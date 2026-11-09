@@ -1,120 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794231874;
-	b=lS61dpcOM9ENGkMA7foCP0miH7h4s/uniCepcfizAcbRjRcvKXdJCODy/UwWYb2ahTOp
-	 etOtc3RDzzWzthT5Y2b0MCe4plt5avl9s94G3n3nI0vvu6Lox13xUksh1obW9boA+7xUw
-	 yzwdd/331LbUOT+m3Um789xEM2amYSUSazIjie48AcRTl3HZUEc9/26RJ0iG366i4sGub
-	 NWscjnPKR64azxBi4jt2EmrDN6jNjvOUxLHtjPjIPA0QKVPontFMaMlaIHvM0JGVRmzAW
-	 /x2H3AqyPP78W1qh3EfbQrzZHN1t/jizqgPvtPyVIzji2tGFK6UJM7qt2cZ+UuLfCxQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794231874;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=bghOY7pp4PqTwolmTpdD1zvT8+4Tek4EN2nSOV+gjQQ=;
-	b=42AMzqRM9LjOZQ/6aS6eJfpn81mEo3fwWG1O2n7frBtJ3ddJxC7UJ7qtsEsjy5b3xZec
-	 u8/HP9FjkFf3+zUKZsUzNUWXO3Iqlhad0AgfJvNfXBZj+Hkd1hw1XOgCLZa6XMbxasRg3
-	 MQXNwld6jjUTPYOjhgfmvfgnYQ+2+95l3jmm3GHmOZamzMZT2Y17v5xWhVEQjvNEQW/+D
-	 pr7yGcFEKRfFaYIpsKfZpXroX4lhUy1olo5LslwUgqyUbjMcS0QOxd9KxEDCL48gBPtbh
-	 Xg5ll0nqnjGoBknTVAafPYIdHl2l2GKRWKUj7r21ZuSQEVmkK6dFwjV9WPc2A7Iksuw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TImMvHFX;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=YvJeU9XV;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794260279;
+	b=WMESB4olIyZqHxXczun+xdECzc0H1MoJ/3vX/QIQ0hDPPICbUg3RSFQk5QXxjhROhbEG
+	 tIJltRZnUj2PDnkFDttJEYUwZKfC7E5te18NadS6x/s1/oYkEM8/w76Bt9anzdF01wyHn
+	 qkCR2cdPn+69wXMxHhoplF0O7O7LuFnx9bmP9gRYFjR/w4m+87tteGRmZrMufLxCjmjD0
+	 ab3IGW/dl5x+i/zZ4u5E/3xqFtuomuB12KUIGKre/du0jdm4QjggPJdkhUH6WvhNwmREG
+	 JnGeKwQAQMFGjtFAGKeGj5ALzvJ5kA8VYImLeOQqUpgylTnNWDBcUb10pRtqSI4iVtw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794260279;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=5+NNiazwIaEbbCVZzcc1IxAFMA7hNsXcy22efoQtKmc=;
+	b=rOlEJBjlZD55goK/tR58CW7Pi6ILrx/m1xojkpN5D8PvMHTroKUaSrmme71T54GFnNOx
+	 NgoS9d+Fk0hO/VpzVFn8JJpVpLeviiRBnGj9Vgju4aZ5e4Y71/aG1LnZ1RlFIYbZoieaE
+	 JzUZjAJgJ7x9TCXuB9zEHIDYjnoXuugdacPFx4NtxhWKFFuhpMESEGZ4OnHPKpQDv9/IX
+	 UyUR+dOOuGwi1Og7m1xbIrTTqX55xU9kESdHr8bqYXNFBePOmZsLsUiRe4BtCbiDyM0hO
+	 xlzZJbc39z/RcffokgQN+XyGouA9JKVghYqUJMgYnictZMtrJ2E1eOr2bsy+heZ6Z8g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=V85JAZrI;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C61606D817
-	for <io-uring@vger.kernel.org>; Mon,  9 Nov 2026 13:44:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2C61606D817
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09FA606A31C
+	for <io-uring@vger.kernel.org>; Mon,  9 Nov 2026 21:37:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D09FA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TImMvHFX;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=YvJeU9XV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794231872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bghOY7pp4PqTwolmTpdD1zvT8+4Tek4EN2nSOV+gjQQ=;
-	b=TImMvHFXpxlE3RZ/IESRjzXY1Bz3uz7xYgDzlWTn5NUo4sYbsDhB250NNUtPlMXxdG6DBc
-	WGLwO6SrQB9OF8tN3uQs4q77tBIalQZPSuzMxkuyVzd/PCVOY7m+CBdrO/4kVUtIPdziQv
-	zULBqgLEhzg8pLONbEyJmnj8v9psdCA=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-357-ACt8V2e3MjSb3kh4nm81sA-1; Mon, 09 Nov 2026 08:44:31 -0500
-X-MC-Unique: ACt8V2e3MjSb3kh4nm81sA-1
-X-Mimecast-MFC-AGG-ID: ACt8V2e3MjSb3kh4nm81sA_1794231871
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-5682eb98dafso636859b6e.0
-        for <io-uring@vger.kernel.org>; Mon, 09 Nov 2026 05:44:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794231871; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dNbXW7CP6y/+Jhp7mY+Sf6iFuZSVOaDwpCm9gc21SuF+VJaZI3EnB3PSx3czpBPd3P
-         0F97SjZbXsn2Hq1MMZy+wq8/LWxXiUW0tLM2vTm276uY1i/xa1+xP8MMwUCVy20Wq+R+
-         H93bXsx086ZWdnE+Gt6hs6Xd7kgp098HWQTMDuq7Ll3WJDsYA5NBjk2SI7SsWJInwElr
-         02tNZ4zBdLzc3SKjLlTzyE8nIAm8suKk4SlOf8kSC0IbIlkriYf7FOGPKmTzhwTKpRXz
-         +ECmIbmhKShilhugPLWQS67V057oNxZXiFvuoW487/KNPRL7Yxal+uIkCbr6LRGI6OUd
-         1Ntg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bghOY7pp4PqTwolmTpdD1zvT8+4Tek4EN2nSOV+gjQQ=;
-        fh=m0rmFnBKNwDB8L4RmxgzKyoVzQmEKGdjabb3hRE9GmY=;
-        b=lqdIe+r4shqFtjv/XshvprnnPVP+7bju/CV2/U+dRfq40+kSl7rlswhUNl3zMuWpPs
-         QMVZyRiICNNitaEwuWr1OOZNdbHBsJpWu1CfZDOk/8MdbA2AjnNB/zQd2avkiIMZ1mOX
-         X228LGVZET9UEsMc6prRAdjlvy9VtOKXQFuN07I1flsoqM7TNTtyi0bKSh8t2sER16PL
-         lEKWRyUeDIE+UYnWfxNcSYqkHHGD5TG09dDMKvpIQbft++xC/7TAUci46QzqaPU6zsk8
-         fKzYe29XBjxebYFVe7P4O/ikHTZxdrScoknJy/sXv3JmI0zA2sYEAhjVW/Sw5PkPFOMP
-         jLtQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=V85JAZrI
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso617346a12.0
+        for <io-uring@vger.kernel.org>; Mon, 09 Nov 2026 13:37:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794231871; x=1794836671; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bghOY7pp4PqTwolmTpdD1zvT8+4Tek4EN2nSOV+gjQQ=;
-        b=YvJeU9XVwfRisHtjyrCD+g+YGGD92Y4vF2X6jtfhy6ghLt1eFKkMwEPTldRNTAcYwI
-         GItFYO/P+dcWYTGtr8Jy81fAkwVcwgfbfg96bG+xjrb/OnsMZLb+hZW5MN3U/ZKjDpC0
-         BOcktFnfPUXucHdwF1+UR4tDqvpRyDMezw8t4YfkxvDhMjaakRyGd2bAZ87J4j/v9ugf
-         hJ2UzlhDvtuOcRc/LSpuVIkVHAqmBkkuIvITMWlo8AhVzCCkUw0C8YPHftpTxw4nf6N3
-         L7byH35l6GMhiO9yNgS5JmHr9mlH1MPlA50sUGYgHyc+7k5qS/eYAJOO66qnWTunj81x
-         ywUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794231871; x=1794836671;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794260277; x=1794865077; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bghOY7pp4PqTwolmTpdD1zvT8+4Tek4EN2nSOV+gjQQ=;
-        b=vGAXYJhChJKFDQjKrQ8+j0uX73hN/VZhcMppgWUhHKUfe8BGFm72BlmHkzEhRHmX72
-         l3MKW43cpI5NsE+Wy08RaXKzWkXC0HxuuyzN285YEuPFQW8zWngOqDWmti77ZnAjc3AM
-         ZczXrI0dgJRNu/l1Cn8udtt4a8Oh8cpj2lRi8J4BdHS5UjywsTZKPzaXV5ebL7HpjEuE
-         pH4EgyYb7qBWb83wJ5RilOkcfY4XJUGWfpQ9F2jxmYpNPa+8aPoBq58h1KpGYj007Dw6
-         /7w/2IypgYpsVkrzNWIm+85p9W0iEMUTKZxZ1Grse/veMIrWL4ZDM1hq1aMTlhq5cmtn
-         /tnA==
-X-Forwarded-Encrypted: i=1; AL+hErFo6czlikguxm8puTDoKGWTWsFdof1seRW1XXmu4ynLKd5CEriLMQO1byP8WL+fSYXOzgaokvbgEw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ZeyPGabTZVCF/t0PKEprhnnz04cKOJNLmudssekc/9AzeUtYA
-	1NSj1w2AsKoVSgJuWfsq8bEqVMhkKyEcu9tNe+N3DPjXvJJ29Ji2BG53Z4nuSmOAVurKfdiKTi4
-	CiPS5Um0Ja9sk/oChkN9rHQmbRakcT7gmIEFpNSEAAmXBLgnxKCiVG2YxsIXV5l3MmSnkNF/dNz
-	QgUB2tNSuXjIbZJaMXSm4lnIPo9wV5VHQd1F4=
-X-Gm-Gg: AYBFou32PmkSEBzo1zhj/EikqcxCge3AfWAynooUeIBYQsBlY9SjZFX4sleCVHZWjJM
-	EUBpxvpwMY7ZEHeRoiz/XJrh8gjQCjmMLY0FQllPHkZzojSVIUNKbRX4c5VdtinHFaMyLCoSbIu
-	JLCf34LnkjK7oIL4fFKqke2ugEfToDAq4Ipyz2cgJ+EVFxqUoRS1hidtkc
-X-Received: by 2002:a05:6808:4fe9:b0:4d7:17d5:6c9b with SMTP id 5614622812f47-56814022659mr2709787b6e.9.1794231870747;
-        Mon, 09 Nov 2026 05:44:30 -0800 (PST)
-X-Received: by 2002:a05:6808:4fe9:b0:4d7:17d5:6c9b with SMTP id
- 5614622812f47-56814022659mr2709756b6e.9.1794231870169; Mon, 09 Nov 2026
- 05:44:30 -0800 (PST)
+        bh=5+NNiazwIaEbbCVZzcc1IxAFMA7hNsXcy22efoQtKmc=;
+        b=V85JAZrIMeISyb08Dg/YBa9AzHq0E/dJ0uYVQWP4dU5WADoJOtfd/L1offq8qRFpnY
+         jxzWq6kXCuHgyTpOpVaLaRCizpnzG6i5ESIxvQGHApFVIxYtuL/sAl9EjFsBK/MRVXrg
+         opOLW2KfHU7xIwu9dlIyd4SXk7AdGTIVFRXZ2uqkGZL9FMidPVeFPUhpkkbrxzB+lzOk
+         o3ljkPFDRgW0dY985usOnQY1hTOaOnqEV/eOZLlA5CmlYkneSWYUQxn0qAdE8YcawTBL
+         7Lr9FZUcBHSmXX5VuiCisfSMwqjHsf8aUazvL/xPTTIbDehTHrAB9Nnwf1JzmvrQdCKx
+         bN2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794260277; x=1794865077;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5+NNiazwIaEbbCVZzcc1IxAFMA7hNsXcy22efoQtKmc=;
+        b=B0JSJdaZguTd20QsA+v7tXEdnep6ycUTlfDtvTv9xfVlTxxFmK7d0ROca0/WiRnKZt
+         rM4sIj5OJ9DJIR7m9lrxZQgO8vACNUQB+om9cpq/RTr835mgKYKKI45bwe2Xj/2xOGaS
+         AwN2qr+6U6wbWiWSByNQFYqcSfwVkxxiexm6ACmVAeaDM/JTR4XRVEb0j7cevb+YrNa3
+         YcLlFyGjIrTblW4+wkihSQQec8P1ICIU+Mf+ne986GZJxDio8f3LBK6DGEMTYG2OQ9hL
+         BFG2p8IVN8NNyj/5LKE2l0rKpoLqrGpEEoCNe2INV+VP0TkmhblCq3dhE9keMRTJFR5D
+         bfkw==
+X-Gm-Message-State: APuU4Z+/76TLM++mZc1jv3t8MVFQc973Xqj225s1ilm0Sje3x0rw33W0
+	novcZ/PakgE8i1+/2fW81uCv481GduJMyJNt0s7dcTk3Gb3okiWV4rfil+jNoz5mETQ=
+X-Gm-Gg: AYBFou2jLfCKb+4OVtAwazq/k8maPLRYwaFKAT9b5LTWo2wa3wIsAHqVwkqEd25cO1+
+	2oyQSxLovoIdcWvbfHuMZrfMvqULmay9AbJ7TuxrqtrX3XXu/GD/+aXbQGwDBpYwFyvNFkiFsbl
+	TwnnPz5pZWWt3tloIM/+MRv8g9aTZVWV6BrnfMLVa+M+bhc03pvK7UU/5mGHcbPLQgu6ubGXjEf
+	B3pD58FkNnNWpgBFGBwdvK7wYyHy+I1cUBnPAME2/iKzsWVtAdpczNf6LcxwqC/WG1P67t5RL5P
+	0QtmuepM+O9LOTyfmuPYwL5cim69K08aebqvEp0Ay/6BLqxL8nbuVjy+4ksQNZYiUxQbZpttldo
+	TnUU1wXwk73auebxNt38lzY/ijp+RNE6JMT2oAXHokmmXDlNkuzyKS23zt0eii8/uKd6CoQzrbw
+	YmSSkMoXvUE3eoo4MN2mgZyGSClVIylU2FG9nOBNffeJz2hb+NpGLUAbr3VE5g6AWVQ/FgRfzrA
+	vFXtkx+VOa0ZdmkYzE8C1TPMr3JpI8qjWfP/hJhO8/K+9d+VhZXmD/Vdso0gLIGx/F3BvcoqxSv
+	nNLMSk6qGPoGPjomLO2puecDRt3HB9O6mx7RYiZbRrn9l44QCjxhtH4tBwmqLoGpAVS5VzhGt3B
+	0pYOixPwrvbw=
+X-Received: by 2002:a17:90b:5283:b0:3a4:b74a:795c with SMTP id 98e67ed59e1d1-3b166cdecb6mr871492a91.16.1794260277070;
+        Mon, 09 Nov 2026 13:37:57 -0800 (PST)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1676d83absm1022071a91.7.2026.11.09.13.37.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Nov 2026 13:37:56 -0800 (PST)
+Message-ID: <628e574b-9d79-4997-a147-51ccbd11e35d@kernel.dk>
+Date: Mon, 9 Nov 2026 14:37:55 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -124,131 +91,43 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261106131829.3228926-1-cui.tao@linux.dev> <20261106131829.3228926-3-cui.tao@linux.dev>
- <1e18fcfd-785d-43cc-afd6-d181bf8305eb@amd.com> <CABdmKX0nCB2hT+iMh=BB-nC=fUBPof8YvjvO-gtEw+zcHZgvZA@mail.gmail.com>
- <b0f530ef-bbfd-4112-aa51-82fdad6c4ba2@amd.com>
-In-Reply-To: <b0f530ef-bbfd-4112-aa51-82fdad6c4ba2@amd.com>
-From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 9 Nov 2026 14:44:17 +0100
-X-Gm-Features: AclHuK-kxgj3T37bjFOZ7HtSClpdxsaDMPyjW53dccz7zE1_ZSRFcURRmSZwzSI
-Message-ID: <CADSE00L3AfcnfcboK1TdPQiW7ZW1KpxG70b1oyWFqpLciOG6ng@mail.gmail.com>
-Subject: Re: [PATCH 2/7] dma-buf/udmabuf: account the page array metadata to memcg
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: "T.J. Mercier" <tjmercier@google.com>, Tao Cui <cui.tao@linux.dev>, akpm@linux-foundation.org, 
-	dgilbert@interlog.com, mkp@kernel.org, loberman@redhat.com, 
-	jmeneghi@redhat.com, kraxel@redhat.com, vivek.kasireddy@intel.com, 
-	mst@redhat.com, jasowangio@gmail.com, eperezma@redhat.com, 
-	stefanha@redhat.com, sgarzare@redhat.com, rostedt@goodmis.org, 
-	vdonnefort@google.com, mhiramat@kernel.org, jgg@ziepe.ca, 
-	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org, 
-	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org, 
-	phasta@kernel.org, joro@8bytes.org, will@kernel.org, 
-	linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org, 
-	kvm@vger.kernel.org, virtualization@lists.linux.dev, 
-	linux-trace-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bobbyeshleman@meta.com, mathieu.desnoyers@efficios.com, robin.murphy@arm.com, 
-	mason@kernel.org, harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] io_uring: improve alloc_cache branch prediction
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261103211031.592745-1-csander@purestorage.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261103211031.592745-1-csander@purestorage.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 9, 2026 at 11:56=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> On 11/6/26 18:25, T.J. Mercier wrote:
-> > On Fri, Nov 6, 2026 at 5:23=E2=80=AFAM Christian K=C3=B6nig <christian.=
-koenig@amd.com> wrote:
-> >>
-> >> On 11/6/26 14:18, Tao Cui wrote:
-> >>> From: Tao Cui <cuitao@kylinos.cn>
-> >>>
-> >>> udmabuf pins the pages of a memfd and hands them out as a dma-buf.  T=
-he
-> >>> data pages keep the accounting of the memfd they were instantiated in=
-,
-> >>> but the bookkeeping around them does not: the page pointer array and
-> >>> the pinned_folios array, both sized by the buffer page count, plus th=
-e
-> >>> transient folios array sized by the memfd folio count, are plain
-> >>> GFP_KERNEL.  A 1GB buffer costs about 4MB of uncharged SUnreclaim
-> >>> memory, and size_limit_mb defaults to INT_MAX.
-> >>>
-> >>> Charge the three kvmalloc allocations so the creator pays for the
-> >>> metadata it induces.  The system heap in the same subsystem already
-> >>> accounts its buffer allocation;
-> >
-> > Only if the mem_accounting param is set to true. We (Android)
-> > currently depend on it being disabled because system heap buffers
-> > don't have a single owner for their entire lifetime (ownership often
-> > changes immediately after they are allocated), and the kernel doesn't
-> > have the ability to switch who is charged for the buffer memory quite
-> > yet. Albert is working hard on it at the moment.
->
-> Good point, making sure that Albert is on CC as well.
->
-> So basically we not only need to charge the backing store of a DMA-buf to=
- somebody else, but also the housekeeping overhead.
+On 11/3/26 2:10 PM, Caleb Sander Mateos wrote:
+> A call to io_uring_alloc_async_data() that provides a struct io_alloc_cache
+> currently has 2 unnecessary NULL checks in the fast path:
+> - Of the struct io_alloc_cache *, even though it points to a struct io_ring_ctx
+>   field
+> - Of the void * entry popped from the cache, even though all cache entries are
+>   non-NULL
+> The compiler also incorrectly assumes the success path in io_alloc_cache_get()
+> is the unlikely one because it's written as an early return.
+> 
+> Avoid the first NULL check by splitting io_uring_alloc_async_data()'s cache
+> logic to a separate function io_uring_alloc_cached_async_data() that uses the
+> cache unconditionally. Avoid the second by returning a separate success bool
+> from io_cache_alloc() instead of checking the NULL-ness of the returned entry.
+> Also mark io_alloc_cache_get() and io_alloc_cache_put()'s success paths as
+> likely so the compiler can avoid jumps in the fast path.
+> 
+> The final commit is a small code simplification in io_futex_wait() noticed while
+> touching the neighboring io_cache_alloc() call.
 
-For system heaps the housekeeping size is fixed at creation so it
-kindof fits the reservation model nicely. We'd only need it to account
-for the overhead (as part of the MEMCG_DMABUF stat probably).
+I hand-applied this, as it needed changes for the post-7.3 trees.
+Patch 3 is somewhat marginal I'd say in terms of rewards for the
+churn, but churn is cheap these days...
 
->
-> Mhm, this here also complicates the charge transfer Albert is working on.
+Anyway, check the end result, please.
 
-The transfer would just move the charge as a single unit. But yeah,
-the complexity will come from lazy exporters or any other exporter
-where the bookkeeping grows or changes.
-
->
-> @Albert not something we need to take care about now, but please keep tha=
-t in mind while working on that stuff.
-
-Noted. The issue already exists so my series does not make it worse. I
-will note this for a follow up series.
-
-Thanks for tagging me!
-
-BR,
-Albert
-
->
-> Regards,
-> Christian.
->
-> >
-> > Could you update the message to note the mem_accounting param pls?
-> >
-> >>> the data pages here stay with the
-> >>> memfd.
-> >
-> > memfd / udmabuf is a little special because it uses shmem for the
-> > backing store, which is already tracked by memcg under all conditions
-> > (except hugetlb). We don't currently use udmabuf, so the lack of memcg
-> > charge transfer for udmabuf is not an issue. But once we get charge
-> > transfer working for the system heap it'd be good to follow up with
-> > udmabuf.
-> >
-> >> T.J. needs to take a look here, but I fear that this might break uAPI.
-> >
-> > Thanks for looping me in Christian. The buffer allocations cost
-> > gigabytes, but these metadata arrays are only 4MB per 1GB of buffer,
-> > so I don't expect charging them to break anyone. Leaving them
-> > uncharged is an accounting gap though, since someone could spam many
-> > udmabufs from the same memfd and only pay for the memfd pages once. So
-> > this change is ok with me.
-> >
-> >> A lot of the DMA-buf resources are intentionally not charged against m=
-emcg.
-> >>
-> >> Regards,
-> >> Christian.
-> >>
-> >>>
-> >>> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> >
-> > With the commit message updated to mention the mem_accounting param:
-> > Reviewed-by: T.J. Mercier <tjmercier@google.com>
->
+-- 
+Jens Axboe
 
