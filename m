@@ -1,99 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794266057;
-	b=oLWHqm4jCP5pGKRe1wZ2UqZnMuoOdK/9TaQsi4MzRW8hzGbC4DBg2uF5f8arT/GVQv1C
-	 DsBV+UXqdDWozhoyMT+K7GVm3RnzGLro2+Lj34xWUH8k1jq0KbfaeYFrWtQ/2dcs/Ei/Z
-	 8Cq5iK6H5JAfEWikwkdMMFzkmM4h+8Y7X5AYHouyuZFS5WqmIaJ9NIgaylkwdW0XNP9bW
-	 /g0Bqv/9Vcg7eZi2Utq5b2BhOrv20dqzEnwIyJVgRomf5z0TuLushmoAah2nUcUJeZgOQ
-	 EK2wvu1OVyYmU+vaKvnHemdhBMQDXrtYToMZPNiEA/7ozwhGPu6ilYgraZydr03XsEA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794266057;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=fqXpBBcqphrOKEoud7aEvUgTXtSFkrkdQ70VK6Fy8AU=;
-	b=H1b7v4PReBPag9gC3vbF/kyE0l26oflupgBWLc8M/QljYffROdzpCIiwvs30gFIUZ/yQ
-	 +xKKSmhS1ieMm1VY3NFnTk/zVarJ34aWP6w0aUBQzhYTBem/3SUlIPnaSaMiUc81hFkUs
-	 s1gySOArn2u6XDHCAVAOXimlC96DzVo0ORqI6/ZPGIQ6DFKKz4I6mHcBr7QfvG2CKzqOt
-	 siRjhbstETwiDghnhEDOif3wyyV7BsMpMTbAIVARLXzQj3Y3mxfd1qc5tTCegrhjryjXP
-	 LV/N0STuULUpbNBvN+KD/N+fSJnus+55NdWaGOX0RKvYHglWl6UgX0XrOLcwnboPA8Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=purestorage.com;
-	spf=pass smtp.mailfrom=purestorage.com;
-	dkim=pass header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=DwtENfGg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.45
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.103
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794279276;
+	b=Ll4Srift/0VeLC6aIqyMOSXI6CReZ6+YzrvGIS5p0dciCfs4riti5bjkTwg/AaiL5dGM
+	 0q5v9dGWZF3w+ZKuOiplk8tX99Q/RlINrQPS/0ZvypAOA5cBWx3FWmjibnhdI+EbrsZsK
+	 L3KMCzTft6w3m7bnV8rhrEQ/2KEombmHgNZUyhm+xKAgp6MGV0Qtpi/yWBoeRfkvuRyBf
+	 VQMtyp0ecqWsQVzvutbGN6dGAhZ9L/YGOL7I4OjsSv1t3ClCYN9fmomavPviiS4eBB6Vv
+	 B8N9Hq8v10HmdIpqNUHH0c1/81kZW1wVCOIjPf03tOtMDb9N46Na9Hbmnj0PncEUWqA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794279276;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=liAvaygvAi7zq6Qajed8oFY32cHq+aoYM0Cq/AlueW0=;
+	b=y0Hp1Dy5pkSWMjqV+8ZsiJGdBpbNhiywZhEs5n0n2SenL6ODIm3X5ylHY+ejjZISsZ4G
+	 sog7RmwXHVYou+RDqZjP2B8YJpnjz2cOBVvU/kFsBJq0tu3W9P7hhzk1RWkKuMY3fY4c/
+	 bSqfWvS78m4uafjKJvg/MkJ6eSMMko0s21fxDu7QTRBVJDPYuIqkUq9jOt5R8Sa/pWjO4
+	 oyK2SQ91RbN96oGZsAuzl5uaUN8l+znCC559EvuxgdZBvHi/Hb9502AiRzU+2yyf0ikbk
+	 lqQbUIw6sZGbsEL5Z6tlad/dRAijjDfhR2oHQEicX6yE1u6Uh2FGnQHotjtb+x2Eh/A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=pm.me;
+	spf=pass smtp.mailfrom=pm.me;
+	dkim=pass header.d=pm.me header.i=@pm.me header.a=rsa-sha256 header.s=protonmail3 header.b="A/myxarS";
+	arc=none smtp.remote-ip=185.70.43.103
+Received: from mail-43103.protonmail.ch (mail-43103.protonmail.ch [185.70.43.103])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEBC606A31C
-	for <io-uring@vger.kernel.org>; Mon,  9 Nov 2026 23:14:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFEBC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6391606A31C
+	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 02:54:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6391606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=DwtENfGg
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-8212fce7258so101778a34.0
-        for <io-uring@vger.kernel.org>; Mon, 09 Nov 2026 15:14:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794266056; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Tsrq9MxeegEp9egtJasUoS7MafobAohp0ko2fAonxRZA9+0VBna7aTsBufBnYou3C5
-         0HJXtmDWw5JZWUxdG8JNXXifeqhm1+Khqrt+YVGwe0LxzSIz9X1eUKfW7vqjYbYkFw7F
-         bbGs1laZybulShQaompzkkP1oSgGjDkj3lpJSVnqH08wuegDWxK269IYK8+cdIkfLu5n
-         Qm1fQN5KCPaHv7IF1693oFAcPiRL8cKzVO9zTIFxAD/DohgQKfmhclumv4fZgZLgdbUv
-         lmbmViiT4x1hGqcx+8GKcQ05Gg+Vc0SYujb5F9hHpIjwFdgLmdcqXBTaYLLtfRTKf4af
-         KgEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fqXpBBcqphrOKEoud7aEvUgTXtSFkrkdQ70VK6Fy8AU=;
-        fh=UjUPYjCyuUY2Mb2LfpQI9V6TSxwVKRTjKeLIVK2k6xw=;
-        b=NmvuvSAs7KWi9O07Z7syuP5Zprpjm5YXqTo2C0Dd6vQP1uk2gk6WQdunqQUd8OSo+c
-         N5x3Dia23WlOS3aoA/g5cz6cJbqx2/3vnmXbD+jNm3KHQ45fgd3O46/DSTPZhbDaDAGA
-         QzkoiAePzU0AW+KCeO7V/tPiogPhoo+4II/GJoGgglbBAN2mEs2FHwClXnltl7+l47Fg
-         tbRc8/ZogxRFLai9NZGHHK9qbjEHbpiJbOC8mBH1jZOGjSU6FFmSaxFSEprBzk/NnQPE
-         9t3O+Qo11M604cmv/GUh1DCkilhdO8NT7KakBXS3KNDJP5dRyO+hbloPuywz0Dn86s8z
-         xTlg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1794266056; x=1794870856; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fqXpBBcqphrOKEoud7aEvUgTXtSFkrkdQ70VK6Fy8AU=;
-        b=DwtENfGgn/NifVR+l4lo+XZZdcGmJC8tTVSXqNdsdA6i8m8W+Dv9ecPvuwlSTB31wx
-         6ku5yGMyTzKSRJupRVLul4hg1JefpxqtJrVsuxX5sSOlJucUOnPJ/GPG+FzCdawwszCY
-         LipMJ8lbrfk+zVuosVWfEUNtkve0h5ZSW6445e/SFfWJWST4MIVEB3eHs1Wi5dUoAPWv
-         Uv1tVMFDgquuVXylar4+3pY6D5ytbU7MRAb5KM/J7GbrAcdpCQAmrb18BsrE+oqIcMt3
-         jOmVQFYri0D7n68w1/WhFNT1WvPTNyJDKp9lVheyqnACtFtWmYxDAOikG/9BTjS/nG6t
-         8w/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794266056; x=1794870856;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fqXpBBcqphrOKEoud7aEvUgTXtSFkrkdQ70VK6Fy8AU=;
-        b=ugxBeu9BSSKrrCsCJNFwuXLq4DWzncqk92HrLvz+flQaxM+xJ730it+S9AZZYY9hDl
-         ez0vqJq67T+zHOxHjYyhOW8KuJO5VNxAzKVF1C81qEzhI8EToY6i8WUf6ejvuM/tdujv
-         DHdNDCTNB9NUW5rww4oq4VJSaYhMScdxNn/qV8GHwAO9LbTRB6W212DCKE9Hbk0IfEdq
-         neHeTway9DzCZwADfYpgRSAyJsNkyfTwAEZlbrR6AhGK66iPHhyrT4oR2r6zfwV/KzW5
-         nVNFHe0JIz7YXeEjAzDgTZGvRweSaq3nMGPTDjT1L0PJvbO8vL0vITdcm50taJBmkg4T
-         Af1Q==
-X-Gm-Message-State: APuU4Z/pia/uArcMj/qZQqptkLRrCDTZ1tUHANjs1iUr8VmHn8rWvFYj
-	7hZO4k+XXLK9FAIqjj/7d0TYT69PQA5kSRxsLCy94pK1mlu4ikIRtnyqzAH3gb6EFSbDqQnSZDs
-	Nluz2Tb6ASmRGg/IQiYEF/igPDZuN8mBWqAF2lvsmN4TmcF0Uw/koO2DIrA==
-X-Gm-Gg: AYBFou0W4XeRB8X357bDsTzVa+YVDFKttmiW2YWe+EF/Bt7c0p9ykH+3exUWJNXFQ3i
-	/RdjVEMgtDGj6mU6w7PN7JQbMiwzQL9zibcKlSPw91BGxPM+rz6yUHTWC+wUAgCvyTBN8zixLYV
-	z3G4isR3sN98VUVg9f4qKitoPWdzmswBow+6kR5eQ6w43QWzSxbB95TZjA8AyTumzHs0xNhSVf+
-	wbJmQXmKl+7pi8rIiHIKffdP0rS6IU2mUClLvpZ8ofz1mrRVYorR7aW7IT01ytREgxIOs468Tti
-	6BNeNuk5rOb+qcBFKK6S72lI96at7l8I7PTu7kNkaTe5TTezvoKf8402wlMzUbWha25OJaZXrNa
-	k2JaxSpKEgkCRQdi2JcMtFAmPm4aIVTvHD3BW
-X-Received: by 2002:a05:6808:222a:b0:55c:866:20de with SMTP id
- 5614622812f47-5683c769dcbmr1387251b6e.2.1794266055753; Mon, 09 Nov 2026
- 15:14:15 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=pm.me header.i=@pm.me header.a=rsa-sha256 header.s=protonmail3 header.b=A/myxarS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1794279272; x=1794538472;
+	bh=liAvaygvAi7zq6Qajed8oFY32cHq+aoYM0Cq/AlueW0=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=A/myxarSBfLfQHdtssu9mYKVU0yZLY/K09i4FRAovrLXDtLfa82RhlSXDJEMuCerA
+	 8qQVuie22k+KXSNMT1Y9K62zQb8eWE6fk11Bao/ld9h9xi/QEojeYy7ehrOYo0WVdP
+	 i0MFKFsPhZtjMgO6PHjk+nFLyMWBSDLv5h0e1fI1kbLgciZx9z7BS+CFQ3/Ieiu8V8
+	 oWkCATzgdYIlojmbXKFvHBONFSMI1Uqww11mgz/25zGCc9HRMlZANgrd9ZX2b1zu7N
+	 7Q5UOdz9P4skDNzLSBPIGR8XIBQZT4M9litAT8Qg27WuAKxUbOlDyCJHYZfCd/dKGK
+	 FBOP/iXPKDrxw==
+Date: Tue, 10 Nov 2026 02:54:26 +0000
+To: Jens Axboe <axboe@kernel.dk>
+From: 7z0423arsenova <7z0423arsenova@pm.me>
+Cc: "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>, Martin Michaelis <code@mgjm.de>
+Subject: io_uring/kbuf: incremental buffer rings and early commit, which contract?
+Message-ID: <NQrKgZ_EzA_lZTXUfCjSTokySt8Mb9474M_oITPgvLg-dllIWY29FCJBQLEIOaX0BKW7cdNcBC64LFX34Q5o9CH60OwsfODdq7irTvKzQvo=@pm.me>
+Feedback-ID: 231403807:user:proton
+X-Pm-Message-ID: 32078a3ae5593570d7ed7738108c4bbf0b71016d
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -103,73 +61,180 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103211031.592745-1-csander@purestorage.com> <628e574b-9d79-4997-a147-51ccbd11e35d@kernel.dk>
-In-Reply-To: <628e574b-9d79-4997-a147-51ccbd11e35d@kernel.dk>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Mon, 9 Nov 2026 15:14:04 -0800
-X-Gm-Features: AclHuK-SlGEp-bvZXvBEMVJrExajAz3zz8HUTT2xD3smMVlf_iPp0ddqJu9OYaQ
-Message-ID: <CADUfDZqoWZDjpZ5B45hkkstw4sjKU4_t64w-TqbbUsCvv2ZM_g@mail.gmail.com>
-Subject: Re: [PATCH 0/4] io_uring: improve alloc_cache branch prediction
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 9, 2026 at 1:37=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 11/3/26 2:10 PM, Caleb Sander Mateos wrote:
-> > A call to io_uring_alloc_async_data() that provides a struct io_alloc_c=
-ache
-> > currently has 2 unnecessary NULL checks in the fast path:
-> > - Of the struct io_alloc_cache *, even though it points to a struct io_=
-ring_ctx
-> >   field
-> > - Of the void * entry popped from the cache, even though all cache entr=
-ies are
-> >   non-NULL
-> > The compiler also incorrectly assumes the success path in io_alloc_cach=
-e_get()
-> > is the unlikely one because it's written as an early return.
-> >
-> > Avoid the first NULL check by splitting io_uring_alloc_async_data()'s c=
-ache
-> > logic to a separate function io_uring_alloc_cached_async_data() that us=
-es the
-> > cache unconditionally. Avoid the second by returning a separate success=
- bool
-> > from io_cache_alloc() instead of checking the NULL-ness of the returned=
- entry.
-> > Also mark io_alloc_cache_get() and io_alloc_cache_put()'s success paths=
- as
-> > likely so the compiler can avoid jumps in the fast path.
-> >
-> > The final commit is a small code simplification in io_futex_wait() noti=
-ced while
-> > touching the neighboring io_cache_alloc() call.
->
-> I hand-applied this, as it needed changes for the post-7.3 trees.
-> Patch 3 is somewhat marginal I'd say in terms of rewards for the
-> churn, but churn is cheap these days...
 
-Sorry, this was based on io_uring-7.4-20261029, but I guess that
-didn't include the dmabuf changes.
 
-Patch 3 removes an impossible branch checking for a NULL entry
-returned from the likely(cache->nr_cached) branch in
-io_alloc_cache_get(). (I verified significantly shorter codegen in
-io_uring_cmd_prep() with no jumps in the fast path after these
-patches.) io_uring's whole philosophy seems to be going to great
-lengths to micro-optimize the I/O path, so I figured this change was
-worthwhile, but feel free to drop it if you feel otherwise :)
+Hi Jens,
 
-I think we could reduce the diff by adding if (!entry) unreachable();
-in io_alloc_cache_get() instead. (Or __assume(entry), though that's
-only supported on recent compilers.) Would you prefer that?
+This is about liburing issue #1555 [1], "Wrong offset for incremental
+buffers after non-pollable files". Before writing a patch I'd like to
+check which behaviour you want, since the possible fixes differ in what
+applications can rely on.
 
->
-> Anyway, check the end result, please.
+When a buffer is selected from an IOU_PBUF_RING_INC ring and
+io_should_commit() is true (io-wq, or a file that can't be polled),
+io_ring_buffer_select() commits the requested length up front, as the
+real transfer size isn't known yet. That causes two problems:
 
-The conflict resolution looks good to me.
+1) Short reads: the buffer was advanced by the requested length, but the
+   CQE reports less. The next completion for the same buffer ID starts
+   after a gap, while the application expects it right after the
+   previous data.
+
+2) Concurrent requests: a request that committed early can complete
+   after a later request that selected from the same buffer, so CQEs for
+   a buffer ID are posted in a different order than the data sits in
+   the buffer. For example, a read punted to io-wq on an empty pipe
+   selects the buffer and waits, an inline read on another pipe with
+   data completes first, then the first read gets its data.
+
+The man page describes the contract per buffer ID: each completion of a
+given buffer ID continues where the previous one left off. In practice
+the locked path also gives a global order: the kernel only moves on to
+the next buffer after posting the last CQE (without
+IORING_CQE_F_BUF_MORE) for the current one. Martin suggested in the
+issue that applications rely on that, and that early commit should be
+refused on incremental rings. That would break regular file reads, which
+test/read-inc-file.c and 418eab7a6f3c explicitly support, so I don't
+think that's what you want. But the question behind it seems to be the
+real one:
+
+  Is the contract per buffer ID only, or can applications rely on a
+  global order across buffer IDs?
+
+The options I can see:
+
+a) At completion, give back the part that wasn't used, if the buffer is
+   still the current one. Small, and fixes 1) as long as only one
+   request is pending. It doesn't fix 2), nor overlapping short reads
+   (on tmpfs, batched reads go through io-wq and overlap).
+
+b) Treat a buffer committed early by a pending request as pinned. A
+   later selection retires it (head++) and moves on to the next buffer.
+   On completion, the owner gives back the unused part if the buffer is
+   still current, and otherwise posts its CQE without BUF_MORE. This
+   fixes 1) and 2) per buffer ID, but breaks the global order, spreads
+   concurrent requests over several buffers, and a ring with a single
+   buffer returns -ENOBUFS to the second concurrent request. I have a
+   prototype of this (about 110 lines in kbuf.c and rw.c, reads only).
+
+c) Consume the whole buffer on early commit for incremental rings,
+   without BUF_MORE. Always correct, but it wastes the rest of the
+   buffer and undoes what 418eab7a6f3c added for regular files.
+
+d) Do a), and refuse a second early commit while one is pending on the
+   same buffer. This keeps the global order and the existing tests, but
+   concurrent users get an error.
+
+Which direction would you prefer? I'm happy to write the patch and aHi Jens=
+,
+
+This is about liburing issue #1555 [1], "Wrong offset for incremental
+buffers after non-pollable files". Before writing a patch I'd like to
+check which behaviour you want, since the possible fixes differ in what
+applications can rely on.
+
+When a buffer is selected from an IOU_PBUF_RING_INC ring and
+io_should_commit() is true (io-wq, or a file that can't be polled),
+io_ring_buffer_select() commits the requested length up front, as the
+real transfer size isn't known yet. That causes two problems:
+
+1) Short reads: the buffer was advanced by the requested length, but the
+   CQE reports less. The next completion for the same buffer ID starts
+   after a gap, while the application expects it right after the
+   previous data.
+
+2) Concurrent requests: a request that committed early can complete
+   after a later request that selected from the same buffer, so CQEs for
+   a buffer ID are posted in a different order than the data sits in
+   the buffer. For example, a read punted to io-wq on an empty pipe
+   selects the buffer and waits, an inline read on another pipe with
+   data completes first, then the first read gets its data.
+
+The man page describes the contract per buffer ID: each completion of a
+given buffer ID continues where the previous one left off. In practice
+the locked path also gives a global order: the kernel only moves on to
+the next buffer after posting the last CQE (without
+IORING_CQE_F_BUF_MORE) for the current one. Martin suggested in the
+issue that applications rely on that, and that early commit should be
+refused on incremental rings. That would break regular file reads, which
+test/read-inc-file.c and 418eab7a6f3c explicitly support, so I don't
+think that's what you want. But the question behind it seems to be the
+real one:
+
+  Is the contract per buffer ID only, or can applications rely on a
+  global order across buffer IDs?
+
+The options I can see:
+
+a) At completion, give back the part that wasn't used, if the buffer is
+   still the current one. Small, and fixes 1) as long as only one
+   request is pending. It doesn't fix 2), nor overlapping short reads
+   (on tmpfs, batched reads go through io-wq and overlap).
+
+b) Treat a buffer committed early by a pending request as pinned. A
+   later selection retires it (head++) and moves on to the next buffer.
+   On completion, the owner gives back the unused part if the buffer is
+   still current, and otherwise posts its CQE without BUF_MORE. This
+   fixes 1) and 2) per buffer ID, but breaks the global order, spreads
+   concurrent requests over several buffers, and a ring with a single
+   buffer returns -ENOBUFS to the second concurrent request. I have a
+   prototype of this (about 110 lines in kbuf.c and rw.c, reads only).
+
+c) Consume the whole buffer on early commit for incremental rings,
+   without BUF_MORE. Always correct, but it wastes the rest of the
+   buffer and undoes what 418eab7a6f3c added for regular files.
+
+d) Do a), and refuse a second early commit while one is pending on the
+   same buffer. This keeps the global order and the existing tests, but
+   concurrent users get an error.
+
+Which direction would you prefer? I'm happy to write the patch and a
+liburing test for it. I have a test that checks the per buffer ID
+contract with sequential, batched and out-of-order reads, which I'll
+adapt to whatever the answer is.
+
+I've tested the b) prototype in a VM on your io_uring-7.4 branch
+(cf6542493e35) and on bare metal on linux-next as of 2026-11-05. In my
+tests, both the short-read and concurrent cases are fixed. Known gaps:
+recv punted to io-wq isn't handled, and the IOPOLL and failure paths
+are untested.
+
+I was going to send the test to liburing and the prototype as an RFC,
+but since the documented contract isn't explicit, it may not be the
+direction you want. Maybe you'd prefer a smaller fix, or have a better
+idea. If you'd rather handle it yourself, that's completely fine, and
+I'm happy to test.
+
+I used an AI assistant to help read the code and search documentation,
+and to handle some repetitive tasks (applying patches and building).
 
 Thanks,
-Caleb
+Yun Wang
+
+[1] https://github.com/axboe/liburing/issues/1555
+liburing test for it. I have a test that checks the per buffer ID
+contract with sequential, batched and out-of-order reads, which I'll
+adapt to whatever the answer is.
+
+I've tested the b) prototype in a VM on your io_uring-7.4 branch
+(cf6542493e35) and on bare metal on linux-next as of 2026-11-05. In my
+tests, both the short-read and concurrent cases are fixed. Known gaps:
+recv punted to io-wq isn't handled, and the IOPOLL and failure paths
+are untested.
+
+I was going to send the test to liburing and the prototype as an RFC,
+but since the documented contract isn't explicit, it may not be the
+direction you want. Maybe you'd prefer a smaller fix, or have a better
+idea. If you'd rather handle it yourself, that's completely fine, and
+I'm happy to test.
+
+I used an AI assistant to help read the code and search documentation,
+and to handle some repetitive tasks (applying patches and building).
+
+Thanks,
+Yun Wang
+
+[1] https://github.com/axboe/liburing/issues/1555
