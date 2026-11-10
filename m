@@ -1,128 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794316834;
-	b=vFrfFLMd6S0TOKKwCHy8xTe+B6uwMwweBUi4m3nQgimOMrV2PU/0M5vRtXch8MwGTIM8
-	 6HkFpqW+S5xBoHZjRPStkxeNoNXAWs4Ok21Uqggyhc5rM9+yM/16jk/sGy60ntDKBPTUF
-	 fHtAkAsL4eO5+Z5zYIPb8/vgRV9tl4bzG90r+hGj5Wn/jyX1v+Ydt2wWucZETP6Tx/9ap
-	 mi6GjqlHFkumZt+eQNDIwa3IhaPkPV83UIHNvL33OVHX1r6mHxZWJtQQd5Y4R8E7ktmsn
-	 Q0zZHEC+a5S/Mv//ZY10qcDdaBsAPfadVercw8KbcN5BIM0wGRq+K2CdHPxII7kHbKA==
+	t=1794318507;
+	b=DguAN5qxcE9fyBLXaCbYlWwlm33kLRiIZLqQLtrFhfqbNpOXrQDEX6l9N0x1/Ffogilp
+	 l25deERxSjb3MdFNhtVb1bQ14Fd40tyx0q/M3qK0zbkdd3XmFoFP+yJlbEZx0y22RUMox
+	 0V5htD/khgPBrgcONOVc720CgBE9SEzcrp01Wriq0O9rQvWzLOFNrSTQJaMbt41I3RrV9
+	 rC+EArcoJ+CPMp47tHjF3nIpCEwg92hQRojIUWsSxN5n+MHMmBjOkdkCUCNvhZgwURthx
+	 lTgoPH2c1exOCt1Yjh7cS8zdUwqDtWMJrQKJahqSfDpDxSOBUcSLT+goZUjzhWXn+MQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794316834;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=jmGjkKcjSqmOdXkFwVhu/ZUdaZzfH+DaKIptD+Gmy0Y=;
-	b=2MKHVcIwCoXsYDVoCDzJzikQBBOpmFZuRc0Mvz5zfStufSKIVknI91Hq6kviWlJr+Jyi
-	 r+yrrgAu/Cn1GP9Mc7l++J5tsBTHaFAemABgBzfFb7dEVZwBg9POJq2OQbA/8UxfgNq6a
-	 vQjmQau/0yIzQ4tAr6Izh959tdKS66oPMaO+bLPKyVFjSA48snfvhV/ui3iLoRqb+ucbq
-	 GgEwZDvtGs3lbPWy4V/wQgEdN9d2fh/CYkbmcByxBzJvJh122O/dMcHxOMbJv2fKX8W/x
-	 MVoyCl2X3ybIbO2W/7Bb2xBAy3PopPYd0ZcZwSm5dRxR1EyKwzWq26ZaP8YmBDAY00A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318507;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
+	b=1dkNvZI/UcFL01rkyu6J2ZaFAx9ac4T3Fz/WY6tsEgWCJq1rqYM50nqMNWcK7n1BZohf
+	 riooyN6ReUgFOaanyZAGtsUQQPD8tqvsHY1D5oJ4alx2hINM0I0kKUnmYFNSBR+LTf1uK
+	 /qV7XU8xGO8O38CwXxMBToJOHLMqxvVOE/noQx8PPX0IADR6gk453iY2e2cFnwJtOyBA8
+	 vNXvNOD98ovxcatyOTQNrAlCeUNtUj9cvtpqMF+FUisQqOtd1Yo9xTkggi2EY717VIMWM
+	 sOUjfw6xWOCOkXHX48sozJAt5Xn865k6e8BiJyu/3ry1w5l2HQy/iZ1zIoI+0QULM9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=bbhwH7gd;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=lYSrv6pH;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=HB72YQ7b;
+	arc=none smtp.remote-ip=74.125.82.173
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9751E60A6F4F
-	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:20:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9751E60A6F4F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0822960A3803
+	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:48:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0822960A3803
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=bbhwH7gd;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=lYSrv6pH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794316832;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jmGjkKcjSqmOdXkFwVhu/ZUdaZzfH+DaKIptD+Gmy0Y=;
-	b=bbhwH7gdKF50S4ykDldCd44NDCOIYdcE5BV3qh1UFP7gP29K8T13JGmEsXAO3pP1yjtsr1
-	/6TNJbwE3AVjhbG9l0SGXHTh0Mghsp4XRwT+H+M2Kcc3pNrpl8stbMUUYhNUfSpAbKPS+j
-	fCiOjYyoLX0AaMvfs0zyNDTZV9G1Wew=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-198-0HTvMtrANmSh2QheQfmmNA-1; Tue, 10 Nov 2026 08:20:29 -0500
-X-MC-Unique: 0HTvMtrANmSh2QheQfmmNA-1
-X-Mimecast-MFC-AGG-ID: 0HTvMtrANmSh2QheQfmmNA_1794316829
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c3613c35145so227438666b.3
-        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:29 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=HB72YQ7b
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-36f6295304dso2712187eec.1
+        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:48:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794316829; x=1794921629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jmGjkKcjSqmOdXkFwVhu/ZUdaZzfH+DaKIptD+Gmy0Y=;
-        b=lYSrv6pHwB1qZHkVvDiuhxA+58vaRWORWjwefkcnxPYtBXttcqLae7ls2ilN18GtyK
-         HMFry42KotdWge+rbCX5W3iLONdA7Yk+W81aQAH/rTyIbK2D9Xrp4pmUzSNZZLPdfS0w
-         kgcdZ/1j9xKfJnlXTF4Iv/u8FX+PExzsl+u+wIcKxrOIUygUPCKFXt/koZOjii0GkVej
-         F7MbyornURD+GgM/OMz8/nAYf4b6OYDNXe5FqJkywCgTjZDMiSdmFlgXhMQin8hrNMi5
-         QvCMZ9Q48MZy+xNWBTjs7DqKd+3o5OHHbpUJkWXd1SqIsIcO7CJy0edg5tPjBMXe+/zx
-         ko4w==
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794318504; x=1794923304; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
+        b=HB72YQ7bzSNDKvQpdxAzIXhw765K3FZEu89E/O9EvBAPCZqbw16+8jdeStxCmh5A15
+         plkmjPO8EHmTzJvTZ5iu6BYR5NFtuz+PTB7iWBCPUIRLkCgu6DZUC9NPs+2aGFTMkAeF
+         cdfF57UkHI3sFT3glI4X4YC+ImrI5h+BfInsK0pf8epb50QuCpEkzvlJabGla57nhEm0
+         qtRQeJYwqKPqJFXucU+zDvokJIDv8OtwSOdgHbYYEgnnlt4BzpJeJPiYDWxA8DhLQvZF
+         RWc/iO9vAht0cLG9xmCvvnyRMTvvz3L9yaRsIuNigHxgDc+jeJ0hdm5KfBq45theZ3hx
+         MS7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794316829; x=1794921629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jmGjkKcjSqmOdXkFwVhu/ZUdaZzfH+DaKIptD+Gmy0Y=;
-        b=ZLYJjBnRPfnD71ExEWXm8QxELGuzA4tysuGy/dQVFgr2GpspboYts1Nx/EYtk+7Hcc
-         DJaVnNskDUgm+x7Kj6N91JVv/4JixozCynt9J6CoIG58D189hN/HXw9XSE7tHFTH0w/2
-         gEx3Bet2kZFr/vRZyFeYLE7hUYUfKi1wLJm6NzVtrgnnV/k28RNSXM4XNIjJXE03r55k
-         xZ9Unf/fTbn/ThKoz0W0retZgJ+XiWQofGKJaCYFK9nfVUGwJU9cbBbjQ93V4PcAqA58
-         RHYpw6nKn7aEi5e479GJw30XXNworHBkiNR7K+TAuA7/CG224z6vZem+/Kxh/XzQprjn
-         gBsA==
-X-Forwarded-Encrypted: i=1; AL+hErFKN2CQ52JUPV0SsGp9oapbXdtZxP24BIvxOqNHk7A9k6zhFHMK+VNDvq7AhdW1kEzKxxv637ZzVA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/nsSYWUFd1rnFcZplen3b8usXDsLWfWOUkLsNhgOyAk9iWBmgU
-	pg1WJZ8+1z5m9MPvll5WRoSHILdTjE7Yh5vsz6wtu9ifPJZfqugaFQKeLL5CoTv9Vdg0UJKTq8K
-	FKzBtUbGxAHFz6WYVPDgJ5vC+ETLPKhHkIkKMvdk4W/b7ddfgEg7Tv/mGv35K
-X-Gm-Gg: AYBFou3I2Dd2T3upifGqjVd/vi0X0vVtruPGlCSmHaB3kWJTa9/11VeCoB7tJuVkMpn
-	xmZfRX9lFGs+GjkFFV8sUcNdjqwF63Ioc77keooKJ4VHURGrLf3WI0sNkO2/l2li+xZfHcJL3or
-	Hoe5O3tsmqZPLx8Dv07tA6PRtRshT6DHUUDVsaTv4BKHPsSnSEtX4VWDBcOvyuOnM9Q5WM5Xv4p
-	eH6pnI4othjXW1MTss+vOjYSgYRo5KZNte40jGmNWQH9IxEnbCzDDLUYaHicKVWiBZFWrygGfMY
-	/2vjiRq7z57juib3VTiWeaNbh8do/yrAsdVwVHKt2H5Yuta0UXlJz7JQ+Zb254D6sMLeiAdwfzQ
-	O8S2yq3NVKuHiqF8q5jPJZY3bK1jyGNOhtrqwrcsVPgd4I1jerFGtEMK2L/Ga6EAaHOsXJ6l16r
-	Wx3hFZT1nT2THj4yhltLtUNxsVyQJr3B0xcL/53pUx1rlyp1xIClB5O575VbnsOcUtGR5bjASvf
-	Fby6R3IGIUlJ0Q0y+BCKGJ+8dUunnxPA8WPXX9HHSz/BaB194UT
-X-Received: by 2002:a17:906:c150:b0:c2c:d06f:cf89 with SMTP id a640c23a62f3a-c50491bd3b6mr211043166b.2.1794316828696;
-        Tue, 10 Nov 2026 05:20:28 -0800 (PST)
-X-Received: by 2002:a17:906:c150:b0:c2c:d06f:cf89 with SMTP id a640c23a62f3a-c50491bd3b6mr211040266b.2.1794316828268;
-        Tue, 10 Nov 2026 05:20:28 -0800 (PST)
-Received: from cluster.. (4f.55.790d.ip4.static.sl-reverse.com. [13.121.85.79])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 05:20:27 -0800 (PST)
-From: Alex Markuze <amarkuze@redhat.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	io-uring@vger.kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH net-next 12/12] io_uring/opaque: add basic KUnit tests
-Date: Tue, 10 Nov 2026 13:20:06 +0000
-Message-Id: <20261110132006.3280986-13-amarkuze@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261110132006.3280986-1-amarkuze@redhat.com>
-References: <20261110132006.3280986-1-amarkuze@redhat.com>
+        d=1e100.net; s=20260707; t=1794318504; x=1794923304;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
+        b=PFV0Qvz/3zIfIXczKI1H67tP0BAPkwFM+ZL/WEVDYxkcS2EtrXAPyt8DDKpjPKYDzq
+         t1aGUBpajVJZsrDFFUfpzdpVVvFs/7+mQpWGZlUgpDRXQ151QZRVVqOnlthaMPtbCpzA
+         Sxq6sbN8wxiJzDHHTI9BCvAsLgVQNdKW/gBChlRveD2ZgE/8GD/8EAoyNEunp/dZt/E6
+         Hfwwmk2dEOM1VtamDZTIBlemKSBXnTIQySjQdyIR22D8D5sLUU3X0qIqfcVH+y0B8YoR
+         LSVjzoRHMMXwlbTEhntsg6TEDyVCMW2I1j6gHtk5hs+q6LzIFjzt73qFGcHr2tXP4dKu
+         QnZg==
+X-Forwarded-Encrypted: i=1; AL+hErFxytA0LZLYgwh0E029Ou4IHJ8EyklikaaNa6XwHdXMbN64EAEJPqUnLkv1bjMVxYS5JbpO774Wbw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8/fZvJzh2N89ODgapsN3TQz/Z+MyXmLNNzlNeZkEX4PJIHc0tG
+	AnVtGz9j2B6fVLfXbw690WCU1BK/iQ+0dLoxZF8AgublMdX5zTp0z9jHc6ZK4s5Plfk=
+X-Gm-Gg: AYBFou2DjVgz/E73Bwx0aX/j+oICZA8Sw7ym9UuT1UBFCh40FeVItmZSr72NcmK1yiF
+	uFkngdFQY5Dv0l8WTTclt6x16R/5Eq6mASY6uuRMTyVMMTfr78rLvIOehnEuhQLrnB7zLgNjEYo
+	Jx+t//VMdoLVeCzFuCAZmyhI95ZjRsJ8Lq3xZiQsCcg7bhgyaLrIxKnnrkHTZ06vG262Z7oftdH
+	NtHnTrlTVi7bmYKESEigWHd4Als+0smJiXPh9x9M08/NwtiU8LPlBthzMWn5112zSr7V7mxcZ7G
+	svkeambyO8/Twjpm2WYA4u4CfngbHRKOkeBN07D9PmTVhO/uiykhlP6wzY8/EbeeTJAOVewZysw
+	279ApFMZrgLjYf7S+ZTZMa1ceX9fEWSQGnijxLSSDhkJrNMzJiv/b/rCnddfoaR56FvBMnRR3Ea
+	8QhImzGKogaqbr4MXV1Bh4KwrEO4zR7qda6NRFuWE4vvQ3XaS09Q+ofWpRWQgaWlS9g6x86Ybqy
+	TH+zR/8CYtXRuGdG6fMcNGXsYjIJlw2uGWgPoLRGmtunlJcxNkPWovpsyahqGePrHQy5wlAUZLx
+	n5qpUF9N+O1c5dVE+/YaIzoTYOt9/+/sNwK5TPslV3WF/HjSaB5i3oYdpMgHUGurL3fRSaiwoo+
+	FT6Mta2Ximm5nqg==
+X-Received: by 2002:a05:693c:8350:b0:36c:a1ef:f8f7 with SMTP id 5a478bee46e88-3751c82ffaamr3514528eec.4.1794318503557;
+        Tue, 10 Nov 2026 05:48:23 -0800 (PST)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375212e7d24sm11503678eec.22.2026.11.10.05.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2026 05:48:22 -0800 (PST)
+Message-ID: <a8dea1a6-1f12-4f28-bd41-b751b3a9c7f0@kernel.dk>
+Date: Tue, 10 Nov 2026 06:48:21 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -132,188 +93,42 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [SECURITY] io_uring: ring resize splits mixed-mode large entries
+To: n3rd <18670333770@163.com>,
+ "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: "security@kernel.org" <security@kernel.org>
+References: <371cd386.bc0dc.1a1c5844185.Coremail.18670333770@163.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <371cd386.bc0dc.1a1c5844185.Coremail.18670333770@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Check receive-budget admission and watermark transitions, then build a
-page-backed immutable version and check its vector, payload, held version
-reference and final backing/reference release.
+On 11/10/26 5:52 AM, n3rd wrote:
+> 
+> Hello,
+> 
+> I am reporting a security bug in the Linux kernel.
 
-Use existing internal helpers without adding production test hooks. These
-are basic helper checks; the matching liburing example exercises a real
-ring and loopback TCP connection.
+Congratulations on being able to run an LLM, less so on being
+able to read and comprehend anything. I'll keep it short as
+you've already wasted more of my time than what is warranted:
 
-Signed-off-by: Alex Markuze <amarkuze@redhat.com>
----
- io_uring/Kconfig       |  10 ++++
- io_uring/Makefile      |   1 +
- io_uring/opaque_test.c | 128 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 139 insertions(+)
- create mode 100644 io_uring/opaque_test.c
+1) No need to CC security@ if you send it to public lists. That's
+in our documentation
+2) Send a patch to fix an issue, that's also in our documentation.
 
-diff --git a/io_uring/Kconfig b/io_uring/Kconfig
-index 5b696cf266f6..db6e3c5a317d 100644
---- a/io_uring/Kconfig
-+++ b/io_uring/Kconfig
-@@ -30,3 +30,13 @@ config IO_URING_BPF_OPS
- 	def_bool y
- 	depends on IO_URING
- 	depends on BPF_SYSCALL && BPF_JIT && DEBUG_INFO_BTF
-+
-+config IO_URING_OPAQUE_OBJ_KUNIT_TEST
-+	bool "KUnit smoke tests for opaque objects" if !KUNIT_ALL_TESTS
-+	depends on KUNIT=y && IO_URING_OPAQUE_OBJ
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Check receive-budget admission and watermark transitions, and the
-+	  vector representation and reference lifetime of an immutable version.
-+	  The tests call internal helpers without a userspace ring or TCP socket.
-+	  They are a small smoke test, not a pressure or concurrency suite.
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index 912b1861c0a5..b7fcc2d3c714 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -18,6 +18,7 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o opdef.o kbuf.o rsrc.o notif.o \
- 
- obj-$(CONFIG_IO_URING_ZCRX)	+= zcrx.o
- obj-$(CONFIG_IO_URING_OPAQUE_OBJ)	+= opaque.o opaque_register.o opaque_compact.o
-+obj-$(CONFIG_IO_URING_OPAQUE_OBJ_KUNIT_TEST) += opaque_test.o
- obj-$(CONFIG_IO_WQ)		+= io-wq.o
- obj-$(CONFIG_FUTEX)		+= futex.o
- obj-$(CONFIG_EPOLL)		+= epoll.o
-diff --git a/io_uring/opaque_test.c b/io_uring/opaque_test.c
-new file mode 100644
-index 000000000000..cba5829de05f
---- /dev/null
-+++ b/io_uring/opaque_test.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <kunit/test.h>
-+#include <linux/highmem.h>
-+
-+#include "opaque_internal.h"
-+
-+struct opaque_basic {
-+	struct io_opaque_store *store;
-+	struct io_opaque_data *data;
-+	struct page *page;
-+};
-+
-+static void opaque_basic_release(void *arg)
-+{
-+	struct opaque_basic *c = arg;
-+
-+	if (!IS_ERR_OR_NULL(c->store)) {
-+		io_opaque_data_put(c->store, c->data);
-+		/* Also release a budget assertion's unfinished reservation. */
-+		if (atomic64_read(&c->store->bytes) > 0)
-+			io_opaque_uncharge(c->store, atomic64_read(&c->store->bytes));
-+		io_opaque_free(c->store);
-+	}
-+	if (c->page)
-+		put_page(c->page);
-+}
-+
-+static struct opaque_basic *opaque_basic_new(struct kunit *test)
-+{
-+	struct io_uring_opaque_config config = {
-+		.hard_limit = 8 * PAGE_SIZE,
-+		.compact_headroom = 2 * PAGE_SIZE,
-+		.reply_reserve = PAGE_SIZE,
-+		.high_watermark = 4 * PAGE_SIZE,
-+		.low_watermark = 2 * PAGE_SIZE,
-+		.max_object_size = PAGE_SIZE,
-+		.max_objects = 4,
-+		.max_streams = 1,
-+		.max_extents = 8,
-+	};
-+	struct opaque_basic *c = kunit_kzalloc(test, sizeof(*c), GFP_KERNEL);
-+	struct io_ring_ctx *ctx;
-+
-+	KUNIT_ASSERT_NOT_NULL(test, c);
-+	KUNIT_ASSERT_EQ(test,
-+			kunit_add_action_or_reset(test, opaque_basic_release, c), 0);
-+	/* No user/mm accounting in this internal-helper fixture. */
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, ctx);
-+	c->store = io_opaque_alloc(ctx, &config);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, c->store);
-+	return c;
-+}
-+
-+static void opaque_basic_budget(struct kunit *test)
-+{
-+	struct opaque_basic *c = opaque_basic_new(test);
-+	struct io_opaque_store *store = c->store;
-+
-+	KUNIT_ASSERT_TRUE(test, io_opaque_charge(store, 3 * PAGE_SIZE, true));
-+	KUNIT_EXPECT_EQ(test, io_opaque_memory_mode(store), IORING_OPAQUE_MEMORY_NORMAL);
-+	KUNIT_ASSERT_TRUE(test, io_opaque_charge(store, PAGE_SIZE, true));
-+	KUNIT_EXPECT_EQ(test, io_opaque_memory_mode(store), IORING_OPAQUE_MEMORY_LOWMEM);
-+	KUNIT_EXPECT_FALSE(test, io_opaque_charge(store, 2 * PAGE_SIZE, true));
-+	KUNIT_EXPECT_EQ(test, atomic64_read(&store->bytes), (s64)(4 * PAGE_SIZE));
-+	io_opaque_uncharge(store, 2 * PAGE_SIZE);
-+	KUNIT_EXPECT_EQ(test, io_opaque_memory_mode(store), IORING_OPAQUE_MEMORY_NORMAL);
-+	io_opaque_uncharge(store, 2 * PAGE_SIZE);
-+	KUNIT_EXPECT_EQ(test, atomic64_read(&store->bytes), 0LL);
-+}
-+
-+static void opaque_basic_version(struct kunit *test)
-+{
-+	static const char payload[] = "opaque";
-+	struct opaque_basic *c = opaque_basic_new(test);
-+	struct io_opaque_extent *extent;
-+	void *mapped;
-+
-+	c->data = io_opaque_data_alloc();
-+	KUNIT_ASSERT_NOT_NULL(test, c->data);
-+	c->page = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+	KUNIT_ASSERT_NOT_NULL(test, c->page);
-+	mapped = kmap_local_page(c->page);
-+	memcpy(mapped + 17, payload, sizeof(payload));
-+	kunmap_local(mapped);
-+	get_page(c->page);
-+	extent = io_opaque_extent_new(c->store, c->page, 17, sizeof(payload), 0, false);
-+	if (IS_ERR(extent))
-+		put_page(c->page);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, extent);
-+	list_add_tail(&extent->list, &c->data->extents);
-+	c->data->length = sizeof(payload);
-+	KUNIT_ASSERT_EQ(test, io_opaque_vector(c->data), 0);
-+	KUNIT_ASSERT_EQ(test, c->data->nr, 1U);
-+	KUNIT_EXPECT_PTR_EQ(test, c->data->bvec[0].bv_page, c->page);
-+	KUNIT_EXPECT_EQ(test, c->data->bvec[0].bv_offset, 17U);
-+	KUNIT_EXPECT_EQ(test, c->data->bvec[0].bv_len, (unsigned int)sizeof(payload));
-+	KUNIT_EXPECT_EQ(test, c->data->charge, (u64)PAGE_SIZE);
-+	KUNIT_EXPECT_EQ(test, atomic64_read(&c->store->bytes), (s64)PAGE_SIZE);
-+	KUNIT_EXPECT_EQ(test, atomic_read(&c->store->extents), 1);
-+	refcount_inc(&c->data->refs);
-+	io_opaque_data_put(c->store, c->data);
-+	KUNIT_EXPECT_EQ(test, refcount_read(&c->data->refs), 1U);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(c->page), 2);
-+	mapped = kmap_local_page(c->data->bvec[0].bv_page);
-+	KUNIT_EXPECT_MEMEQ(test, mapped + c->data->bvec[0].bv_offset, payload, sizeof(payload));
-+	kunmap_local(mapped);
-+	io_opaque_data_put(c->store, c->data);
-+	c->data = NULL;
-+	KUNIT_EXPECT_EQ(test, page_ref_count(c->page), 1);
-+	KUNIT_EXPECT_EQ(test, atomic64_read(&c->store->bytes), 0LL);
-+	KUNIT_EXPECT_EQ(test, atomic_read(&c->store->extents), 0);
-+}
-+
-+static struct kunit_case opaque_basic_cases[] = {
-+	KUNIT_CASE(opaque_basic_budget),
-+	KUNIT_CASE(opaque_basic_version),
-+	{}
-+};
-+
-+static struct kunit_suite opaque_basic_suite = {
-+	.name = "io_opaque_basic",
-+	.test_cases = opaque_basic_cases,
-+};
-+
-+kunit_test_suite(opaque_basic_suite);
-+
-+MODULE_LICENSE("GPL");
+and most importantly:
+
+3) This isn't a security issue at all. An application resizing a
+ring and getting a CQE or SQE mangled is NOT a security issue. It's
+just a bug.
+
+If you want to actually be useful, send a fix. And don't bother
+security@ for trivial bugs.
+
 -- 
-2.34.1
+Jens Axboe
 
