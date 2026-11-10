@@ -1,104 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794316828;
-	b=Sc8B5y5MOuwdjygEbWnZS5oNiVGyZiM7JFBIil+mGxrhUgi02CJLH46e+h8cQ3wIRdUH
-	 4K3ri8AzDHhXry+Fhz52hrTAnIKPbt/jCAjpaENWL1mT1r95bGMK535wZRCqfie30ek29
-	 bfPdxQzHdPaYeCBPiEbqus7V7v5lm7v9jp7euUVzmeXjwANphXFXaiIEyDgOcaYO6uhr0
-	 gRyrkbtOhdTo9GTYMEhwFKKbT1JantQ3S/ypLUWbuaVbF1ZdIsK5XoXufsDM6MZOwvcH4
-	 1Vxw/lwTUJ0dyhE7TrDJ7SRm0ea4N9pbot4mw+QiPuXKUTvU/C2CQFxfrBeDHiKLiwQ==
+	t=1794316829;
+	b=pbRD++RVkqBU9S9nk3x38hjq9tYd7Hv8As+fxxPvL43o82Nd3fhkXZE0tQv3gEt22PPC
+	 gjFSBxk4c/5MbZ1EUe7l7tQqb0f3xeS+WyxI6NFzpQ9B69MSJLPUp6Hiu0jcEYJLONc8/
+	 SjkNVlkGzEDgz+z0nuXxYk0QfzIrSqKg5V1YYQuLX7AbEQcaKHWDzKsxdSbKJfng5CgdS
+	 HprtUPlgiJX+HxXU58ayovfGOyzapYgiFhZUyJaZxBFuR0G/8dTMTeDkXOTBAWGx7Jmet
+	 QfvuuVfKG+VVOkmyVSl0utWdQvVjfIe3yI75rSxpk/KuDigYUQnLQn49JxNr/jnkjHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794316828;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794316829;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=IMjpAbpOJnuW14XTRIrRCLYNjoSdqJNJdckzdUdSkFo=;
-	b=1x42Gz9ZYWu4NfuiMJjO1rnII7CEXw+9A0HLuIq2Nx/2mXxlpqHNfdMf34s+IJvR/dkS
-	 nF2FNFMEK/h3olxtHzI8VCR5VJOkz3T4O+Yb1/bTrtr9xR6qyJDh3D9QJdYDoKyo4sXaW
-	 zCapyASY9vvtU8/C+RSCI+J6goi/L2hqcBbwHbYa52JqJ143sqlvRs9tECUxqo7ocrOQ3
-	 tfyCgIfBbFHGAHZMl9ldRDCHTVSn8khZsTtrxVIHkmOhAhUuwRWMKtgPHC1FmnUb4knv9
-	 LBryteB1WtKqxo2Vi/mOaoyqpdi6sSV1+h0lvVDVsBDsN8Ao5iZz0exP0+EUXlXyhFw==
+	bh=SIYtpsSXUKLmHj3y4sdEOcfIe52+dEJG+otddOtS/UE=;
+	b=uc2b7GXYJ5dnF90EtgenGlQgNATizGE6Z1sdUoC49KlyoDGCwRSzkrK75/TVUpeVOxoE
+	 xAmAhPVrWBl8ms9NoDMQAofJz5WRLmylfnCRYMc3Ko0pm26XC2VKMmgYmhHH3hACSNxmo
+	 LQtt6xzaD/Cgp3cxAdSZp5yo8WVYY92AA8xabF3MCSeOGvH/C5QDSKcUusBV+Tc1v4wFf
+	 eRRGOA4KjIfYXx6rAcS2DI9R6yiP+5qMkpJE7hBKu0XoyaepFE6A9FI3RdoL1u4xJMgaz
+	 TXtI16cqYgmknO+QkJVXrKby9x+PknTb/M3KRFUA8DTAGFFxSFAgjXfJ2k0lgTBk66A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YeO8Z9MR;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="nN8P/pKj";
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Hh6L3gkO;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hUMLiVhB;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E84606A9F7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46AA60A5BE8
 	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:20:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67E84606A9F7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E46AA60A5BE8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=YeO8Z9MR;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=nN8P/pKj
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Hh6L3gkO;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hUMLiVhB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794316826;
+	s=mimecast20190719; t=1794316827;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IMjpAbpOJnuW14XTRIrRCLYNjoSdqJNJdckzdUdSkFo=;
-	b=YeO8Z9MRShMd7P23GVywQlGp5q4PCCP5ZXm94HgKl+jWYN8NVOxtvl6NsDfod0I88qas2H
-	Tv1FHoABka71Lx+NZ8UxXa6jQyCYBGouKtHjol6Jx9CncmvX7hL1ULbvBXCZhsWEhRMkIt
-	jR2POWqI9i+1F8QV+epIRgRYYeHB28c=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=SIYtpsSXUKLmHj3y4sdEOcfIe52+dEJG+otddOtS/UE=;
+	b=Hh6L3gkOReoFbhs5zs0CTGhzR7/VIdf6BBFiibBlRWHq97nRnIXN4IFiTNrgDLXBfVgLya
+	3hB5REsQLdWY7hTdBZHYq5r1Z6/I3Vs0Blug6HIsC8w3lRHyJQPiyEElYxmCP72tZ3w4V2
+	Q3j6Mcdtx60jJkjOBbOOymANTMX6qyM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-471-FyB4oPCHORGJz21OO7YSqQ-1; Tue, 10 Nov 2026 08:20:24 -0500
-X-MC-Unique: FyB4oPCHORGJz21OO7YSqQ-1
-X-Mimecast-MFC-AGG-ID: FyB4oPCHORGJz21OO7YSqQ_1794316823
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c505eecba6cso12401266b.1
-        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:23 -0800 (PST)
+ us-mta-274-Lon9Kw-jO8-8IPqjaJP_Iw-1; Tue, 10 Nov 2026 08:20:26 -0500
+X-MC-Unique: Lon9Kw-jO8-8IPqjaJP_Iw-1
+X-Mimecast-MFC-AGG-ID: Lon9Kw-jO8-8IPqjaJP_Iw_1794316825
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c4d1684d1b3so184260666b.1
+        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794316823; x=1794921623; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1794316825; x=1794921625; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IMjpAbpOJnuW14XTRIrRCLYNjoSdqJNJdckzdUdSkFo=;
-        b=nN8P/pKjYfOdMOFTccorc+DPQr5TUiMFZke/HoDlETTSnwckBYK4/DDhWWUy4kfbaB
-         tWrowqK19JbeJs7hH5Yt3nycFwDXb7iQNQFevvoqSHImAgx83kkmP8UCwo2G1sEdw6i3
-         n4Wlp0J2+bzkwoHt80yZlfoSslcM61lsAVfKDqCYtWh5IaokpC3Fn9CtX2sHQkIUWdjs
-         xRX8ctidOaFGgwvaRSVFPboLz0IweXAREp6YM2nSrsne1NZwRnVBueXzsuwNLPKJIZar
-         ZSfDDCKievOFyClcl5pG9lAyrZOBFDErXvz2URm5c6mSAGXd9bRwaYkxpH3DMIEH73xr
-         lJDw==
+        bh=SIYtpsSXUKLmHj3y4sdEOcfIe52+dEJG+otddOtS/UE=;
+        b=hUMLiVhB3b5felEGYP7ZkbJVKx0PY/bkp9rLFsBttkA/1svEW9RMoxcwcCKtPo5Ce+
+         ViRj8EatoIkNF/SGH/N9b3+dU50yutnldBAIgqS/sy5/cRMI6jy28J5/mQ8D5fQtTZDq
+         0JeJtS3U9jja5w0/fJtkyLlq3c8M2vzWCFYzJje3BALD/hUbcRpT5MHmBJfTg5WVRqeM
+         UceObruuEzGQUnRtwYma40rbdkHEZdward9SYs3UqPm8X7sD3etehy0Fj/lcBk4+qqQu
+         3BjYbqD76VecfbAcB9yGB9ciwPTmMCeJOEWMMRopch6LnP6OtGLXlPhNekgTSobFlIOV
+         hLaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794316823; x=1794921623;
+        d=1e100.net; s=20260707; t=1794316825; x=1794921625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IMjpAbpOJnuW14XTRIrRCLYNjoSdqJNJdckzdUdSkFo=;
-        b=hNPE4YDDmwDZAIOXPQ2kDuBC1DQfigtv/ywaHh7OM13QLRl81r2P4ZtaXOqVELwMcl
-         DCXezdwwAH/xcDn/DyeCB/+iJt0+0wp9aX5WIz/s2BraycORUw1i2MNz4K0e+k8kQccm
-         NHFI7pojG30z8xANpiIxuS0B9+WDVYUTvCXy4cZGCJUvaY7+GuxDJwEs2yFyxlz4PqWO
-         1zjk4BTah5+rRhLKVuEKA27XNH3h01AZ8jMVkpDfRIs+1nEbnwo8rwwmFQyZKatXOvQ7
-         cWLyjG+o0bKPj1SajRD1gzGwGYq1ZtTnT0KkvO2oNOhFqActbOsIhplSqieTv6RXDEKv
-         WEsg==
-X-Forwarded-Encrypted: i=1; AL+hErFs8vku6RDxXO5uBewM6UCr12ecgPe7RyYAhEQHHIiscXKws+OAeLfFrw482dgUfkXAj8ARZsKxUA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+M0ONTWF0fGtsdT3gV/g3BQ2TAT7nTnjxHTtWKci03+pcIIVZl
-	/Um/GgyNLhN1XM8x7ZS+QUl/IXOM6MCYFtatXHmI75RlpaWJFTIgtcy5eOpNOX/rmhMwyOmQzNq
-	n6mmZRFE3919vZX+5LKLYD1GdhxuhEFj4bcpFM/tF0Qlf+Bu3IiFLTm2byvDmZDP8bwAU
-X-Gm-Gg: AYBFou1DYlxmsq2O/cFeqMod4GsfYy/lz2JMpEjy3KyTUDYPl9aAKMtL6d/fgT44UTY
-	yqkxi0e6Laf31GYglhISxIXemdfSd0kHjwSNDn4QUMHtOyt82P3XP/IkWXj7OD4pijgi8OYwGZ8
-	3RqUTluvJvKxI155NqMFYL48P/z/n0WhHV5+Py/Aq5bEJhJ2d0hx+dr2J1q7gTxicFwLU2YNST/
-	N8rzebJqzul2yxKTWSDYDJVX2aVo8h91bN3fIh30OKUKmbpft3KqXAfDMcrQYgHevYFv+CESFXN
-	eeyGz5jewpUi5EaJNdcuhTN1vA6022naDWOqHED+EczrlfPhHkxjS9wFjKRGJWPDGFcVL+2GtQZ
-	MVfjYBRCU2F7XJOTYHgYwgHu8Aw4nJSX5t3VnrydTAOF/ol4NJ1BXf9JtYBsUDPxN8j9++gL5Lz
-	iIXUEN7Ka2LvLGUuuoPTXhT7u43xM7utcIeOs2ZasXp/xfK4+7lrJf+nQKnmma1vFPSAqebG05L
-	IkPtNu0mhLo4IW8A2L5MVmSdnIzHpi3GqwXKdx0VR+kdE3cM8GG
-X-Received: by 2002:a17:906:379b:b0:c4d:212a:192a with SMTP id a640c23a62f3a-c50496a58cemr148394566b.48.1794316822295;
-        Tue, 10 Nov 2026 05:20:22 -0800 (PST)
-X-Received: by 2002:a17:906:379b:b0:c4d:212a:192a with SMTP id a640c23a62f3a-c50496a58cemr148392266b.48.1794316821686;
-        Tue, 10 Nov 2026 05:20:21 -0800 (PST)
+        bh=SIYtpsSXUKLmHj3y4sdEOcfIe52+dEJG+otddOtS/UE=;
+        b=YOWYbsAcHddStsgmWV9tiMIKGmMf51AXslmF9w7+uoIjklBQ5RgvYX1S+Rj4LRiW3K
+         d9Byx7BEDw5sY3d0Zwij3OnIHCstXyZ2dncKDPSewcXuQHAWOdk5BeAlO0AoM9UhsHKe
+         q6LaRJUG7fzXcPXJV/fVebPI3uXDDvbhHOPSt0Z7ZtQG/yhHjiuiomgQ3GraoUelZOa2
+         D046zfNv8shJAp4jIGbrf/ewcj4jIoiKDoPaYC8K6+4BNrkewQp6czwz8fnFbRiddlOf
+         AGsH1yiGptTTcSGuv/VXR31tKt0sizZDAV1MnGxnmOk1GEnXePBYvqP0uW1Jsq/Nh8qE
+         2VRA==
+X-Forwarded-Encrypted: i=1; AL+hErF0kzQnQIZOquudyD1fEC7M1yjfy6lLMGnI79xRmkD7lkk927njrFL3UV7RkSkxUbStHYJGed9H1w==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8n5GEcXfu8ldql2DrJ49LPLN44YhmcU4CYsCIx2yG0PH0mQ2Fg
+	BNmowHn6GmEN7ShZKHkehNWafb7mXeSpIYnilac4tgg4npBZJM+geeyuPcxrd2ySUzPM1hbSyPh
+	YuEG+02A1yQw11oSFtl/bWPDcDkBSu1tEAdG6p/A1ZhuFCuMvQ/Yd1+Mon9Xm
+X-Gm-Gg: AYBFou021t5hY/xOotCUupldmpk8dm+ClNAgzkbk25gwZzuWTiGi/+XLVZmFeqyyhBD
+	WJi+seqDN+Vj/Z6v7j+8QkfoNGpyIVohjWva3qggZH4pNO2SDBCGWve0tUD3RWt7IQwtB/FZxnT
+	uHiBm7aebAIG41Wl9AdeZnvsfFcIhV7IhyLMTTJ8EBKYjdcEmKUZv4EIdAqFH/MhGaRmTnmaKcA
+	LnxdmZiXp8M+c5oNXzNKEUcC1EQR+OY65R4KeqoNrm+FPIUW0dmleeBhjLPNRp3xN/sRxAZwGye
+	4gJZgNj+sxeeAgCcgEuOy0lKeTkxLYs+jC1fNt6GAOOh95pIpAkvsk036zVPPF2BEgHfUs48X+4
+	Gxw+JX6R2D/hAP9OO4qS+ZjmndJiwQI2/9r0WipIq7osn3jLu7XhXXbGKeUWjFzqf5zEpL5LnNZ
+	L/MrpxJczphiVf65ETd9H/mILm/XKfes+uNFWZ63gEd3wYRbypXMbBKSG5Fs3IEdhvMbmTjWMxq
+	sC5ibQyzeP01z8dQDO9+bnR56KTxvs+AY58znIB0DeBMxOXjz36
+X-Received: by 2002:a17:907:96ab:b0:c50:5a93:3bd7 with SMTP id a640c23a62f3a-c505a93483fmr107228766b.3.1794316824583;
+        Tue, 10 Nov 2026 05:20:24 -0800 (PST)
+X-Received: by 2002:a17:907:96ab:b0:c50:5a93:3bd7 with SMTP id a640c23a62f3a-c505a93483fmr107225166b.3.1794316824074;
+        Tue, 10 Nov 2026 05:20:24 -0800 (PST)
 Received: from cluster.. (4f.55.790d.ip4.static.sl-reverse.com. [13.121.85.79])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.20
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 05:20:21 -0800 (PST)
+        Tue, 10 Nov 2026 05:20:22 -0800 (PST)
 From: Alex Markuze <amarkuze@redhat.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	"David S . Miller" <davem@davemloft.net>,
@@ -117,9 +117,9 @@ Cc: Pavel Begunkov <asml.silence@gmail.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH net-next 09/12] io_uring/opaque: add IORING_OP_OPAQUE_COLLECT
-Date: Tue, 10 Nov 2026 13:20:03 +0000
-Message-Id: <20261110132006.3280986-10-amarkuze@redhat.com>
+Subject: [RFC PATCH net-next 10/12] io_uring/opaque: add IORING_OPAQUE_CREATE
+Date: Tue, 10 Nov 2026 13:20:04 +0000
+Message-Id: <20261110132006.3280986-11-amarkuze@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261110132006.3280986-1-amarkuze@redhat.com>
 References: <20261110132006.3280986-1-amarkuze@redhat.com>
@@ -134,957 +134,209 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a multishot request that attaches a connected TCP socket to a store
-and collects its receive stream. sqe->fd names the socket and
-opaque_store_id the store. ioprio accepts POLL_FIRST; IOSQE_ASYNC and
-successful-CQE suppression are rejected.
+Allow an application to populate an immutable object from its own memory,
+for example to retain a generated reply for repeated sends. Add CREATE
+to IORING_OP_OPAQUE_OBJ; its objects support the same reads, sends and
+FREE as received objects.
 
-Attachment requires ESTABLISHED or CLOSE_WAIT, the original TCP protocol,
-no receive owner, repair mode, urgent data or sk_user_data. Authorize
-receive access under the request's credentials before attachment and
-before taking the socket lock. This authorization covers the collector's
-lifetime; subsequent passes do not recheck receive policy. Attachment
-posts the stream-token CQE before publishing the receive claim. If that
-CQE cannot be posted, no claim or byte is taken. Stream offset zero is
-the first unread byte at attachment.
+sqe->addr3 points to the source and len supplies 1 to INT_MAX bytes;
+addr and off must be zero. Preparation rejects malformed fields, sizes
+beyond the store's object or capture limits, and inaccessible or
+overflowing source ranges. Source memory remains valid through execution.
 
-Each issue captures at most 256 KiB through tcp_read_sock(). The actor
-follows the earliest pending stream decision: DISCARD consumes without
-retention, RECV_OBJECT builds private backing, and other bytes become
-undecided. Eligible unshared receive pages are retained by reference;
-other data is packed into owned copies. Undecided bytes normally stop
-further collection so TCP flow control can apply. Decisions and waiting
-inspection requests can make collection resume.
+Issue reserves an object slot and page-rounded backing charge, then
+copies synchronously under the ring lock. It uses the compaction page
+allocator, preferring compound allocations and falling back to smaller
+orders. Each allocation owns an extent and part of the reservation.
+Copying proceeds by base page and yields between destination allocations.
+CREATE fails immediately on budget exhaustion rather than waiting.
 
-Byte or extent pressure produces a nonterminal -ENOBUFS CQE, at most
-once per unread offset, and enrolls the collector on the store's budget
-wait list. Allocation failure imposes a 50-ms retry deadline. Wakeups
-grant no capacity: reentry checks both budgets and the deadline again.
-An infeasible partial RECV_OBJECT returns its private prefix and fails
-instead of holding capacity while waiting for the rest of itself.
-
-Use native multishot socket polling between collection passes. The
-receive-owner callback, decisions, closure and capacity returns set
-a persistent private collector predicate before waking the socket
-waitqueue with kernel-only POLL_RX_OWNER (bit 26). Native poll enrolls
-before checking the predicate and consumes it only on collector entry.
-Filter the private key before taking poll ownership: ordinary polls
-and output async polls ignore it. Eligible payload-read async polls
-recheck current receive ownership even after coalesced notifications,
-so the real receive handler reports the owner conflict. Error-queue
-receives retain their existing behavior. No UAPI poll event is added.
-
-Retain a pass after both initial and multishot batch exhaustion. A
-worker poll before first issue permits initial attachment unless
-POLL_FIRST requested ordinary socket readiness. Set NO_LAZY because
-one collector task-work enqueue can complete several range requests.
-While budget-blocked, the collector still observes errors, urgent data
-and EOF, consumes a payload-free FIN, and can execute a DISCARD at its
-capture cursor without allocating.
-
-EOF, socket error, urgent data, cancellation, stream close or inability
-to post a pressure CQE ends the collector. Cancellation closes its stream
-and releases retained undecided data, including cancellation after a
-native poll-setup failure. A token is not a recovery promise after
-that failure. EOF and socket errors leave retained data available for
-pending decisions. The stream token remains until
-STREAM_CLOSE or store teardown. The stream retains its socket file.
-
-Capture takes stream->lock, then the socket lock, then wait_lock.
-Attachment takes the socket lock before tables and sk_callback_lock;
-no table holder waits for the socket lock.
+Success returns the length, handle and forwarding-only flag; OBJECT_STAT
+marks the dense version as compacted. STAT counts the copied bytes. On
+failure no handle is published, and cleanup releases the slot, backing
+and unused reservation. A large CREATE holds the ring lock through the
+copy and can delay other requests of that ring. There is no per-store
+pending-request limit.
 
 Signed-off-by: Alex Markuze <amarkuze@redhat.com>
 ---
- include/linux/poll.h          |   3 +
- include/uapi/linux/io_uring.h |   1 +
- io_uring/opaque.c             | 599 +++++++++++++++++++++++++++++++++-
- io_uring/opaque.h             |   6 +
- io_uring/opaque_internal.h    |   3 +
- io_uring/opdef.c              |  18 +
- io_uring/poll.c               |  58 +++-
- 7 files changed, 680 insertions(+), 8 deletions(-)
+ io_uring/opaque.c | 129 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 127 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/poll.h b/include/linux/poll.h
-index 12bb18e8b978..b2a85a503fd9 100644
---- a/include/linux/poll.h
-+++ b/include/linux/poll.h
-@@ -12,6 +12,9 @@
- #include <uapi/linux/poll.h>
- #include <uapi/linux/eventpoll.h>
- 
-+/* Wake-only receive-owner notification, not file readiness or a UAPI event. */
-+#define POLL_RX_OWNER	((__force __poll_t)(1U << 26))
-+
- /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
-    additional memory. */
- #define MAX_STACK_ALLOC 832
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 1759f4f805b1..6469ab391eec 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -322,6 +322,7 @@ enum io_uring_op {
- 	IORING_OP_URING_CMD128,
- 	IORING_OP_OPAQUE_OBJ,
- 	IORING_OP_OPAQUE_OBJ_SEND,
-+	IORING_OP_OPAQUE_COLLECT,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
 diff --git a/io_uring/opaque.c b/io_uring/opaque.c
-index 0c58900073f7..4610e212a800 100644
+index 4610e212a800..78ae19a6ad82 100644
 --- a/io_uring/opaque.c
 +++ b/io_uring/opaque.c
-@@ -8,6 +8,7 @@
- #include <linux/overflow.h>
- #include <linux/rbtree.h>
- #include <linux/sched/mm.h>
-+#include <linux/security.h>
- #include <linux/skbuff.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
-@@ -49,6 +50,38 @@ static void io_opaque_vec_cleanup(struct io_opaque_req *op);
- static void io_opaque_stream_close(struct io_opaque_stream *stream);
- static void io_opaque_tx_put(struct io_opaque_req *op);
- 
-+/*
-+ * Publish before waking; native poll enrolls before reading collect_ready.
-+ * This is not TCP readiness: only COLLECT and receive-owner-affected apoll
-+ * recheck their predicates. Ordinary poll and output apoll ignore the key.
-+ */
-+static void io_opaque_collect_wake(struct io_opaque_stream *stream)
-+{
-+	struct socket *sock = sock_from_file(stream->file);
+@@ -1884,7 +1884,6 @@ int io_opaque_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	    READ_ONCE(sqe->buf_index) || READ_ONCE(sqe->__pad2[0]) ||
+ 	    cmd > IORING_OPAQUE_AVAILABLE ||
+ 	    cmd == IORING_OPAQUE_COMPACT || cmd == IORING_OPAQUE_SET_POLICY ||
+-	    cmd == IORING_OPAQUE_CREATE ||
+ 	    (req->flags & (REQ_F_CQE_SKIP | REQ_F_FIXED_FILE)))
+ 		return -EINVAL;
+ 	op = io_opaque_req_alloc(req, store);
+@@ -1899,6 +1898,21 @@ int io_opaque_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	op->offset = READ_ONCE(sqe->off);
+ 	op->length = READ_ONCE(sqe->len);
+ 	op->addr = u64_to_user_ptr(READ_ONCE(sqe->addr3));
++	if (cmd == IORING_OPAQUE_CREATE) {
++		u64 pointer = READ_ONCE(sqe->addr3);
 +
-+	atomic_set(&stream->collect_ready, 1);
-+	wake_up_interruptible_poll(sk_sleep(sock->sk), POLL_RX_OWNER);
-+}
-+
-+static void io_opaque_data_ready(struct sock *sk, void *data)
-+{
-+	struct io_opaque_stream *stream = data;
-+
-+	/* sk_callback_lock pins stream; do not take stream or socket locks here. */
-+	atomic_set(&stream->collect_ready, 1);
-+	wake_up_interruptible_poll(sk_sleep(sk), POLL_RX_OWNER);
-+}
-+
-+__poll_t io_opaque_collect_poll(struct io_kiocb *req)
-+{
-+	struct io_opaque_req *op = req->async_data;
-+
-+	/* io-wq may poll before the first issue, including a trailing link. */
-+	if (!op->stream)
-+		return op->collect_flags & IORING_RECVSEND_POLL_FIRST ? 0 : EPOLLIN;
-+	return atomic_read(&op->stream->collect_ready) ? EPOLLIN : 0;
-+}
-+
- static bool io_opaque_budget_ready(struct io_opaque_req *op, unsigned long now)
- {
- 	struct io_opaque_store *store = op->store;
-@@ -103,8 +136,6 @@ static bool io_opaque_wake_budget(struct io_opaque_store *store)
- 	guard(spinlock)(&store->wait_lock);
- 	stopped = READ_ONCE(store->dead);
- 	list_for_each_entry_safe(op, next, &store->budget_waits, wait) {
--		struct socket *sock = sock_from_file(op->req->file);
--
- 		if (!stopped && !READ_ONCE(op->stream->closed)) {
- 			if (time_before(now, op->retry_at)) {
- 				delay = min(delay, op->retry_at - now);
-@@ -122,7 +153,7 @@ static bool io_opaque_wake_budget(struct io_opaque_store *store)
- 		/* A wake is not a reservation; the collector rechecks on entry. */
- 		woken++;
- 		/* Native multishot polling also observes FIN, RST and urgent data. */
--		wake_up_interruptible_poll(sk_sleep(sock->sk), EPOLLIN);
-+		io_opaque_collect_wake(op->stream);
- 	}
- 	if (!stopped && delay != MAX_JIFFY_OFFSET)
- 		queue_delayed_work(system_dfl_wq, &store->retry_work, delay);
-@@ -147,7 +178,6 @@ static void io_opaque_retry_work(struct work_struct *work)
- static void io_opaque_wake_stream(struct io_opaque_stream *stream)
- {
- 	struct io_opaque_req *op = stream->collector;
--	struct socket *sock = sock_from_file(stream->file);
- 
- 	lockdep_assert_held(&stream->lock);
- 	if (!op)
-@@ -158,7 +188,7 @@ static void io_opaque_wake_stream(struct io_opaque_stream *stream)
- 			return;
- 		list_del_init(&op->wait);
- 	}
--	wake_up_interruptible_poll(sk_sleep(sock->sk), EPOLLIN);
-+	io_opaque_collect_wake(stream);
- }
- 
- int io_opaque_memory_mode(struct io_opaque_store *store)
-@@ -1158,6 +1188,269 @@ static void io_opaque_stream_process(struct io_opaque_stream *stream)
- 	}
- }
- 
-+/* Only the earliest undecided range is consulted on the capture hot path. */
-+static struct io_opaque_req *io_opaque_next_decision(struct io_opaque_stream *stream)
-+{
-+	struct rb_node *node = rb_first_cached(&stream->decisions);
-+
-+	return node ? rb_entry(node, struct io_opaque_req, decision) : NULL;
-+}
-+
-+/* Undecided bytes are collected only when nothing is pending or a request needs later bytes. */
-+static bool io_opaque_collect_demand(struct io_opaque_stream *stream)
-+{
-+	struct io_opaque_req *op = io_opaque_next_decision(stream);
-+
-+	lockdep_assert_held(&stream->lock);
-+	return !stream->undecided || !list_empty(&stream->reads) ||
-+	       (op && op->offset > stream->next);
-+}
-+
-+static struct io_opaque_req *io_opaque_capture_keep(struct io_opaque_stream *stream)
-+{
-+	struct io_opaque_req *op = io_opaque_next_decision(stream);
-+
-+	if (op && op->op == IORING_OPAQUE_RECV_OBJECT && stream->next >= op->offset &&
-+	    stream->next < op->offset + op->length)
-+		return op;
-+	return NULL;
-+}
-+
-+static struct io_opaque_extent *io_opaque_capture_tail(struct io_opaque_stream *stream)
-+{
-+	struct io_opaque_req *op = io_opaque_capture_keep(stream);
-+	struct list_head *list = op ? &op->data->extents : &stream->extents;
-+
-+	return list_last_entry_or_null(list, struct io_opaque_extent, list);
-+}
-+
-+static int io_opaque_append(struct io_opaque_stream *stream, struct page *page,
-+			    u32 offset, u32 length, bool take_ref, bool copied)
-+{
-+	struct io_opaque_req *op = io_opaque_capture_keep(stream);
-+	struct list_head *list = &stream->extents;
-+	struct io_opaque_extent *extent, *tail;
-+	u64 start = stream->next;
-+	bool new_backing = false;
-+
-+	if (op) {
-+		list = &op->data->extents;
-+		start -= op->offset;
-+	}
-+	tail = list_last_entry_or_null(list, struct io_opaque_extent, list);
-+	offset += (page - compound_head(page)) * PAGE_SIZE;
-+	page = compound_head(page);
-+	if (tail && tail->backing->page == page) {
-+		if (tail->start + tail->length == start &&
-+		    tail->offset + tail->length == offset) {
-+			tail->length += length;
-+			extent = tail;
-+			goto accounted;
-+		}
-+	}
-+	stream->need_bytes = page_size(page);
-+	if (atomic_read(&stream->store->extents) >= stream->store->config.max_extents - 2)
-+		return -ENOBUFS;
-+	if (tail && tail->backing->page == page) {
-+		if (!io_opaque_extent_reserve(stream->store))
-+			return -ENOBUFS;
-+		extent = kmalloc_obj(*extent, GFP_KERNEL_ACCOUNT);
-+		if (!extent) {
-+			io_opaque_extent_unreserve(stream->store, 0);
-+			return -ENOMEM;
-+		}
-+		*extent = (struct io_opaque_extent) {
-+			.backing = tail->backing, .start = start,
-+			.offset = offset, .length = length,
-+		};
-+		refcount_inc(&extent->backing->refs);
-+	} else {
-+		u64 left = op ? ALIGN(op->length - op->progress - length, PAGE_SIZE) : 0;
-+
-+		/* Leave room for dense copies of a private KEEP's remaining bytes. */
-+		if (!copied && op && op->data->charge + stream->need_bytes + left >
-+		    io_opaque_rx_limit(stream->store))
-+			return -ENOBUFS;
-+		extent = io_opaque_extent_new(stream->store, page, offset, length, start, copied);
-+		if (IS_ERR(extent))
-+			return PTR_ERR(extent);
-+		if (take_ref)
-+			get_page(page);
-+		extent->backing->copied = copied;
-+		new_backing = true;
-+	}
-+	list_add_tail(&extent->list, list);
-+accounted:
-+	if (op) {
-+		op->progress += length;
-+		op->data->length += length;
-+		if (new_backing)
-+			op->data->charge += extent->backing->charge;
-+	} else {
-+		stream->undecided += length;
-+	}
-+	if (copied) {
-+		extent->backing->filled = offset + length;
-+		atomic64_add(length, &stream->store->copied);
-+	}
-+	return length;
-+}
-+
-+static int io_opaque_capture(struct io_opaque_stream *stream,
-+			     const struct sk_buff *skb, u32 offset, u32 len,
-+			     bool shared)
-+{
-+	u32 consumed = 0, head = skb_headlen(skb), start = head;
-+	bool copy_frags;
-+	struct sk_buff *child;
-+	u64 retain_limit = io_opaque_rx_limit(stream->store);
-+	u32 chunk;
-+	int i, ret = -EFAULT;
-+
-+	shared |= skb_shared(skb);
-+	copy_frags = shared || skb_cloned(skb) || skb_has_shared_frag(skb);
-+	if (!skb_frags_readable(skb))
-+		return -EIO;
-+	if (offset < head) {
-+		chunk = min(head - offset, len);
-+		if (!shared && !skb_head_is_locked(skb)) {
-+			void *data = skb->data + offset;
-+			struct page *page = virt_to_page(data);
-+
-+			/* A compound allocation larger than the limit can never fit. */
-+			if (page_size(compound_head(page)) > retain_limit)
-+				goto copy;
-+			ret = io_opaque_append(stream, page, offset_in_page(data),
-+					       chunk, true, false);
-+		} else {
-+			goto copy;
-+		}
-+		if (ret == -ENOBUFS)
-+			goto copy;
-+		goto head_done;
-+	}
-+	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-+		const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-+		u32 size = skb_frag_size(frag);
-+
-+		if (offset >= start + size) {
-+			start += size;
-+			continue;
-+		}
-+		chunk = min(start + size - offset, len);
-+		if (copy_frags || page_size(compound_head(skb_frag_page(frag))) > retain_limit)
-+			goto copy;
-+		ret = io_opaque_append(stream, skb_frag_page(frag),
-+				       skb_frag_off(frag) + offset - start, chunk, true, false);
-+		if (ret == -ENOBUFS)
-+			goto copy;
-+		goto head_done;
-+	}
-+	skb_walk_frags(skb, child) {
-+		if (offset >= start + child->len) {
-+			start += child->len;
-+			continue;
-+		}
-+		return io_opaque_capture(stream, child, offset - start,
-+					 min(start + child->len - offset, len), copy_frags);
-+	}
-+	return -EFAULT;
-+copy:
-+	{
-+		struct io_opaque_extent *tail = io_opaque_capture_tail(stream);
-+		struct page *page;
-+		u32 pos = 0;
-+		bool allocated = true;
-+		void *mapped;
-+
-+		if (tail && tail->backing->copied && tail->backing->filled < PAGE_SIZE &&
-+		    tail->offset + tail->length == tail->backing->filled) {
-+			page = tail->backing->page;
-+			pos = tail->backing->filled;
-+			allocated = false;
-+		} else {
-+			stream->need_bytes = PAGE_SIZE;
-+			if (!io_opaque_charge(stream->store, PAGE_SIZE, true))
-+				return -ENOBUFS;
-+			page = alloc_page(GFP_KERNEL_ACCOUNT);
-+			if (!page) {
-+				io_opaque_uncharge(stream->store, PAGE_SIZE);
-+				return -ENOMEM;
-+			}
-+		}
-+		chunk = min_t(u32, chunk, PAGE_SIZE - pos);
-+		mapped = kmap_local_page(page);
-+		ret = skb_copy_bits(skb, offset, mapped + pos, chunk);
-+		kunmap_local(mapped);
-+		if (!ret)
-+			ret = io_opaque_append(stream, page, pos, chunk, false, true);
-+		if (ret < 0 && allocated) {
-+			put_page(page);
-+			io_opaque_uncharge(stream->store, PAGE_SIZE);
-+		}
-+	}
-+head_done:
-+	if (ret > 0)
-+		consumed += ret;
-+	return consumed ?: ret;
-+}
-+
-+static int io_opaque_actor(read_descriptor_t *desc, struct sk_buff *skb,
-+			   unsigned int offset, size_t length)
-+{
-+	struct io_opaque_stream *stream = desc->arg.data;
-+	u32 consumed = 0;
-+	int ret = 0;
-+
-+	/* The first capture error ends the pass; later bytes wait for the next one. */
-+	if (desc->error)
++		if (op->handle || op->offset || !op->length ||
++		    op->length > INT_MAX || !pointer)
++			return -EINVAL;
++		if (op->length > store->config.max_object_size ||
++		    ALIGN((u64)op->length, PAGE_SIZE) > io_opaque_rx_limit(store))
++			return -EMSGSIZE;
++		if (check_add_overflow(pointer, (u64)op->length, &end) ||
++		    pointer > ULONG_MAX || end > ULONG_MAX ||
++		    !access_ok(op->addr, op->length))
++			return -EFAULT;
 +		return 0;
-+	length = min(length, desc->count);
-+	length = min_t(u64, length, U64_MAX - stream->next);
-+	while (length) {
-+		struct io_opaque_req *op = io_opaque_next_decision(stream);
-+		u32 chunk = length;
-+
-+		if (op && stream->next >= op->offset) {
-+			chunk = min_t(u64, chunk, op->offset + op->length - stream->next);
-+			if (op->op == IORING_OPAQUE_DISCARD) {
-+				op->progress += chunk;
-+				ret = chunk;
-+				goto consumed;
-+			}
-+		} else {
-+			/*
-+			 * Undecided bytes stay on the socket until someone asks for them.
-+			 * A decision further in the stream asks for the gap before it,
-+			 * including one that became the earliest during this pass.
-+			 */
-+			if (stream->hold_undecided && !op)
-+				break;
-+			if (op)
-+				chunk = min_t(u64, chunk, op->offset - stream->next);
-+		}
-+		ret = io_opaque_capture(stream, skb, offset, chunk, false);
-+		if (ret <= 0) {
-+			desc->error = ret;
-+			break;
-+		}
-+consumed:
-+		stream->next += ret;
-+		consumed += ret;
-+		offset += ret;
-+		length -= ret;
-+		desc->count -= ret;
-+		if (op && op->progress == op->length) {
-+			rb_erase_cached(&op->decision, &stream->decisions);
-+			RB_CLEAR_NODE(&op->decision);
-+			io_opaque_queue_ready(op, op->length);
-+		}
 +	}
-+	if (!length && stream->next == U64_MAX)
-+		stream->error = -EOVERFLOW;
-+	return consumed ?: ret;
-+}
-+
- static void io_opaque_stream_close(struct io_opaque_stream *stream)
- {
- 	struct socket *sock = sock_from_file(stream->file);
-@@ -1174,10 +1467,299 @@ static void io_opaque_stream_close(struct io_opaque_stream *stream)
- 	io_opaque_extents_free(stream->store, &stream->extents);
- 	stream->undecided = 0;
- 	io_opaque_stream_process(stream);
--	wake_up_interruptible_poll(sk_sleep(sock->sk), EPOLLIN);
-+	io_opaque_collect_wake(stream);
- 	io_opaque_wake_budget(stream->store);
+ 	if (check_add_overflow(op->offset, (u64)op->length, &end))
+ 		return -EOVERFLOW;
+ 	if (cmd <= IORING_OPAQUE_READ_OBJECT || cmd == IORING_OPAQUE_AVAILABLE) {
+@@ -2046,12 +2060,110 @@ static int io_opaque_stat(struct io_opaque_req *op)
+ 	return io_opaque_stat_copy(op, &stat, sizeof(stat));
  }
  
-+int io_opaque_recv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	struct io_opaque_store *store = xa_load(&req->ctx->opaque_stores,
-+						READ_ONCE(sqe->opaque_store_id));
-+	struct io_opaque_req *op;
-+	u16 flags = READ_ONCE(sqe->ioprio);
-+
-+	if (!store)
-+		return -ENXIO;
-+	if (READ_ONCE(sqe->addr) || READ_ONCE(sqe->off) || READ_ONCE(sqe->addr3) ||
-+	    READ_ONCE(sqe->len) || READ_ONCE(sqe->msg_flags) ||
-+	    READ_ONCE(sqe->buf_index) || READ_ONCE(sqe->__pad2[0]) ||
-+	    (flags & ~IORING_RECVSEND_POLL_FIRST) ||
-+	    (req->flags & (REQ_F_CQE_SKIP | REQ_F_FORCE_ASYNC)))
-+		return -EINVAL;
-+	op = io_opaque_req_alloc(req, store);
-+	if (IS_ERR(op))
-+		return PTR_ERR(op);
-+	op->op = U16_MAX - 1;
-+	op->collect_flags = flags;
-+	/* One native poll task-work enqueue may produce several range CQEs. */
-+	req->flags |= REQ_F_APOLL_MULTISHOT | REQ_F_POLL_NO_LAZY;
-+	return 0;
-+}
-+
-+/*
-+ * Make @op the collector of its socket. The socket is taken before tables,
-+ * which is the order a send admits in, with the socket owned. Nothing may wait
-+ * for a socket lock while it holds tables.
-+ */
-+static int io_opaque_attach(struct io_opaque_req *op)
++/* Construction is synchronous under the ring lock, like READ_OBJECT copies. */
++static int io_opaque_create_build(struct io_opaque_req *op)
 +{
 +	struct io_opaque_store *store = op->store;
-+	struct io_opaque_stream *stream;
-+	struct socket *sock = sock_from_file(op->req->file);
-+	struct msghdr msg = { .msg_flags = MSG_DONTWAIT };
-+	struct io_uring_cqe cqe[2] = {};
-+	u32 i;
-+	int ret;
++	struct mem_cgroup *old = set_active_memcg(store->memcg);
++	u64 done = 0;
++	int ret = 0;
 +
-+	if (!sock || sock->type != SOCK_STREAM || sock->sk->sk_protocol != IPPROTO_TCP)
-+		return -EOPNOTSUPP;
-+	/* Authorize the collector's lifetime before taking the socket lock. */
-+	ret = security_socket_recvmsg(sock, &msg, 0, MSG_DONTWAIT);
-+	if (ret)
-+		return ret;
-+	stream = kzalloc_obj(*stream, GFP_KERNEL_ACCOUNT);
-+	if (!stream)
-+		return -ENOMEM;
-+	refcount_set(&stream->refs, 1);
-+	atomic_set(&stream->collect_ready, 0);
-+	mutex_init(&stream->lock);
-+	INIT_LIST_HEAD(&stream->extents);
-+	INIT_LIST_HEAD(&stream->reads);
-+	stream->decisions = RB_ROOT_CACHED;
-+	stream->store = store;
-+	stream->file = get_file(op->req->file);
-+	stream->owner.actor = io_opaque_actor;
-+	stream->owner.data = stream;
-+	stream->owner.data_ready = io_opaque_data_ready;
-+	stream->collector = op;
-+	lock_sock(sock->sk);
-+	mutex_lock(&store->tables);
-+	if (sock->sk->sk_rx_owner || sock->sk->sk_prot != sock->sk->sk_prot_creator ||
-+	    tcp_sk(sock->sk)->repair || tcp_sk(sock->sk)->urg_data) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+	if (sock->sk->sk_state != TCP_ESTABLISHED && sock->sk->sk_state != TCP_CLOSE_WAIT) {
-+		ret = -ENOTCONN;
-+		goto unlock;
-+	}
-+	ret = -ENOSPC;
-+	for (;;) {
-+		struct io_opaque_stream_slot *slot;
++	while (done < op->length) {
++		u64 pages_left = DIV_ROUND_UP_ULL(op->length - done, PAGE_SIZE);
++		struct io_opaque_extent *extent;
++		unsigned int order;
++		struct page *page;
++		u32 chunk, written = 0;
 +
-+		i = io_opaque_find_slot(store->stream_used, store->config.max_streams,
-+					&store->stream_cursor);
-+		if (i >= store->config.max_streams)
-+			break;
-+		slot = &store->streams[i];
-+		if (slot->generation == IO_OPAQUE_GENERATION_MAX) {
-+			__set_bit(i, store->stream_used);
-+			continue;
-+		}
-+		write_lock_bh(&sock->sk->sk_callback_lock);
-+		if (sock->sk->sk_user_data) {
-+			write_unlock_bh(&sock->sk->sk_callback_lock);
-+			ret = -EBUSY;
-+			break;
-+		}
-+		slot->generation++;
-+		stream->token = io_opaque_handle(i, slot->generation) | IO_OPAQUE_TOKEN_TAG;
-+		cqe[0].user_data = op->req->cqe.user_data;
-+		cqe[0].flags = IORING_CQE_F_MORE | ctx_cqe32_flags(op->req->ctx);
-+		memcpy(&cqe[1], &stream->token, sizeof(stream->token));
-+		if (!io_req_post_cqe32(op->req, cqe)) {
-+			write_unlock_bh(&sock->sk->sk_callback_lock);
-+			ret = -ENOSPC;
-+			break;
-+		}
-+		WRITE_ONCE(sock->sk->sk_rx_owner, &stream->owner);
-+		write_unlock_bh(&sock->sk->sk_callback_lock);
-+		slot->stream = stream;
-+		__set_bit(i, store->stream_used);
-+		store->nr_streams++;
-+		refcount_inc(&stream->refs);
-+		op->stream = stream;
-+		ret = 0;
-+		break;
-+	}
-+unlock:
-+	mutex_unlock(&store->tables);
-+	release_sock(sock->sk);
-+	/* Ownership publication is not an ordinary TCP readiness event either. */
-+	if (!ret)
-+		wake_up_interruptible_poll(sk_sleep(sock->sk), POLL_RX_OWNER);
-+	if (ret)
-+		io_opaque_stream_put(stream);
-+	return ret;
-+}
-+
-+/* Report a budget stall once per unread offset, without ending collection. */
-+static int io_opaque_budget_cqe(struct io_opaque_req *op)
-+{
-+	struct io_opaque_stream *stream = op->stream;
-+	struct io_uring_cqe cqe[2] = {};
-+	u64 extra[2] = { stream->token, stream->next };
-+
-+	if (op->budget_reported && op->offset == stream->next)
-+		return 0;
-+	cqe[0].res = -ENOBUFS;
-+	cqe[0].flags = IORING_CQE_F_MORE | ctx_cqe32_flags(op->req->ctx);
-+	memcpy(&cqe[1], extra, sizeof(extra));
-+	if (!io_req_post_cqe32(op->req, cqe))
-+		return -ENOSPC;
-+	op->budget_reported = true;
-+	op->offset = stream->next;
-+	return 0;
-+}
-+
-+static void io_opaque_budget_wait(struct io_opaque_req *op, int error)
-+{
-+	lockdep_assert_held(&op->stream->lock);
-+	scoped_guard(spinlock, &op->store->wait_lock) {
-+		op->need_bytes = error == -ENOMEM ? 0 : op->stream->need_bytes;
-+		if (error == -ENOMEM && !time_before(jiffies, op->retry_at))
-+			op->retry_at = jiffies + msecs_to_jiffies(IO_OPAQUE_ALLOC_RETRY_MS);
-+		else if (error == -ENOBUFS)
-+			op->retry_at = jiffies;
-+		op->phase = IO_OPAQUE_BUDGET_POLL;
-+		list_add_tail(&op->wait, &op->store->budget_waits);
-+	}
-+	/* Recheck after enrollment to close the release/enrollment race. */
-+	io_opaque_wake_budget(op->store);
-+}
-+
-+int io_opaque_recv(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_opaque_req *op = req->async_data;
-+	struct io_opaque_stream *stream;
-+	struct socket *sock = sock_from_file(req->file);
-+	read_descriptor_t desc = { .count = IO_OPAQUE_RX_BATCH };
-+	struct mem_cgroup *old;
-+	bool blocked;
-+	int ret;
-+
-+	io_ring_submit_lock(req->ctx, issue_flags);
-+	if (!(req->flags & REQ_F_POLLED) &&
-+	    (op->collect_flags & IORING_RECVSEND_POLL_FIRST)) {
-+		ret = -EAGAIN;
-+		goto out;
-+	}
-+	if (!op->stream && (issue_flags & IO_URING_F_UNLOCKED)) {
-+		io_req_task_queue(req);
-+		ret = IOU_ISSUE_SKIP_COMPLETE;
-+		goto out;
-+	}
-+	if (!op->stream) {
-+		ret = io_opaque_attach(op);
-+		if (ret)
++		page = io_opaque_dest_page(store, pages_left, &order);
++		if (!page) {
++			ret = -ENOMEM;
 +			goto out;
-+	}
-+	stream = op->stream;
-+	mutex_lock(&stream->lock);
-+	/* A concurrent data wake after this exchange belongs to the next pass. */
-+	atomic_xchg(&stream->collect_ready, 0);
-+	if (stream->closed || READ_ONCE(op->store->dead)) {
-+		ret = -ECANCELED;
-+		goto unlock_stream;
-+	}
-+	scoped_guard(spinlock, &op->store->wait_lock) {
-+		blocked = io_opaque_collect_blocked(op);
-+		if (blocked) {
-+			/* Capacity may have been taken since the wake removed us. */
-+			if (list_empty(&op->wait))
-+				list_add_tail(&op->wait, &op->store->budget_waits);
-+		} else {
-+			list_del_init(&op->wait);
-+			op->phase = IO_OPAQUE_IDLE;
 +		}
-+	}
-+	desc.arg.data = stream;
-+	old = set_active_memcg(op->store->memcg);
-+	if (!blocked) {
-+		/* Retained prefixes precede bytes captured directly into a TAKE. */
-+		io_opaque_stream_process(stream);
-+		stream->hold_undecided = !io_opaque_collect_demand(stream);
-+	}
-+	lock_sock(sock->sk);
-+	if (tcp_sk(sock->sk)->urg_data) {
-+		ret = -EOPNOTSUPP;
-+	} else if (blocked) {
-+		ret = 0;
-+		if (sock->sk->sk_shutdown & RCV_SHUTDOWN) {
-+			/* Consume a FIN-only skb, never payload, while out of budget. */
-+			desc.count = 0;
-+			ret = tcp_read_sock(sock->sk, &desc, io_opaque_actor);
++		chunk = min_t(u64, op->length - done, PAGE_SIZE << order);
++		extent = io_opaque_extent_new(store, page, 0, chunk, done, true);
++		if (IS_ERR(extent)) {
++			put_page(page);
++			ret = PTR_ERR(extent);
++			goto out;
 +		}
-+	} else {
-+		ret = tcp_read_sock(sock->sk, &desc, io_opaque_actor);
-+	}
-+	if (desc.error)
-+		ret = desc.error;
-+	if (sock->sk->sk_err)
-+		stream->error = sock_error(sock->sk);
-+	if ((sock->sk->sk_shutdown & RCV_SHUTDOWN) &&
-+	    skb_queue_empty(&sock->sk->sk_receive_queue))
-+		stream->eof = true;
-+	release_sock(sock->sk);
-+	set_active_memcg(old);
-+	if (ret < 0 && ret != -ENOBUFS && ret != -ENOMEM)
-+		stream->error = ret;
-+	if (blocked && !stream->error && !stream->eof) {
-+		/* Close release/reenrollment races without retrying TCP capture. */
-+		io_opaque_wake_budget(op->store);
-+		ret = IOU_RETRY;
-+		goto unlock_stream;
-+	}
-+	if (blocked) {
-+		guard(spinlock)(&op->store->wait_lock);
++		op->create_reserved -= page_size(page);
++		extent->backing->copied = true;
++		list_add_tail(&extent->list, &op->data->extents);
++		while (written < chunk) {
++			u32 bytes = min_t(u32, chunk - written, PAGE_SIZE);
++			unsigned long left;
++			void *mapped;
 +
-+		list_del_init(&op->wait);
-+		op->phase = IO_OPAQUE_IDLE;
-+	}
-+	io_opaque_stream_process(stream);
-+	if (ret == -ENOBUFS) {
-+		struct io_opaque_req *keep = io_opaque_capture_keep(stream);
-+
-+		/* A private prefix must not pin quota indefinitely awaiting itself. */
-+		if (keep && keep->progress) {
-+			rb_erase_cached(&keep->decision, &stream->decisions);
-+			RB_CLEAR_NODE(&keep->decision);
-+			io_opaque_restore(keep);
-+			io_opaque_queue_ready(keep, -ENOBUFS);
++			mapped = kmap_local_page(page + (written >> PAGE_SHIFT));
++			left = copy_from_user(mapped, op->addr + done + written, bytes);
++			kunmap_local(mapped);
++			atomic64_add(bytes - left, &store->copied);
++			if (left) {
++				ret = -EFAULT;
++				goto out;
++			}
++			written += bytes;
 +		}
++		done += chunk;
++		op->data->length = done;
++		cond_resched();
 +	}
-+	if (ret == -ENOBUFS && !stream->error && !stream->eof) {
-+		int err = io_opaque_budget_cqe(op);
-+
-+		if (err) {
-+			/* Retain the token and captured prefix for explicit recovery. */
-+			stream->error = err;
-+			io_opaque_stream_process(stream);
-+		}
-+	}
-+	if (stream->error || stream->eof) {
-+		ret = stream->error;
-+	} else if (ret == -ENOBUFS || ret == -ENOMEM) {
-+		io_opaque_budget_wait(op, ret);
-+		ret = IOU_RETRY;
-+	} else if (!desc.count) {
-+		/* Also retain the next pass when the initial issue exhausts a batch. */
-+		atomic_set(&stream->collect_ready, 1);
-+		ret = issue_flags & IO_URING_F_MULTISHOT ? IOU_REQUEUE : IOU_RETRY;
-+	} else {
-+		ret = IOU_RETRY;
-+	}
-+unlock_stream:
-+	mutex_unlock(&stream->lock);
++	ret = io_opaque_vector(op->data);
++	if (!ret)
++		op->data->dense = true;
 +out:
-+	if (ret >= 0 && ret != IOU_ISSUE_SKIP_COMPLETE) {
-+		io_req_set_res(req, ret, 0);
-+		ret = IOU_COMPLETE;
-+	}
-+	io_ring_submit_unlock(req->ctx, issue_flags);
++	set_active_memcg(old);
 +	return ret;
 +}
 +
- static int io_opaque_copy(struct io_opaque_data *data, u64 off, u32 length,
- 			  void __user *dest)
- {
-@@ -1679,6 +2261,11 @@ void io_opaque_cleanup(struct io_kiocb *req)
- 		}
- 		if (op->stream->collector == op) {
- 			op->stream->collector = NULL;
-+			/*
-+			 * Native poll setup failure may cancel COLLECT too. As for
-+			 * explicit cancellation, closing discards undecided capture;
-+			 * a token is not a promise of recovery after this failure.
-+			 */
- 			close = !op->stream->eof && !op->stream->closed && !op->stream->error;
- 		}
- 		mutex_unlock(&op->stream->lock);
-diff --git a/io_uring/opaque.h b/io_uring/opaque.h
-index a7210f4bee5e..4001a4484ff9 100644
---- a/io_uring/opaque.h
-+++ b/io_uring/opaque.h
-@@ -102,6 +102,7 @@ void io_opaque_stop(struct io_opaque_store *store);
- void io_opaque_free(struct io_opaque_store *store);
- int io_opaque_recv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_opaque_recv(struct io_kiocb *req, unsigned int issue_flags);
-+__poll_t io_opaque_collect_poll(struct io_kiocb *req);
- int io_opaque_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_opaque_issue(struct io_kiocb *req, unsigned int issue_flags);
- int io_opaque_send_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-@@ -113,6 +114,11 @@ int io_opaque_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd,
- bool io_opaque_cancel_all(struct io_ring_ctx *ctx, struct io_uring_task *tctx,
- 			  bool cancel_all);
- #else
-+static inline __poll_t io_opaque_collect_poll(struct io_kiocb *req)
++static int io_opaque_create(struct io_opaque_req *op, unsigned int issue_flags)
 +{
-+	return 0;
-+}
++	struct io_ring_ctx *ctx = op->req->ctx;
++	u64 charge = ALIGN((u64)op->length, PAGE_SIZE);
++	u64 object_flags = 0;
++	struct mem_cgroup *old;
++	int ret;
 +
- static inline bool io_opaque_cache_init(struct io_ring_ctx *ctx)
- {
- 	return false;
-diff --git a/io_uring/opaque_internal.h b/io_uring/opaque_internal.h
-index f6b372800c76..2d5f69ee8925 100644
---- a/io_uring/opaque_internal.h
-+++ b/io_uring/opaque_internal.h
-@@ -2,6 +2,7 @@
- #ifndef IO_URING_OPAQUE_INTERNAL_H
- #define IO_URING_OPAQUE_INTERNAL_H
- 
-+#include <linux/atomic.h>
- #include <linux/bitmap.h>
- #include <linux/bvec.h>
- #include <linux/net.h>
-@@ -148,6 +149,8 @@ struct io_opaque_vec {
- 
- struct io_opaque_stream {
- 	refcount_t refs;
-+	/* Consumed only on entry to a collector pass, never by native poll. */
-+	atomic_t collect_ready;
- 	/* Extents, range decisions and collector state. */
- 	struct mutex lock;
- 	struct io_opaque_store *store;
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index a80a56b19581..628f908a66ad 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -592,6 +592,20 @@ const struct io_issue_def io_issue_defs[] = {
- 		.prep			= io_uring_cmd_prep,
- 		.issue			= io_uring_cmd,
- 	},
-+	[IORING_OP_OPAQUE_COLLECT] = {
-+		.audit_skip		= 1,
-+		.ioprio			= 1,
-+		.needs_file		= 1,
-+		.unbound_nonreg_file	= 1,
-+		.pollin			= 1,
-+#ifdef CONFIG_IO_URING_OPAQUE_OBJ
-+		.async_size		= sizeof(struct io_opaque_req),
-+		.prep			= io_opaque_recv_prep,
-+		.issue			= io_opaque_recv,
-+#else
-+		.prep			= io_eopnotsupp_prep,
-+#endif
-+	},
- 	[IORING_OP_OPAQUE_OBJ] = {
- 		.audit_skip		= 1,
- 		.ioprio			= 1,
-@@ -875,6 +889,10 @@ const struct io_cold_def io_cold_defs[] = {
- 		.sqe_copy		= io_uring_cmd_sqe_copy,
- 		.cleanup		= io_uring_cmd_cleanup,
- 	},
-+	[IORING_OP_OPAQUE_COLLECT] = {
-+		.name			= "OPAQUE_COLLECT",
-+		.cleanup		= io_opaque_cleanup,
-+	},
- 	[IORING_OP_OPAQUE_OBJ] = {
- 		.name			= "OPAQUE_OBJ",
- 		.cleanup		= io_opaque_cleanup,
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 4f04bda42f7f..25a202f3f3ae 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -9,6 +9,10 @@
- #include <linux/hashtable.h>
- #include <linux/io_uring.h>
- 
-+#ifdef CONFIG_SOCK_RX_OWNER
-+#include <net/sock.h>
-+#endif
-+
- #include <trace/events/io_uring.h>
- 
- #include <uapi/linux/io_uring.h>
-@@ -21,6 +25,7 @@
- #include "kbuf.h"
- #include "poll.h"
- #include "cancel.h"
-+#include "opaque.h"
- 
- struct io_poll_update {
- 	struct file			*file;
-@@ -41,6 +46,47 @@ struct io_poll_table {
- 	__poll_t result_mask;
- };
- 
-+static bool io_poll_rx_owned(struct io_kiocb *req)
-+{
-+#ifdef CONFIG_SOCK_RX_OWNER
-+	struct socket *sock;
-+
-+	/* Error-queue receives do not encounter the payload-owner refusal. */
-+	if (req->flags & REQ_F_CLEAR_POLLIN)
-+		return false;
-+	switch (req->opcode) {
-+	case IORING_OP_READ:
-+	case IORING_OP_READV:
-+	case IORING_OP_READ_FIXED:
-+	case IORING_OP_READV_FIXED:
-+	case IORING_OP_READ_MULTISHOT:
-+	case IORING_OP_RECV:
-+	case IORING_OP_RECVMSG:
-+	case IORING_OP_RECV_ZC:
-+		break;
-+	default:
-+		return false;
++	io_ring_submit_lock(ctx, issue_flags);
++	if (READ_ONCE(op->store->dead)) {
++		ret = -ESHUTDOWN;
++		goto unlock;
 +	}
-+	sock = sock_from_file(req->file);
-+	return sock && sock->sk && sock_rx_owned(sock->sk);
-+#else
-+	return false;
-+#endif
-+}
-+
-+static __poll_t io_poll_mask(struct io_kiocb *req, struct poll_table_struct *pt)
-+{
-+	/* Enroll before checking persistent readiness: a later change must wake us. */
-+	__poll_t mask = vfs_poll(req->file, pt);
-+
-+	if (req->opcode == IORING_OP_OPAQUE_COLLECT)
-+		mask |= io_opaque_collect_poll(req);
-+	else if (io_poll_rx_owned(req))
-+		/* A coalesced claim wake must still issue the real receive handler. */
-+		mask |= EPOLLIN | EPOLLRDNORM;
-+	return mask;
-+}
-+
- #define IO_POLL_CANCEL_FLAG	BIT(31)
- #define IO_POLL_RETRY_FLAG	BIT(30)
- #define IO_POLL_REF_MASK	GENMASK(29, 0)
-@@ -283,7 +329,7 @@ static int io_poll_check_events(struct io_kiocb *req, io_tw_token_t tw)
- 			__poll_t events = req->apoll_events;
- 			struct poll_table_struct pt = { ._key = events };
- 
--			req->cqe.res = vfs_poll(req->file, &pt) & events;
-+			req->cqe.res = io_poll_mask(req, &pt) & events;
- 			/*
- 			 * We got woken with a mask, but someone else got to
- 			 * it first. The above vfs_poll() doesn't add us back
-@@ -417,6 +463,14 @@ static int io_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
- 	if (unlikely(mask & POLLFREE))
- 		return io_pollfree_wake(req, poll);
- 
-+	if (mask & POLL_RX_OWNER) {
-+		if (req->opcode != IORING_OP_OPAQUE_COLLECT &&
-+		    !io_poll_rx_owned(req))
-+			return 0;
-+		/* Recheck current ownership/readiness, never cache a private event. */
-+		mask = 0;
++	old = set_active_memcg(op->store->memcg);
++	op->data = io_opaque_data_alloc();
++	set_active_memcg(old);
++	if (!op->data) {
++		ret = -ENOMEM;
++		goto unlock;
 +	}
++	ret = io_opaque_slot_reserve(op);
++	if (ret)
++		goto unlock;
++	if (!io_opaque_charge(op->store, charge, true)) {
++		ret = -ENOBUFS;
++		goto unlock;
++	}
++	op->create_reserved = charge;
++	ret = io_opaque_create_build(op);
++	if (!ret)
++		ret = io_opaque_publish(op, &object_flags);
++unlock:
++	io_req_set_res32(op->req, ret, 0, ret >= 0 ? op->handle : 0, object_flags);
++	if (ret < 0)
++		req_set_fail(op->req);
++	io_ring_submit_unlock(ctx, issue_flags);
++	return IOU_COMPLETE;
++}
 +
- 	/* for instances that support it check for an event match first */
- 	if (mask && !(mask & (poll->events & ~IO_ASYNC_POLL_COMMON)))
- 		return 0;
-@@ -597,7 +651,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
- 	if (poll->events & EPOLLEXCLUSIVE)
- 		req->flags |= REQ_F_POLL_NO_LAZY;
+ int io_opaque_issue(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_opaque_req *op = req->async_data;
+ 	struct io_opaque_store *store = op->store;
+ 	int ret;
  
--	mask = vfs_poll(req->file, &ipt->pt) & poll->events;
-+	mask = io_poll_mask(req, &ipt->pt) & poll->events;
++	if (op->op == IORING_OPAQUE_CREATE)
++		return io_opaque_create(op, issue_flags);
+ 	io_ring_submit_lock(req->ctx, issue_flags);
+ 	/* Pair with the cancellation search before any opaque wait enrollment. */
+ 	if (io_wq_cancel_seen(req, issue_flags)) {
+@@ -2224,6 +2336,16 @@ bool io_opaque_cancel_all(struct io_ring_ctx *ctx, struct io_uring_task *tctx,
+ 	return found;
+ }
  
- 	if (unlikely(ipt->error || !ipt->nr_entries)) {
- 		io_poll_remove_entries(req);
++static void io_opaque_create_release(struct io_opaque_req *op)
++{
++	io_opaque_data_put(op->store, op->data);
++	op->data = NULL;
++	if (op->create_reserved) {
++		io_opaque_uncharge(op->store, op->create_reserved);
++		op->create_reserved = 0;
++	}
++}
++
+ void io_opaque_cleanup(struct io_kiocb *req)
+ {
+ 	struct io_opaque_req *op = req->async_data;
+@@ -2287,7 +2409,10 @@ void io_opaque_cleanup(struct io_kiocb *req)
+ 	}
+ 	if (unlikely(op->vec))
+ 		io_opaque_vec_cleanup(op);
+-	io_opaque_data_put(store, op->data);
++	if (op->op == IORING_OPAQUE_CREATE)
++		io_opaque_create_release(op);
++	else
++		io_opaque_data_put(store, op->data);
+ 	io_opaque_stream_put(op->stream);
+ 	lockdep_assert_held(&req->ctx->uring_lock);
+ 	io_opaque_req_free(req->ctx, op);
 -- 
 2.34.1
 
