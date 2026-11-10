@@ -1,104 +1,104 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794316820;
-	b=ghwRFC6SfC6GkIBBeHl+og4vfRzc8rdJ1Je5WhRdxFRmWzzU/nDF3geWIIfICBDUEpHF
-	 4rEq9JiV21N5OCm20NQOlCLDiALDhNQYtp5nJWqT/4m/rPAzhm55ZHvz+zGM11lQImIwL
-	 mWzE7jnbgt2D3UDhqmWNVEuBJvtbFVXe4hB6rj20EhwkAzWLDJ2UA4a3++EA/BJ9/+D+a
-	 RyUukGb42zZjw/4f1Gek8GCmNX2kJKZG/eJZ4sFryFMK1PtNsyQTsocyZnmXYbDVCjtqG
-	 oUtRKzoxVmJhOdCPtcMYk/KdNVE8udQJG9zQ3N6bESa9ro1teBV2sx4X24uZ/jiHZxw==
+	t=1794316821;
+	b=yXPFUqoK02SbDiS7EhvQ14BWo2chU4N8SUjW4f+lNByvL+w34YhEWbnARH0NL3u+34iS
+	 SFTBcKExQDJYbK8+sD/sREslTgy63Nl3LU6nKg0hyFlRKE/MKgwUfAihZubRUpUXB9PBY
+	 dfNG42J1S79HIwHWHiI/+IxAfjWrfBdLYp/wedU6yGAGADnxhoHwpnjpX2OC8/5la2CDf
+	 KosnR1WpG4dQ2xRVmXz9CBBVUk7S4wr1mOyixMzkHqn1JMMIT1Ve9JugntN9/gemUbYQD
+	 hq3Zbl4BM76QhRoJG1KupQZy4KQVLinVCLcZFAvcG5ZYLh9KK9oXT1FxwQcFHTHrvag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794316820;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794316821;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=o3j8ZSLUlMW9spzjCj6Lf6ZyTqWduSvktrPcGEoHNnM=;
-	b=ISJwOTg+cr9HU8asAJLONiGAUB3hat58gtmUzP1qZdQYDkUkwSo/f6U2kq7k0oKiMdMG
-	 qR1HTBKnLhcLPdjh2xYqsdi+SCPP8SaHvtV/PtydzXuLclpuANxqztDRYCsHKtkmliBgh
-	 escL8oMhwl2TtBlUNUfclVRngzxEO9hbo9/7fzp5h2/zLhYrz2NORgBSa1rgLh6v86l6A
-	 b6SmsqzPM6+LCtBcNGNorkU4UrZ9x1NZy2LGgZZaEII4QSxcScxEKxC1iNzTE5RCaOtLw
-	 YziCdn7QGL2XeJvfR2Z7AMFWYKUtzEQav/8SS6zjKNNF/mfpyyvumrVXcJXDdbEGsuA==
+	bh=6Y7QVx7G1MN02E+ysgPRqko/xyke3gT627Z3+xepCco=;
+	b=ATsAVS1dQQ5Z2YPUDLxXFDX01dbeJ8BmpFqtnYodazB7kyIhctgPIMWiEENbqJSlptVL
+	 fch8mfISIr9TphMKCU5rey3TP2lDmeXqtb1DmKs3AZHNWv8P6HFVk6XCfyRH7jKSoN0ID
+	 P/Vi5X8D4mdMsHEsYBC7pDMZCiJQZfcBuBiCC3S+OUbPZ6Z/YfPViebNTbqdpsaG49pyu
+	 CPZkD3JaUMaZSatXzyu/H+yYa26zQ9D391lk0qmTgMgKI9gVXnJt09bzUWms74IknD/yx
+	 qI8airU/NMSBQkhFGj4Ws1Yt4kO6TyjB+FrcHPgvd12Nz0gzj6606+QSP5OyK48Ix7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PGyQ6bE0;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=i+5XCEtm;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TZwDpout;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=V+L4MQf2;
 	arc=none smtp.remote-ip=170.10.129.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0D760A263C
-	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:20:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD0D760A263C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D6E60A3819
+	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:20:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4D6E60A3819
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PGyQ6bE0;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=i+5XCEtm
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TZwDpout;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=V+L4MQf2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794316819;
+	s=mimecast20190719; t=1794316820;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=o3j8ZSLUlMW9spzjCj6Lf6ZyTqWduSvktrPcGEoHNnM=;
-	b=PGyQ6bE0dpjNwNxjzO3E/32hiLaRxTjXtWXk3wHoxqEkKREQ1qM0k2bhisZRFAHrFxjx0C
-	EJxrcOgrWM6c8TNEnClibWaD4QLoQMNuEnUmky32GSQZsUXj3QpL7zoFPgWaZ2tmYutTgU
-	J23pf5t3Qaa+pl+vstS2z2OcEVyIcO8=
+	bh=6Y7QVx7G1MN02E+ysgPRqko/xyke3gT627Z3+xepCco=;
+	b=TZwDpout5q/kwvHvB6LrbY5JEAKhNm/7IJj+T5OIIWe/Kr8pqEDAgdDQ9DLRwTBciDj+dn
+	4Wv91KE0lWmJfnEQvp9BJihwN8l/J06U/fZwXfO/IC1Aa4JsiF9gwRHooVus7g1A/R16Qk
+	IEx3p3SBEK/o5Nqz5FZ4MWeOPJbdS4A=
 Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
  [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-401-vbTZ9Y9xPd6Zcqwc56vzAQ-1; Tue, 10 Nov 2026 08:20:15 -0500
-X-MC-Unique: vbTZ9Y9xPd6Zcqwc56vzAQ-1
-X-Mimecast-MFC-AGG-ID: vbTZ9Y9xPd6Zcqwc56vzAQ_1794316814
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c25edb54d22so259265666b.1
-        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:15 -0800 (PST)
+ us-mta-457-UEK5Jh62PY64bBV8OBRP2g-1; Tue, 10 Nov 2026 08:20:18 -0500
+X-MC-Unique: UEK5Jh62PY64bBV8OBRP2g-1
+X-Mimecast-MFC-AGG-ID: UEK5Jh62PY64bBV8OBRP2g_1794316817
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c4163a5400eso15576566b.1
+        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794316814; x=1794921614; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1794316817; x=1794921617; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=o3j8ZSLUlMW9spzjCj6Lf6ZyTqWduSvktrPcGEoHNnM=;
-        b=i+5XCEtmpFWipFgZNLE/fMc723DK5Ny/xxXGHMwawP8OlJErf09CL2Kd6S1HWtelVY
-         0zuny+/muaJNJ88KY68zQHVVG9rHZ+MM5Ol1hIrYV3EbejqvN/SlDmdkKKCkM5sGJZbw
-         3Pt4Jh+b8OXbZ6IEOtO62/Q9QIGkkxlrHZEBib1vjauncP8CRsER39qLbpU+PIN27fuH
-         cbTyBBpeEz+/4O4bSV3vEmKdMKM4qQNCqAQWTfJFpl1xJUc40dWzRhueU/nCSn4DA/u6
-         hju+8l8mYQJsSUTfCExcYwzApOkH09e06ykd90tqOEJ5B3cCyFzjuXIgreztbKVEIIt7
-         WZmA==
+        bh=6Y7QVx7G1MN02E+ysgPRqko/xyke3gT627Z3+xepCco=;
+        b=V+L4MQf2V/f8l+1hgny6XSIxT9epFwVQtd1EiYQrbbofwz6u7uNGPCKeMr2UcBX16C
+         /4EI2lOOflS2gsyoHKI/gpLYXkJ7o8MFPGYhmqXC6SCzeM+eCuzfxf57mPKlypH40qUh
+         YHqrpUUcytsH7QNVtR328ftiN/fZtjGg5F3m9pYchMjz5DtjQGEAtv46IK9yCmh9Cubp
+         yFYBESZROljsfmosnKdNRDVVpQjDlshhFDem99CG7soh4UB2Q2sM9HUJu9ZjYFN6ydoq
+         PtioevzmR7vn33EvRMBDGbhDNI7hOrPDp0PbSVWEwh7MhFigU80/AVSfzrMt16RxBHyj
+         61NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794316814; x=1794921614;
+        d=1e100.net; s=20260707; t=1794316817; x=1794921617;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=o3j8ZSLUlMW9spzjCj6Lf6ZyTqWduSvktrPcGEoHNnM=;
-        b=UHIVS/ngOsLWq2ipxGa7H7yRb668ctTwhJ8Iilz0m1xepkO69476zLyF4jEmavDn80
-         Gy65QpWST0geofuev6j5XSAJosPaittLQ80rzWn8lgBqwJrosvpAaZFsIjNTr8xKwbY0
-         O7rdsyz8eLACD7LzcVQ3jG9U7UbMlnNlfF6i84813D+owVciLcMKQS5kpJiHOEiqKA3z
-         yOFc8uZVpAHfP6Rb272uIIbUFlbW5mjRv9XIIZjayYmY3BTtODPgMURCMdXUZQ6kNSl/
-         SpwsE2OweEK9OSxq1teQIcZLy1G5BHiY4JWHiGGoPwg3WNiOWd10WZH2o4qbTTd75DuV
-         EMAg==
-X-Forwarded-Encrypted: i=1; AL+hErHA2fo2VE36KeK/HpRdiXNeVp/QJkm4sdE2It/IFrNXzTrZDjyAgh6XyNwlugbOfud9qh+llRTMIA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/wcHyS4grZ72qrG28LDiX4Y8042/Gk03vHYEern0x8h/k5EzRS
-	F+gAOvcuMVVFz2Qptv1Yi3bQCXiWeJbGVr4z89bdNYPcD2uaZFrKUx9ZrYZmGN4u7DNdOn9MuVK
-	ynyFUyheJT0bzPGlZPa1OY3pUdicEfj7tpLdcXinnpqNVn1IF/0ebtDyxagfS
-X-Gm-Gg: AYBFou0n5FAd+nQjiJkIg4bm4XBEw/N2mUc3CRE7uFPN5tocAGpcQ+Q+2oJgok8Rvli
-	FkfjfaFFDXsU8EDqweoFMWSF9B4562rCMuRD35F+ZMpEE81IdDAgSDav5mTi4sLRevrtOCxxSwe
-	pfnn1GLk1gd1KoV7KjbFGf7DjGD7+eAxm0p04d73Z3UUQWKgN5HuoAujdAVRVR+8NV73Fn1IUy7
-	egrgMA3x0/xBJRIRBKf7rqR2Jij7kuz1NIiSGLzabxfPnmoS3ZcXRaC08AxAllFFdPIO7qq7T+v
-	OofMfjcfP9TqC67dx+X0HAs2qo1R9QrkShCwiyMTlhnz6zsj2zo9fm8u3LD84YIf+6wDJoHYFsX
-	xuMFVLFSUGKHQfyWiIG5V+LDApEIN9+ReNopEle6rw9ZIKQfK62vp4beTlLkqMtRX7eUzqVo05N
-	hDwyGX+NPeGqRKYtEiDbRUywdSQxHiui0MBd0ZJ6m9K1M2Fm2NJfTQG2koF7NP8N1NmaDbouB8S
-	u5mnlJcNaobBX63gSdqjnBlrxrcESN1cODED/moeWP7x3jYdWK7
-X-Received: by 2002:a17:907:d7c9:b0:c2e:2252:6ddb with SMTP id a640c23a62f3a-c50495dfb72mr227137866b.10.1794316814435;
-        Tue, 10 Nov 2026 05:20:14 -0800 (PST)
-X-Received: by 2002:a17:907:d7c9:b0:c2e:2252:6ddb with SMTP id a640c23a62f3a-c50495dfb72mr227134966b.10.1794316813994;
-        Tue, 10 Nov 2026 05:20:13 -0800 (PST)
+        bh=6Y7QVx7G1MN02E+ysgPRqko/xyke3gT627Z3+xepCco=;
+        b=i54FZhMjl65dB3rHAlBQBU3Z/ILL3eADXyu65luKZhZGZTMlXyBlsu7JpmA5yKotao
+         yuCfKg+xMOyFpBBpUdFX33fKn02b1Pq970s9pNRc1L+qG8xuQkobm4r0f/Ckf4vbht4L
+         ogcN+Zjto/3bbwTRgDp3TPNkR13PRbCELwMJHZnJKDGQeXMDoJESzd2VGeFwdFEQZmPa
+         zLh3Ui0dJC/e7O8QXmc9n0JvFd3OtDgVR8QcItXzjZTZqnRhV5fdFruJ4bFfeAhVC4nF
+         VQeiVPguji+ZkX0ioQCxXObkgRzydpSIAmGymEeeDd1ZIMxpXxdxWly4u1cgz4IG0lLO
+         dpTQ==
+X-Forwarded-Encrypted: i=1; AL+hErH8SRxAc6kwWH+cqFsuBfmNF7JrKTA3STLi3E2tmqZucEh/p7Ay87RJ9NtsRxAMygncUuPhSLMlhQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/jBTE4HcQx+QT6e7uMcVnSE5r4paaSdrv1ZADzY+9uChLXF46W
+	CnDKPmVpSzxhPxN3xdWSkz/eMOMlmp79g4/n8Jqprb5e4qI06A8sjFDAVXdbw9lba5HWGzVraPK
+	joGr0kxzc82kJwcQRtbD9oUFshRu8zgjGLD2lpRaWKORWUTCHFyVQnvyDg3Et
+X-Gm-Gg: AYBFou2mOYiPDYeWRf2JWpPrOeZxKUrHNIlGrWLUQQkYX9qbSDdZ8CGAsk6fiE5QiMV
+	2u8O1RTNENUM0kKyX3AyLgrLAfSkjDHpboapbYaDurZUDxWCu3bYSctPtQr57VyDlcgGLmgI+QT
+	ig8FyP1l08EGvMxj2bt6eXOnQOgv4TrQD4C32jw1SOk8UA97ku8NImHj90/LlEqev5+M3W4tkvZ
+	2fT1J1MArsiueFqGVbk9GghB9yLSCvxJ1OrG4PN5s6FT+a5FJpEeCk3RBR5FnZpwOWjThoYIqe9
+	ZFq/cqc/2mTN9GxmFYY6gk3JDKD1FaLKeyKhLXlkZ/nHOe3EyTe5BcO7NN4ygQAC/J4ga8K0cqm
+	mqRyDvrK5BMAWo2IvojpDwpyyJND7DwOVxQ1mJQBNIwsVSVISQ0rfkJkXGeLiRpza92pnHN5tGv
+	31KEIA/GJ8iCGSHiMlSojB1saJc/XgTBn6yC5G3BOy270RZQtjgLTlLugmVjcKDGSchp92qVosr
+	sd9FeXoCiqkq28aLHiIkCXewR2/nlQ9yVrJHTohHGHzfbUxUF13
+X-Received: by 2002:a17:907:9b83:b0:c2e:1b6b:8b19 with SMTP id a640c23a62f3a-c5048c13001mr207597266b.23.1794316817167;
+        Tue, 10 Nov 2026 05:20:17 -0800 (PST)
+X-Received: by 2002:a17:907:9b83:b0:c2e:1b6b:8b19 with SMTP id a640c23a62f3a-c5048c13001mr207594966b.23.1794316816822;
+        Tue, 10 Nov 2026 05:20:16 -0800 (PST)
 Received: from cluster.. (4f.55.790d.ip4.static.sl-reverse.com. [13.121.85.79])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 05:20:13 -0800 (PST)
+        Tue, 10 Nov 2026 05:20:16 -0800 (PST)
 From: Alex Markuze <amarkuze@redhat.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	"David S . Miller" <davem@davemloft.net>,
@@ -117,9 +117,9 @@ Cc: Pavel Begunkov <asml.silence@gmail.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH net-next 04/12] io_uring/opaque: add owned-page helpers for dense copies
-Date: Tue, 10 Nov 2026 13:19:58 +0000
-Message-Id: <20261110132006.3280986-5-amarkuze@redhat.com>
+Subject: [RFC PATCH net-next 06/12] io_uring/opaque: allow rings to share a store
+Date: Tue, 10 Nov 2026 13:20:00 +0000
+Message-Id: <20261110132006.3280986-7-amarkuze@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261110132006.3280986-1-amarkuze@redhat.com>
 References: <20261110132006.3280986-1-amarkuze@redhat.com>
@@ -134,69 +134,152 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the accounted destination-page allocator used by CREATE and compaction.
-Prefer compound allocations up to 64 KiB, or one base page when larger,
-and fall back to smaller orders.
+A multi-threaded server often uses one ring per thread. Allow an object
+received or created through one ring to be used through another ring
+without copying its payload.
+
+Add EXPORT and IMPORT controls to IORING_REGISTER_OPAQUE_STORE. EXPORT
+returns a close-on-exec anonymous-inode descriptor; IMPORT registers its
+store under a new ring-local ID. The descriptor cannot read, map or poll
+payload. Handles and stream tokens belong to the store and are valid
+through every ring sharing it.
+
+Each registered ring entry and export file holds one user reference and
+one lifetime reference. The last user stops the store; the last lifetime
+reference releases its memory and accounting. An export file can keep a
+store alive after the creating ring exits. Import preserves the store's
+memory-cgroup ownership and original ring user/mm accounting and adds no
+backing charge.
+
+Export reserves the descriptor and creates the file, copies the number
+to userspace, and installs it only after that copy succeeds. Failure
+unwinds the references and descriptor reservation. Import erases the
+new ring-local ID if copying its result to userspace fails.
 
 Signed-off-by: Alex Markuze <amarkuze@redhat.com>
 ---
- io_uring/Makefile         |  2 +-
- io_uring/opaque_compact.c | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 io_uring/opaque_compact.c
+ include/uapi/linux/io_uring/opaque.h |  3 +
+ io_uring/opaque_register.c           | 84 ++++++++++++++++++++++++----
+ 2 files changed, 76 insertions(+), 11 deletions(-)
 
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index 81710127046c..191316972e04 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -17,7 +17,7 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o opdef.o kbuf.o rsrc.o notif.o \
- 					query.o loop.o
+diff --git a/include/uapi/linux/io_uring/opaque.h b/include/uapi/linux/io_uring/opaque.h
+index 692daa7d7e32..9a129b5da5af 100644
+--- a/include/uapi/linux/io_uring/opaque.h
++++ b/include/uapi/linux/io_uring/opaque.h
+@@ -16,6 +16,9 @@ struct io_uring_opaque_register {
+ 	__u64 __resv[2];
+ };
  
- obj-$(CONFIG_IO_URING_ZCRX)	+= zcrx.o
--obj-$(CONFIG_IO_URING_OPAQUE_OBJ)	+= opaque.o
-+obj-$(CONFIG_IO_URING_OPAQUE_OBJ)	+= opaque.o opaque_compact.o
- obj-$(CONFIG_IO_WQ)		+= io-wq.o
- obj-$(CONFIG_FUTEX)		+= futex.o
- obj-$(CONFIG_EPOLL)		+= epoll.o
-diff --git a/io_uring/opaque_compact.c b/io_uring/opaque_compact.c
-new file mode 100644
-index 000000000000..b59c7cb95d42
---- /dev/null
-+++ b/io_uring/opaque_compact.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Workers copy immutable backing without holding object table locks. */
-+#include <linux/highmem.h>
-+#include <linux/memcontrol.h>
-+#include <linux/mm.h>
-+#include <linux/overflow.h>
-+#include <linux/sched.h>
-+#include <linux/sizes.h>
-+#include <linux/slab.h>
++#define IORING_OPAQUE_REG_IMPORT	(1U << 0)
++#define IORING_OPAQUE_REG_EXPORT	(1U << 1)
 +
-+#include "io_uring.h"
-+#include "opaque_internal.h"
-+
-+struct page *io_opaque_owned_page(unsigned int *order)
+ /* config/config_size select a size-versioned configuration on creation. */
+ struct io_uring_opaque_config {
+ 	__u64 hard_limit;
+diff --git a/io_uring/opaque_register.c b/io_uring/opaque_register.c
+index 9e39d1ee5072..472c739a17de 100644
+--- a/io_uring/opaque_register.c
++++ b/io_uring/opaque_register.c
+@@ -15,6 +15,50 @@ static void io_opaque_unregister_user(struct io_opaque_store *store)
+ 	io_opaque_put(store);
+ }
+ 
++static int io_opaque_box_release(struct inode *inode, struct file *file)
 +{
-+	struct page *page;
++	io_opaque_unregister_user(file->private_data);
++	return 0;
++}
 +
-+	for (;;) {
-+		page = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_COMP | __GFP_NORETRY |
-+				   __GFP_NOWARN, *order);
-+		if (page || !*order)
-+			return page;
-+		(*order)--;
++static const struct file_operations io_opaque_box_fops = {
++	.owner = THIS_MODULE,
++	.release = io_opaque_box_release,
++};
++
++static int io_opaque_export(struct io_ring_ctx *ctx, void __user *arg,
++			    struct io_uring_opaque_register *reg, u32 size)
++{
++	struct io_opaque_store *store = xa_load(&ctx->opaque_stores, reg->store_id);
++	struct file *file;
++	int fd, ret;
++
++	if (!store)
++		return -ENXIO;
++	fd = get_unused_fd_flags(O_CLOEXEC);
++	if (fd < 0)
++		return fd;
++	io_opaque_get(store);
++	file = anon_inode_create_getfile("[io_uring-opaque]", &io_opaque_box_fops,
++					 store, O_CLOEXEC, NULL);
++	if (IS_ERR(file)) {
++		ret = PTR_ERR(file);
++		io_opaque_unregister_user(store);
++		goto put_fd;
 +	}
++	reg->fd = fd;
++	ret = copy_struct_to_user(arg, size, reg, sizeof(*reg), NULL);
++	if (ret) {
++		fput(file);
++		goto put_fd;
++	}
++	fd_install(fd, file);
++	return 0;
++put_fd:
++	put_unused_fd(fd);
++	return ret;
 +}
 +
-+/* Destination allocation for dense copies and CREATE. */
-+struct page *io_opaque_dest_page(struct io_opaque_store *store, u64 pages_left,
-+				 unsigned int *order)
-+{
-+	*order = min_t(unsigned int, IO_OPAQUE_MAX_ORDER, ilog2(pages_left));
-+	return io_opaque_owned_page(order);
-+}
+ int io_register_opaque(struct io_ring_ctx *ctx, void __user *arg)
+ {
+ 	struct io_uring_opaque_register reg;
+@@ -38,19 +82,37 @@ int io_register_opaque(struct io_ring_ctx *ctx, void __user *arg)
+ 	    !mem_is_zero(reg.__resv, sizeof(reg.__resv)))
+ 		return -EINVAL;
+ 	reg.size = sizeof(reg);
+-	if (reg.store_id || reg.flags)
++	if (reg.flags == IORING_OPAQUE_REG_EXPORT) {
++		if (reg.fd != -1 || reg.config || reg.config_size)
++			return -EINVAL;
++		return io_opaque_export(ctx, arg, &reg, size);
++	}
++	if (reg.store_id)
+ 		return -EINVAL;
+-	if (reg.fd != -1 || !reg.config ||
+-	    reg.config_size < offsetof(struct io_uring_opaque_config, __resv0) ||
+-	    reg.config_size > PAGE_SIZE)
++	if (reg.flags == IORING_OPAQUE_REG_IMPORT) {
++		CLASS(fd, f)(reg.fd);
++
++		if (reg.config || reg.config_size)
++			return -EINVAL;
++		if (fd_empty(f) || fd_file(f)->f_op != &io_opaque_box_fops)
++			return -EBADF;
++		store = fd_file(f)->private_data;
++		io_opaque_get(store);
++	} else if (!reg.flags) {
++		if (reg.fd != -1 || !reg.config ||
++		    reg.config_size < offsetof(struct io_uring_opaque_config, __resv0) ||
++		    reg.config_size > PAGE_SIZE)
++			return -EINVAL;
++		ret = copy_struct_from_user(&config, sizeof(config),
++					    u64_to_user_ptr(reg.config), reg.config_size);
++		if (ret)
++			return ret;
++		store = io_opaque_alloc(ctx, &config);
++		if (IS_ERR(store))
++			return PTR_ERR(store);
++	} else {
+ 		return -EINVAL;
+-	ret = copy_struct_from_user(&config, sizeof(config),
+-				    u64_to_user_ptr(reg.config), reg.config_size);
+-	if (ret)
+-		return ret;
+-	store = io_opaque_alloc(ctx, &config);
+-	if (IS_ERR(store))
+-		return PTR_ERR(store);
++	}
+ 	ret = xa_alloc(&ctx->opaque_stores, &id, store, xa_limit_31b, GFP_KERNEL);
+ 	if (ret)
+ 		goto put_store;
 -- 
 2.34.1
 
