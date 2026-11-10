@@ -1,89 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318507;
-	b=DguAN5qxcE9fyBLXaCbYlWwlm33kLRiIZLqQLtrFhfqbNpOXrQDEX6l9N0x1/Ffogilp
-	 l25deERxSjb3MdFNhtVb1bQ14Fd40tyx0q/M3qK0zbkdd3XmFoFP+yJlbEZx0y22RUMox
-	 0V5htD/khgPBrgcONOVc720CgBE9SEzcrp01Wriq0O9rQvWzLOFNrSTQJaMbt41I3RrV9
-	 rC+EArcoJ+CPMp47tHjF3nIpCEwg92hQRojIUWsSxN5n+MHMmBjOkdkCUCNvhZgwURthx
-	 lTgoPH2c1exOCt1Yjh7cS8zdUwqDtWMJrQKJahqSfDpDxSOBUcSLT+goZUjzhWXn+MQ==
+	t=1794319961;
+	b=h3Pfr5+FHkr/APDZlFqFUlKSVVGekLqxYljeFS+w2wpBRhd0VPP4zGr0cyADz/T33Vwb
+	 gA2KjE8tg5K0cP3Y79snXEsxh4nEVsmASe1BwhM+BQfhUZwdz+n5YwF0iSv64wQArstTn
+	 rkp/2BkpbTwU33cLE7GCVXDkeRQMSnUzXSCu6+Hcq27qT6JuKm580kjP4QjNturP97/fi
+	 L4hC1KI7bvox7L9w5QudjzmCwHDaFGrapN4RKXk02YumJ40bGmJv/OIVgv+Xdcf0ebjn9
+	 b2r+YS4Nyk+9T47+WUhl3YGX2oVrqDa0GlGZCiJYrTrSiLssh05jtU3vAsMde/J3hZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318507;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
-	b=1dkNvZI/UcFL01rkyu6J2ZaFAx9ac4T3Fz/WY6tsEgWCJq1rqYM50nqMNWcK7n1BZohf
-	 riooyN6ReUgFOaanyZAGtsUQQPD8tqvsHY1D5oJ4alx2hINM0I0kKUnmYFNSBR+LTf1uK
-	 /qV7XU8xGO8O38CwXxMBToJOHLMqxvVOE/noQx8PPX0IADR6gk453iY2e2cFnwJtOyBA8
-	 vNXvNOD98ovxcatyOTQNrAlCeUNtUj9cvtpqMF+FUisQqOtd1Yo9xTkggi2EY717VIMWM
-	 sOUjfw6xWOCOkXHX48sozJAt5Xn865k6e8BiJyu/3ry1w5l2HQy/iZ1zIoI+0QULM9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794319961;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=6VgY6UdWu9zLmnF3aLHQsmOuzao3PITWEgw/5e5KuwU=;
+	b=DJIb1TY4IGqkSSB2Q1S+UjwycKCAyBZoVlUG40wuv7+WaIIKm342qPSFv56WueZdvBe9
+	 QWeFeq4EyPkZ+PyD5XHOSJIwrVyR+gPTLVwA2LelgsgUA2aVtxBAopCuyKL2TM66zJobe
+	 UVBoxS0aICRusJt54vOQAAdJIq1fqg1sWtpb6f6IcU2vKWKBR81KtMeVzBZpUuHMPuYAG
+	 Cnz2MWEobZHz7lNJ6QyUjvQ/9uQNh9w1WkQj/GgFCq/WNHNzr6k4OvGQvJCd7Utml22Qi
+	 fn0Dk/eu8cysHbnW7Vr2+PB6RAjoeArrAlDh5tOmFMEHRWDcOLQtvG0z9UFji79hTtA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=HB72YQ7b;
-	arc=none smtp.remote-ip=74.125.82.173
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qm0sZ2Fq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0822960A3803
-	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:48:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0822960A3803
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE47C606A31C;
+	Tue, 10 Nov 2026 14:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=HB72YQ7b
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-36f6295304dso2712187eec.1
-        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794318504; x=1794923304; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
-        b=HB72YQ7bzSNDKvQpdxAzIXhw765K3FZEu89E/O9EvBAPCZqbw16+8jdeStxCmh5A15
-         plkmjPO8EHmTzJvTZ5iu6BYR5NFtuz+PTB7iWBCPUIRLkCgu6DZUC9NPs+2aGFTMkAeF
-         cdfF57UkHI3sFT3glI4X4YC+ImrI5h+BfInsK0pf8epb50QuCpEkzvlJabGla57nhEm0
-         qtRQeJYwqKPqJFXucU+zDvokJIDv8OtwSOdgHbYYEgnnlt4BzpJeJPiYDWxA8DhLQvZF
-         RWc/iO9vAht0cLG9xmCvvnyRMTvvz3L9yaRsIuNigHxgDc+jeJ0hdm5KfBq45theZ3hx
-         MS7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794318504; x=1794923304;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Qa/RCZFR0wligE06OpZS2PXhYivUpmqS4SHJe2hoXp8=;
-        b=PFV0Qvz/3zIfIXczKI1H67tP0BAPkwFM+ZL/WEVDYxkcS2EtrXAPyt8DDKpjPKYDzq
-         t1aGUBpajVJZsrDFFUfpzdpVVvFs/7+mQpWGZlUgpDRXQ151QZRVVqOnlthaMPtbCpzA
-         Sxq6sbN8wxiJzDHHTI9BCvAsLgVQNdKW/gBChlRveD2ZgE/8GD/8EAoyNEunp/dZt/E6
-         Hfwwmk2dEOM1VtamDZTIBlemKSBXnTIQySjQdyIR22D8D5sLUU3X0qIqfcVH+y0B8YoR
-         LSVjzoRHMMXwlbTEhntsg6TEDyVCMW2I1j6gHtk5hs+q6LzIFjzt73qFGcHr2tXP4dKu
-         QnZg==
-X-Forwarded-Encrypted: i=1; AL+hErFxytA0LZLYgwh0E029Ou4IHJ8EyklikaaNa6XwHdXMbN64EAEJPqUnLkv1bjMVxYS5JbpO774Wbw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z8/fZvJzh2N89ODgapsN3TQz/Z+MyXmLNNzlNeZkEX4PJIHc0tG
-	AnVtGz9j2B6fVLfXbw690WCU1BK/iQ+0dLoxZF8AgublMdX5zTp0z9jHc6ZK4s5Plfk=
-X-Gm-Gg: AYBFou2DjVgz/E73Bwx0aX/j+oICZA8Sw7ym9UuT1UBFCh40FeVItmZSr72NcmK1yiF
-	uFkngdFQY5Dv0l8WTTclt6x16R/5Eq6mASY6uuRMTyVMMTfr78rLvIOehnEuhQLrnB7zLgNjEYo
-	Jx+t//VMdoLVeCzFuCAZmyhI95ZjRsJ8Lq3xZiQsCcg7bhgyaLrIxKnnrkHTZ06vG262Z7oftdH
-	NtHnTrlTVi7bmYKESEigWHd4Als+0smJiXPh9x9M08/NwtiU8LPlBthzMWn5112zSr7V7mxcZ7G
-	svkeambyO8/Twjpm2WYA4u4CfngbHRKOkeBN07D9PmTVhO/uiykhlP6wzY8/EbeeTJAOVewZysw
-	279ApFMZrgLjYf7S+ZTZMa1ceX9fEWSQGnijxLSSDhkJrNMzJiv/b/rCnddfoaR56FvBMnRR3Ea
-	8QhImzGKogaqbr4MXV1Bh4KwrEO4zR7qda6NRFuWE4vvQ3XaS09Q+ofWpRWQgaWlS9g6x86Ybqy
-	TH+zR/8CYtXRuGdG6fMcNGXsYjIJlw2uGWgPoLRGmtunlJcxNkPWovpsyahqGePrHQy5wlAUZLx
-	n5qpUF9N+O1c5dVE+/YaIzoTYOt9/+/sNwK5TPslV3WF/HjSaB5i3oYdpMgHUGurL3fRSaiwoo+
-	FT6Mta2Ximm5nqg==
-X-Received: by 2002:a05:693c:8350:b0:36c:a1ef:f8f7 with SMTP id 5a478bee46e88-3751c82ffaamr3514528eec.4.1794318503557;
-        Tue, 10 Nov 2026 05:48:23 -0800 (PST)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375212e7d24sm11503678eec.22.2026.11.10.05.48.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2026 05:48:22 -0800 (PST)
-Message-ID: <a8dea1a6-1f12-4f28-bd41-b751b3a9c7f0@kernel.dk>
-Date: Tue, 10 Nov 2026 06:48:21 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qm0sZ2Fq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CB61F008A1;
+	Tue, 10 Nov 2026 14:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794319960;
+	bh=6VgY6UdWu9zLmnF3aLHQsmOuzao3PITWEgw/5e5KuwU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Qm0sZ2Fq4qPY1DKIKav6pqo7ACprob1rUv8p319SW6KFEx+TBxE4TRzcyKCZevuDw
+	 0cS3uXOaW2KCkoqT8UtoX0z0uLH+IlOzbaDYK1NJ2eUKWPbwmLU9//qxzJMoLkU6cJ
+	 z+KJzWh7p3OU9AP5hvCXIM/QjG9Y3VXFoWkP5jvm1xaEGEiE2FDCVIKdchuCWU6LB5
+	 A+OF2in0nAygQ2p7Rnv2xCqKveTl1hrNC5jmHhshuWoo7YxUYQdDBoW+TUzrER2nUx
+	 S+UYgfQUl1O5/x03wPgGptiG2nqhteMr27xLsPeRmuMu0yZxubY3OoAAJWJlzyUjXT
+	 ogs7KmUEotdnQ==
+Date: Tue, 10 Nov 2026 15:12:36 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Jan Kara <jack@suse.cz>
+Cc: =?utf-8?B?TcOpdmVu?= Car <meven29@gmail.com>, 
+	Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, =?utf-8?B?TcOpdmVu?= Car <meven@kde.org>
+Subject: Re: [RFC PATCH v2 1/3] fs: add filename_utimensat()
+Message-ID: <20261110-ohrfeigen-broschen-quartal-28599cd8e172@brauner>
+References: <20261104110604.126717-1-meven29@gmail.com>
+ <20261104110604.126717-2-meven29@gmail.com>
+ <35n54rrx6qq67j4fpxlvh67hal7zhmke2g5zcuhs5sbvxy22ez@nnnt4r4xng4r>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -93,42 +62,34 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [SECURITY] io_uring: ring resize splits mixed-mode large entries
-To: n3rd <18670333770@163.com>,
- "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: "security@kernel.org" <security@kernel.org>
-References: <371cd386.bc0dc.1a1c5844185.Coremail.18670333770@163.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <371cd386.bc0dc.1a1c5844185.Coremail.18670333770@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <35n54rrx6qq67j4fpxlvh67hal7zhmke2g5zcuhs5sbvxy22ez@nnnt4r4xng4r>
 
-On 11/10/26 5:52 AM, n3rd wrote:
+On Mon, Nov 09, 2026 at 12:05:18PM +0100, Jan Kara wrote:
+> On Wed 04-11-26 12:06:02, Méven Car wrote:
+> > From: Méven Car <meven@kde.org>
+> > 
+> > Copy utilities that preserve timestamps, like cp -p or a file manager,
+> > set the times of every copy after its last write. To do that through
+> > io_uring, the request needs the utimensat() lookup on a name that was
+> > imported at submission time.
+> > 
+> > io_uring takes the path of a request when it is submitted and looks it
+> > up later, from a worker thread. The path ops it already has call the
+> > filename_*() helpers of fs/namei.c with a struct filename. utimensat(2)
+> > had no such helper: do_utimes_path() took the user pointer and imported
+> > the name itself.
+> > 
+> > Split the lookup and the vfs_utimes() call out of do_utimes_path() into
+> > filename_utimensat(), declared in fs/internal.h next to the other
+> > filename_*() helpers. do_utimes_path() now only imports the name.
+> > 
+> > Signed-off-by: Méven Car <meven@kde.org>
 > 
-> Hello,
+> Looks ok. Feel free to add:
 > 
-> I am reporting a security bug in the Linux kernel.
+> Reviewed-by: Jan Kara <jack@suse.cz>
 
-Congratulations on being able to run an LLM, less so on being
-able to read and comprehend anything. I'll keep it short as
-you've already wasted more of my time than what is warranted:
-
-1) No need to CC security@ if you send it to public lists. That's
-in our documentation
-2) Send a patch to fix an issue, that's also in our documentation.
-
-and most importantly:
-
-3) This isn't a security issue at all. An application resizing a
-ring and getting a CQE or SQE mangled is NOT a security issue. It's
-just a bug.
-
-If you want to actually be useful, send a fix. And don't bother
-security@ for trivial bugs.
-
--- 
-Jens Axboe
-
+Seems fine.
