@@ -1,168 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.23.69
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794313481;
-	b=uHWJlBMvzb+ktaoKtUCRgAz0wDMn4Xf/u+MDgSVX0TUmyKtPR5GupM/K2efhVLLeKV3F
-	 5G+HMryZ60XL1BMC0IQoZ7dWDdYxvq9SS6XZmFK04LeZaF7q2Cxgak7cY2s7jTHqId+KI
-	 bgE5TNTz6kEGXXmdmIB3097kgnySJqqPsGaYHDER9dqG4ZPCiruNKAM55KW4K9rP99q12
-	 Lyyxrhg71PPdD0S3YGVB5u1nI7x02kE7rRkCnbxeoSJw1RI7uDEhNbL1NCKe9cwI/itZ5
-	 f/FGMGGa32Rbk+eLFMsLtoheECkIxDPGqHByDigH0aUfqj0d//YSfYI5zxLB4AUryeQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794313481;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:
-	 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=xDOIdpaCx9QY4p1FOgufA3xlzxKio9Xq87xYhvhitV4=;
-	b=BZP9a4Wac4Ui5ETV+GgfX+9SSdRzjjQ6c7k249jTnXNjQI1Od3jjMKo+Np/PiMzgFDuq
-	 MbfhEkvqGzarO9lq0NbKrqYtCQ78JBjZweR+n1DEme7AiRllbbS1TxEzgCaueYL7ZlnVp
-	 4D+0eW3yEYEqYIx04qVe/PPKzOGuUtzMoBE/w7dt9qc05mXI2Z4iKMrgk+T9QtM8HSm1L
-	 u5RLBDd/Asf3eAQNbJ2GM4HydAqx0CuPPOiZ6tnq6cl9T+aDGiKZ3+onw9Wb5lg6sJKUF
-	 irt1q98WkOkAEQKTAaEXGyjfyH5usrFwql+B0//lj1Nf/cR/4JJHWZc+QsvrmPYSLzA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=outlook.com;
-	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=I2D1k0kP;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.23.69
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azolkn19011069.outbound.protection.outlook.com [52.103.23.69])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794316814;
+	b=b1LD2Un0Bs6m1Zh2gGDTmRIIBC++1dcrsamuDJN6mQOT/DBLnQaKlKghc/jlgOdEoMAB
+	 89Avq/cODtFNRThYQTx5sQ8mFCF5zfWw5KhmMDSktGgk4w0QkmSdTRbLBbXcOVQxBoel9
+	 iYrVlvgiZLlohfS5fESSHrXiPEiaYS0idBW8e1cRDfgLqNm4lFmb1hZODiUvnJgvQp3yZ
+	 TJUPuiISRvMNNec2YkZXKbLMAE7xjATqrPIKL+MktmrXwiM+5UoJiH4zGCJgs7l6gLkPd
+	 Tu7yZzduHI5oBJmZofDI3PSuyC26b4JVz/6vLb3bVYsR8VgYn7xmVYXSFmI/5Wigezg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794316814;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=BuFQdLxm76k2ibrTpYCTvB4FrdQtvYcaSVR0hj2U17U=;
+	b=acu1GF6SbNbmMhkwfErc+ptvhD6gyJmEztzPg6z6To7YG+Mx5mhyQwESYZhWnVkr/wNN
+	 tU+ItQ5XSsnE/ToK+0Ll3NyqkqcF1ivUPn9ETy+2isom7QoBH2/5VOnyk3WiZZq7gc3mV
+	 bydh+dWV6BPoLeeagDupg1CXcRztBicV0PcN7Zc5bgHmVNBEBaKqfcQSLgf92YozmKv09
+	 2zy8jvYeHdd4GuuiPFXHGijQ5UpauTV1qDzxbsQZymZB5ubmC2MhpF0Hx60MyYthgmPXK
+	 HjF1nKiLKdSGif2O3MkyD7wNZk82S33It2jVxseb0YLHSnWm/U69MAiKjQ/sy+q8SEg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ghapI88P;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=nYdmCcfe;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24356606A31C;
-	Tue, 10 Nov 2026 12:24:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24356606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54904606A760
+	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 13:20:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54904606A760
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=I2D1k0kP
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VT7vzpeEItI744ABovFTnr+WVYnEbznfxkcXIJl7+NsUfslo6smrBd5rtbMLdefWlXVLsMhhxfWI0CNkNFDSCS6m3lGh5UYhe+XRMhA5WiOYGhMq/9sj0l6HRVuzau381aNe0pFY8KA5eHM/ndP0jXcnoiR2Coq1VMjskuQKWB+jkabc/Wn7lOWOCUIj7SaAMbVMi45lTNLIFZiCIdY7H0PThaSZLW9kCbJBGLjJRP4pQV6TajfzgwF7U+9h+7wjywMlhAiXU4bPIk2PlDDEMUvELIoSC13dV6hAtnfMjczcA3OgAh/OArjOVU5JC6cCjr0By8kOofjR4MwpmWyMTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=xDOIdpaCx9QY4p1FOgufA3xlzxKio9Xq87xYhvhitV4=;
- b=Z3E6c6oBWb7zhQELcW9idVwLC0C+X9b/FXsYZ99a4HHJDswPUyWdxOjocxoNjxNCNQD939nlMRINzoK2txW7WqxMSRYOz5C1N/gf0HgXnSj1JT3EZfBWYlpy+LGhkEitk6dstZe1ES7QTawkmhtEIyJQQ432hVbjxWA0SGEbIfk4YhNBJ7nLSUYrvejZyYFDSeO+EYJqGXNoO56kY/e4melMzDC5cggLJQwtYbhnS+0AB4k58v9mdoU0wbW+i77npWJ7DU5tAp10cmaNdSO/W7IbzuOOTK1RBx/q8EGT07zUy6EteVOfoxpRUr3ErctyqLF23oz729/apv6+Wk/eNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xDOIdpaCx9QY4p1FOgufA3xlzxKio9Xq87xYhvhitV4=;
- b=I2D1k0kPufVrPjkSDffoBrn5lgAs7vQ4PYbEReRDfuwF+P7tynx3d8ZrIyVMhbCJW+O8kjHQLyCYlnLMDnqnmNT/jqvFJ2iFiz66GLz0FtEAfovse+6rJjMk0SwfnT5XMSg6LnUg44hlqcJegf8uCJJF14dHhG9/N3PH9G54UTTs9wC8hR13E/vcpgRYUSDICl9q8fUuYklzwRagzjY//oNGela110K3odLw4CJW7uMUOz8udeKVCNj+qYn4KcU7jaOxioQJWWTe63meauSDXc01fpr/r/zRpLkdEbf0wT1IS8I1NDtpqjkDziouOeSguFKMgMk/bHh+YXQTu1n2tg==
-Received: from SA3PR05MB10385.namprd05.prod.outlook.com
- (2603:10b6:806:39d::17) by SJ0PR05MB7532.namprd05.prod.outlook.com
- (2603:10b6:a03:2ec::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.8; Tue, 10 Nov
- 2026 12:24:38 +0000
-Received: from SA3PR05MB10385.namprd05.prod.outlook.com
- ([fe80::e22f:a0f5:fcb0:9b0d]) by SA3PR05MB10385.namprd05.prod.outlook.com
- ([fe80::e22f:a0f5:fcb0:9b0d%6]) with mapi id 15.21.0615.007; Tue, 10 Nov 2026
- 12:24:38 +0000
-From: Yingjie Wang <x-professor@outlook.com>
-To: "yangxiuwei@kylinos.cn" <yangxiuwei@kylinos.cn>
-CC: "mkp@kernel.org" <mkp@kernel.org>, "James.Bottomley@HansenPartnership.com"
-	<James.Bottomley@HansenPartnership.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"bvanassche@acm.org" <bvanassche@acm.org>, "jthoughton@google.com"
-	<jthoughton@google.com>, "asml.silence@gmail.com" <asml.silence@gmail.com>,
-	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v3 5/6] io_uring/cmd: allow reusing SQE storage for
- completion data
-Thread-Topic: [RFC PATCH v3 5/6] io_uring/cmd: allow reusing SQE storage for
- completion data
-Thread-Index: AQHdbp1r/IUM1KiQW0u7BqizLWiRsQ==
-Date: Tue, 10 Nov 2026 12:24:38 +0000
-Message-ID: <20261110122434.4144043-1-x-professor@outlook.com>
-References: <cover.1794045010.git.x-professor@outlook.com>
- <a4ec8431c2f36172348449b872faf26d7d6d4d7a.1794045010.git.x-professor@outlook.com>
- <20261109025114.433681-1-yangxiuwei@kylinos.cn>
-In-Reply-To: <20261109025114.433681-1-yangxiuwei@kylinos.cn>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA3PR05MB10385:EE_|SJ0PR05MB7532:EE_
-x-ms-office365-filtering-correlation-id: 772229fa-9495-4d15-7870-08df3f2596de
-x-microsoft-antispam:
- BCL:0;ARA:14566002|4140399003|24021099003|25010399006|31061999003|16041099003|38102599003|8060799015|19110799012|8062599012|12121999013|24121999003|22091999003|15080799012|12091999003|53005399003|40105399003|26121999007|102099032|3412199025|440099028;
-x-microsoft-antispam-message-info:
- =?utf-8?B?dmtyajN5cmdNNFJWcDVHZmU1SHF4aWx3QjhFRVVKQXA1N2Q4TE5XZmkzWHc3?=
- =?utf-8?B?dWNCMWtCdzJpZUNyVXQzTURnMU5kVi83N2ttMEYyeitVS2l3aFlsWUluei9a?=
- =?utf-8?B?ZCtwM3hSbjI1dTJtNTRXbCsxVzEzdXhqSXZsSmgwZGdEa2VlSTNsNWZaclNs?=
- =?utf-8?B?dzVaMXNhQnBXYWt1VkR6OVlqVlZtY1UycWc0RkZjdkVENlNDTjJzUzQ5TWgz?=
- =?utf-8?B?c3Q0VlVVSU9taTdYRi9pZWRCSXFVaGEzdUR6bzBzOVVsWkcvS0VmRG5NTVFI?=
- =?utf-8?B?MEtibkJwWkwzVFViTktEU1VQMUFMdkNUOW02dzZtaXBwU2ErbmFYUkhpZjRP?=
- =?utf-8?B?SGxEVzJqYVZxSGtVTzZaeDljSWtPM1hZUlh4NWdFQms2TThyaHpyWGlEQ3o0?=
- =?utf-8?B?Nm5Od0NIUHhkQnVEdDhqM1hjd1BTRTM5YVNyTXdLMHdNbmVibm5TMUtVcm9y?=
- =?utf-8?B?VjRKTm1tVzZkU205RGRlRFBMSnBmVmpLQlFuS1BWbHFvV1RuVTRDbGJTYzRl?=
- =?utf-8?B?a2NnUTV5ZlIrVTRiZE5BTFpUQzhiZjdMWlA3b3NzcGt0NEhOcFZHUW1KSUll?=
- =?utf-8?B?VnNyZEY1NGtBUDcvaCtNTklCVWoyT1BPNDR4SHVZZ0pEOGo5K3dvbzFtUmhN?=
- =?utf-8?B?U0t0YjJ4MGI4TUt0MGk1S2V6b3kyV3pIOUNER3YzZDdqblQ0T1hQRFdhZlQ1?=
- =?utf-8?B?eHRvd1Q1S3BrL1pZcEVyaHVSZFdSbnNwNURxTHVkemR0S3NnYVVlKzdCaGQr?=
- =?utf-8?B?S0ZKRkE2MVJ2RkJsQkF4dU0wOXRHRXZUTnVKZXg3azd6bTZ1YUdZYkR4dXph?=
- =?utf-8?B?NWI4bzdKVXkyTndBS01BWG12RXZadzZUVlduZVUxVElHbnB1NUhJWHluR0gy?=
- =?utf-8?B?TlU3OUlCTCtRT2FCMWFzSVE3VCtPdmFSMnhrcFNNaVdhNHBYTGVWT2dLRC9w?=
- =?utf-8?B?aXhpUkg2TDU2dTh5Qm0xVVREems4NGZtTnRWaDUwMldDYmtJajNzeEVTRklT?=
- =?utf-8?B?Yy9JV082SDMzbEQxb1FZM3JUYU55QzNUaUZJT2grQ0dlZE52NGpxbXZ5WlRm?=
- =?utf-8?B?c25CcEZXNytsQkJYVHZWU1pyS1ZUZlJvcjNwL3Y1Q1FmYklqT2IxVVpWT3lN?=
- =?utf-8?B?YWJpdmp0YzNjWDNOYmJyN0UrK0tXM0JIMXVYTXFCM1hiek5CclRUQTJ6a1F2?=
- =?utf-8?B?UUZVWVpXcTRPaVpzdjNFTFVwd21WaS9JM3lGT2ptS0NiVVo2UTNac1FCSG9t?=
- =?utf-8?B?NWRZU0RRUVVwZ3k1OVYxUWVBeEY4amNiQWFsVWV3MTlRbS80a2VuRFA1RWdu?=
- =?utf-8?B?cEcwTE9VR0NPU0RIQUh5YzJXUkYrKzE4Mjd4bS9CL2hiSEZyaWROcXBrN1Zz?=
- =?utf-8?B?MU5HSlFEREo1c1p5K3JSMXVleUl5YXYrbUlWdlI5ZlN0L0ZIMko3ZVJXYTQ4?=
- =?utf-8?B?RzlWV1pubTVMTVYwbGUxby9kSXJNUWxmY2tBYVZjbXk2NTVOdndxUHVNUlJk?=
- =?utf-8?B?MDd1cVNnaDBYd1B1WGJEWld1aTRSY25FdU9UVzF6Y1AwSFlUWURqcjN4Mmcr?=
- =?utf-8?Q?Xzexb5sqJ7PW6S8HnfysGVchg=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?RzkrRkVGOENEaWpEanQ4Tm5zcnp4NnBmaFNVbUs0N2FyVDFOQ2xYUUZQV1Mw?=
- =?utf-8?B?QU14MVVzM201TUpkaEY4dG5qaDJxNEdpOCtBd3NYcjlHbG9uL01Ob2d3MEx5?=
- =?utf-8?B?UDVMTnlTVFBzdUxuTjluYUduMitEeVFINmdCWExFbGRZa3ZaUWN4MHZ5R0xu?=
- =?utf-8?B?YUZSMmdTSnZ3azdpRDBNKzkwWER3YSswNHNITlRwWExTWmt1bEUyVDBSNE84?=
- =?utf-8?B?bVFNZ2NRVXlqbk1CNWRxL2lSN3NWRXI3cXl2cksrRDJkODFOTzVlSjJZTVMw?=
- =?utf-8?B?aVBiR1BXTHNkN0FYZjFuMittZHBQN1lMTExQWTlMUWRhUllGWjhQdVRvSnl3?=
- =?utf-8?B?M0JsM0xBYUtMbjAzaFF1b0NSeHRGdmlrMmp5SDZqU055TjM2Q2hENUJGUElo?=
- =?utf-8?B?bzNNb0xqV3RlR2dwTms5bkRYVGxmZEdqOTVheU1xM1VxUWgrQVRxS0JZNzlO?=
- =?utf-8?B?MEMzMTN3MHo1MFpVMTRjUzgrK0dhY3JERHFwZUI0TEZMM1VlY2VIMXhkRVdu?=
- =?utf-8?B?MS90OE5GQ1dmVzA2UVlBc0Q3cTd6c2RLRko4Y0pQWFNNMnFPQ2RONzAzT2NH?=
- =?utf-8?B?bElvNTc0a3pNd0JlTjM3Vk5YRGxUcHlkbFZQUTAvZGdlajUwdmhmZzR3M05Y?=
- =?utf-8?B?cFRaTEdzcWZPMWc3QzRKdmxFam1jM3BFWC81ejJ2eHgyeGNtNDRTQlg2Yk9C?=
- =?utf-8?B?NGg1Vzc0eXc4QW1tV1hzbW90c0FKNzQ0c3VKbmxFTTVENVVoNWx1d1h2bnZR?=
- =?utf-8?B?YWJvcmtNazh6blpDYUQrcE1hVkUwcnF0NzlrWFRXN1NSTHJ0aDRCZkUrOGNC?=
- =?utf-8?B?Ky9lU0ppU3FTTnBMTkZEWmIvNFZoYS9xT3FKRFFkc3hPdFRjcUM3WEZNdG9p?=
- =?utf-8?B?L0t3Q1dKbTRSUzloYVZlY2RyeXBnNmFJZDBTclp1N3Z6czU0S3RRVXlqSzV2?=
- =?utf-8?B?d0EyVVRMOTFpY2dpdkpKemRuUDR3cHBHY01rcUd5N1ppQWIyaUxNc0c1WHlw?=
- =?utf-8?B?aEFhNXJKMU5mbjhxc2Fka1VGaUllcWF5TlJweE4rTFcyU083VG1IdmY2RHpF?=
- =?utf-8?B?aW05ZG5PZnM2Z1htaC9XM1RaRElNeHpSN0JvMlJCYi94YUhwQU1VVVZ6b1ZV?=
- =?utf-8?B?ZHI5QlpGaE80dmJ4dDdwZXpWTnVVZlFLeGZSQ2wrUG5qYkNmdloyU3V1aThi?=
- =?utf-8?B?ZWlIQ0JWSUludHEvSnNMd3NlbUhLV2NQdms2L2hHR1Arenk0VmxWTlQ5NXQ0?=
- =?utf-8?B?MGZOWk5LN0x2ZXFIN3lpaDBDcDZGVzJxQk1adG9tR2Y5aERNQXAzS3A1Q0R0?=
- =?utf-8?B?RGZMMDNGVUsvVzM2NWVzZTk5SE1kWUhoNmJUTnNGSWlCdTY2UkJ6RnpvemFu?=
- =?utf-8?B?WTU4UXN6K2dtcitKR0NKZUFpUHpsVXRHdURoTjZyc21zOE04RnV6bGd4OUhm?=
- =?utf-8?B?UmwxbG0xM29RTWZVOHMwNU5HcW1qZVNEOGZ4QklQRzF3andmWWszRHFMTGdR?=
- =?utf-8?B?anhwZU5EK2VZN2RqNW5YdE9kQVNzMXlhVlFJcnBva3JnbnEyNnZHcktLc01N?=
- =?utf-8?B?TXJ4T1hsaVFvOHI1L3BiUUgwSG1OMjZFNFZSZ1Rha3M5NjExcE5zUUJoRE1G?=
- =?utf-8?B?cDFidFAzWDkvWTlPMzdLaGI1YnhTWE84eHRNSHYwbTVTMVVjdnIrL2Z6bmMz?=
- =?utf-8?B?WEVHU3BWTkpsZ29Obi80L2g5WnZNQjlzUno0Z2dXQ00ydjREbTVkSExmNStj?=
- =?utf-8?B?bElzV0t0eThMdDBGaFpjSi9vdndYVHNVR2s2ajQ2Y2Yya1dpaldDNTlXbW9W?=
- =?utf-8?B?bWlvSmM1OFA3ZlpvbWJtbmFtd3hLZjMybXlyaVVKcmxHQ3RJeExGTmNnNTRR?=
- =?utf-8?Q?yvhh5nh4PAnRy?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <51F20E9E6C155046A168A91C47568143@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ghapI88P;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=nYdmCcfe
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794316812;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BuFQdLxm76k2ibrTpYCTvB4FrdQtvYcaSVR0hj2U17U=;
+	b=ghapI88Pz0SfjtlBzW75JJ8iKsCNv0BjV3RhD1rSxlQwvpDu6d2dBaBRMMy4WVj4EqvpkL
+	No6FDeVHvZDQx0/LyZTWpcqE5EqisRzLbKqdrUcpFNTQeaoi//eD/VFX02HRCZI1iB+sZ4
+	7/tFqPJForff15EZqgS5yKzjaD2HDjY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-298-XMNaX-gYPyScn9BfxtHNEg-1; Tue, 10 Nov 2026 08:20:11 -0500
+X-MC-Unique: XMNaX-gYPyScn9BfxtHNEg-1
+X-Mimecast-MFC-AGG-ID: XMNaX-gYPyScn9BfxtHNEg_1794316809
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c4d34d6082fso192485666b.0
+        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 05:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794316809; x=1794921609; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BuFQdLxm76k2ibrTpYCTvB4FrdQtvYcaSVR0hj2U17U=;
+        b=nYdmCcfeo3QLxglJR/X9RKwdepZWlzRx50obo24T1NdllDNI6GQM04V8VEVd1Q8Dmz
+         oY6Bl8GFbumrIX9GAsAz+Y7ibEm/kIuhLe9d7xFXGAQsdsQBS23zUTfI3byK/EF9k9xz
+         D0v7pHQPI00JE7/myvSJLtn6AUr5IVNv0T96Eq8JLcuC+73gw1In3y9LQiVSfy3uMgcx
+         NiN9o/isV3uylb8YkaN4fdMJIcgLfKaU9sSKoNdSga7acGKyeyjc+0W5lC8WqjXIweDJ
+         01zNuKqHeFnPXhieLYLtRZoxg8XsJmymvsLqLjVRWJI5uOKzVFF3IP15IpQCrH+5DYa9
+         DOVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794316809; x=1794921609;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BuFQdLxm76k2ibrTpYCTvB4FrdQtvYcaSVR0hj2U17U=;
+        b=EiOE1qAawFcs4yQGuoCKAE8DRQ5pTw7oG0E+4Z9M0MkUih4WvTc/oj83D8HJO84XGq
+         4Wm5vUZ9W2RjLA+T70mPym9JkPhHrkzAtFq1MLOPLj07aPuEX142UfLwuMoVHBdE3K4s
+         6HcK1gZbIETinGLMXUjwzXp1mH+dS0whL/bvx4hdhIPHvjFzK9Pfg0+NhjHGpEZRqw8N
+         58cewDkfzpe21fJxWWCbKGDHqB1CgbikoKt4QiKgOQtu4K22tJCJCk1MuQz32gtPd46w
+         WeGyLqWVXigAZC3iclZp7CABl14LML6NDzTP6zg1LM0aqV1EFxFD59BDmnEJuSMxLkPz
+         K5LA==
+X-Forwarded-Encrypted: i=1; AL+hErFaeQ4X/DJG4hlAhhAfS8zf+OIiVU/br6/liFrpYOdUbrXCe/qIfIIa6ZTSUWFwGjepY+vgFQGMKQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+l6U0Qp3yWWb3aVnOCL2NWlJmzxtkN2J6iUxNf6orGsT2AXvOK
+	OY+Ok3gSr3bhiB8RCkeIlPsxjT/rq1m0FLOougMz9fE6cv1r3pbYlR0y8Xs/O27D+cM2ZNVLjI8
+	JB6KBsUbAzT8VN/F38ey1/TW7JeRlhTr8CmRTH8hlXb/tjqtzgQ0RtcCe7TA1
+X-Gm-Gg: AYBFou0O3kVtIN5F+/0QlJUTPgorsy/K752o4MbWb3sH9AzACUdJxeIkjTZCLADk2TP
+	ClR14fllhWHyF9H5e7GFpxuWNKOR2WoYlvflgyeP/879DkCTeKRrI7Qqd41wehK1ctcNXp6QQPy
+	uWtxXxpmfFhPcYy2tBxVWB1JwtGfgP1SHSo9wqvrJSWifK70wVq2nVH5egGkePNyF9AseyvT3zV
+	isGzM2njKVaA+qxsNlSVSoWr4gZqfcL3GrDIXjt4qrQp8N01K8fWVvOzRG5aA4AwEy9p0EJaMb5
+	WtJEDObQfQO6HR6+WUks5/wFsthiq5D3DjntFAWYVwixZSS3ev3MrbdcgELTqknz3Bdto3RPT6Y
+	AxLYJXR9IUR93gFpWuMg7Gp1Cz11s0UsQIbJZucpEvfdrc3H+bCbmHgyS64ITOQUTjZBLgtK3o6
+	GkFBVJUeYJKFfGsfauRD2DxoOPtZHxDuZePkfL1t3zCNRkFJPaAu4+gYHEt2z0QoQ732sKusLNL
+	w2Fuc/OzVel1KXSysLMdg30ghyihB9qH+heIPThl6XGXwJRcvcC
+X-Received: by 2002:a17:907:3fa9:b0:c46:7645:861 with SMTP id a640c23a62f3a-c50491b945cmr220483366b.7.1794316808793;
+        Tue, 10 Nov 2026 05:20:08 -0800 (PST)
+X-Received: by 2002:a17:907:3fa9:b0:c46:7645:861 with SMTP id a640c23a62f3a-c50491b945cmr220481366b.7.1794316808211;
+        Tue, 10 Nov 2026 05:20:08 -0800 (PST)
+Received: from cluster.. (4f.55.790d.ip4.static.sl-reverse.com. [13.121.85.79])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a5d54bbsm107791166b.48.2026.11.10.05.20.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 05:20:07 -0800 (PST)
+From: Alex Markuze <amarkuze@redhat.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	io-uring@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH net-next 00/12] io_uring: opaque TCP payload objects
+Date: Tue, 10 Nov 2026 13:19:54 +0000
+Message-Id: <20261110132006.3280986-1-amarkuze@redhat.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -172,46 +128,233 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR05MB10385.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 772229fa-9495-4d15-7870-08df3f2596de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2026 12:24:38.6878
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR05MB7532
+Content-Transfer-Encoding: 8bit
 
-T24gTW9uLCA5IE5vdiAyMDI2LCBZYW5nIFhpdXdlaSB3cm90ZToKPiBpb19hc3luY19jbWQgaXMg
-aW9fdXJpbmcncyBvd24gYXN5bmMgc3RhdGUuIHNxZXNbXSBpcyB3aGF0Cj4gaW9fdXJpbmdfY21k
-X3NxZV9jb3B5KCkgcG9pbnRzIGlvdWNtZC0+c3FlIGF0LiBHaXZpbmcgdGhhdCBidWZmZXIgdG8K
-PiBzY3NpX2JzZyBjb3VwbGVzIHRoZSBkcml2ZXIgdG8gdGhlIGlvX3VyaW5nIGxheW91dCBhbmQg
-bGlmZXRpbWUuCgpIaSBZYW5nLAoKVGhhbmtzIGZvciB0aGUgcmV2aWV3LiBzY3NpX2JzZyBwYXNz
-ZXMgdGhlIHJlcXVpcmVkIHNpemUgdG8gdGhlIGhlbHBlcgphbmQgZ2V0cyBhIHBvaW50ZXIgdG8g
-dGhlIHN0b3JhZ2UgYmFjazsgaXQgZG9lcyBub3QgYWNjZXNzIGlvX2FzeW5jX2NtZApvciBzcWVz
-W10gZGlyZWN0bHkuIEhvd2V2ZXIsIEkgYWdyZWUgdGhhdCB0aGUgaGVscGVyIGNvbnN0cmFpbnMg
-aG93CmlvX3VyaW5nIGNhbiByZXVzZSB0aGF0IGludGVybmFsIHN0b3JhZ2UuCgpUaGUgcHJvcG9z
-ZWQgY29udHJhY3QgaXMgdGhhdCwgYWZ0ZXIgYSBzdWNjZXNzZnVsIGNhbGwsIHRoZSByZXF1ZXN0
-ZWQKc3RvcmFnZSByZW1haW5zIHZhbGlkIHVudGlsIGlvX3VyaW5nX2NtZF9kb25lKigpLiBCU0cg
-cmVxdWVzdHMgOTYgYnl0ZXM7CnRoZSBjdXJyZW50IGltcGxlbWVudGF0aW9uIGNhbiBwcm92aWRl
-IHVwIHRvIDEyOCBieXRlcy4gVGhlIGNhbGxlcgptdXN0IGFsc28gc3RvcCB1c2luZyB0aGUgU1FF
-IGFuZCBtdXN0IG5vdCByZWlzc3VlIHRoZSBjb21tYW5kLCBhbmQKbXVsdGlzaG90IGNvbW1hbmRz
-IGNhbm5vdCB1c2UgdGhlIGhlbHBlci4KCkplbnMsIFBhdmVsLCB3b3VsZCBzdWNoIGEgY29tcGxl
-dGlvbi1zdG9yYWdlIGNvbnRyYWN0IGJlIGFjY2VwdGFibGUKZm9yIHVyaW5nX2NtZCwgb3Igd291
-bGQgeW91IHByZWZlciB0aGUgc3RvcmFnZSB0byBiZSBkcml2ZXItb3duZWQ/Cgo+IFByZWFsbG9j
-YXRpbmcgdGhlIGJ1ZmZlciBpbiBic2cgaXRzZWxmIG1heSBiZSBhIGJldHRlciBmaXQuCgpXaGlj
-aCBvYmplY3QgZGlkIHlvdSBoYXZlIGluIG1pbmQgZm9yIHRoZSBidWZmZXI/IFdpdGggNi82LCBl
-bmQtSS9PCmZyZWVzIHRoZSByZXF1ZXN0LCBhbmQgdGhlIHRhZyBjYW4gYmUgcmV1c2VkIGJlZm9y
-ZSB0YXNrIHdvcmsgY29waWVzCnRoZSBzZW5zZSBkYXRhLiBTdG9yYWdlIHRoYXQgaXMgcmV1c2Vk
-IGFsb25nIHdpdGggdGhlIHJlcXVlc3Qgb3IgdGFnCndvdWxkIHRoZXJlZm9yZSBoYXZlIHRoZSBz
-YW1lIGxpZmV0aW1lIHByb2JsZW0gYXMgc2NtZC0+c2Vuc2VfYnVmZmVyLgoKUXVldWUgZGVwdGgg
-YWxvbmUgYWxzbyBkb2VzIG5vdCBib3VuZCB0aGUgbnVtYmVyIG9mIGNvbXBsZXRlZApjb21tYW5k
-cyB3YWl0aW5nIGZvciB0YXNrIHdvcmsgb25jZSB0aGVpciB0YWdzIGhhdmUgYmVlbiByZWxlYXNl
-ZC4KQSBCU0ctb3duZWQgcG9vbCB3b3VsZCBuZWVkIGEgc2l6aW5nIGFuZCBleGhhdXN0aW9uIHBv
-bGljeS4KYnNnX29wZW4oKSBjdXJyZW50bHkgYWxsb2NhdGVzIG5vIHBlci1maWxlIHN0YXRlLgoK
-SWYgZHJpdmVyLW93bmVkIHN0b3JhZ2UgaXMgcHJlZmVycmVkLCBJIGNhbiBpbnZlc3RpZ2F0ZSBh
-IHBlci1maWxlCnBvb2wgZm9yIHY0LiBJIHdvdWxkIG5lZWQgdG8gY2hlY2sgdGhhdCB3YWl0aW5n
-IGZvciBhIGZyZWUgYnVmZmVyCmNhbm5vdCBwcmV2ZW50IHRoZSB0YXNrIHdvcmsgdGhhdCByZXR1
-cm5zIGJ1ZmZlcnMgZnJvbSBydW5uaW5nLgoKVGhhbmtzLApZaW5namllCg==
+A proxy, cache or key-value store often does not read the payload. It
+parses a header, decides, and forwards the body or keeps it to serve
+again. The body should stay in the kernel. The application needs a
+handle, not a mapping.
+
+Sharing pages with the application does not give it that. MSG_ZEROCOPY
+and SEND_ZC pin the application's buffer. TCP_ZEROCOPY_RECEIVE and
+io_uring zcrx map receive pages into the application, and zcrx also
+wants a header/data split and a queue steered to one ring. splice()
+and sendfile() ask nothing of the NIC, but a pipe only carries bytes
+in order, and a file holds them only after a copy into the page cache.
+There is nothing to retain and send again.
+
+This series keeps the payload in the kernel and names it. Nothing is
+mapped. Capture uses the socket's receive queue through
+tcp_read_sock(), after the stack, on whatever pages the driver used.
+A fragment nothing else shares is kept by reference. The rest is copied
+into pages the store owns. The NIC is not asked for a split, a provider,
+a queue or flow steering. The same path runs on any driver that delivers
+TCP to the socket.
+
+A send takes page references through MSG_SPLICE_PAGES. There is no pin
+per send, no registered buffer, and no range the application must leave
+unchanged until a completion. The object is the received data, so the
+body is not copied into an application buffer before it is forwarded,
+retained or served to another client.
+
+The net change
+==============
+
+recv(), splice() and tcp_zerocopy_receive() are the reader. They consume
+the sequence as they go. They never hand the application a stable offset
+over a queue that some other reader can still drain, so TCP had nothing
+to protect.
+
+The collector does. RECV_OBJECT and DISCARD name ranges counted from the
+first unread byte at attach. If recv() or splice() takes bytes in the
+meantime, those offsets no longer point at the same data, and the
+application keeps or drops the wrong range. Patch 1 puts one receive
+owner on the socket. While the collector holds it, the other readers
+return -EBUSY.
+
+The option is hidden and selected by this feature. With it off, struct
+sock and those paths are unchanged. Patch 1 has no other user.
+
+Interface
+=========
+
+IORING_REGISTER_OPAQUE_STORE creates a store with a memory budget.
+Rings share it through a descriptor. IORING_OP_OPAQUE_COLLECT attaches
+a connected TCP socket. Bytes the application has not decided about stop
+the collector, so TCP flow control applies. Between passes the collector
+waits on io_uring's own multishot poll. There is no second polling
+mechanism and no new poll event for userspace.
+
+IORING_OP_OPAQUE_OBJ carries the object operations. INSPECT copies out
+the header bytes the application has to parse. RECV_OBJECT turns a range
+of the stream into an object and returns its handle. DISCARD drops a
+range. READ_OBJECT copies bytes out when they are needed after all, and
+FREE releases the handle. CREATE copies application memory into an
+object, for a value that is served many times rather than received.
+
+IORING_OP_OPAQUE_OBJ_SEND sends one range, or a vector of up to 1024,
+with a prefix and a suffix from application memory. An object can be
+sent any number of times and on any socket. SEND_LAST gives it up with
+the send. Sends through one store to one socket are ordered by enqueue
+under the store's TX lock at first issue, not by SQE submission across
+rings.
+
+Backing is bounded per store, accounted like registered buffers and
+charged to the memory cgroup of the task that created the store.
+
+Measurements
+============
+
+These numbers are from development kernels (7.3-rc6 based), not from the
+patches as posted. This series is a first-interface cut of that work and
+has not been benchmarked itself. Those kernels also carried an earlier
+skb_splice_from_iter() change, which made object sends 24% cheaper at
+64 KiB and 14% at 256 KiB. This series applies and works without it.
+
+The runs used virtio-net VMs with 32 vCPUs, one TCP flow and NIC
+interrupts pinned. That is where the numbers were taken, not a limit of
+the interface. CPU is the whole host's, total minus idle, per GB
+delivered. Full speed is unpaced: from 4 KiB every sender, and every
+receiver, moves what the path allows, so the comparison is CPU.
+
+At full speed with 64 KiB writes, capturing the stream as objects costs
+the receiving host 31% less CPU than recv(), and DISCARD 57% less. In
+the runs where the path gave the flow 16 Gbit/s instead of 22, those
+figures were 15% and 53%. Paced, capture and recv() are within 21% of
+each other, in either direction. Receive at full speed was measured at
+64 KiB only.
+
+On send, from 16 KiB an object costs what SEND_ZC costs without its pin.
+Sender CPU at full speed, one object or one buffer per request. Objects
+against SEND_ZC that pins on every send:
+
+   4 KiB   -15%
+  16 KiB   -22%
+  64 KiB   -24%
+ 256 KiB   -22%
+   1 MiB   -27%
+
+The pin itself, SEND_ZC pinning per send against SEND_ZC with a
+registered buffer:
+
+   4 KiB   +90%
+  16 KiB   +25%
+  64 KiB   +22%
+ 256 KiB   +17%
+   1 MiB   +33%
+
+The pin costs SEND_ZC 49-106 ns per 4 KiB page from 16 KiB to 1 MiB, so
+it grows with the buffer, and 0.70 microseconds per send at 4 KiB.
+Against a registered buffer, which is pinned once, objects are level
+from 16 KiB (-21% to +4%, eight ranges per request on both sides).
+Small sends are where a registered buffer stays ahead: by 6-12% at 1
+and 4 KiB with eight ranges per request, and by more at 4 KiB with one.
+Objects cost 40-57% less than copying send() from 16 KiB, and 12-48%
+less than MSG_ZEROCOPY from 1 KiB to 1 MiB.
+
+The SEND_ZC senders resend one page-aligned buffer and set MSG_EOR every
+1 MiB to bound their notification chains.
+
+The series
+==========
+
+Patch 1 is the receive claim above. Patches 2-6 add the store, its
+accounting and sharing between rings. Patch 7 adds the send and patch 8
+its vectored form: at full speed, eight ranges per request make 1 KiB
+sends 3.6 times cheaper. Patch 9 adds the collector, 10 CREATE, and 11
+compaction, which copies an object out of sparsely used receive pages
+into dense backing under the same handle. Patch 12 adds two KUnit cases
+for budget admission and version release.
+
+Registering a store needs DEFER_TASKRUN and CQE32 or CQE_MIXED.
+Userspace helpers are not in this posting. A mapped mode, for
+applications that do read the payload, is not in this RFC. Neither is
+the later send-path work that takes one reference per folio instead of
+one per fragment. The separate skb_splice_from_iter() series, which
+builds one fragment per folio for every MSG_SPLICE_PAGES user, makes
+sendfile() from 64 KiB folios 11% cheaper. This series does not depend
+on it.
+
+Testing
+=======
+
+Two KUnit cases passed on UML, with no skips. They check budget
+admission and release of a page-backed version. A loopback program
+against this kernel captured one payload, sent the handle twice with
+framing, checked SEND_LAST, and left the store empty. The kernel build
+used W=1 and WERROR=y.
+
+This is smoke coverage, not a pressure or scheduling-race campaign.
+io-wq fallback, native SMP callback lifetimes and runtime memcg
+isolation are not covered. The numbers above are not a benchmark of
+this series.
+
+Known limits
+============
+
+ - Receive authorization is checked when the collector attaches and
+   covers its lifetime; later policy changes do not revoke it.
+ - If poll setup fails for lack of memory, collection ends and the
+   undecided data is dropped.
+ - Table sizes (objects, streams, extents) are fixed at registration.
+ - An object holds the receive pages its bytes arrived in, which can be
+   much more memory than its payload until it is compacted.
+ - A large CREATE copies under the ring lock.
+
+Feedback wanted
+===============
+
+ - The receive claim: is an owner in struct sock the right way to make
+   a socket's receive side exclusive to one consumer?
+ - One opcode with the operation in sqe->ioprio (OPAQUE_OBJ), against
+   an opcode per operation.
+ - Reporting the transfer of ownership in the extended CQE (CONSUMED).
+ - Whether this is the right first scope.
+
+Thanks,
+Alex Markuze
+
+Alex Markuze (12):
+  net: add an exclusive TCP receive claim
+  io_uring/opaque: add data structures and the UAPI header
+  io_uring/opaque: add backing accounting and immutable versions
+  io_uring/opaque: add owned-page helpers for dense copies
+  io_uring/opaque: add store registration and IORING_OP_OPAQUE_OBJ
+  io_uring/opaque: allow rings to share a store
+  io_uring/opaque: add IORING_OP_OPAQUE_OBJ_SEND
+  io_uring/opaque: add vectored IORING_OP_OPAQUE_OBJ_SEND
+  io_uring/opaque: add IORING_OP_OPAQUE_COLLECT
+  io_uring/opaque: add IORING_OPAQUE_CREATE
+  io_uring/opaque: add manual and automatic compaction
+  io_uring/opaque: add basic KUnit tests
+
+ include/linux/io_uring_types.h       |   10 +
+ include/linux/net.h                  |    8 +
+ include/linux/poll.h                 |    3 +
+ include/net/sock.h                   |   46 +
+ include/uapi/linux/io_uring.h        |   10 +
+ include/uapi/linux/io_uring/opaque.h |  145 ++
+ io_uring/Kconfig                     |   21 +
+ io_uring/Makefile                    |    2 +
+ io_uring/cancel.c                    |    5 +
+ io_uring/io_uring.c                  |    9 +
+ io_uring/opaque.c                    | 3926 ++++++++++++++++++++++++++++++++++
+ io_uring/opaque.h                    |  167 ++
+ io_uring/opaque_compact.c            |  425 ++++
+ io_uring/opaque_internal.h           |  295 +++
+ io_uring/opaque_register.c           |  152 ++
+ io_uring/opaque_test.c               |  128 ++
+ io_uring/opdef.c                     |   55 +
+ io_uring/poll.c                      |   58 +-
+ io_uring/register.c                  |    7 +
+ net/Kconfig                          |    7 +
+ net/core/skmsg.c                     |    4 +
+ net/core/sock.c                      |    6 +-
+ net/ipv4/af_inet.c                   |    2 +
+ net/ipv4/tcp.c                       |   22 +-
+ net/ipv4/tcp_input.c                 |    1 +
+ net/ipv4/tcp_ulp.c                   |    2 +
+ 26 files changed, 5512 insertions(+), 4 deletions(-)
+
+base-commit: 4dd16e31135ea8437a720222df34e8745f385d6d
+
