@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794403675;
-	b=MHUpu2dPnJTpe3pFhfaexDAF/xZgpBk77PH1fNmIepvvkKYhYk4W1dAjDY/mbZly5ov1
-	 TsTtDOfgDvMFQSxjM6+oRQtAlG3o7OVQ/pcCYiISoQK+mfQ1JvpUVCb3ooeyPriqbbE9q
-	 iTrcpHEiAv7c6LGKkrOTzqbwTzxWCBoxSExVV8S8gRggA7KaTLjR1CwhNFNG+cJ5FUyyP
-	 L0FHsF6s6AnhZWRxC7s3e3sIVuGGX7eL44QU91WHQGos/zhPBA3IDmAevoSGf6X0ORuQZ
-	 mPIhjyiEJ45fvzn8TrFX03Bwj557y02FnSZe/eLtN2zfjKci+zaarGqMzhZDr4D7/CA==
+	t=1794405102;
+	b=rIbPb6cwjQEQ1/vUTcQZxdiTg8WrsA7Jycwlpe6fgTTSxskQ57sv6jP/W8j2ldKs+s8R
+	 qeBpnY8+FyctvtWay/mSi2zHA9/dRvb3HVW8j0DrkbMFqzFJpKyNnC7KEPrZXhRO5nqz6
+	 BCIP81zG9wTJ9uZ3mki/jaGDZSwxyg+I8W1BUlmjtO5BWq4GQGUv8R8r94VWo7VjJq35s
+	 Bf/sm52g5Xt8leoJlhBVqR5dTKsg97VcIeV3jzNy5Ps07yhfhGWmWwtZq5to0T0GBpbjZ
+	 M9tERdAwGgx5trsILifQexjMzGs9ugjE0T2EChppE4HReasmXXsPPsqAqn5/5gYW72A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794403675;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794405102;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
-	b=t1rdQ2P5X5f+rf1hlU4xu+mWkN4QUQXQH8jftQrpkzpgyLyEZC9BF34PuAyjyRGViA2s
-	 OFqhcO+IZ/NjKq0LuUpC57dwyGoaFwMXceSp0dTxJ4tpuajomjvac12mpUHD0wrmeTM4b
-	 7HI2cPPPpxsVYBoEB55+rbl/rV1YFCPVf0N0PVpM50wORljxhEJ48DYg50ttdURIXKhyD
-	 WSkjWrQgDnis2nnFRR8oNt0prqdS0iTAHzP3K6gOie1wt4njZ+m+wJPzm3JXD4WQaa9ee
-	 wEo5Zu6VLwVPBaB3IprQDS4mBHx+w8lv9y6ePFcw0/qVFWacT/LzJcbt2EE6Z7PxuBQ==
+	bh=xdwgS6nFFPgGcnzDnviv3rlnY2N4c/xLYaETcsEp4NQ=;
+	b=bs+Xkr51kysk3PJEN6ZwfW/TLIz1cW46mHTlEWJleNWNGDlyuCXv230eBTUgDRlboWPo
+	 EBkOnjcRRTzY0R1wkELcle0CEoBRyqB6BE2yUt2mDZhdxjGjyucmFgssJ05WffS3pyPoe
+	 RkYl3027uyOANMDvvKOQsB1uPQh3PFArFA3Z2i60T7QD0Nk4KK7GNm637oCGKLbXTmdmm
+	 VipC3HyNY/SLGwm0EMIL8DLECxGM6V0at8bQnAIXI8FIpxrhoIZtp2wHgluBaKq9Ozgvp
+	 j49LKt/2fKt8DlS8MSipIx8QojYj+3aX/DeqqJhIgCdR9PKtCJcuaHzFC90Mz44n00Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VOEM2LJj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8E2606A31C;
-	Wed, 11 Nov 2026 13:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07CE606A321;
+	Wed, 11 Nov 2026 13:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEdkPhkE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6368F1F00A05;
-	Wed, 11 Nov 2026 13:27:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VOEM2LJj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6A051F00A05;
+	Wed, 11 Nov 2026 13:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794403675;
-	bh=5TobANsfNbQPE7bHGqRUO1+IBRipYYGScGTtUnijg5Y=;
+	s=k20260515; t=1794405102;
+	bh=xdwgS6nFFPgGcnzDnviv3rlnY2N4c/xLYaETcsEp4NQ=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=NEdkPhkEYUeNthxyHswKlC+LjnE3+C8o+r69jP/kWWwPJmNjwUjX+n+MMVxp86fU3
-	 nRjyHg29mW4zKgB9zMfQeSzMvvHdf2fKf94JxaWhgLL2UNMd7ycqXvlqYBgcx4uhXr
-	 YNd/LCvK63k37DwGXK6b0TQDBrIGUpyAfYnNWJlIJlGu+t2gyajY4rYAs18sR8WJ/x
-	 nMUEA4I988zdXET2E/tBIaZpQ2YcNX39oUAB+DEYSftb5YPfi2iJpdFO8M5uQWpbyh
-	 GauZxaMl/9tkIxRUqgCf6TE/U4Jrnhpnix3hcgOcAIFMfnQHTfRsfI3a89cyrPU9+6
-	 LZg4ZR/DaB6zA==
+	b=VOEM2LJjaiSVRyMdMxeRjb+JH91r76k7rrchf2Q0YlZ+O2d2YPHl8W2itpk5Q4d6R
+	 EN4Lsb9fdyI7lxf9Fppr5u7HCb4e3+gqojPwIuDYF37FlGyQV7XrxW52Hk4j9M6OMM
+	 t9JJofvC2SYkc0gjMtsd/X2lMkdGM9NGVsGH+xPAMoa5519oI6MjVJk4SoM76Vkcgn
+	 CL6u+hEBA/JiFSavEVYpXn03Gryo/ZEewXyZ486my9LGCMDVkSLlUzM/UgjxdFy8om
+	 C+VtmctaB0fgmgYcljhJF7toQT7a9XSmn5MzciMPq1dY9jOCJ8qjxhSPCGx7KsRsMW
+	 YyCCFPoUT0aaA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet
@@ -64,14 +64,14 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
  Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
- lifetime
-In-Reply-To: <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next v1 04/11] xsk: Allocate UMEM chunks through
+ page_pool
+In-Reply-To: <CAJ8uoz0gcQmqTPGBmNF6+WvWZHPOVRsPoEmTwG6WeOaq1vPxcg@mail.gmail.com>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-4-bjorn@kernel.org>
- <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
-Date: Wed, 11 Nov 2026 05:27:51 -0800
-Message-ID: <87eccra46g.fsf@all.your.base.are.belong.to.us>
+ <20261110102039.1002605-5-bjorn@kernel.org>
+ <CAJ8uoz0gcQmqTPGBmNF6+WvWZHPOVRsPoEmTwG6WeOaq1vPxcg@mail.gmail.com>
+Date: Wed, 11 Nov 2026 05:51:39 -0800
+Message-ID: <87wlqj8oic.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -84,119 +84,323 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+Magnus Karlsson <magnus.karlsson@gmail.com> writes:
 
-> On 11/10, Bj=C3=B6rn T=C3=B6pel wrote:
+> On Tue, 10 Nov 2026 at 12:26, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
+ote:
 
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index 07231adfb5f8..1105bb9e3292 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -81,6 +81,16 @@ enum xdp_buff_flags {
->>  	 * XDP program is not attached.
->>  	 */
->>  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
->> +	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
->> +	 * Not copied to xdp_frames or skbs.
->> +	 */
->> +	XDP_FLAGS_EXT			=3D BIT(3),
+>> diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
+>> index 7c811b5cce76..4dab7b9a1487 100644
+>> --- a/net/xdp/xsk.h
+>> +++ b/net/xdp/xsk.h
+>> @@ -34,6 +34,12 @@ static inline struct xdp_sock *xdp_sk(struct sock *sk)
+>>
+>>  void xsk_map_try_sock_delete(struct xsk_map *map, struct xdp_sock *xs,
+>>                              struct xdp_sock __rcu **map_entry);
+>> +struct xsk_pp;
+>
+> How about a header file instead of a forward declaration?
+
+Thanks for taking a look, Magnus!
+
+Hmm, my take was this this was ont by itself sufficient for a header.
+Let me think about it, and I might add net/xdp/xsk_pp.h.
+
+>
+>> +extern const struct memory_provider_ops xsk_pp_ops;
+>> +
+>> +struct xsk_pp *xsk_pp_create(struct xsk_buff_pool *pool);
+>> +void xsk_pp_put(struct xsk_pp *pp);
+>>  void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id);
+>>  int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *p=
+ool,
+>>                         u16 queue_id);
+>> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+>> new file mode 100644
+>> index 000000000000..fdd55265a6cd
+>> --- /dev/null
+>> +++ b/net/xdp/xsk_pp.c
+>> @@ -0,0 +1,246 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* AF_XDP UMEM as a page pool memory provider
+>> + *
+>> + * Each aligned UMEM chunk is a readable net_iov with one owner at a ti=
+me:
+>> + *
+>> + *   userspace --FILL--> page pool --release--> reuse --alloc--> page p=
+ool
+>> + *       ^                   |
+>> + *       +-----RX ring-------+
+>> + */
+>> +
+>> +#include <net/page_pool/helpers.h>
+>> +#include <net/page_pool/memory_provider.h>
+>> +#include <net/xdp_sock_drv.h>
+>> +
+>> +#include "xsk.h"
+>> +#include "xsk_queue.h"
+>> +
+>> +enum xsk_pp_chunk {
+>> +       XSK_PP_USER,    /* owned by userspace */
+>> +       XSK_PP_POOL,    /* owned by a page pool */
+>> +       XSK_PP_REUSE,   /* on the reuse stack */
 >> +};
 >> +
->> +/* For a head buffer that cannot hold kernel data, see xdp_init_buff_ne=
-tmem() */
->> +struct xdp_buff_ext {
->> +	netmem_ref netmem;
+>> +struct xsk_pp {
+>> +       struct net_iov_area area;
+>> +       struct xsk_buff_pool *pool;
+>> +       /* Protects fq, state and reuse */
+>> +       spinlock_t lock;
+>> +       struct xsk_queue *fq;
+>> +       refcount_t refs;
+>> +       u32 nr_pools;
+>> +       bool dma_need_sync;
+>> +       u8 *state;
+>> +       u32 reuse_cnt;
+>> +       u32 reuse[];
 >
-> nit: netmem -> head ? and the same for xdp_init_buff_netmem netmem arg?
+> Is the reason that you have a reuse stack here and not use the one in
+> xsk_buff_pool that it only exists in unaligned mode, which you are not
+> supporting? Could you still use the "pre-calculated" heads in aligned
+> mode and link them up? There is already a xskb_list and free_list in
+> there that is used for that purpose. Just an idea that could cut down
+> the state and maybe the amount of code.
 
-Yup, will fix.
 
->> @@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unread=
-able(struct xdp_buff *xdp)
->>=20=20
->>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff=
- *xdp)
->>  {
->> -	return xdp->flags;
->> +	return xdp->flags & ~XDP_FLAGS_EXT;
->
-> The only consumer is xdp_update_skb_frags_info, so probably not worth
-> filtering out XDP_FLAGS_EXT here? Or is it for
-> xdp_update_frame_from_buff? Can we explicitly clear it at the caller?=20
+Not quite. reuse is the counterpart of free_list, which aligned mode has
+too. But free_list links xdp_buff_xsk, and this mode has none: the page
+pool hands out net_iovs, and the driver has its own xdp_buff. Patch 5
+stops allocating the heads here: 128 bytes per chunk, against 69 for
+net_iov, reuse and state. devmem and zcrx use the same kind of index
+stack.
 
-It was for xdp_update_frame_from_buff(), but looking closer EXT never
-gets there...
+free_list is also NAPI only, while the page pool releases chunks from
+process context too (below). And state is needed either way; it is what
+drops a FILL entry for a chunk the kernel still owns.
 
-I'll drop the mask. Thanks!
 
->> diff --git a/net/core/devmem.c b/net/core/devmem.c
->> index 8f190b574beb..dea4a4a17e86 100644
->> --- a/net/core/devmem.c
->> +++ b/net/core/devmem.c
->> @@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devme=
-m_ops =3D {
->>  	.release_netmem		=3D mp_dmabuf_devmem_release_page,
->>  	.nl_fill		=3D mp_dmabuf_devmem_nl_fill,
->>  	.uninstall		=3D mp_dmabuf_devmem_uninstall,
->> -	.caps			=3D MP_CAP_FRAG,
->> +	.caps			=3D MP_CAP_FRAG | MP_CAP_RETAIN,
->
-> Not sure I understand this part, can you explain?
-> These are MP_CAP_RETAIN because they are unreadable?
-
-No, RETAIN is about lifetime: the stack may hold page pool references
-after the RX poll, e.g. skbs on a TCP receive queue. That's how devmem
-and zcrx work; without it the stack would try to copy them, and they'd
-trip the DEBUG_NET check in skb_add_rx_frag_netmem().
-
-A provider without RETAIN gets copied, so it must be readable. I'll try
-to make that more clear in the kdoc, and probably refuse a provider that
-is neither.
-
->> diff --git a/net/core/xdp.c b/net/core/xdp.c
->> index 1d679e8fd649..0cf46d492d91 100644
->> --- a/net/core/xdp.c
->> +++ b/net/core/xdp.c
->> @@ -23,6 +23,8 @@
->>  #include <trace/events/xdp.h>
->>  #include <net/xdp_sock_drv.h>
->>=20=20
->> +#include "dev.h"
+>> +};
 >> +
->>  #define REG_STATE_NEW		0x0
->>  #define REG_STATE_REGISTERED	0x1
->>  #define REG_STATE_UNREGISTERED	0x2
->> @@ -559,10 +561,41 @@ void xdp_return_buff(struct xdp_buff *xdp)
->>  			     xdp->rxq->mem.type, true, xdp);
->>=20=20
->>  out:
->> -	__xdp_return(virt_to_netmem(xdp->data), xdp->rxq->mem.type, true, xdp);
->> +	__xdp_return(xdp_buff_head_netmem(xdp), xdp->rxq->mem.type, true, xdp);
->>  }
->>  EXPORT_SYMBOL_GPL(xdp_return_buff);
->>=20=20
->> +bool __xdp_buff_needs_copy(const struct xdp_buff *xdp)
+>> +static void xsk_pp_free(struct xsk_pp *pp)
 >> +{
->> +	const struct skb_shared_info *sinfo;
->> +	u32 i;
+>> +       kvfree(pp->state);
+>> +       kvfree(pp->area.niovs);
+>> +       kvfree(pp);
+>> +}
 >> +
->> +	/* Provider buffers come only from page pool queues */
->> +	if (xdp->rxq->mem.type !=3D MEM_TYPE_PAGE_POOL)
->> +		return false;
->> +	if (!netmem_can_retain(xdp_buff_head_netmem(xdp)))
->> +		return true;
->> +	if (likely(!xdp_buff_has_frags(xdp)))
->> +		return false;
+>> +void xsk_pp_put(struct xsk_pp *pp)
+>> +{
+>> +       if (refcount_dec_and_test(&pp->refs))
+>> +               xsk_pp_free(pp);
+>> +}
 >> +
->> +	sinfo =3D xdp_get_shared_info_from_buff(xdp);
->> +	for (i =3D 0; i < sinfo->nr_frags; i++) {
->> +		if (!netmem_can_retain(skb_frag_netmem(&sinfo->frags[i])))
->> +			return true;
+>> +/* @pool must be DMA mapped and have aligned chunks. The provider must =
+be
+>> + * the only consumer of its FILL ring.
+>> + */
+>> +struct xsk_pp *xsk_pp_create(struct xsk_buff_pool *pool)
+>> +{
+>> +       struct net_iov *niov;
+>> +       struct xsk_pp *pp;
+>> +       dma_addr_t dma;
+>> +       u32 i;
+>> +
+>> +       pp =3D kvzalloc_flex(*pp, reuse, pool->heads_cnt, GFP_KERNEL_ACC=
+OUNT);
+>> +       if (!pp)
+>> +               return ERR_PTR(-ENOMEM);
+>> +
+>> +       pp->area.niovs =3D kvzalloc_objs(*pp->area.niovs, pool->heads_cn=
+t,
+>> +                                      GFP_KERNEL_ACCOUNT);
+>> +       pp->state =3D kvzalloc(pool->heads_cnt, GFP_KERNEL_ACCOUNT);
+>> +       if (!pp->area.niovs || !pp->state) {
+>> +               xsk_pp_free(pp);
+>> +               return ERR_PTR(-ENOMEM);
+>> +       }
+>> +
+>> +       pp->area.num_niovs =3D pool->heads_cnt;
+>> +       pp->area.niov_shift =3D pool->chunk_shift;
+>> +       pp->area.vaddr =3D pool->addrs;
+>> +       pp->pool =3D pool;
+>> +       pp->fq =3D pool->fq;
+>> +       pp->dma_need_sync =3D dma_dev_need_sync(pool->dev);
 >
-> Do we want/need to go that deep? Can we have a skb-like assumptions that
-> mixing retain and non-retain in the same shinfo is not allowed?
+> Are you copying these for performance reasons, i.e. no extra pointer
+> dereference in the fast path? In the same manner as the pool copies
+> some information from the umem?
 
-Yep, let's make that the rule. I'll remove the deep checks.
+Only dma_need_sync is a cache -- I'll drop that!
+
+fq stays. It's the provider's handle on FILL: unbind clears it under the
+lock (patch 5), so the provider stops reading FILL, while pool->fq stays
+with the socket for mmap, need_wakeup and copy mode until the ring is
+freed. The area fields are the generic net_iov_area that
+netmem_address() needs.
+
+Does that make sense?
+
+>> +       spin_lock_init(&pp->lock);
+>> +       refcount_set(&pp->refs, 1);
+>> +
+>> +       for (i =3D 0; i < pp->area.num_niovs; i++) {
+>> +               niov =3D &pp->area.niovs[i];
+>> +               dma =3D xp_raw_get_dma(pool, (u64)i << pool->chunk_shift=
+);
+>> +               net_iov_init(niov, &pp->area, NET_IOV_XSK);
+>> +               if (net_mp_niov_set_dma_addr(niov, dma)) {
+>> +                       xsk_pp_free(pp);
+>> +                       return ERR_PTR(-ERANGE);
+>> +               }
+>> +       }
+>> +
+>> +       return pp;
+>> +}
+>> +
+>> +static int xsk_pp_init(struct page_pool *pool)
+>> +{
+>> +       struct xsk_pp *pp =3D pool->mp_priv;
+>> +
+>> +       if (pool->p.order || pool->p.dma_dir !=3D DMA_BIDIRECTIONAL ||
+>> +           pool->p.dev !=3D pp->pool->dev)
+>> +               return -EINVAL;
+>> +       if (pool->p.max_len > pp->pool->chunk_size ||
+>> +           pool->p.offset > pp->pool->chunk_size - pool->p.max_len)
+>> +               return -EINVAL;
+>> +
+>> +       refcount_inc(&pp->refs);
+>> +       spin_lock_bh(&pp->lock);
+>> +       pp->nr_pools++;
+>
+> What is the difference between this counter and the refcount?
+
+refs is the lifetime of struct xsk_pp. The buffer pool holds one
+reference, and each page pool that takes the provider holds one. A page
+pool can outlive the socket, as page_pool_destroy() defers while buffers
+are in flight. The struct is freed with the last reference.
+
+nr_pools only tells whether a page pool still exists, when a failed bind
+(patch 5) hands the leftover chunks to copy mode. But the page pools of
+a failed bind never ran, and are gone by then, so a WARN on refs !=3D 1
+does the same job... I'll drop nr_pools. Thanks!
+
+>> +       spin_unlock_bh(&pp->lock);
+>> +       return 0;
+>> +}
+>> +
+>> +static void xsk_pp_destroy(struct page_pool *pool)
+>> +{
+>> +       struct xsk_pp *pp =3D pool->mp_priv;
+>> +
+>> +       spin_lock_bh(&pp->lock);
+>> +       pp->nr_pools--;
+>> +       spin_unlock_bh(&pp->lock);
+>> +       xsk_pp_put(pp);
+>> +}
+>> +
+>> +static bool xsk_pp_claim(struct xsk_pp *pp, u32 idx, enum xsk_pp_chunk =
+from)
+>> +{
+>> +       lockdep_assert_held(&pp->lock);
+>> +
+>> +       if (pp->state[idx] !=3D from)
+>> +               return false;
+>> +
+>> +       pp->state[idx] =3D XSK_PP_POOL;
+>> +       return true;
+>> +}
+>> +
+>> +static u32 xsk_pp_alloc_reuse(struct xsk_pp *pp, netmem_ref *netmems, u=
+32 max)
+>> +{
+>> +       u32 idx, n =3D 0;
+>> +
+>> +       while (n < max && pp->reuse_cnt) {
+>> +               idx =3D pp->reuse[--pp->reuse_cnt];
+>> +               if (WARN_ON_ONCE(!xsk_pp_claim(pp, idx, XSK_PP_REUSE)))
+>> +                       continue;
+>> +               netmems[n++] =3D net_iov_to_netmem(&pp->area.niovs[idx]);
+>> +       }
+>> +
+>> +       return n;
+>> +}
+>> +
+>> +static u32 xsk_pp_alloc_fill(struct xsk_pp *pp, netmem_ref *netmems, u3=
+2 max)
+>> +{
+>> +       struct xsk_buff_pool *pool =3D pp->pool;
+>> +       struct xsk_queue *fq =3D pp->fq;
+>> +       u32 i, entries, cons, idx, n =3D 0;
+>> +       u64 addr;
+>> +
+>> +       if (!fq || !max)
+>> +               return 0;
+>> +
+>> +       entries =3D xskq_cons_nb_entries(fq, max);
+>> +       if (!entries) {
+>> +               fq->queue_empty_descs++;
+>> +               return 0;
+>> +       }
+>> +
+>> +       cons =3D fq->cached_cons;
+>> +       for (i =3D 0; i < entries; i++) {
+>> +               __xskq_cons_read_addr_unchecked(fq, cons++, &addr);
+>> +               addr &=3D pool->chunk_mask;
+>> +               idx =3D addr >> pp->area.niov_shift;
+>> +               if (unlikely(addr >=3D pool->addrs_cnt ||
+>> +                            !xsk_pp_claim(pp, idx, XSK_PP_USER))) {
+>> +                       fq->invalid_descs++;
+>> +                       continue;
+>> +               }
+>> +               netmems[n++] =3D net_iov_to_netmem(&pp->area.niovs[idx]);
+>> +       }
+>> +
+>> +       xskq_cons_release_n(fq, entries);
+>> +       __xskq_cons_release(fq);
+>> +       return n;
+>> +}
+>> +
+>> +static netmem_ref xsk_pp_alloc_netmems(struct page_pool *pool, gfp_t gf=
+p)
+>> +{
+>> +       netmem_ref *netmems =3D pool->alloc.cache;
+>> +       struct xsk_pp *pp =3D pool->mp_priv;
+>> +       struct net_iov *niov;
+>> +       dma_addr_t dma;
+>> +       u32 i, n;
+>> +
+>> +       if (WARN_ON_ONCE(pool->alloc.count))
+>
+> What has the driver writer or system done if this ever happens?
+
+A correct driver can't get there; the page pool calls ->alloc_netmems()
+only with an empty cache. It fires on a page_pool core bug, or when a
+driver recycles with allow_direct outside the pool's NAPI, and races the
+cache. The provider fills the cache from index 0, so failing beats
+overwriting live entries. devmem and zcrx have the same check; I'll add
+zcrx's comment.
+
+
+>> +               return 0;
+>> +
+>> +       spin_lock_bh(&pp->lock);
+>
+> For my understanding, what entities can call this function at the same
+> time? With the xsk_buff_pool we were protected by NAPI.
+
+Yeah... this is a bit gnarley.=20
+
+The provider outlives a page pool: a queue restart starts the new queue
+before it frees the old pool, so the old pool releases chunks while the
+new NAPI allocates. Teardown can be deferred to a work item, and the
+initial fill, bind and unbind run in process context. A driver that
+fills its new rings in ndo_queue_mem_alloc() even has two pools on one
+FILL ring.
+
+However, in steady state only in NAPI, once per refill, so the lock is
+uncontended. I haven't been able to see it in perf...
+
+I'll list that in a comment.
 
 
 Bj=C3=B6rn
