@@ -1,73 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794438928;
-	b=Lw8P8O3u9gaU8fWvOPyk9qW14uvyTOSu6DJ3vzWimedSkcVPXAKtl+t17+VJldYvzsKp
-	 1VEVrA4HCCbMjczMpXDEaOyaU8DmlLaW9gsOYMhK19piujBEYlOSZxmV31Z/eY1ZdSIN4
-	 LQrvTl3/+E0VUleUhhozc4oelCihZFs9RUfNcgjo/NPQdpEq4UhPc4KTeR4PIdXZGqaYC
-	 QPgPYR/5Ck5NKIb5AU0G3CuVMugf6qziLWfxh9CzzdmUq0jZHHAR+rucny4dPlBVuqzHL
-	 gZ2BaG+WVmqfi1Hf3DmmfbFj/SeC2Y2LJ21Ee1B71ZoPfO8AllHEBJs6WPJpo47IQvQ==
+	t=1794439264;
+	b=MEHKlBLHBzL5etBLNc2bmflAB5WrgXts85WRE0u6FhoXRl7/N+BBUoCQBEtLuiCFwLFD
+	 jdW+EckNwMBXSoUzhCEBnlp6HHdf2g44F3Skra38uUcC2GlnZs9GuDXqiWHeR52HwUhSr
+	 DkqxJWA8Dw3i2Y4XIFQt3DPMgeA9S40lifisTP3q/aicq2G8jTXGyPGwBMiKKXyWj/TWu
+	 Wl4oJCVpwCnxwzicO2Z57VpfvT2W5PVbf46zIv0I4p5v2hiV5JLU2aa0WZIyyrthQjFXJ
+	 w7YKEgmAH9Kta15ml2NnaNqSmRhk3RUvhu3nufTVejxNiInlV874CXMDRlwC9HToEzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794438928;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=gmDNsQ8h2wciKasKQCbqVP3maaL4qbrw5sZmT7BnjeA=;
-	b=ad9zTcEOvfB01rrFDqzazNxSbDqW5SUq7SpYouQB1u89uZuRuGAOl7YC+VGvuPf0XwLU
-	 CIqcT5VwHPvB3dbKyDeZps9xMPhjGaiw5Y0e6eD7JLJyQ/SuR8lnBUcxnTl4FCE9wIT6r
-	 cNnLaEtoNtIvPhNkfgrP744QDeIax2z8pDSRutZka5ShTD/KclMgLfG6CKHzZhlhb1gbR
-	 Xesxi7Pabh2fAlqoYnCj2kLj7uU1sqTUNAIgRQNyregfAGqWanzUNVVLf8G27Lwp3SPQe
-	 0jVMhALLKRQ9hIwUa5j1Fv5zKNeh7ztpxgtZs5fGxeKD7iG8jw2WtgkjGIBlG9HylIw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794439264;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+	b=j0oovaKAzOh2CUYHxTebbEXFIBPaGcoxp2zA/pmTYK+Ef+oDWucB7b2pCc5eyGXLDuZ1
+	 tFN7lfeVWsu6r3esqHz8Qew8I0kdd76F8nWfXDs4ChhvCvIPZL1oRgpSAhxzH3Vs7Ajro
+	 m07/wMA00YSy+npF2vxXNo2D28xs5BwjjBj/HCQ3W/SXElzW4Qnmsis1NwkLR4abONli4
+	 drps4OsWyHmtFI8eeSp/skEWWmxlUp+HVCoRYf61hKAbsxzBRjkaj1hUYEVzhYelSMxRa
+	 9RvrU33NecNxmMRwqCQR6kh4BEafb6M5r7kOfXZSsJAFtAxQpGzMkY3exhSbwKoD6Bg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b="7BpeV/CN";
-	arc=none smtp.remote-ip=216.40.44.13
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AS4FCx2D;
+	arc=none smtp.remote-ip=74.125.229.133
+Received: from mail-dl2-f5.google.com (mail-dl2-f5.google.com [74.125.229.133])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E69606A337;
-	Wed, 11 Nov 2026 23:15:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1E69606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1ED606A8A9
+	for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 23:21:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF1ED606A8A9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=7BpeV/CN
-Received: from omf12.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id 42BF340216;
-	Wed, 11 Nov 2026 23:15:15 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id 7DEE41A;
-	Wed, 11 Nov 2026 23:14:54 +0000 (UTC)
-Date: Wed, 11 Nov 2026 18:14:47 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: Tao Cui <cui.tao@linux.dev>, akpm@linux-foundation.org,
- dgilbert@interlog.com, mkp@kernel.org, loberman@redhat.com,
- jmeneghi@redhat.com, kraxel@redhat.com, vivek.kasireddy@intel.com,
- mst@redhat.com, jasowangio@gmail.com, eperezma@redhat.com,
- stefanha@redhat.com, sgarzare@redhat.com, mhiramat@kernel.org,
- jgg@ziepe.ca, kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
- James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
- christian.koenig@amd.com, phasta@kernel.org, joro@8bytes.org,
- will@kernel.org, linux-scsi@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
- virtualization@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
- iommu@lists.linux.dev, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, bobbyeshleman@meta.com,
- mathieu.desnoyers@efficios.com, robin.murphy@arm.com, mason@kernel.org,
- aesteve@redhat.com, tjmercier@google.com, harry@kernel.org, vbabka@suse.cz,
- cuitao@kylinos.cn
-Subject: Re: [PATCH 4/7] tracing: account ring buffer pages and trace_array
- metadata to memcg
-Message-ID: <20261111181447.3c483a50@fedora>
-In-Reply-To: <avScKhR22kFOQ1z4@google.com>
-References: <20261106131829.3228926-1-cui.tao@linux.dev>
-	<20261106131829.3228926-5-cui.tao@linux.dev>
-	<avScKhR22kFOQ1z4@google.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AS4FCx2D
+Received: by mail-dl2-f5.google.com with SMTP id a92af1059eb24-1ac216daf7dso2074489c88.1
+        for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 15:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794439263; x=1795044063; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+        b=AS4FCx2Dzy3knLqQU0KfBNqF5KUSlkLF7ulR+nDPovTotbPJqyuHWJZbdiqD0hnert
+         Fjrod0191CeZY5GKnOqJQFXEdEHnEc9RnGOSGH5h4p748bHPLDNJ0byXo7dSycqqcU13
+         OyILZU4dK6tcd2Ci05DZ8FF8yEvMkGJErFQBNpoVdDDqtfOvSHLZqPU/NPmpqdQ/5ur1
+         G0ewEQXkjx0av1/XfhNJuB0qBTb2u6LImLfzoX4gBMIL2Eoag2sL2m+gsCjyN778IkpV
+         3mYuBiwwgs25VP7eFbwR1g1h0EZbnCDVpu2l2LNGRuQnz/SV5so618qySg3qt6ExWr2C
+         Jtpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794439263; x=1795044063;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=eE9X9IsI4DGKfcKaEqbUpAyTJeGhuPKiIV6pCis8+mc=;
+        b=F/1OiXR9PWIOl5/HubtBmeY/6bW61POXebZ2F5SNCXxH89MHPCp4bygqlMFnHiRLmx
+         Hw2A4Hfvlp+M0cmT+eqQdWrvQtBrltLyTGsDtdak03x80XP+7Uvi+e2eBVrjEcVy7xHv
+         j7sDFDVdRVu8QZiIUHee7SH8EKZmnQ8cVig3mup+lbqHURjvWVRtPLOZPtQ1UdWMlgoQ
+         WrFyNBARjkYQ4ze6XAGAz31AjoR4fjiz3cbPcvUM8zy2UHoPmNlqWZIWFT5sLSGrBClU
+         9UFxrVDd0KTzq3QzE6cg6Q+m1K3GOhrkx95sJP4kY8VD4zMiFb0+EXqXI0eZ7vay+q+3
+         c+yQ==
+X-Forwarded-Encrypted: i=1; AL+hErFRCWj6l5xm0wEvxBX6W08ySVGa463zKrhuGHEo3LmMfrEuCuSGKoVSonrXaHoPxAhItzc3sAv8mQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8+e7kEhUT5Byk9UvFQRx7/YwOtxK/zTervClmsq/D1UPi5Gwa2
+	Mldpk7WJej/V4U/j/R3dO351X1o2Yzc54CuTLBTj6RKO64ZxBgfh7p0o
+X-Gm-Gg: AYBFou3r0k1yWFBXmnbtnnL/3U/qLSBsQuT0KjWkGwQRF5072zr5DkKa3Vu/Uxb+W64
+	BP2mztgNj5er/5MTfYDc9HaFq8rQ7a9+S3b4/5RzzJSj3PLcbD+bIX3mvr6G+3rqSUDJ8McnJjd
+	BvC4pMz0B8Ig4oleXvWM/m0lhCQOF2VvhzAQY7wm+EspvQ8XC8rfppo9wu/hKSJgwrDnIX3EiaX
+	GxgXNmbx2ajm66UrJR9u8A2MCARow1ijjA88bgwlzVzsPs3y5woh7dOP+FuEtsGb46cHkfLXaGS
+	ztG3E9OHOj7mvOWrLTaNHvE7TXNnANd8CNNS6XnUKzG/mFNST6cgHSuUy0y1cVjjKRytmVkkg2p
+	GapMxu7utrhNJfFOXqbda/gJ9XJBvMjw+lJAYT26f8eV32S461cPHq42a1wu0aMMbRnhDXatAAO
+	Ka6V4VuJwGfTXBg5F83bblhPsu3+EmezGhwsXNcEOW024Za42rQOhw001nCGtIHa1DCkKPRrIj7
+	edJULsukATO3uogxjwQPFWCOP6Wa+v0Xleh+bzNfUxJ7PyddNPxDWM34xKBOdlcHF1J2XnxfD1g
+	Hw0BZiyigV9UFXAK1/bFmfE=
+X-Received: by 2002:a05:7300:1899:b0:376:b957:c01 with SMTP id 5a478bee46e88-376b9570fd3mr5155040eec.16.1794439263001;
+        Wed, 11 Nov 2026 15:21:03 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:66::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3751fe2ff5dsm19921294eec.5.2026.11.11.15.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 15:21:02 -0800 (PST)
+Date: Wed, 11 Nov 2026 15:05:25 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 03/11] xdp: Copy buffers with restricted
+ lifetime
+Message-ID: <avT0b5T5trWZXAMo@devvm16445.scu0.facebook.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-4-bjorn@kernel.org>
+ <avOZa6jLnmvYkk2H@devvm16445.scu0.facebook.com>
+ <87eccra46g.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -77,88 +119,75 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 7DEE41A
-X-Stat-Signature: d4cfzmoxk13pg5m5ihp4akmy4hyu64j7
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18kGGg1w/ZySP1UptBt2yyJGC8WbNBioPU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=gmDNsQ8h2wciKasKQCbqVP3maaL4qbrw5sZmT7BnjeA=; b=7BpeV/CNBK0xn7L5qTZRDTfRvQV7U2cQp/mCdojV1+x96AlRZ9rtulOhbTPnbSonEkl9dmgz3eGjHb8p+E0h3XDjeebpimn+FH/g477dsAXlpcaBL9IKpa4sWBqls3LUz3Nl8QeSDhvVfF3uaAU+FhhTMPtyWJPI5tA4IvX91lQ=
-X-HE-Tag: 1794438894-129449
-X-HE-Meta: U2FsdGVkX1+FAoSScfo676HReBJlhh89iBeR1SRWVaCqtKRtwKahRcTeRtp0PW6X+8tP0+cIcuPmi2dveZHq+M/PfpnjBQfOKdRrGrE6L6XJMKcHrkYMPwWfT5W0HZpH0ZA4Tjcgp99PZuSv7mPL4a7u5MFDGa5PSeaKjEeGZ88gtDz4qBX9Zmj8tooxKlDTcIzzVtZdHTNqYaysHU8krqFFZhQV25li+r73imgz99krf7wx8TB68OGyy17GR6OQunJdYHkV2EjKXilR7+DL4H7NvH48tc6IGNBrCqnO6wIQzDRZ3F+KJfPb6Hec+mdDc+COvRxaHejVamxGg/o8L4iQ0lpkg48J
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87eccra46g.fsf@all.your.base.are.belong.to.us>
 
-On Wed, 11 Nov 2026 16:47:38 +0000
-Vincent Donnefort <vdonnefort@google.com> wrote:
-
-> On Fri, Nov 06, 2026 at 09:18:26PM +0800, Tao Cui wrote:
-> > From: Tao Cui <cuitao@kylinos.cn>
-> > 
-> > Creating an instance immediately allocates two full sets of per-cpu
-> > ring buffers, array buffer plus snapshot, about 1.375MB per cpu per set
-> > on the default config, plus the trace_array and its name.  None of it
-> > is charged: neither trace.c nor ring_buffer.c passes __GFP_ACCOUNT,
-> > while user_events in the same directory accounts everything it
-> > allocates.
-
-As the name suggests, "user_events" are for users and are special.
-
-> > 
-> > Instance creation is currently gated by tracefs file permissions
-> > alone, so a
-> > rootful container with the host tracefs bound in can create instances
-> > until the host runs out of memory.
-
-You mean, "works as expected"?
-
->  Charge the ring buffer pages and
-> > the trace_array metadata to the creating cgroup.
-> > 
-> > Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> > ---
-> >  kernel/trace/ring_buffer.c | 8 +++++++-
-> >  kernel/trace/trace.c       | 6 +++---
-> >  2 files changed, 10 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> > index 1fd28a72e6ee..676c059c112c 100644
-> > --- a/kernel/trace/ring_buffer.c
-> > +++ b/kernel/trace/ring_buffer.c
-> > @@ -441,7 +441,13 @@ static struct buffer_data_page *alloc_cpu_data(int cpu, int order)
-> >  	 * gracefully without invoking oom-killer and the system is not
-> >  	 * destabilized.
-> >  	 */
-> > -	mflags = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_COMP | __GFP_ZERO;
-> > +	/*
-> > +	 * The subbuffers are charged to the memcg of whoever caused the
-> > +	 * allocation: the creator of a trace instance, or root at boot for
-> > +	 * the global trace.
-> > +	 */
-> > +	mflags = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_COMP | __GFP_ZERO |
-> > +		  __GFP_ACCOUNT;
-> >  
-> >  	page = alloc_pages_node(cpu_to_node(cpu), mflags, order);
-> >  	if (!page)  
+On 11/11, Björn Töpel wrote:
+> Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 > 
-> Hum, by default tracefs is root only. 
+> > On 11/10, Björn Töpel wrote:
 > 
-> And even if made accessible to other users: 
+> >> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> >> index 07231adfb5f8..1105bb9e3292 100644
+> >> --- a/include/net/xdp.h
+> >> +++ b/include/net/xdp.h
+> >> @@ -81,6 +81,16 @@ enum xdp_buff_flags {
+> >>  	 * XDP program is not attached.
+> >>  	 */
+> >>  	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
+> >> +	/* Internal: the head netmem and the shared info are in &xdp_buff.ext.
+> >> +	 * Not copied to xdp_frames or skbs.
+> >> +	 */
+> >> +	XDP_FLAGS_EXT			= BIT(3),
+> >> +};
+> >> +
+> >> +/* For a head buffer that cannot hold kernel data, see xdp_init_buff_netmem() */
+> >> +struct xdp_buff_ext {
+> >> +	netmem_ref netmem;
+> >
+> > nit: netmem -> head ? and the same for xdp_init_buff_netmem netmem arg?
 > 
->   1. The life span of a trace instance is not tied to the caller.
->   2. The ring buffer is shared by multiple users.
-
-Right. Is there a use case out there that allows non-admin to create an
-instance? Tracing ring buffers can expose a lot and should not be given
-to unprivileged users.
-
-What exactly is this trying to achieve?
-
--- Steve
-
-
+> Yup, will fix.
 > 
-> Overall I am not convinced charging the creator makes much sense.
+> >> @@ -138,7 +153,7 @@ static __always_inline void xdp_buff_set_frag_unreadable(struct xdp_buff *xdp)
+> >>  
+> >>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff *xdp)
+> >>  {
+> >> -	return xdp->flags;
+> >> +	return xdp->flags & ~XDP_FLAGS_EXT;
+> >
+> > The only consumer is xdp_update_skb_frags_info, so probably not worth
+> > filtering out XDP_FLAGS_EXT here? Or is it for
+> > xdp_update_frame_from_buff? Can we explicitly clear it at the caller? 
 > 
-> Eventually a few allocations for iterators could be GFP_ACCOUNT.
+> It was for xdp_update_frame_from_buff(), but looking closer EXT never
+> gets there...
 > 
+> I'll drop the mask. Thanks!
+> 
+> >> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> >> index 8f190b574beb..dea4a4a17e86 100644
+> >> --- a/net/core/devmem.c
+> >> +++ b/net/core/devmem.c
+> >> @@ -698,5 +698,5 @@ static const struct memory_provider_ops dmabuf_devmem_ops = {
+> >>  	.release_netmem		= mp_dmabuf_devmem_release_page,
+> >>  	.nl_fill		= mp_dmabuf_devmem_nl_fill,
+> >>  	.uninstall		= mp_dmabuf_devmem_uninstall,
+> >> -	.caps			= MP_CAP_FRAG,
+> >> +	.caps			= MP_CAP_FRAG | MP_CAP_RETAIN,
+> >
+> > Not sure I understand this part, can you explain?
+> > These are MP_CAP_RETAIN because they are unreadable?
+> 
+> No, RETAIN is about lifetime: the stack may hold page pool references
+> after the RX poll, e.g. skbs on a TCP receive queue. That's how devmem
+> and zcrx work; without it the stack would try to copy them, and they'd
+> trip the DEBUG_NET check in skb_add_rx_frag_netmem().
+> 
+> A provider without RETAIN gets copied, so it must be readable. I'll try
+> to make that more clear in the kdoc, and probably refuse a provider that
+> is neither.
 
+Ah, yes, thanks, I did miss that warn in skb_add_rx_frag_netme, makes sense!
