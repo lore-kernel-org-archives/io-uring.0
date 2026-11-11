@@ -1,113 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794354735;
-	b=nGCggm+QjjPjSkyDgHYmRu30TW97DGd7Ae9bQg1osZCMVRXnjrmev2RiFobdPAI50UUm
-	 mO6L0Dk21nHtCq7K5pXpnrLqtWnuAH73xmYPG/vgt41G/yXnNOksypVirdxqW7g5qL+JQ
-	 B7Le6pM3JcLxTvLqK5bvJ/sAaVWbxCDsKrG2FDhsgLFpDSlLzIAIZqSnmeGlGgWUBu0Xd
-	 AApVVyRZpinnKlFjJyq12BEuMtezrW7MzDkVojz4wA/XMvt1APoimAys+zNBqyX+PUKq3
-	 1SfjwTVTPHRVpqZeEZDeNc/BqoSXdTvnbCUk2Jl/eVIe7ljbDFA/o/KRt8PBl0qsPpw==
+	t=1794357466;
+	b=Ae1TZj7z9ryl3Jf+RIOFOEr5b7jtmC8D3MTpQjO2MLgaf+Rqywx4NMxuP8ukyQnn0FOj
+	 x8VHPQ9S8S+kflef3UyweBI9BVkCKjEAbrV5ICvtlUrSIDg3tdOtPP/G3FPDPDBtyc2tr
+	 CzI/gHkXME4hdMjlWx2bpVk9XKkMW7v/QONDxPYmL8Vzml1cOf4fbWlLZ/EM5CJo/Oi4o
+	 PR6qpu0sfFmkKdQvfAXNF2L2SeL+lGuH1WWqJZEd0QDZJJUH5O17JqpRYLgJ+zeWoNW59
+	 /PQ1pG1X65mDkmFl10uTDCqheR/m0bxy6uxb+dGIxjjgSYXCAQnDFLAOWp3bclRNafA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794354735;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=9rj8EzBjlrHZ5xAlf0shYcxqn1sb5NbiDhyrmTtYevk=;
-	b=z4Ttvi+lf2mZYPD8/K42gmRSwdFSBmZgdvJJRF1TFWjAy6m/EVAN+h0ZLmwVaFC+MaXi
-	 jspcvlrykIzvFZeGdE64DLpPrbckhtqnrB+RulMbA8YGoLtQ7eVbPizvn60jijY+75th/
-	 wTATyiY04n1IwBdJ/nLc7NLWt3SZ0+AAPl0fC/Wm3JI6N9wNq5yIGvau6cGdCB4cnUDcd
-	 3anExiThjCZJZGrf9dW0P124i9mS2ei4i1KU/4UawvtJMb21qsDze7gWHt0B7/YTseXtz
-	 V54LEveO7yLgRYLAbEe30znLsOS32X76bRGobrn9MmooPnHCHYEb5lCpBebuwoVFVog==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794357466;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:Sender:
+	 X-CM-SenderInfo;
+	bh=HOhwJnDwMrJdnAxlnqa+1F3QjuwiESQoaDImj+ZrdAY=;
+	b=Eqtm/M7jOdnbzzV7uwSz9VBvwm3eACtwZ9P+XIUJbn8RwxF6+/XlDLnQ0+YR4hY6AslC
+	 bDhOzs55ST8F42fVoZaU6yI5hJmUm1sOuVB+rMDaqFJjXL9BilrqDURKcwLBmwHCXMEP1
+	 b7HwnkLTV6sjUjQHb0NKvod9z3CTJpAUIhuXOqFDCjK4VDkfYB6TZFT7xpKQcc5uyyZsG
+	 77HlWrZQokmgHFFkxauNY7hjzF3sp0/O0jhBuVtwQdL4PvtbBzBVQrHvz89lTGLuNjeuF
+	 JjYOPJWnBLe712BtIJYIE1K/XGDJCSTHDBd+rQOdTqI1GvsgueXQYOsJK7/scgRySDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F6tfZ3GZ;
-	arc=none smtp.remote-ip=74.125.229.4
-Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=NYIRMvdU;
+	arc=none smtp.remote-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AEC606A339
-	for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 23:52:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75AEC606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B165606A31C;
+	Wed, 11 Nov 2026 00:37:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B165606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F6tfZ3GZ
-Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36e06480786so1083245eec.1
-        for <io-uring@vger.kernel.org>; Tue, 10 Nov 2026 15:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794354734; x=1794959534; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9rj8EzBjlrHZ5xAlf0shYcxqn1sb5NbiDhyrmTtYevk=;
-        b=F6tfZ3GZcndbrP3lQEGGVjId/xyZ9fHyzdAFR7MjnNcR+YLS6rmMlSKOvR7hICxc/h
-         vKplz3pzZDEQ2Cb5IMOufB4Mfj7/QqLl5oTWW1/Gkgs6k5ksb+vRPmASdWSaEt3tFRAd
-         J03GrlKVRUIVttm4Uv3b9pgD513Fqkq0Vk2pxqnQMc2nyEoz0+oJkK+MWHh4sFXuJM4M
-         anpzZFRcCOL+w1IplL2L9VFP0n2srzF37IT4NPsouN3mKDiWukkZiJxCpiNGV6K65w2B
-         7uuYihcagjJpW/96eJhFSw+nddMIsP2/yxEv3vPjYlqNjUT/9fXhotKbNPEdV6cOW0Rp
-         00OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794354734; x=1794959534;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=9rj8EzBjlrHZ5xAlf0shYcxqn1sb5NbiDhyrmTtYevk=;
-        b=XA4qGYveqiLFfXuWr1utTRqiNzlVNBIRQSrrLlUSZbJgacmjHcKs+/aZhOcvxt0aU+
-         vvwUBpnngOmhz7zBsSp/7pV0TNTVAkd1yUKTOHrVdEv9C11kN1RQ0O6npBCcZNGXRt2B
-         tXkIeNpcC/3l8rt6eOZAmLxDOESuOLUFW0Gg3k+4nroEaKtqdHRYvE8SDywqCsLBG3yU
-         Pk/5IrCNdgARmu+FV5ydyPXUz/LtIz/9tJV4NuCNjsFNaWjKqv1qkujf+uikBLyk713B
-         LAUZJlRo3VdQ6oJFQZ7cjv8QZjKFVeSC7lXfykDfe/NTuq4ZiDxWc3XYg/OVcZsLOGiB
-         5CZw==
-X-Forwarded-Encrypted: i=1; AL+hErFNoMs2TeWX7qrBmc8Jgb3PrpMtuAkyZsuEke3gSwc65mpruZc+V4fSbr97EVMqXPUT54Po0979JA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/dXO9Uw/OweOfeJAEDLTX+p5T3WnATbDab4H8J97WvTzC39uQM
-	U76G9iBrkH/oTG7K6Tw8fVZU7OipXw1WuYBrtjxw0XvDbcx36zc0Qzdf
-X-Gm-Gg: AYBFou07fj9r2d/9paeZfkGTNHMDLHLzOdX5XJTO4Xho/SBaSIcZm8fMVDMc9wuaGty
-	L8p5QleIrPaLsWqx4nJhy4xFB9nkbB7noQSacPQtf+6vEK4j0JZJGvgdmY0GjLAR/V1WsuGCPsJ
-	AyGirtCr5JK7KQ2+rtt3xK3WGmSqTPAvzTWb8YPKWVxTWvV9UBVlXCOe+/iZZnQzzd5iiiEpA5u
-	uvDpfNiNHAPu3/vv0u6odzoqGEh0r+FASRKU7KNwz3Nq4gCl8aRTM6oF0KvDDaXvf+4V/qnOyMC
-	zlJrKS9E44lKW+HCAH+Mx7f9ik4N1AAwCn8Sz39TcUahFXNaoOIN/MwhULZYgKZQmw08mBVGprW
-	Exxsw+5lVjq5UGT+1S7iKRhWL1/m3NY4lX7Qjqj0QVMhizySffRD2q2J8f3k1bAqYiIS6iVXVw7
-	zX+hoNZ63f0I+S5pKzQeYKg2y+PwkYiNt7N4MMDBQASMpLNYcbwbfZlwJlabTR6Z9qBqcijde1v
-	LRNM/rG8SobOXDyR2nfR6aRfRG2BVoKwyonM6C0EPIFAt0J0u073j4058BGri0KzQ9UvLx3rQyA
-	QgjmCj6uDA2NRSV4LLwtMKc=
-X-Received: by 2002:a05:7022:7e88:b0:1b3:c0cb:d231 with SMTP id a92af1059eb24-1b3c0cc5d12mr447595c88.45.1794354733614;
-        Tue, 10 Nov 2026 15:52:13 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:42::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3b5b4ecccsm8750104c88.13.2026.11.10.15.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 15:52:13 -0800 (PST)
-Date: Tue, 10 Nov 2026 15:51:21 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, 
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Stuart Clark <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
- memory providers
-Message-ID: <avOtxBw_grmuDJae@devvm16445.scu0.facebook.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-7-bjorn@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=NYIRMvdU
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=HO
+	hwJnDwMrJdnAxlnqa+1F3QjuwiESQoaDImj+ZrdAY=; b=NYIRMvdUsZVfcgYHBl
+	oY4XFk0yW28e0C6oBGA3yJEdEQTlRsretO5q1m7wq1u2d1/wb45VLjLWARPlEg+b
+	lYYej574YyXxnRFt/ZhGv1IYsPdjD6NI7KjCssp9y2CYGcl+83pkp9dd0uBLT0ck
+	yU6K5Pa0RFsi+t/+oxfcizzM0=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3X6SnuPNqctCmGg--.61032S2;
+	Wed, 11 Nov 2026 08:36:57 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: x-professor@outlook.com
+Cc: mkp@kernel.org,
+	James.Bottomley@HansenPartnership.com,
+	axboe@kernel.dk,
+	linux-scsi@vger.kernel.org,
+	bvanassche@acm.org,
+	jthoughton@google.com,
+	asml.silence@gmail.com,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 5/6] io_uring/cmd: allow reusing SQE storage for completion data
+Date: Wed, 11 Nov 2026 08:36:55 +0800
+Message-Id: <20261111003655.3678579-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20261110122434.4144043-1-x-professor@outlook.com>
+References: <cover.1794045010.git.x-professor@outlook.com> <a4ec8431c2f36172348449b872faf26d7d6d4d7a.1794045010.git.x-professor@outlook.com> <20261109025114.433681-1-yangxiuwei@kylinos.cn> <20261110122434.4144043-1-x-professor@outlook.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -117,73 +69,28 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261110102039.1002605-7-bjorn@kernel.org>
+X-CM-TRANSID:_____wD3X6SnuPNqctCmGg--.61032S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUo38eUUUUU
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6QnvgGrzuKmiigAA3v
 
-On 11/10, Björn Töpel wrote:
-> A UMEM has a fixed number of chunks. When a refill finds none, and the
-> chunks come back later, nothing schedules the queue again: RX stalls.
-> Kicks after each queue operation are easy to miss.
-> 
-> Drivers report the end of each refill with page_pool_refill_done().
-> The provider then asks for another poll, or wakes the queue later
-> through the NAPI that the core publishes while the queue runs. Socket
-> wakeups use that NAPI too, so such drivers need no ndo_xsk_wakeup.
-> 
-> With XDP_USE_NEED_WAKEUP, the FILL flag stays set: a flag set only
-> when starved can miss an entry posted at the same time.
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  Documentation/networking/netmem.rst     | 10 +++
->  include/net/netdev_rx_queue.h           |  6 ++
->  include/net/page_pool/helpers.h         | 24 ++++++
->  include/net/page_pool/memory_provider.h |  2 +
->  include/net/page_pool/types.h           |  6 ++
->  net/core/dev.c                          |  4 +
->  net/core/dev.h                          |  4 +
->  net/core/netdev_rx_queue.c              | 97 ++++++++++++++++++++++++-
->  net/xdp/xsk.c                           |  4 +
->  net/xdp/xsk.h                           |  1 +
->  net/xdp/xsk_pp.c                        | 73 ++++++++++++++++++-
->  11 files changed, 226 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-> index 39cb75339704..74c73d7d126e 100644
-> --- a/Documentation/networking/netmem.rst
-> +++ b/Documentation/networking/netmem.rst
-> @@ -136,6 +136,16 @@ Driver RX Requirements
->     circulation times, such as when userspace holds a reference in zerocopy
->     scenarios.
->  
-> +8. After each RX ring refill, call page_pool_refill_done() once per page
-> +   pool, with PP_REFILL_FULL only if all rings that use the pool are full.
-> +   Rings of a queue that take buffers from one such provider share one
-> +   page pool. Keep buffers in each of them, first in a ring that every
-> +   packet needs, like a header ring, so that a provider with few buffers
-> +   does not leave them all in one ring. If the call returns false, poll
-> +   again soon, for example by returning the full NAPI budget. Register the
-> +   NAPI of each RX queue with netif_queue_set_napi(); the core schedules
-> +   it when provider buffers become available.
-> +
->  Driver TX Requirements
->  ======================
->  
-> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-> index 989120cbf452..ca12cbf7b825 100644
-> --- a/include/net/netdev_rx_queue.h
-> +++ b/include/net/netdev_rx_queue.h
-> @@ -33,6 +33,12 @@ struct netdev_rx_queue {
->  	struct pp_memory_provider_params mp_params;
->  	/* stamps the page pools of each queue allocation */
->  	u32				mp_gen;
-> +	/* NAPI of the running queue, for memory provider wakeups. Set while
-> +	 * mp_armed, and if the provider has a refill_done op. Written under
-> +	 * the ops lock, read under RCU, see netif_mp_wake().
-> +	 */
-> +	struct napi_struct __rcu	*mp_napi;
-> +	bool				mp_armed;
+Hi Yingjie,
 
-The comment should explain why mp_napi != napi? (I do not understand why)
+On Tue, 10 Nov 2026 at 12:24, Yingjie Wang wrote:
+> Which object did you have in mind for the buffer? With 6/6, end-I/O
+> frees the request, and the tag can be reused before task work copies
+> the sense data.
+
+Not the request or the tag. A buffer owned by bsg, freed from task
+work after the copy. Per-file or per-queue both work.
+
+> Queue depth alone also does not bound the number of completed
+> commands waiting for task work once their tags have been released.
+
+Agreed. If the pool is empty, return -EAGAIN. Do not sleep on it.
+
+Thanks,
+Yang Xiuwei
+
