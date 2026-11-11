@@ -1,109 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794415664;
-	b=5HqqakQyhajZbowHwipWRDFkRzkg306pUYuJAw7HYES18W3cxkdDVZrevOf+v+U7fmxB
-	 UpbHUR1KvPKFqN8m6BgcaijmkqOf3b5SgFVWUu8WjnaBbVH+wn1tNiQzUni+rrSgan4Dv
-	 h5BT0V/C7UlDGW94bQMXy0G8Qq1NE8KF9XjtJ8ZXa8hJMwHW3j3mpPO53uS4RI1Upl1Z1
-	 56Htr6zdICeTQifGUMI6xl1ECq35DoNF8+m45Lm+7XBlCP5BovMoHF3PyGHheOHT4qiZe
-	 CitJ75e8/t8HF2lXxHiMGp1DW3i6WHLIfKgWdLf0Zb5ehuHiIM3Cmv/K0kT9WuOYjjQ==
+	t=1794425184;
+	b=yuEisPirZwx6aqwnaLSUSbKxjeouxZJmriM5aA8F4tq+1quahsU2kSttVzFY9iSudBVM
+	 BKS9sKcpYx+63mv23mxeDtUgvVQUKPC6M2LyGUovitbYgRiRwRcrnaSvvQN9IzwYr5Z8K
+	 UGjiV/ngKTKX6WD1vAhLZX3VppWfZs8Nm0UvM3btDG5gXagluwi1Hy1fLuwHhcEXQRJTw
+	 q42XakktpJ0KzJVM6P42FpvlYZpDJuDGdUOn7/y4bh1PL7HKgu4FSVHpEiay1IJfYGYNc
+	 W0J7XkQKZrXAdWyehFw5NszadTF4Bhdk7CAaj6vwWo4xIsn69qQZBP4H/weKmxAHOHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415664;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=JEN1we3zUbJ34wQgamBpttlVbDethKWGuPURScqYgfU=;
-	b=o4x39yslWhWDOrRdZk6F4vNgvEe4t3fb+433viCEzmJbWUT+4uo9KsO8jcjTWG8Bkdi2
-	 zqDP1wC7K7DbXfgLt6EG2d/gpDF/VilRP79vgBXZf4xkmcgUrjCW5zY5U3u82xclTyBgP
-	 oSa1fgr1RPeoBZB4/cn78UVt0D1AL9H/wgztVw6edza32exQoHsGys6yxYekf9n+IAqQK
-	 VuyvpwQDH76piDdau0aoodD3h5VIr1LSDBbfKKEd8vxFlwSYw5Tr7k+m8C4gqoEIoaTu4
-	 +idfFu+LYZDJ/Qe1J9NKdH28MulSYgG8G/Ucz63XvA0sqibC8T8jenEoZu+ELTTxjBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794425184;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=pr1i3ecZGDWDAvpLi3ABH9Nl7KtZoQS7X+cpI1BrO3Y=;
+	b=20ELUi5yYhQ/Xnf2hnzF4eU9y1tkyq1SY/htlHWSvo0tOjfVYEocZeyvx7quYMTZsRj/
+	 Rnej6Wd9Wdv2MpcnZKLYU8gUMZe9yEIYp+mcBytvq8RBzM4dKldIcgbLrtrGJEyxeDV0M
+	 1GgNV7R5a/3BafUY79cYQr7Uz3Ewp+8cdfkB7fwslcdxhIvyl7mUIoFdf70C69j2sV8M+
+	 aS8DtxXHAH3oAdqavuy6EECpOoaId1QLnYwJ5bJOT5Pb7d7EJJpADlQE46B+cU7xfiS0R
+	 B2cL8QGCq9iRzDUgWp7P64/aHOH1Ql+bM4ubRgjaS8pnwGsCAbNFT5aa4MlNXImDr6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Arhv0r+C;
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="D/UGcqUc";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688C7606A32D
-	for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 16:47:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 688C7606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14012606A31C;
+	Wed, 11 Nov 2026 19:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Arhv0r+C
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so238945e9.1
-        for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 08:47:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794415663; x=1795020463; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JEN1we3zUbJ34wQgamBpttlVbDethKWGuPURScqYgfU=;
-        b=Arhv0r+CzJ6kd+TulLavcwx/mGrglYS422JYKTdbpa5un1a18rj23MyxqxLhddkmnB
-         gNcaXJ2IrojyJbxM+OgBPEAeEpsNpzWgOGqEgdEdfbdQsuKembFEQ+6KhZaeIYR30gze
-         IooSZe2fNj/7K3ZNeH8x15dEsu+UQLaI/m1IWuoX86P9po90K2PyeQK2TvubNwe2um3L
-         oa28twmLTolBcK1wc4TjQY120ADR9pALZ4st9GAliG4qO1r6wi1yEW2L29tlSgZjmr2h
-         E0qSshK5f4Tgf9M06nnSpMmyfbMbMx74mcpO6fx0yDufhfISeijTTqV/EjmW0IdaeTyH
-         ahNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415663; x=1795020463;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JEN1we3zUbJ34wQgamBpttlVbDethKWGuPURScqYgfU=;
-        b=arGQ5jyjU4xrtIhvT/F7irSJJN6JxAUqwYsgQ/uataPHYyxFPFs3ClnLLoiFfRL0/Y
-         nymf0Ex/4ZJN7J5GMOnQgI6QUSglmUgBXOZO9fCYP53FCJw6b9yjSrZ/unY5z3Rn9f2x
-         eK/eEnH8XDJ38fLGZjHmR7T15PYfQSoCikR9gkGwkqT9VbZEF2kTodtY+SldK0rj86HX
-         EO0cYYQPnBwzhwMOzmClLC6A8t9ZcAOLIHMU1nmXNHdtHudhNGmLO/ucV4J4nQZ6T5hk
-         twWW2cde26qBbhKQx+F+mYnOCKnh/1xplTy4Yi0kzO/+7VY7pa4imDqF89oxjWYRgr74
-         chUw==
-X-Forwarded-Encrypted: i=1; AL+hErFhoV5qPeioGAhmqAezQW8oTAKP+u1mh8rq8dcKiHUFLt4aNynNLDx0xdt20BocoOvCqB/JNDFg5Q==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/32GjlYBRRH/j2za3IcVTidMwm6DkfEG/CFyM4TXg81D+3Oo7h
-	K0x+WuBXGoutRGaWp8hjSipoYJP2FyAL7IKBfLd6Bc5eNHIYEplhRM/kcN78PODhOw==
-X-Gm-Gg: AYBFou3mlvcnHcJlxn+b/cBQq1bnSIbkA2WTH2Wmb0XQPWXzw7b5tlbQxx50vb17A1T
-	EoBLBZUNvm1juQv6rDPornDNYXYImEWOA81DuB6x48doAwj4uzxnFwAaiMYtyJ14Z3p7R0WrYK3
-	DiVCBBK7dCS/GtW9ESOJn+xrk9WdGzqENdO6ZVwi2haG3vPSvq5LIoqjySVzLdPUpz854YgekLH
-	GhgfEfHgD5wSGx498CR88nrr4Vk2++uobst5wq/Sg20IOxGYv9wkYdYzTKJNidoAp6oGBRburhc
-	FPEOdMZNiy7diHSPx7rdmslJDSFhKNkGiyVJZqOHcxmBUemhpIs564u9n/0tzGoafgAfckLT09b
-	Tq63gUdUPd+lCZXejYTwdad5aXwtC4BXA1lcYrxEwxUIp97KQNLP3q7uTkkq8pBrGkaHhWtoXF8
-	PLlue1y+nrXUhLPWUqg4zFT1X2YLSYZqtw/2CDTzfvn7GOf4Dk3ggU42J76e3bmDE7jdMqNClVH
-	eEGPeaJPWoV7ViadMJOFLbO3hABgsPfopqK9PlsX7Fmu+C6QQLSFroPB7UUdYlK1o30fpvj+wzt
-	Y7R+dY4abOkouV64C2mzZkmEDOOuqsEQfV9IsDvtyrAf3sP9QynwbcR4g85AUTELeQ==
-X-Received: by 2002:a05:600c:3f07:b0:4a2:18c4:61a5 with SMTP id 5b1f17b1804b1-4bb4e27994emr1100895e9.6.1794415662004;
-        Wed, 11 Nov 2026 08:47:42 -0800 (PST)
-Received: from google.com (0.182.34.34.bc.googleusercontent.com. [34.34.182.0])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498365cd06fsm11724877f8f.40.2026.11.11.08.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:47:41 -0800 (PST)
-Date: Wed, 11 Nov 2026 16:47:38 +0000
-From: Vincent Donnefort <vdonnefort@google.com>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: akpm@linux-foundation.org, dgilbert@interlog.com, mkp@kernel.org,
-	loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com,
-	vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com,
-	eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
-	rostedt@goodmis.org, mhiramat@kernel.org, jgg@ziepe.ca,
-	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
-	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
-	christian.koenig@amd.com, phasta@kernel.org, joro@8bytes.org,
-	will@kernel.org, linux-scsi@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bobbyeshleman@meta.com,
-	mathieu.desnoyers@efficios.com, robin.murphy@arm.com,
-	mason@kernel.org, aesteve@redhat.com, tjmercier@google.com,
-	harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
-Subject: Re: [PATCH 4/7] tracing: account ring buffer pages and trace_array
- metadata to memcg
-Message-ID: <avScKhR22kFOQ1z4@google.com>
-References: <20261106131829.3228926-1-cui.tao@linux.dev>
- <20261106131829.3228926-5-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D/UGcqUc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAFA1F00A05;
+	Wed, 11 Nov 2026 19:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794425183;
+	bh=pr1i3ecZGDWDAvpLi3ABH9Nl7KtZoQS7X+cpI1BrO3Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=D/UGcqUcwQkz6nfm3G07JgMB+/3Hq+c9+B1470SiKYg3q+WBzTVCED/nm/Kv10/wU
+	 +RwPtlaZtlkenY3lzewO9GA2kxFdtdQAKu7BCuAu6PUZ6wRcLhiqfH/rSaXK7XQYx1
+	 j+aN3H8HcoKrD6Z+VDE5ZNKF0O7rXbuMxoRA27SsuwbbUPUCMQrKVjXardHMzvdey6
+	 Hyi7PAxO/WNn5rystEcCA5omgunZQdYlHOHZHkiSmY1VfXCSTovGPLACAb6eGDC+np
+	 SYFY40RFug9owSGq9o2IGrnq4oM+oQT8poQDrGqgFFIMXkhbpJOAQw2g2+RDvvfb8a
+	 CefaaMChBXAig==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ Mina Almasry <almasrymina@google.com>, "Mike Marciniszyn (Meta)"
+ <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Alexander
+ Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
+ in the core
+In-Reply-To: <CAJ8uoz2JMEKkzO-V7jtreS9q1Btmo0URosXzBGW7f=jhFnUzxg@mail.gmail.com>
+References: <20261110102039.1002605-1-bjorn@kernel.org>
+ <20261110102039.1002605-6-bjorn@kernel.org>
+ <CAJ8uoz2JMEKkzO-V7jtreS9q1Btmo0URosXzBGW7f=jhFnUzxg@mail.gmail.com>
+Date: Wed, 11 Nov 2026 11:26:19 -0800
+Message-ID: <875wy3890k.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -113,93 +81,236 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106131829.3228926-5-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 06, 2026 at 09:18:26PM +0800, Tao Cui wrote:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> Creating an instance immediately allocates two full sets of per-cpu
-> ring buffers, array buffer plus snapshot, about 1.375MB per cpu per set
-> on the default config, plus the trace_array and its name.  None of it
-> is charged: neither trace.c nor ring_buffer.c passes __GFP_ACCOUNT,
-> while user_events in the same directory accounts everything it
-> allocates.
-> 
-> Instance creation is currently gated by tracefs file permissions
-> alone, so a
-> rootful container with the host tracefs bound in can create instances
-> until the host runs out of memory.  Charge the ring buffer pages and
-> the trace_array metadata to the creating cgroup.
-> 
-> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> ---
->  kernel/trace/ring_buffer.c | 8 +++++++-
->  kernel/trace/trace.c       | 6 +++---
->  2 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index 1fd28a72e6ee..676c059c112c 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -441,7 +441,13 @@ static struct buffer_data_page *alloc_cpu_data(int cpu, int order)
->  	 * gracefully without invoking oom-killer and the system is not
->  	 * destabilized.
->  	 */
-> -	mflags = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_COMP | __GFP_ZERO;
-> +	/*
-> +	 * The subbuffers are charged to the memcg of whoever caused the
-> +	 * allocation: the creator of a trace instance, or root at boot for
-> +	 * the global trace.
-> +	 */
-> +	mflags = GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_COMP | __GFP_ZERO |
-> +		  __GFP_ACCOUNT;
->  
->  	page = alloc_pages_node(cpu_to_node(cpu), mflags, order);
->  	if (!page)
+Magnus Karlsson <magnus.karlsson@gmail.com> writes:
 
-Hum, by default tracefs is root only. 
+> On Tue, 10 Nov 2026 at 11:36, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
+ote:
 
-And even if made accessible to other users: 
+>> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+>> index 18966bbdb5b7..c620a0c32c17 100644
+>> --- a/net/xdp/xsk_buff_pool.c
+>> +++ b/net/xdp/xsk_buff_pool.c
+>> @@ -104,10 +101,30 @@ struct xsk_buff_pool *xp_create_and_assign_umem(st=
+ruct xdp_sock *xs,
+>>         pool->fq =3D xs->fq_tmp;
+>>         pool->cq =3D xs->cq_tmp;
+>>
+>> -       for (i =3D 0; i < pool->free_heads_cnt; i++) {
+>> +       return pool;
+>> +
+>> +out:
+>> +       xp_destroy(pool);
+>> +       return NULL;
+>> +}
+>> +
+>> +/* Only copy mode and driver zero copy use heads */
+>> +int xp_alloc_heads(struct xsk_buff_pool *pool)
+>> +{
+>> +       struct xdp_buff_xsk *xskb;
+>> +       u32 i;
+>> +
+>> +       if (pool->heads)
+>> +               return 0;
+>> +
+>> +       pool->heads =3D kvzalloc_objs(*pool->heads, pool->heads_cnt);
+>> +       if (!pool->heads)
+>> +               return -ENOMEM;
+>> +
+>> +       for (i =3D 0; i < pool->heads_cnt; i++) {
+>
+> Now I get why you are not reusing the existing xdp_buff_xsk infra, you
+> are removing them here for the PP case. Please mention this in the
+> cover letter of the previous patch. There might be a good argument for
+> it at least in aligned mode. It is wasting memory versus performance.
+> Today when memory is expensive and also for umems that are shared
+> between many sockets, the current scheme in the xsk_buffer pool for
+> aligned mode might not be worth it.
 
-  1. The life span of a trace instance is not tied to the caller.
-  2. The ring buffer is shared by multiple users.
+Will do!
 
-Overall I am not convinced charging the creator makes much sense.
+> I have two questions for you. What would the performance be if you
+> moved the aligned mode over to use the same free_list as unaligned
+> mode and then use that in PP? Would reuse more code, but would it be
+> fast enough?
+>
+> If that is not performant, what if you instead decreased the cost of
+> the current pre-allocated xskbs in aligned mode by just creating a
+> single copy per umem and using those in PP? Might be a good thing for
+> regular xsk drivers too these days, but do not know if it will work
+> for you.
+>
+> I do not know if any of these suggestions would work, but I think you
+> should examine them as less code paths is generally a good thing. You
+> might also improve the non-PP case too by optimizing it for your case!
 
-Eventually a few allocations for iterators could be GFP_ACCOUNT.
+Neither would help the provider. The page pool hands out net_iovs, so it
+needs one per chunk anyway, and the driver brings its own xdp_buff.
+net_iov, reuse and state are 69 bytes per chunk, against 128 for an
+xdp_buff_xsk; free_list would add those 128 on top. Nor is reuse on the
+hot path: the page pool recycles in its own cache and ring, and gives
+chunks back only when it is destroyed or its ring is full. The hot path
+is the FILL claim and the RX ring flush.
 
--- 
-Vincent
+I don't like the reuse[] fixes size tho...
 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index e8c4efa8107b..04b60b9cc4f5 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -8693,11 +8693,11 @@ trace_array_create_systems(const char *name, const char *systems,
->  	int ret;
->  
->  	ret = -ENOMEM;
-> -	tr = kzalloc_obj(*tr);
-> +	tr = kzalloc_obj(*tr, GFP_KERNEL_ACCOUNT);
->  	if (!tr)
->  		return ERR_PTR(ret);
->  
-> -	tr->name = kstrdup(name, GFP_KERNEL);
-> +	tr->name = kstrdup(name, GFP_KERNEL_ACCOUNT);
->  	if (!tr->name)
->  		goto out_free_tr;
->  
-> @@ -8708,7 +8708,7 @@ trace_array_create_systems(const char *name, const char *systems,
->  		goto out_free_tr;
->  
->  	if (systems) {
-> -		tr->system_names = kstrdup_const(systems, GFP_KERNEL);
-> +		tr->system_names = kstrdup_const(systems, GFP_KERNEL_ACCOUNT);
->  		if (!tr->system_names)
->  			goto out_free_tr;
->  	}
-> -- 
-> 2.43.0
-> 
+One copy per UMEM doesn't work either: an xdp_buff_xsk holds pool, rxq,
+DMA addresses and cb, so it can only be shared by pools of the same
+device and queue, and those already share the pool.
+
+For driver ZC I agree, heads add up with a shared UMEM: 32 MB per pool
+for 1 GB of 4K chunks. Unaligned mode allocates a head per chunk too,
+though, so moving aligned mode to free_heads saves nothing by itself;
+heads would have to be sized by the rings. Worth a look, with numbers,
+but in a separate series.
+
+>>                 xskb =3D &pool->heads[i];
+>>                 xskb->pool =3D pool;
+>> -               xskb->xdp.frame_sz =3D umem->chunk_size - umem->headroom;
+>> +               xskb->xdp.frame_sz =3D pool->chunk_size - pool->headroom;
+>>                 INIT_LIST_HEAD(&xskb->list_node);
+>>                 if (pool->unaligned)
+>>                         pool->free_heads[i] =3D xskb;
+>> @@ -115,11 +132,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(str=
+uct xdp_sock *xs,
+>>                         xp_init_xskb_addr(xskb, pool, (u64)i * pool->chu=
+nk_size);
+>>         }
+>>
+>> -       return pool;
+>> -
+>> -out:
+>> -       xp_destroy(pool);
+>> -       return NULL;
+>> +       return 0;
+>
+> Agree with Stan that these changes should be in a separate commit.
+> Think also about if it would make sense to put your page_pool changes
+> in yet another commit.
+
+ACK!
+
+>>  }
+>>
+>>  void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *r=
+xq)
+>> @@ -212,9 +225,24 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>>          */
+>>         hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
+>>
+>> -       if (force_copy)
+>> +       if (force_copy) {
+>>                 /* For copy-mode, we are done. */
+>> +               err =3D xp_alloc_heads(pool);
+>> +               goto out;
+>> +       }
+>> +
+>> +       if (xsk_pp_supported(netdev)) {
+>> +               err =3D xsk_pp_bind(pool, netdev, queue_id);
+>> +               if (err)
+>> +                       goto err_unreg_pool;
+>> +
+>> +               pool->umem->zc =3D true;
+>>                 return 0;
+>> +       }
+>> +
+>> +       err =3D xp_alloc_heads(pool);
+>> +       if (err)
+>> +               goto out;
+>>
+>>         if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) !=3D NETDEV_XDP_=
+ACT_XSK) {
+>>                 err =3D -EOPNOTSUPP;
+>> @@ -267,8 +295,10 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+>>  err_unreg_xsk:
+>>         xp_disable_drv_zc(pool);
+>>  err_unreg_pool:
+>> -       if (!force_zc)
+>> -               err =3D 0; /* fallback to copy mode */
+>> +       /* An old page pool may still own chunks of a failed provider. */
+>> +       if (!force_zc && !pool->pp)
+>> +               err =3D xp_alloc_heads(pool); /* fallback to copy mode */
+>> +out:
+>>         if (err) {
+>>                 pool->umem->flags =3D umem_flags;
+>>                 xsk_clear_pool_at_qid(netdev, queue_id);
+>> @@ -301,7 +331,10 @@ static void __xp_clear_dev(struct xsk_buff_pool *po=
+ol)
+>>         struct net_device *netdev =3D pool->netdev;
+>>
+>>         netdev_assert_locked_ops_compat(netdev);
+>> -       xp_disable_drv_zc(pool);
+>> +       if (pool->pp)
+>> +               xsk_pp_unbind(pool);
+>> +       else
+>> +               xp_disable_drv_zc(pool);
+>>         xsk_clear_pool_at_qid(netdev, pool->queue_id);
+>>         hlist_del(&pool->dev_node);
+>>         pool->netdev =3D NULL;
+>> @@ -474,7 +507,7 @@ static void xp_check_dma_contiguity(struct xsk_dma_m=
+ap *dma_map)
+>>
+>>  static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_=
+map *dma_map)
+>>  {
+>> -       if (!pool->unaligned) {
+>> +       if (!pool->unaligned && pool->heads) {
+>>                 u32 i;
+>>
+>>                 for (i =3D 0; i < pool->heads_cnt; i++) {
+>> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+>> index fdd55265a6cd..c2214e718cdb 100644
+>> --- a/net/xdp/xsk_pp.c
+>> +++ b/net/xdp/xsk_pp.c
+>> @@ -8,6 +8,9 @@
+>>   *       +-----RX ring-------+
+>>   */
+>>
+>> +#include <net/netdev_lock.h>
+>> +#include <net/netdev_queues.h>
+>> +#include <net/netdev_rx_queue.h>
+>>  #include <net/page_pool/helpers.h>
+>>  #include <net/page_pool/memory_provider.h>
+>>  #include <net/xdp_sock_drv.h>
+>> @@ -15,6 +18,8 @@
+>>  #include "xsk.h"
+>>  #include "xsk_queue.h"
+>>
+>> +#define XSK_PP_DMA_ATTR        (DMA_ATTR_WEAK_ORDERING | DMA_ATTR_SKIP_=
+CPU_SYNC)
+>> +
+>>  enum xsk_pp_chunk {
+>>         XSK_PP_USER,    /* owned by userspace */
+>>         XSK_PP_POOL,    /* owned by a page pool */
+>> @@ -30,6 +35,8 @@ struct xsk_pp {
+>>         refcount_t refs;
+>>         u32 nr_pools;
+>>         bool dma_need_sync;
+>> +       /* RX queue of the provider, NULL once it is removed */
+>> +       struct netdev_rx_queue *rxq;
+>>         u8 *state;
+>>         u32 reuse_cnt;
+>>         u32 reuse[];
+>> @@ -236,11 +243,225 @@ static int xsk_pp_nl_fill(void *mp_priv, struct s=
+k_buff *rsp,
+>>         return 0;
+>>  }
+>>
+>> +/* The queue no longer uses the provider, and its DMA stopped */
+>> +static void xsk_pp_detach(struct xsk_pp *pp)
+>> +{
+>> +       pp->rxq =3D NULL;
+>> +       spin_lock_bh(&pp->lock);
+>
+> Just curious, but why this protection of the fq here?
+
+After a normal unbind the queue is already stopped, so nothing reads
+FILL anyway. It matters when the restart fails and the old queue keeps
+running; I have a net fix that keeps the provider on such a queue until
+a retry succeeds... but maybe it's better to introduce the lock then.
+Let me noodle on it for the next rev.
+
+
+Bj=C3=B6rn
