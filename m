@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436895;
-	b=fLJNhZSVMEAvYL5dXKjO/f/kvGSUai2jVHBEcYLywIPB+YKu2EVd8EVqcanYVKnE7EBj
-	 9dGNLtMSXct3Q6hlZN/YZ4flnzP4vszkVfVEoJjXYJ6P8UKnJxtr7I0JcBQAqB0N0tuf0
-	 ey8bub6BkovNK8F2O81Y2JKoGbnhwxyBfI+nxViM2L+FKbLRSRlAf398toBddFnNIgGFn
-	 1n1xIByPdl34QnZBoKHj2Ql9519UPKfQ/EYCVvjA8/2Jjlfnhf6joKKG5bE49ur4kYgGx
-	 8/qmv10JynMIUuzR4s4d8Vaexu0y2iZwGGK9jmLnm09moXWrPv3L+ruXcfkIae9CX4A==
+	t=1794436899;
+	b=VRLbN+YSBbEx4ndh2wK+KU4G86B9wX08fGG9JAc21sMSU/847aWsNL06aoA9CZkAw7GK
+	 cSGAAhgP3tgCWkyh2VNlfx26xsE2pHRnqh7d6YyVUX8c64187BcyRk0Zld2E09hJw63A2
+	 clFRwo49J53EoTSpo48C55bqedeQtKVzosnanILhTo+y2NexI9j1Wy/OzslvYySyzkC9M
+	 h4zrPBikH9KHk0oiIhHPTQ5wwYLtd2reV2F+M1i905jDd31+Q1Mi1yH4h4R/epc3k6fCx
+	 hs31p9ZgoCVDWoMCj6tRRsFmEx4n1xCm56TscHHazScHCDH6tLB7IKO7CAGkfdZg/XA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436895;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436899;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=5YG3G017g+DRKcZrjM4aeoqUjwUFGHSzbQrSNzK7C7g=;
-	b=meRGJGP1K59svqrjH8PMLFkxs/xSYlK1Spf2FM+eut4hOUXKoHmS3hEG8vAUM7UC6e86
-	 /ta1iP5nF4Pu+tk3V4e6ACQsP14s/sKRKtcmGWAUOJKbYlzzdRJn5tHBHqjFNQv07Ozrx
-	 4wHz0ZzSxeAhLT5FfhK5iXVilGsnIGObmRalxy4KW1sDAM/sTWbo5bWe9U+ZbMDQ1dNxC
-	 YSVMwb7yw95PmP00/ji8/Xkb5IJUvsZkLLQbkmVsDKHVtA3pJQ4s3sp21I71KOBVb7iQo
-	 9ZmVgqF8ObCWA14JXW0sl2de3iauoxvmE1oDVGNjwxf9nYnPU0J9LesMIWyhoQ2p4XA==
+	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
+	b=j4IggsyZZgiFdEOfWgWEXOHl5gmyb4qz/WfHLROPXlh6T2PXrt8+BgH60L1QIMJcQ0PS
+	 PRgoick2pCV3y//UeOcGYLl9g58YKigm8k7XFhs0vnRTQCmEhsTXFNdG4n3Ixz9yOhdhx
+	 p1yhfvz7rvCO0JLZfH0s2Sjj0zcIeiYIk9pBYFq41USRBLAOzUbo2xga7susLL83fKNlO
+	 I4KIaw4IUe1oPNT2lDO2K9nkVdK0JvzewbgBWEvk80rBFsgYWDbNRTC1cSSslUxdEbNxn
+	 n4Vx7TYRVk8+kBeIT43phPgdg6KKaLE2hsTww0Mj8K+VkBtspRi5M7kQyQn5at6sVzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzNaHAfZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8539606A332;
-	Wed, 11 Nov 2026 22:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD4760A3820;
+	Wed, 11 Nov 2026 22:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzNaHAfZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44401F00A05;
-	Wed, 11 Nov 2026 22:41:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EAB1F00A09;
+	Wed, 11 Nov 2026 22:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436895;
-	bh=5YG3G017g+DRKcZrjM4aeoqUjwUFGHSzbQrSNzK7C7g=;
+	s=k20260515; t=1794436898;
+	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OzNaHAfZgHeFe0kzPfiSABT/lLSgTkJJVUdBa5p3d/BPIpVbjN32lRnNUDYuMU8ci
-	 C9wpB2FSSjTwO68e4BvKfxDc5LR5RA+wnipR78D7Tkffxdz546nDTzs/NI3bWwktwz
-	 4stFrWIxwomQoL3GPw0EIpCEccGFKdphi22dkj8Zjv6uJ71uO6/wgo2Eq6oSIavSEu
-	 6gqef/Z8JsrM5qflOGPO7obcAgAcVyon6PP4qrK2M92ABuPWyRR/oZiCd7t+zrTsdg
-	 AiGTLEQOzyMbJgToSMevfsvi77Y2O25sYI4LqABq4zz3MZ5FxVxag03Hr1+JoT7ehg
-	 fDaCFNO3qnabw==
-Subject: Re: [PATCH net-next v1 06/11] page_pool: Coordinate refill with
- memory providers
+	b=YMvPc8rqcRjg2+UCtIXYxVtWdwSW1aaeylbH62iXeKnQeRlW+PxRhxHVNrgbDgDQE
+	 6MvnZ2SY6R5G+uU5ZgnzJDSdJHlYyqD7KHAWIOVpGHn+WhGXWm2oEJ/6FMnTe5meYi
+	 iT6OsnvqtRuXD4EQ8gshuiui8OJWvxN8Spl/1HaeruKKVdsczo1ULEwpopI5tm0RnL
+	 ovWS9OvMfEn+qpkfqCSaRlt6cH3LWAQtwLEGkp6Bk0IDhfroVEgXEHCAubAU/Gl6XO
+	 b2fy5QOJJHA899IYxLcmHjCQlm27++rxFd7wFuxT1e7VB1bt8bUQ679Z8khejKLmdf
+	 eyAYdcbd8J4gw==
+Subject:
+ Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without copying
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -58,10 +58,10 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:33 +0000
-Message-ID: <179443689325.2199510.6016244708978672874@kernel.org>
-In-Reply-To: <20261110102039.1002605-7-bjorn@kernel.org>
-References: <20261110102039.1002605-7-bjorn@kernel.org>
+Date: Wed, 11 Nov 2026 22:41:35 +0000
+Message-ID: <179443689590.2199510.9741809616593174859@kernel.org>
+In-Reply-To: <20261110102039.1002605-8-bjorn@kernel.org>
+References: <20261110102039.1002605-8-bjorn@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,10 +75,10 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 4 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -86,270 +86,248 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] net/xdp/xsk_pp.c: xsk_pp_refill_done() can read freed memory.
-- [Medium] Provider wakeups that land on a disabled NAPI are dropped
-  silently, and xsk_pp_release_netmem() clears pp->starved before it…
-- [Medium] net: wrong mp_napi state after netdev_rx_queue_reconfig()
-  error recovery
-- [Medium] net: dangling rxq->napi left by netif_mp_napi_del() and
-  republished
-- [Low] Not confirmed (baseline: false positive).
-- [Low] Not confirmed (baseline: false positive).
+- [Medium] The patch weakens a documented AF_XDP UAPI guarantee, and
+  userspace cannot opt in or detect it.
+- [Low] The commit message gets wrong what the old copy path did.
+- [Low] The patch adds a new core page_pool memory-provider API,
+  net_mp_release_page_pool_bulk(), in net/core/page_pool.c and…
+- [Low] The new drop paths for provider sockets in xsk_rcv() do a plain
+  non-atomic `xs->rx_dropped++` on a u64 from contexts outside the queue…
 
 --
 
-page_pool: Coordinate refill with memory providers
+xsk: Deliver provider chunks without copying
 
-This commit adds a refill_done memory provider op and a
-page_pool_refill_done() helper, so drivers can report the end of each RX
-ring refill. While a queue runs, the core publishes its NAPI in
-rxq->mp_napi, and a provider can use it to wake the queue when buffers
-come back. The xsk provider uses this to track starvation, and AF_XDP
-socket wakeups go through it instead of ndo_xsk_wakeup.
+This commit puts packets whose buffers all belong to the socket's memory
+provider directly on the AF_XDP RX ring, and copies other packets into
+chunks claimed from the provider. Generic XDP and CPUMAP redirects to
+provider sockets are dropped. TX descriptor validation now reserves
+tx_metadata_len only for descriptors with XDP_TX_METADATA.
 
-> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-> index 4e2f906fbc735..3fe904b56791b 100644
-> --- a/net/core/netdev_rx_queue.c
-> +++ b/net/core/netdev_rx_queue.c
-> @@ -116,6 +116,94 @@ bool netif_all_mps_have_cap(struct net_device *dev, u32 cap)
->  	return true;
->  }
->  
-> +/**
-> + * netif_mp_wake - schedule the NAPI that refills a memory provider queue
+> A provider socket still receives through the copy path, which takes
+> FILL entries without the provider's ownership checks: a chunk that a
+> page pool holds could be handed out twice. No driver opts in yet.
+
+[Severity: Low]
+Does this describe what the old copy path actually does for a provider
+socket?
+
+Before this patch, xsk_rcv() calls __xsk_rcv() for provider sockets,
+because their mem.type is MEM_TYPE_PAGE_POOL. That leads to:
+
+xsk_rcv()->__xsk_rcv()->xsk_buff_alloc()->xp_alloc()->__xp_alloc()
+    ->xp_get_xskb()
+
+For a provider bind, pool->free_heads_cnt is umem->chunks and pool->fq is
+still set. So __xp_alloc() peeks a FILL entry, and in aligned mode (the
+only mode xsk_pp_bind() accepts) xp_get_xskb() returns &pool->heads[idx].
+
+pool->heads is never allocated here. xp_assign_dev() returns right after
+a successful xsk_pp_bind() and never calls xp_alloc_heads():
+
+net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+    ...
+	if (xsk_pp_supported(netdev)) {
+		err = xsk_pp_bind(pool, netdev, queue_id);
+		if (err)
+			goto err_unreg_pool;
+
+		pool->umem->zc = true;
+		return 0;
+	}
+    ...
+}
+
+xp_alloc() then writes xskb->xdp.data through a NULL-based pointer.
+
+So the failure would be a NULL or wild pointer dereference in NAPI, not a
+chunk handed out twice. No driver opts in yet, so there is no runtime
+impact. Could the commit message describe the actual failure mode?
+
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index e897e79d31f19..56c299f2280d7 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
 
 [ ... ]
 
-> +bool netif_mp_wake(struct netdev_rx_queue *rxq)
-> +{
-> +	struct napi_struct *napi;
-> +	bool running = false;
+> @@ -1422,3 +1422,35 @@ void net_mp_niov_clear_page_pool(struct net_iov *niov)
+>  
+>  	page_pool_clear_pp_info(netmem);
+>  }
 > +
-> +	rcu_read_lock();
-> +	napi = rcu_dereference(rxq->mp_napi);
-> +	if (napi) {
-> +		local_bh_disable();
-> +		napi_schedule(napi);
-> +		local_bh_enable();
-> +		running = true;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	return running;
-> +}
-> +
-> +/* Point wakeups at the NAPI of the running queue, and schedule it once: a
-> + * refill during the start may have found no buffers.
+> +/**
+> + * net_mp_release_page_pool_bulk() - take net_iovs back from a page pool
+> + * @pool: page pool that holds one reference to each net_iov
+> + * @netmems: net_iovs of the memory provider of @pool
+> + * @count: number of entries in @netmems
+> + *
+> + * A memory provider takes net_iovs out of a page pool without
+> + * ->release_netmem(), for example to give them to userspace. @pool may be
+> + * freed on return.
 > + */
-> +void netif_mp_update_napi(struct netdev_rx_queue *rxq)
+> +void net_mp_release_page_pool_bulk(struct page_pool *pool,
+> +				   netmem_ref *netmems, u32 count)
 > +{
-> +	const struct memory_provider_ops *ops = rxq->mp_params.mp_ops;
-> +	struct napi_struct *napi = NULL;
+
+[Severity: Low]
+This isn't a bug, but this adds a new core page_pool memory provider API,
+declared in include/net/page_pool/memory_provider.h. The xsk commit
+message doesn't mention it.
+
+The helper clears pp_info and advances pool->pages_state_release_cnt.
+That counter feeds the inflight accounting that decides when a destroyed
+pool is freed. The helper also documents that @pool may be freed on
+return.
+
+Other core changes in this series, such as "page_pool: Coordinate refill
+with memory providers", got their own patches. Could this go in a
+separate page_pool patch, so the page_pool maintainers can review the
+new contract?
+
+[ ... ]
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 113b0b08356d5..b419c673e3f14 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+
+[ ... ]
+
+> @@ -488,7 +547,26 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
+>  		return xsk_rcv_zc(xs, xdp, len);
+>  	}
+>  
+> -	err = __xsk_rcv(xs, xdp, len);
+> +	if (!xs->pool->pp) {
+> +		err = __xsk_rcv(xs, xdp, len);
+> +	} else {
+> +		/* A CPUMAP program runs XDP on another CPU, not in NAPI. */
+> +		if (unlikely(!xdp_rxq_info_is_reg(xdp->rxq))) {
+> +			xs->rx_dropped++;
+> +			return -EINVAL;
+> +		}
 > +
-> +	if (rxq->mp_armed && ops && ops->refill_done)
-> +		napi = rxq->napi;
-> +	if (rcu_access_pointer(rxq->mp_napi) == napi)
-> +		return;
+> +		err = xsk_pp_rcv_zc(xs->pool->pp, xs, xdp);
+> +		if (err != -EXDEV)
+> +			return err;
 > +
-> +	rcu_assign_pointer(rxq->mp_napi, napi);
-> +	if (napi)
-> +		netif_mp_wake(rxq);
-> +}
+> +		/* Copy only packets of the queue, from its NAPI */
+> +		if (unlikely(!xsk_pp_queue_buf(xs->pool->pp, xdp))) {
+> +			xs->rx_dropped++;
+> +			return -EINVAL;
+> +		}
 
-[Severity: Medium]
-Can this leave rxq->napi dangling for netif_mp_update_napi() to pick
-up again?
+[Severity: Low]
+Can these xs->rx_dropped++ updates race with the queue NAPI?
 
-netif_mp_napi_del() clears dev->_rx[i].mp_napi when it matches the
-NAPI being deleted, but dev->_rx[i].napi still points at it.
-__dev_close_many() and netdev_rx_queue_reconfig() disarm the queue
-around ndo_stop() and ndo_queue_stop(). While it is disarmed, mp_napi
-is already NULL, so this loop does not touch the queue at all.
+The CPUMAP kthread reaches the unregistered rxq branch.
+cpu_map_bpf_prog_run_xdp() uses an on-stack rxq:
 
-Suppose the driver deletes the NAPI without first calling
-netif_queue_set_napi() with a NULL napi. Suppose it also does not
-register another NAPI for that queue before the next
-netif_mp_arm_napi() or netif_mp_arm_dev(). Then
-netif_mp_update_napi() reads the stale rxq->napi and publishes it in
-rxq->mp_napi. It then calls netif_mp_wake(), which does
-napi_schedule() on a deleted napi_struct.
+kernel/bpf/cpumap.c:cpu_map_bpf_prog_run_xdp() {
+    ...
+	struct xdp_rxq_info rxq = {};
+    ...
+}
 
-For drivers that free the NAPI together with their queue vectors, this
-is a use-after-free. Every later provider wakeup also goes through the
-same pointer.
+It sets rxq.dev = xdpf->dev_rx and leaves queue_index at 0, so
+xsk_rcv_check() passes for a socket bound to queue 0.
 
-Should netif_mp_napi_del() also clear rxq->napi when it matches, or
-should netif_mp_update_napi() only publish a NAPI that is still
-listed? If drivers are expected to clear the association themselves,
-could netmem.rst item 8 say so?
+A BPF_F_TEST_XDP_LIVE_FRAMES test run reaches the xsk_pp_queue_buf()
+branch. xdp_test_run_setup() registers a fake rxq on the real device with
+queue_index 0 and page-backed MEM_TYPE_PAGE_POOL buffers. xsk_pp_rcv_zc()
+returns -EXDEV, then xsk_pp_queue_buf() returns false, all in process
+context.
 
-[Severity: Medium]
-Can this kick be lost when it lands on a disabled NAPI?
+At the same time, the queue NAPI on another CPU can increment
+xs->rx_dropped and xs->rx_queue_full in xsk_pp_rcv_copy(),
+xsk_pp_rcv_zc() and xsk_rcv_check(). No lock is shared between these
+contexts.
 
-Drivers often call netif_queue_set_napi() during ring setup, before
-napi_enable(). If the NAPI is disabled, napi_schedule_prep() sees
-NAPIF_STATE_SCHED already set and only sets NAPIF_STATE_MISSED.
-napi_enable_locked() then clears SCHED/NPSVC/DISABLED without acting on
-MISSED, so no poll runs.
+Would concurrent increments get lost, and could the u64 counter tear on
+32-bit, so that XDP_STATISTICS reports wrong drop counts? xsk_rcv_check()
+already has the same unsynchronized pattern, and the effect is limited to
+these counters.
 
-netif_mp_wake() still returns true, because it ignores the result of
-napi_schedule().
-
-If the driver reuses the same napi_struct across a restart, the early
-return on rcu_access_pointer(rxq->mp_napi) == napi skips the kick
-entirely.
-
-The core re-kicks only from netif_mp_arm_dev() and netif_mp_arm_napi().
-Driver-internal restarts (ethtool -G/-L, MTU or XDP changes, resets)
-keep mp_armed set, so this kick is the only one they get.
-
-The starved state doesn't recover either. xsk_pp_release_netmem() clears
-pp->starved before it knows whether the wakeup reached an enabled NAPI:
-
-	starved = pp->starved;
-	WRITE_ONCE(pp->starved, false);
-	spin_unlock_bh(&pp->lock);
-
-	/* A starved queue may wait for this release */
-	if (starved)
-		xsk_pp_wake(pp);
-
-Here is one sequence:
-
-- The new rings are filled while the old pool still holds the chunks,
-  so the refill finds nothing and sets starved.
-- The old pool then releases the chunks while mp_napi is NULL or the
-  NAPI is still disabled, so the wakeup is dropped.
-- Later releases don't retry, and the empty ring raises no IRQ.
-
-Wouldn't that leave RX stalled, which is the problem this patch sets out
-to fix?
-
-fbnic avoids this because fbnic_napi_enable() and __fbnic_nv_restart()
-write FBNIC_INTR_SET after napi_enable_locked(). However, netmem.rst item
-8 only says "the core schedules it when provider buffers become
-available", and does not ask drivers to force a poll after napi_enable().
-
-Should the documented contract require that, or should the core handle
-the disabled-NAPI case itself?
+> +		err = xsk_pp_rcv_copy(xs, xdp, len);
+> +	}
+>  	if (!err)
+>  		xdp_return_buff(xdp);
+>  	return err;
 
 [ ... ]
 
 > diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
-> index c2214e718cdb3..a77213f7fef6b 100644
+> index a77213f7fef6b..a1c2ca00f0169 100644
 > --- a/net/xdp/xsk_pp.c
 > +++ b/net/xdp/xsk_pp.c
 
 [ ... ]
 
-> @@ -232,11 +253,47 @@ static bool xsk_pp_release_netmem(struct page_pool *pool, netmem_ref netmem)
+> @@ -294,6 +299,166 @@ static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
 
 [ ... ]
 
-> +static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
+> +/* Returns -EXDEV for a packet that must be copied. Called from the NAPI. */
+> +int xsk_pp_rcv_zc(struct xsk_pp *pp, struct xdp_sock *xs,
+> +		  struct xdp_buff *xdp)
 > +{
-> +	struct xsk_pp *pp = pool->mp_priv;
-> +	struct xsk_buff_pool *xp = pp->pool;
-> +	bool wait = xp->uses_need_wakeup;
-
-[Severity: Medium]
-Can this read a freed xsk_buff_pool?
-
-pp->pool is dereferenced in the initializer, before the !pp->fq check
-that handles a detached provider. So the read happens even on the
-PP_REFILL_FULL fast path.
-
-The xsk_pp can outlive the buff pool. Each page pool built on it holds a
-ref taken in xsk_pp_init(), but xp_destroy() drops only the buff pool's
-own ref before freeing it:
-
-net/xdp/xsk_buff_pool.c:xp_destroy() {
-    ...
-	if (pool->pp)
-		xsk_pp_put(pool->pp);
-	kvfree(pool->tx_descs);
-	kvfree(pool->heads);
-	kvfree(pool);
-}
-
-One way to get there is a failed queue reconfig during unbind, after
-which the old queue keeps running on the provider's page pools. The
-reconfig can fail in kvzalloc() or ndo_queue_mem_alloc(), or in
-ndo_queue_start(), whose error path restarts old_mem:
-
-xsk_pp_unbind()
-  netif_mp_close_rxq()
-    __netif_mp_close_rxq()
-      netdev_rx_queue_reconfig()   <- fails, only WARNs
-  xsk_pp_detach()                  <- error ignored, fq = NULL
-xp_destroy()                       <- kvfree(pool)
-
-After that, the old queue's NAPI still calls page_pool_refill_done()
-after each refill. That reaches xsk_pp_refill_done(), which reads
-xp->uses_need_wakeup from the freed pool.
-
-Before this patch, the provider callbacks that can run after detach
-either didn't touch pp->pool or checked pp->fq first.
-
-Could uses_need_wakeup be cached in struct xsk_pp when it is created, or
-read only after pp->fq is confirmed under pp->lock?
-
-> +	bool more;
-> +
-> +	if (state == PP_REFILL_FULL && !READ_ONCE(pp->starved))
-> +		return true;
-> +
-> +	spin_lock_bh(&pp->lock);
-> +	if (!pp->fq) {
-> +		spin_unlock_bh(&pp->lock);
-> +		return true;
-> +	}
 
 [ ... ]
 
-> @@ -183,8 +273,13 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
->  		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
->  		     rxq_idx);
->  		qops->ndo_queue_mem_free(dev, old_mem);
-> +		goto err_free_new_queue_mem;
->  	}
->  
-> +err_arm_old_queue:
-> +	/* The old queue may run */
-> +	netif_mp_arm_napi(rxq);
+> +	__xskq_prod_reserve_desc(xs->rx, xdp->data - umem,
+> +				 xdp->data_end - xdp->data,
+> +				 nr_frags ? XDP_PKT_CONTD : 0);
+> +	pp->pending[pp->pending_cnt++] = head;
 > +
->  err_free_new_queue_mem:
->  	qops->ndo_queue_mem_free(dev, new_mem);
->  
+> +	for (i = 0; i < nr_frags; i++) {
+> +		frag = &sinfo->frags[i];
+> +		__xskq_prod_reserve_desc(xs->rx, skb_frag_address(frag) - umem,
+> +					 skb_frag_size(frag),
+> +					 i + 1 < nr_frags ? XDP_PKT_CONTD : 0);
 
 [Severity: Medium]
-Does this arm the queue from the right provider state?
+Does this weaken the documented AF_XDP headroom guarantee for XDP_USE_SG
+applications, with no way to opt in or detect it?
 
-When netdev_rx_queue_reconfig() runs, rxq->mp_params already holds the
-target configuration. It does not hold the configuration of the queue
-that is restarted on this error path.
+af_xdp.rst says a UMEM headroom of N means the packet "will start N bytes
+into the buffer leaving the first N bytes for the application to use".
+Before this patch, every RX buffer kept this headroom:
 
-In __netif_mp_open_rxq(), rxq->mp_params = *p is written before the
-reconfig. If ndo_queue_stop() fails, or ndo_queue_start() fails and the
-old queue is restarted, netif_mp_arm_napi() here sees the new
-provider's refill_done. It publishes rxq->napi in rxq->mp_napi and
-kicks it. The error then goes back to __netif_mp_open_rxq(), which
-zeroes rxq->mp_params at err_clear_mp but never resyncs mp_napi.
+- copy mode, in __xsk_rcv()
+- driver zero copy, in xp_alloc()
+- the new xsk_pp_rcv_copy() path, which uses addrs[i] + headroom
 
-That leaves mp_napi published for a queue with no provider installed,
-which breaks the rule documented in struct netdev_rx_queue. A later
-netif_mp_wake() on that rxq would schedule it. The early return in
-netif_mp_update_napi() would also compare against a pointer that
-should not be there.
+Here the frag descriptors are published at skb_frag_address(frag) - umem,
+wherever the device placed the payload. On fbnic that can be chunk
+offset 0. The device has then DMA-written into the first N bytes of
+those chunks. Any per-chunk application data kept in the headroom is
+overwritten.
 
-The close direction is the mirror image. __netif_mp_close_rxq() clears
-rxq->mp_params before the reconfig. If the stop or the restart then
-fails, netif_mp_update_napi() sees no mp_ops and leaves mp_napi NULL,
-even though the old queue keeps running on the provider's page pools.
+xp_assign_dev() picks xsk_pp_bind() automatically whenever
+xsk_pp_supported(netdev) is true. That covers both XDP_ZEROCOPY and a
+bind without flags. No bind or UMEM flag lets an application accept or
+refuse the weaker rule. The af_xdp.rst hunk changes the documented rule
+for all drivers:
 
-Should the error path arm from the configuration that is running
-again, or should __netif_mp_open_rxq() and __netif_mp_close_rxq() call
-netif_mp_update_napi() once they have settled rxq->mp_params?
+  In a multi-buffer packet, only the first buffer is guaranteed this
+  headroom; the others may start at offset 0 of their chunk.
+
+At the end of the series only fbnic opts in, and fbnic had no AF_XDP RX
+before, so no existing deployment changes today. An application that
+relies on per-buffer headroom could still lose it, with no change on its
+side, if another driver later moves to xsk_page_pool.
+
+Should this be gated by a flag? Or should the commit message describe it
+as a UAPI change rather than as a device property?
+
+> +		pp->pending[pp->pending_cnt++] = skb_frag_netmem(frag);
+> +	}
+> +
+> +	return 0;
+> +}
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
