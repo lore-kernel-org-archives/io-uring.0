@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794436899;
-	b=VRLbN+YSBbEx4ndh2wK+KU4G86B9wX08fGG9JAc21sMSU/847aWsNL06aoA9CZkAw7GK
-	 cSGAAhgP3tgCWkyh2VNlfx26xsE2pHRnqh7d6YyVUX8c64187BcyRk0Zld2E09hJw63A2
-	 clFRwo49J53EoTSpo48C55bqedeQtKVzosnanILhTo+y2NexI9j1Wy/OzslvYySyzkC9M
-	 h4zrPBikH9KHk0oiIhHPTQ5wwYLtd2reV2F+M1i905jDd31+Q1Mi1yH4h4R/epc3k6fCx
-	 hs31p9ZgoCVDWoMCj6tRRsFmEx4n1xCm56TscHHazScHCDH6tLB7IKO7CAGkfdZg/XA==
+	t=1794436902;
+	b=tyfneguWVDcS883Pal5capYnvAg8OmNh97o8ABD/io0UEiPUR4atAeoAhHcjeN0IHF4y
+	 +QOTxD2b4VtSq3io8ZnGwvcUaHrNaaMOj0dWpQcjxhv2ujEV70JLfwD7vKzMw63/9H7xa
+	 k4P0CBp5tcE2KICGxW8tPOHMdX/Rx7jltsL3ZU4SfHsNr36+8g7qnhb5Q4OB5MjbQEz3V
+	 AGNhrI40ZWIMHlAdWIZqAAT/gGWDBHhrhJzw5OXmw+vIv6wjHCSoKQJgmjUwsvEAKnIK5
+	 dNo1FJFUN9kP8HNsjEhGvTILC29mlJl5RvtjvjSUIoJ0lE0tQ5AMZyp0RQusDZsNMQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794436899;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436902;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
-	b=j4IggsyZZgiFdEOfWgWEXOHl5gmyb4qz/WfHLROPXlh6T2PXrt8+BgH60L1QIMJcQ0PS
-	 PRgoick2pCV3y//UeOcGYLl9g58YKigm8k7XFhs0vnRTQCmEhsTXFNdG4n3Ixz9yOhdhx
-	 p1yhfvz7rvCO0JLZfH0s2Sjj0zcIeiYIk9pBYFq41USRBLAOzUbo2xga7susLL83fKNlO
-	 I4KIaw4IUe1oPNT2lDO2K9nkVdK0JvzewbgBWEvk80rBFsgYWDbNRTC1cSSslUxdEbNxn
-	 n4Vx7TYRVk8+kBeIT43phPgdg6KKaLE2hsTww0Mj8K+VkBtspRi5M7kQyQn5at6sVzw==
+	bh=YXZE4/JCiF0eACXrRw2VIV6D7SpvemyMj7K6scSqWvc=;
+	b=0g22U73FmauiNgdmH5saOoQ0XJ6ePl3tXBUj2TQbXkIMlKT6nmpvt0rpeGNd15g4fVLp
+	 gMtHL8EN7A6WXl/7pasjx48ZCzJ53Dsg+gc9dY5Ocw67I51wSJ0Jh9keP60gijMxx/em6
+	 Bu+zSTsSCWA9aP5+r1/FFwghdo7EVU8cb39G6YZkGMluU2I5kw8EnOILZSDehq6VwhJfw
+	 WXw+SZV2+AS4eHrKyv6xlMFZKsLRplwBba2Buoq73XrPKkhU/oorLa/MmQ2jOux+jg1xZ
+	 iVi5C42qFieWdOncFVppc+juoYdyxPrAMvfQNFO5Dp96OeG+FWVTRgfgHfD1slwbTxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bid5kCCS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD4760A3820;
-	Wed, 11 Nov 2026 22:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0649360A5BE0;
+	Wed, 11 Nov 2026 22:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMvPc8rq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EAB1F00A09;
-	Wed, 11 Nov 2026 22:41:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bid5kCCS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2321F00ACC;
+	Wed, 11 Nov 2026 22:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794436898;
-	bh=/AWuy26j6xO/+PuOcFejOEnfNmeGq9vPqTM+p90YjAc=;
+	s=k20260515; t=1794436901;
+	bh=YXZE4/JCiF0eACXrRw2VIV6D7SpvemyMj7K6scSqWvc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YMvPc8rqcRjg2+UCtIXYxVtWdwSW1aaeylbH62iXeKnQeRlW+PxRhxHVNrgbDgDQE
-	 6MvnZ2SY6R5G+uU5ZgnzJDSdJHlYyqD7KHAWIOVpGHn+WhGXWm2oEJ/6FMnTe5meYi
-	 iT6OsnvqtRuXD4EQ8gshuiui8OJWvxN8Spl/1HaeruKKVdsczo1ULEwpopI5tm0RnL
-	 ovWS9OvMfEn+qpkfqCSaRlt6cH3LWAQtwLEGkp6Bk0IDhfroVEgXEHCAubAU/Gl6XO
-	 b2fy5QOJJHA899IYxLcmHjCQlm27++rxFd7wFuxT1e7VB1bt8bUQ679Z8khejKLmdf
-	 eyAYdcbd8J4gw==
+	b=Bid5kCCSu5WypSvc7Yy6AMkIfdUDrJWusTlL6nlybv/UiOv7dlV09KEKfNBGlnJP8
+	 Mo8DovxcVZhczOzVDrvnyRhRfAI6mKNGf4k5MQXl9i2KUjR9F5VhUthV46nUQXx5oy
+	 STo1r6hrkydhg3ZeViNw3zqvmgw7dlrVsfUYk5zaTfKclmxpMN9J8Z8wox2WT7IKsv
+	 osRhc3iDgQbp5YtFlgScoTScFaPYL4heyGJWa9ouZh26p8aSDk5HV1dteEtMysO3T2
+	 x8jITzi8cuxxVCv/Gsk+HL1rUbt2a/M9cq/w4vZu93JIaAHruDGz4yZLzJq29ZqG7T
+	 JrV5qY+YEVpbg==
 Subject:
- Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without copying
+ Re: [PATCH net-next v1 10/11] eth: fbnic: Support RX buffers it cannot split
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
@@ -58,10 +58,10 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
  bestswngs@gmail.com, razor@blackwall.org, dw@davidwei.uk,
  aleksander.lobakin@intel.com, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, stuclar@meta.com
-Date: Wed, 11 Nov 2026 22:41:35 +0000
-Message-ID: <179443689590.2199510.9741809616593174859@kernel.org>
-In-Reply-To: <20261110102039.1002605-8-bjorn@kernel.org>
-References: <20261110102039.1002605-8-bjorn@kernel.org>
+Date: Wed, 11 Nov 2026 22:41:39 +0000
+Message-ID: <179443689907.2199510.5966675063900520158@kernel.org>
+In-Reply-To: <20261110102039.1002605-11-bjorn@kernel.org>
+References: <20261110102039.1002605-11-bjorn@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -75,10 +75,10 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 4 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 3
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -86,248 +86,207 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The patch weakens a documented AF_XDP UAPI guarantee, and
-  userspace cannot opt in or detect it.
-- [Low] The commit message gets wrong what the old copy path did.
-- [Low] The patch adds a new core page_pool memory-provider API,
-  net_mp_release_page_pool_bulk(), in net/core/page_pool.c and…
-- [Low] The new drop paths for provider sockets in xsk_rcv() do a plain
-  non-atomic `xs->rx_dropped++` on a u64 from contexts outside the queue…
+- [Medium] fbnic_config_drop_mode() in
+  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c changes the drop mode in…
+- [Medium] eth: fbnic: incomplete split-buffer checks in
+  fbnic_bd_one_desc() callers
+- [Low] (Baseline: rejected.) At this commit none of the whole-buffer
+  code can run.
 
 --
 
-xsk: Deliver provider chunks without copying
+eth: fbnic: Support RX buffers it cannot split
 
-This commit puts packets whose buffers all belong to the socket's memory
-provider directly on the AF_XDP RX ring, and copies other packets into
-chunks claimed from the provider. Generic XDP and CPUMAP redirects to
-provider sockets are dropped. TX descriptor validation now reserves
-tx_metadata_len only for descriptors with XDP_TX_METADATA.
+The patch lets fbnic RX queues use a page pool provider without
+MP_CAP_FRAG. Each such buffer gets a single reference, the queue is
+programmed so each header and payload takes its own buffer, and packets
+that break this are dropped. Header split is now set per queue, and link
+up only modifies the drop mode in RDE_CTL0.
 
-> A provider socket still receives through the copy path, which takes
-> FILL entries without the provider's ownership checks: a chunk that a
-> page pool holds could be handed out twice. No driver opts in yet.
-
-[Severity: Low]
-Does this describe what the old copy path actually does for a provider
-socket?
-
-Before this patch, xsk_rcv() calls __xsk_rcv() for provider sockets,
-because their mem.type is MEM_TYPE_PAGE_POOL. That leads to:
-
-xsk_rcv()->__xsk_rcv()->xsk_buff_alloc()->xp_alloc()->__xp_alloc()
-    ->xp_get_xskb()
-
-For a provider bind, pool->free_heads_cnt is umem->chunks and pool->fq is
-still set. So __xp_alloc() peeks a FILL entry, and in aligned mode (the
-only mode xsk_pp_bind() accepts) xp_get_xskb() returns &pool->heads[idx].
-
-pool->heads is never allocated here. xp_assign_dev() returns right after
-a successful xsk_pp_bind() and never calls xp_alloc_heads():
-
-net/xdp/xsk_buff_pool.c:xp_assign_dev() {
-    ...
-	if (xsk_pp_supported(netdev)) {
-		err = xsk_pp_bind(pool, netdev, queue_id);
-		if (err)
-			goto err_unreg_pool;
-
-		pool->umem->zc = true;
-		return 0;
-	}
-    ...
-}
-
-xp_alloc() then writes xskb->xdp.data through a NULL-based pointer.
-
-So the failure would be a NULL or wild pointer dereference in NAPI, not a
-chunk handed out twice. No driver opts in yet, so there is no runtime
-impact. Could the commit message describe the actual failure mode?
-
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index e897e79d31f19..56c299f2280d7 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> index bfaa284e497eb..d96c957d6fbad 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
 
 [ ... ]
 
-> @@ -1422,3 +1422,35 @@ void net_mp_niov_clear_page_pool(struct net_iov *niov)
+> @@ -1644,6 +1693,9 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
+>  		return PTR_ERR(pp);
 >  
->  	page_pool_clear_pp_info(netmem);
+>  	qt->sub0.page_pool = pp;
+> +	qt->hdr_max = 0;
+> +	if (!page_pool_supports_frag(pp))
+> +		qt->hdr_max = fbnic_whole_hdr_max(FBNIC_RX_HROOM);
+
+[Severity: Low]
+This isn't a bug, but can this branch be reached at this commit?
+
+Both fbnic page pools are still created without PP_FLAG_MEM_PROVIDER.
+That means no provider without MP_CAP_FRAG can be attached (xsk_pp only
+advertises MP_CAP_READABLE), so page_pool_supports_frag() is always true
+here.
+
+As a result, qt->hdr_max stays 0. The whole-buffer paths in
+fbnic_bd_one_desc(), fbnic_page_pool_init() and fbnic_enable_rcq() are
+not used until the later patch "eth: fbnic: Support AF_XDP page pool zero
+copy" sets PP_FLAG_MEM_PROVIDER.
+
+Could the commit message say that a later patch in the series enables
+this?
+
+>  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
+>  		pp_params.order = get_order(rx_page_size);
+>  		pp_params.max_len = rx_page_size;
+
+[ ... ]
+
+> @@ -2693,20 +2750,32 @@ static void fbnic_config_drop_mode_rcq(struct fbnic_napi_vector *nv,
+>  	fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 >  }
-> +
-> +/**
-> + * net_mp_release_page_pool_bulk() - take net_iovs back from a page pool
-> + * @pool: page pool that holds one reference to each net_iov
-> + * @netmems: net_iovs of the memory provider of @pool
-> + * @count: number of entries in @netmems
-> + *
-> + * A memory provider takes net_iovs out of a page pool without
-> + * ->release_netmem(), for example to give them to userspace. @pool may be
-> + * freed on return.
-> + */
-> +void net_mp_release_page_pool_bulk(struct page_pool *pool,
-> +				   netmem_ref *netmems, u32 count)
-> +{
-
-[Severity: Low]
-This isn't a bug, but this adds a new core page_pool memory provider API,
-declared in include/net/page_pool/memory_provider.h. The xsk commit
-message doesn't mention it.
-
-The helper clears pp_info and advances pool->pages_state_release_cnt.
-That counter feeds the inflight accounting that decides when a destroyed
-pool is freed. The helper also documents that @pool may be freed on
-return.
-
-Other core changes in this series, such as "page_pool: Coordinate refill
-with memory providers", got their own patches. Could this go in a
-separate page_pool patch, so the page_pool maintainers can review the
-new contract?
-
-[ ... ]
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 113b0b08356d5..b419c673e3f14 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-
-[ ... ]
-
-> @@ -488,7 +547,26 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
->  		return xsk_rcv_zc(xs, xdp, len);
->  	}
 >  
-> -	err = __xsk_rcv(xs, xdp, len);
-> +	if (!xs->pool->pp) {
-> +		err = __xsk_rcv(xs, xdp, len);
-> +	} else {
-> +		/* A CPUMAP program runs XDP on another CPU, not in NAPI. */
-> +		if (unlikely(!xdp_rxq_info_is_reg(xdp->rxq))) {
-> +			xs->rx_dropped++;
-> +			return -EINVAL;
-> +		}
-> +
-> +		err = xsk_pp_rcv_zc(xs->pool->pp, xs, xdp);
-> +		if (err != -EXDEV)
-> +			return err;
-> +
-> +		/* Copy only packets of the queue, from its NAPI */
-> +		if (unlikely(!xsk_pp_queue_buf(xs->pool->pp, xdp))) {
-> +			xs->rx_dropped++;
-> +			return -EINVAL;
-> +		}
-
-[Severity: Low]
-Can these xs->rx_dropped++ updates race with the queue NAPI?
-
-The CPUMAP kthread reaches the unregistered rxq branch.
-cpu_map_bpf_prog_run_xdp() uses an on-stack rxq:
-
-kernel/bpf/cpumap.c:cpu_map_bpf_prog_run_xdp() {
-    ...
-	struct xdp_rxq_info rxq = {};
-    ...
-}
-
-It sets rxq.dev = xdpf->dev_rx and leaves queue_index at 0, so
-xsk_rcv_check() passes for a socket bound to queue 0.
-
-A BPF_F_TEST_XDP_LIVE_FRAMES test run reaches the xsk_pp_queue_buf()
-branch. xdp_test_run_setup() registers a fake rxq on the real device with
-queue_index 0 and page-backed MEM_TYPE_PAGE_POOL buffers. xsk_pp_rcv_zc()
-returns -EXDEV, then xsk_pp_queue_buf() returns false, all in process
-context.
-
-At the same time, the queue NAPI on another CPU can increment
-xs->rx_dropped and xs->rx_queue_full in xsk_pp_rcv_copy(),
-xsk_pp_rcv_zc() and xsk_rcv_check(). No lock is shared between these
-contexts.
-
-Would concurrent increments get lost, and could the u64 counter tear on
-32-bit, so that XDP_STATISTICS reports wrong drop counts? xsk_rcv_check()
-already has the same unsynchronized pattern, and the effect is limited to
-these counters.
-
-> +		err = xsk_pp_rcv_copy(xs, xdp, len);
-> +	}
->  	if (!err)
->  		xdp_return_buff(xdp);
->  	return err;
-
-[ ... ]
-
-> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
-> index a77213f7fef6b..a1c2ca00f0169 100644
-> --- a/net/xdp/xsk_pp.c
-> +++ b/net/xdp/xsk_pp.c
-
-[ ... ]
-
-> @@ -294,6 +299,166 @@ static bool xsk_pp_refill_done(struct page_pool *pool, enum pp_refill state)
-
-[ ... ]
-
-> +/* Returns -EXDEV for a packet that must be copied. Called from the NAPI. */
-> +int xsk_pp_rcv_zc(struct xsk_pp *pp, struct xdp_sock *xs,
-> +		  struct xdp_buff *xdp)
+> +static u32 fbnic_rcq_hds_thresh(const struct fbnic_net *fbn,
+> +				const struct fbnic_ring *rcq)
 > +{
-
-[ ... ]
-
-> +	__xskq_prod_reserve_desc(xs->rx, xdp->data - umem,
-> +				 xdp->data_end - xdp->data,
-> +				 nr_frags ? XDP_PKT_CONTD : 0);
-> +	pp->pending[pp->pending_cnt++] = head;
+> +	const struct fbnic_q_triad *qt;
 > +
-> +	for (i = 0; i < nr_frags; i++) {
-> +		frag = &sinfo->frags[i];
-> +		__xskq_prod_reserve_desc(xs->rx, skb_frag_address(frag) - umem,
-> +					 skb_frag_size(frag),
-> +					 i + 1 < nr_frags ? XDP_PKT_CONTD : 0);
+> +	qt = container_of_const(rcq, struct fbnic_q_triad, cmpl);
+> +	return qt->hdr_max ? : fbn->hds_thresh;
+> +}
+> +
+> +/* Only the drop mode: a queue start may write the rest of the register */
+>  void fbnic_config_drop_mode(struct fbnic_net *fbn, bool txp)
+>  {
+> -	bool hds;
+> +	struct fbnic_ring *rcq;
+> +	u32 drop_mode, rcq_ctl;
+>  	int i, t;
+>  
+> -	hds = fbn->hds_thresh < FBNIC_HDR_BYTES_MIN;
+> -
+> +	drop_mode = fbnic_drop_mode(fbn, txp);
+>  	for (i = 0; i < fbn->num_napi; i++) {
+>  		struct fbnic_napi_vector *nv = fbn->napi[i];
+>  
+>  		for (t = 0; t < nv->rxt_count; t++) {
+> -			struct fbnic_q_triad *qt = &nv->qt[nv->txt_count + t];
+> -
+> -			fbnic_config_drop_mode_rcq(nv, &qt->cmpl, txp, hds);
+> +			rcq = &nv->qt[nv->txt_count + t].cmpl;
+> +			rcq_ctl = fbnic_ring_rd32(rcq, FBNIC_QUEUE_RDE_CTL0);
+> +			FIELD_MODIFY(FBNIC_QUEUE_RDE_CTL0_DROP_MODE_MASK,
+> +				     &rcq_ctl, drop_mode);
+> +			fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 
 [Severity: Medium]
-Does this weaken the documented AF_XDP headroom guarantee for XDP_USE_SG
-applications, with no way to opt in or detect it?
+Does anything serialize this read-modify-write of FBNIC_QUEUE_RDE_CTL0
+against a queue restart?
 
-af_xdp.rst says a UMEM headroom of N means the packet "will start N bytes
-into the buffer leaving the first N bytes for the application to use".
-Before this patch, every RX buffer kept this headroom:
+fbnic_config_drop_mode() is called from fbnic_phylink_mac_link_up():
 
-- copy mode, in __xsk_rcv()
-- driver zero copy, in xp_alloc()
-- the new xsk_pp_rcv_copy() path, which uses addrs[i] + headroom
+fbnic_phylink.c:fbnic_phylink_mac_link_up() {
+    ...
+	fbn->tx_pause = tx_pause;
+	fbnic_config_drop_mode(fbn, tx_pause);
+    ...
+}
 
-Here the frag descriptors are published at skb_frag_address(frag) - umem,
-wherever the device placed the payload. On fbnic that can be chunk
-offset 0. The device has then DMA-written into the first N bytes of
-those chunks. Any per-chunk application data kept in the headroom is
-overwritten.
+That runs from the phylink_resolve() work item. The work item holds
+pl->state_mutex and the phy locks, but not rtnl or the netdev instance
+lock.
 
-xp_assign_dev() picks xsk_pp_bind() automatically whenever
-xsk_pp_supported(netdev) is true. That covers both XDP_ZEROCOPY and a
-bind without flags. No bind or UMEM flag lets an application accept or
-refuse the weaker rule. The af_xdp.rst hunk changes the documented rule
-for all drivers:
+The queue start path runs under the netdev instance lock and writes the
+whole register from per-queue state:
 
-  In a multi-buffer packet, only the first buffer is guaranteed this
-  headroom; the others may start at offset 0 of their chunk.
+fbnic_queue_start()
+  __fbnic_nv_restart()
+    fbnic_enable_rcq()
+      fbnic_config_drop_mode_rcq()
+        fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
 
-At the end of the series only fbnic opts in, and fbnic had no AF_XDP RX
-before, so no existing deployment changes today. An application that
-relies on per-buffer headroom could still lose it, with no change on its
-side, if another driver later moves to xsk_page_pool.
+Suppose the link up worker reads CTL0. A queue start then writes a new
+CTL0 with a different EN_HDR_SPLIT, derived from qt->hdr_max. The worker
+then writes its saved copy back.
 
-Should this be gated by a flag? Or should the commit message describe it
-as a UAPI change rather than as a device property?
+Wouldn't the restarted queue keep the old EN_HDR_SPLIT, which no longer
+matches the MAX_HDR, PAYLD_OFF and PAYLD_PG_CL values in CTL1? Nothing
+corrects it until the next restart of that queue.
 
-> +		pp->pending[pp->pending_cnt++] = skb_frag_netmem(frag);
-> +	}
-> +
-> +	return 0;
-> +}
+At this commit qt->hdr_max is always 0, so the written-back value still
+matches. Later in the series, "eth: fbnic: Support AF_XDP page pool zero
+copy" makes hdr_max and MIN_HROOM (from qt->rx_hroom) truly per queue.
+
+After that, an AF_XDP bind or unbind that overlaps a link up event could
+leave the queue misconfigured. For example, a stale EN_HDR_SPLIT on a
+non-SG AF_XDP queue would make every packet multi-buffer, and
+fbnic_run_xdp() would drop it.
+
+>  		}
+>  	}
+>  }
 
 [ ... ]
+
+> @@ -993,6 +1000,19 @@ static unsigned int fbnic_hdr_pg_end(unsigned int pg_off, unsigned int len)
+>  	return ALIGN(pg_off, 128) - FBNIC_RX_HROOM;
+>  }
+>  
+> +/* A buffer that cannot be split has one reference and takes one descriptor */
+> +static bool fbnic_bd_one_desc(struct fbnic_napi_vector *nv,
+> +			      const struct fbnic_ring *bdq, unsigned int idx,
+> +			      bool ok)
+> +{
+> +	if (likely(page_pool_supports_frag(bdq->page_pool) ||
+> +		   (bdq->rx_buf[idx].pagecnt_bias == 1 && ok)))
+> +		return true;
+> +
+> +	netdev_err_once(nv->napi.dev, "Bad descriptor for a whole RX buffer\n");
+> +	return false;
+> +}
+> +
+>  static void fbnic_pkt_prepare(struct fbnic_napi_vector *nv, u64 rcd,
+>  			      struct fbnic_pkt_buff *pkt,
+>  			      struct fbnic_q_triad *qt)
+
+[Severity: Medium]
+Do the two callers of fbnic_bd_one_desc() check enough to catch a
+whole buffer that the device splits across more than one completion?
+
+The commit message says packets that break the one descriptor per
+buffer rule are dropped. Each caller only checks half of that
+condition, though.
+
+In fbnic_add_rx_frag() the ok argument is only !pg_off, and
+FBNIC_RCD_AL_PAGE_FIN is not checked. Suppose a payload buffer ends up
+holding more than one payload. The first completion then has
+pg_off == 0 and PAGE_FIN == 0, so it passes. fbnic_page_pool_get_data()
+drops pagecnt_bias from 1 to 0, and the packet takes the only reference
+to the netmem.
+
+That reference can then go back to the pool through
+page_pool_put_full_netmem(), or be handed to the AF_XDP socket. The
+device still has the buffer open at that point and may DMA the next
+payload into it. The next completion for that buffer is rejected
+because pagecnt_bias is now 0, but the buffer has already been
+released by then.
+
+fbnic_pkt_prepare() has the opposite gap. It checks only PAGE_FIN, not
+where the header sits in the buffer. Suppose two headers land in the
+same header buffer. The first completion has PAGE_FIN == 0 and is
+rejected before fbnic_page_pool_get_head() runs, so pagecnt_bias stays
+at 1.
+
+The second completion has PAGE_FIN == 1 at a non-zero offset. It still
+sees pagecnt_bias == 1 and is accepted. An xdp_buff is then built from
+the middle of a buffer that was meant to hold a single header.
+
+A conforming device should not do either of these with the MAX_HDR,
+PAYLD_OFF and PAYLD_PG_CL values programmed in fbnic_enable_rcq().
+However, these checks exist to catch the case where it does.
+
+Should both callers require that the completion starts the buffer and
+also closes it, i.e. a zero offset and PAGE_FIN set? Passing the rcd
+into fbnic_bd_one_desc() and doing both checks there might keep the
+header and payload paths from drifting apart again.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110102039.1002605-1-bjorn%40kernel.org
