@@ -1,93 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794414429;
-	b=iJzhhfCJy1vN631lbi5pXCI14XoZQX0sRXuKNUqXfEg1d2Q9UYNpDuLXXkfq3t2Ise71
-	 6l87Y9N15rgKYcxd//l3g/XrHHMnMGWFaJv+mGqsYrUm5Vpa82328HX2CcdKsF85zih3Y
-	 cp4QPbUTwhk5HmroHxlf517rCvreGGt+WPfEmIJcSEXKmLqLFkXlhC4qjPM9ZDEZzntDC
-	 c3xJJpRbyrviuTvKeVVnEHnvPov0grsMFiLbgcCwzbGHmAszAu6rtkRHt+iIPLcTANlyt
-	 CxEv07TD2eZFX6ZrIc3ZZ3TOH7LSMFmu8nJFngGzJZ8UByQM1Tn+8vuzFIRmbTudH9Q==
+	t=1794414440;
+	b=R2EQkT+QCcsyKVt8z1MogLEkIAT51eI3u4pETMLpqJYGUl5SCyz7eEXHkyN9VpL8BCen
+	 6wugOw93d17q/szxO/dIGkLhGZ841u0vgNfc8HKgQtu/4Jb/QYj5MFpWneD59knOZVX/h
+	 qZoPCqH/4AGNP/TU3elVTA70m59F4oxCsIvGi45ToOszNTIIfQz7o85iXsbZ66KEytDoS
+	 al8JzbR6gU4U5t7MHy3N9iW7iHr7Lvk3IGD7NunGeK38g8dyOD3W9n3b/p5DXzMa1gEU8
+	 zdBJ+ETILYTO0ggHf3Sbh8jYsKFjKQsfyUXG8ROkG8r6AZUzRSEWippS7ppfthYflJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794414429;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794414440;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 From:To:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kmVh2q2hoDBqiX4Uz/7oHg+C+WnsN1l5lj+X9HPrX/o=;
-	b=QqsOSSknB+EPkP0b9/tSl3svG2VbinPhN3ufLn356IvsJM3zWkqw9TzsGW5WrgaZs0gs
-	 m4QHp43/c38mJA227TP84evq2rkVYMMpadfit5rkNwsbtV4FjZ5ZCAD6XURK/hwV4hOa7
-	 vikTHBvUvsmAgDmCIHgmNphWiGtjZ01oycLzXL4GyxiW4IWgNXf2DUuFJVzrBlhmKYmeS
-	 OD/3D0unyinxGWio8RQsuLcKsYwNUtrfFk36kqzFi5XlLi3BPeuyETvuolvkpnllVL2su
-	 8o3lW6C48kgjwqmhsbbRLUhrfY4u9kY1zIdKC3SiYkpRYe5eRbWUqbJ391gEquf8qqw==
+	bh=GAa/JB/dGlysKnvdVKBk1Gac1LQ6ZOjNf/u8F2y2Lpk=;
+	b=uhFt+UIOpUGXgiEu79TrHiNE7MdFI891HeYh/v0kA6T2EuS4eFrMgGq1fsv/4s53q6L3
+	 TDQwZasUMMI6m3xX/0JO0PqswIhzFcDe6oIQdTyYSUcJpk/kXEYAYqDSSKEq3aHcvYmUp
+	 3veegpUbUJYN+yKYQ86ybsCk9QTTfDIOZ4/lARA5UdlfQz/H+ALTdnCaVPOI2+mFj69mT
+	 oJkn2g+j97TFAOdZTb8Zp666Do0z3sBqzPciwOOt/enH5pwdfP0oQAtVhKPumJ8VmaZ4s
+	 TYnWYDcHLntE9LFLD8RrmOvEl3PWRFnfOHNShxnNndUHXHKVF+IJS6s0VuyI/4vHWFw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jTbeqADq;
-	arc=none smtp.remote-ip=209.85.221.48
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EF8T2b2w;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607B7606A32A
-	for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 16:27:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 607B7606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907FA606A321
+	for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 16:27:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 907FA606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jTbeqADq
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48e46e449e8so2235582f8f.3
-        for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 08:27:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EF8T2b2w
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4ba013938d7so20729135e9.2
+        for <io-uring@vger.kernel.org>; Wed, 11 Nov 2026 08:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794414428; x=1795019228; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kmVh2q2hoDBqiX4Uz/7oHg+C+WnsN1l5lj+X9HPrX/o=;
-        b=jTbeqADqi91Gqw+fkOctkx3GVd3Jt1bpvIADJ5uCM27fyE7hAUwven/vSt0nYCCdFr
-         IqUZTfWY+l6alw8r50Wl2QRxt3+j4t6J7hita6vQzOedaDuSBbz87axGBYTffrWszbsr
-         2RFzJ39hv0MBxTgas0M1UBUYrArmlJks7ReOFU7XOxMc8fiwUcmu/zfz6HpnwmyrJjg0
-         WbGcZmfuWJV64dqx0oKnCONfPx0SX1CFx3v5XASJoxiT7Oz24f5JLebR7/R6yV6tS7bh
-         lVUKeGMPST2tz8dVrYxq2vd2h4XhH/yEEiQtiKdGqeNAe5BmB3wxFyKSs4ZUjucLPqUp
-         FmSw==
+        d=gmail.com; s=20260707; t=1794414438; x=1795019238; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GAa/JB/dGlysKnvdVKBk1Gac1LQ6ZOjNf/u8F2y2Lpk=;
+        b=EF8T2b2wmXpqX32VfayoAI++02HL84EXF5Jg74UOsH3nVGseT/oTzt+dLZ1ETXnUAd
+         +xGSDniRbT7qGKo92yk60yvYwVmft0YPEb8EzxK+feQ3zedAkFJaCYXkMnvD4DHFAWbn
+         ZDszH0Npbh9GSAgRLqIPZGuDnwg8SLuGz0OZWhzYPSsLFjIGj7DX3/N1bH7Vy8B6dnzP
+         0BHOH7fqUBnIAdLJsTe/Ap+KQASQuQkPzfa1e8+1e6IbM8DfyRvFXU4lzwZu1sp8hJ0v
+         8eDIrVMXCM3mwubkgYJ1aHNbtO6C6HDNrzKA01Q9dKZXctHiOGYlK7IyqSDg8SxFefZA
+         Ccbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794414428; x=1795019228;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kmVh2q2hoDBqiX4Uz/7oHg+C+WnsN1l5lj+X9HPrX/o=;
-        b=jmFOZ9ctRdcU//WNs4TmtFXfDwDMJiFdI8xJvEMgSAzCqofb9SDpHlUTOxu5dcDINH
-         wbbR6sY2gfGw4zud0I9zNfL8b+nnr9YGltysTmvgVCb6URCYM9WPZuKtsYzSemfZt/Hj
-         aC4bZxa7mXQdlemhPt2WzdS1MIOOgurNngaMc2MZxOZS1Sjvtze5Mt62fs/o1zPF9PTM
-         DZJGm7kbq7sDAl0nfBwTrSg0Vx+wR9SATfcAn4cVelA6UDbbKiOKuXWrgPRIK8NTiYNs
-         Sh8FUP1vzFuxNLtHJHCNvB5IMnz/FupWJpyLr0/crlsTqD55tJH6Dz+R7b+WboiNY8zf
-         RXGw==
-X-Forwarded-Encrypted: i=1; AL+hErF8k9XqwKBKm2i2thqOWjcvjQJJrP7IxWDQyBtHAkCOXSNv2WpmCTv7sP4hPJznGaVW0kQFnRVmBQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z8J5uKAJRn76TAwAayJzZ8vsaeUewFei4UPSXGkqVKxVNMghjtD
-	GORTzRVLJgNthMsGuUENVlKkWZoDnJtEU7cyveMUOi6QqbcEFQpkZuhZsOvRRjOV
-X-Gm-Gg: AYBFou2IRJ0v9uqnBbWR9Ql9O/+9PXLK6dbqiid9twD8LJQb63mwZ1q35vTPDM3BAxh
-	dz/h5S7PnaDNjbsQGJxta9yFdbds/aJ4CwPfj3Msdw2LGto7sBFwEbdWLgBrTtiabkp5Xs51Rf0
-	/WRQJg/5sHZsjmtMV/SOWyhw8o4N/QYBoSfa80e6pbS2cfiWb4aFIee96L7pbaa4RTPy4Hy82f1
-	efE3MeqKp77yjzq2qXPrBTSWsobBfk+BKlYoB6sqXt9qlLAXOOQAKjp+5QJtlkbk1yifaRYXkgM
-	caEObvnj6eXu/XR9Xaweo/MZ6QqutYoWUwsos0pUuXugR/J4ZzJuyNyyv6xVjgX1qVzEFsU22Z2
-	Aflv7rcDoxS4rv9TUkIY0cqhV2vPmJEOMalJTC/v6h2bvkSBsUXm/TVTGS22GV8OZRXgGUcRVsx
-	6sLUPAcJC0u4WjKseLzmtgiBi0DaAogTziCDAPYbgh0sE1kor5DGWP8xM07CCDcZOqoPOpeNDSf
-	DtE4aaCqVySQjt3Vk/eKQnSFz3BMQnDrY5+QLxMYN0SVFxfr6yrCm82MQp+bcKNp2wy3RKWqa+7
-	MsxbW1CyHDOMGTOHl/edTYOB68Q7KpmmNA==
-X-Received: by 2002:a05:6000:220d:b0:48d:db77:d124 with SMTP id ffacd0b85a97d-499c4815411mr5481170f8f.6.1794414427394;
-        Wed, 11 Nov 2026 08:27:07 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794414438; x=1795019238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=GAa/JB/dGlysKnvdVKBk1Gac1LQ6ZOjNf/u8F2y2Lpk=;
+        b=csNvWdJgME9AaBS1F22e1MoHEaGGQD7H46kI+XZkKaaOuaFA3hfr2dTBg4itX3kgXv
+         aqlfsmJUFupQlQphoatwV2Tb1cg4hAavAsTu54wG/apdWyuAJEXbJ3JNrlBj8EcGWCwU
+         zMRE9Qmt1My8TjT986dJSWXR5er8KEbl3hD9l6rXG8hM2FqONsr5VwqRrCthWSFpBAww
+         dwF6ICKnhkz7pRDsUUSRq40AmE95039v+UJZ2ofcmy2+DOupsLsShdgv7sO2GEiu4uuh
+         VsrXC41rtFaWwVvJacLROLOisQiBB1L/VkLm7b+LXFnc+1eBUQbJdHoRVkQDB61RD4XF
+         Xphw==
+X-Forwarded-Encrypted: i=1; AL+hErELrwe8MwFeJBnlqWvPsBudUAiO+TGETizlnDVreOZxvf3R/xBOvLDV4CJTo+7kydw9l6fh73yefg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+nQobkRT4QhRGx4mWxK+scOXVRa+3YjxInMM3e4QX7cuQfjL9A
+	Q/sVrsiSIuSn2Md7yiQ/0qv1jyHmrHrumDgaUwD/swM/p6yhR9aJZKkMKtGUhQ==
+X-Gm-Gg: AYBFou2Xzg1yCYrxSBDxyYaBQO6+cfObyKIPlUZ8CXjbhfRX85pBNjUnJw0A5916nB5
+	V7RQ2py0bl2RH+hfgV0W/yPouzxYwIXz7pXLE3p6oP5I5hCVMP1SRCGTtnKATPGs/qnYg8x/ZYm
+	dHlv+kKNRbplRBChdkFTcuQ4N8IisRlZlrYQ3+upswpY0cYIDQRjFpw2DNagw3hzVBMcE35jgwb
+	h1a61kKHqTpeebsiF4iHF4xhVV9S9Rre2hQ/Vi/H9EAIaFJ84Q41Q1v81hUyKWS20YdNwdHNYrO
+	P0gOeZDyfM9T8sjhpUqNZ+OYMDmAinpBa/vvMOxwGSuMXd5mgn0FlGoBMyaGyTf5k5s7xqklFBJ
+	ZTQlW6P4I0ULfx077dGaSrQ6KFX9gWdFBzOkWiLGWnYRDzxwVqAj0yJ0Mxc8C85Ts0EfQFajwYu
+	fdQzgMtJRWmsdUXbfG9TqMtyCKP16zkwtjuPowvGWIo6X6R47mzIr3xxlnTRhRQzff2pQAheixD
+	an8Y2mGZPzc8gQm8WEcUqCHj7EwYAKhGb4l7RoMm6f5nJzIbE3jZOfNBJrVdqokcOu/LAhdJ2Zm
+	9b7kC+XZUA7thJuZE9Bu8R2DcOb+6uL31Q==
+X-Received: by 2002:a05:600d:82f1:b0:4a2:cbe:beac with SMTP id 5b1f17b1804b1-4ba093c85ebmr58934365e9.23.1794414437702;
+        Wed, 11 Nov 2026 08:27:17 -0800 (PST)
 Received: from build-server.. ([62.96.37.222])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498366c500asm11472573f8f.48.2026.11.11.08.27.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e2538b9sm104385e9.1.2026.11.11.08.27.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 08:27:06 -0800 (PST)
+        Wed, 11 Nov 2026 08:27:17 -0800 (PST)
 From: Mikhail Malyshev <mike.malyshev@gmail.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Felix Moessbauer <felix.moessbauer@siemens.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/io-wq: apply the current cpuset to new workers
-Date: Wed, 11 Nov 2026 16:27:05 +0000
-Message-ID: <20261111162705.1150983-1-mike.malyshev@gmail.com>
+Subject: [PATCH liburing] test/iowq-cpuset: check that io-wq workers follow cpuset changes
+Date: Wed, 11 Nov 2026 16:27:16 +0000
+Message-ID: <20261111162716.1151068-1-mike.malyshev@gmail.com>
 X-Mailer: git-send-email 2.43.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -100,154 +95,383 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since commit 84eacf177faa ("io_uring/io-wq: inherit cpuset of cgroup in
-io worker"), io_wq_create() copies the cpuset of the creating task into
-wq->cpu_mask, and io_init_new_worker() gives each new worker that copy.
-A cpuset change, or a move of the task to another cgroup, updates the
-workers that exist but not the copy, so workers started later run on
-the CPUs the cgroup had when the io-wq was created, which may since
-have been given to other tasks. Workers come and go for the life of the
-io-wq, and a worker that cpuset moved is also retired at its next idle
-timeout and replaced on the old CPUs.
+io-wq workers started after the cpuset of a task changes, or after the
+task moves to another cgroup, run on the CPUs the task had when its
+io-wq was created: the kernel reads the cpuset only then. The kernel
+fix is "io_uring/io-wq: apply the current cpuset to new workers".
 
-Keep wq->cpu_mask for the affinity of the io-wq itself, all CPUs or the
-mask set with IORING_REGISTER_IOWQ_AFF, and intersect it with the cpuset
-of the worker when the worker starts, falling back to the cpuset if the
-two do not intersect, as __set_cpus_allowed_ptr() does. Use the same
-mask in the idle exit test, and go back to all CPUs when the registered
-affinity is removed.
+Add a test that starts a worker on one CPU, moves the task to another
+CPU, once by changing its cpuset and once by moving it to another
+cgroup, starts three more workers, and checks that all of them run on
+the new CPU only. It needs root and cgroup v2 with the cpuset
+controller, and skips otherwise.
 
-Fixes: 84eacf177faa ("io_uring/io-wq: inherit cpuset of cgroup in io worker")
-Cc: stable@vger.kernel.org
 Signed-off-by: Mikhail Malyshev <mike.malyshev@gmail.com>
 ---
-Tested on x86_64 under QEMU/KVM (8 CPUs, cgroup v2, PROVE_LOCKING,
-DEBUG_ATOMIC_SLEEP, CPUMASK_OFFSTACK) on io_uring-7.4 with and without
-this patch. A test program blocks requests in io-wq workers around
-cpuset changes and checks the affinity of every worker:
+The kernel fix: https://lore.kernel.org/io-uring/20261111162705.1150983-1-mike.malyshev@gmail.com/
 
-  case                                          without   with
-  cpuset 2-3 -> 4-5, new workers                FAIL      pass
-  idle worker retired after the change          FAIL      pass
-  cpuset grows 2-3 -> 2-5                       FAIL      pass
-  task moved to a cgroup with 4-5               FAIL      pass
-  IORING_REGISTER_IOWQ_AFF 2-3, cpuset 3-6,     FAIL      pass
-    then 4-5, then unregister
-  CPU offline and online                        pass      pass
+On io_uring-7.4 under QEMU/KVM (x86_64, 8 CPUs, cgroup v2) the test
+fails without the kernel fix, at its first subtest (the cpuset change),
+and passes with it; the same on 6.18.y. Without root it skips.
 
-No lockdep or sleeping-in-atomic reports. The liburing test suite gives
-the same results with and without the patch (iowait fails in some runs
-on both kernels: 5 and 7 of 20). A liburing test for this,
-test/iowq-cpuset.c, follows separately; it fails without the patch and
-passes with it.
+The test was written with Claude Code (Anthropic, Claude Opus 5.5)
+together with the kernel fix; I have reviewed it.
 
-The cost is one cpuset_cpus_allowed() per worker start and per idle
-timeout of a worker, not per request: 0.3-0.4 us against about 60 us
-for create_io_worker(), measured with the function graph tracer.
+ test/Makefile      |   1 +
+ test/iowq-cpuset.c | 330 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 331 insertions(+)
+ create mode 100644 test/iowq-cpuset.c
 
-The patch applies unchanged to for-7.5/io_uring and to 6.18.y, where
-the results are the same. The bug was first seen on real hardware with
-6.18; the fix was tested only under QEMU. Not tested: architectures
-other than x86_64, and cgroup v1 cpusets.
-
-This patch was developed with Claude Code (Anthropic, Claude Opus 5.5).
-The problem came up while I worked with it on CPU isolation for VMs in
-EVE (LF Edge): asked whether QEMU's io-wq workers can appear after a VM
-has started, it found in the code that workers started after a cpuset
-change keep the old CPUs, and reproduced that. It then wrote the fix,
-the changelog, the test program and the QEMU setup, and ran the tests
-above. I have reviewed the patch and the test results.
-
- io_uring/io-wq.c | 44 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 92df54c6f50ca..f2f3c3aad19b5 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -741,6 +741,34 @@ static bool io_worker_retire(struct io_wq_acct *acct, struct io_worker *worker)
- 	return false;
- }
- 
+diff --git a/test/Makefile b/test/Makefile
+index 8771aa50..a4249ecd 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -159,6 +159,7 @@ test_srcs := \
+ 	io-wq-exit.c \
+ 	io-wq-unused-exit.c \
+ 	iowait.c \
++	iowq-cpuset.c \
+ 	kallsyms.c \
+ 	large-resize.c \
+ 	lfs-openat.c \
+diff --git a/test/iowq-cpuset.c b/test/iowq-cpuset.c
+new file mode 100644
+index 00000000..49657655
+--- /dev/null
++++ b/test/iowq-cpuset.c
+@@ -0,0 +1,330 @@
++/* SPDX-License-Identifier: MIT */
 +/*
-+ * The CPUs a worker of @wq runs on: those of the io-wq affinity that the
-+ * worker's cpuset allows, or the cpuset if they have none in common, as the
-+ * scheduler does with a task's requested affinity when its cpuset changes.
-+ * Read the cpuset each time: it can change while the io-wq exists.
++ * Description: test that io-wq workers started after the cpuset of the task
++ *		changes, or after the task moves to another cgroup, run on
++ *		the CPUs of the cpuset the task is in now, not on those it
++ *		had when its io-wq was created. Needs root and cgroup v2
++ *		with the cpuset controller.
 + */
-+static void io_wq_worker_cpus(struct io_wq *wq, struct task_struct *tsk,
-+			      struct cpumask *cpus)
++#include <dirent.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <sched.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/stat.h>
++#include <sys/vfs.h>
++#include <sys/wait.h>
++#include <linux/magic.h>
++
++#include "liburing.h"
++#include "helpers.h"
++
++#define CG_ROOT		"/sys/fs/cgroup"
++#define NR_PARKED	4
++
++static char cg_a[64], cg_b[64], fifo[64];
++static int cpu_old, cpu_new, parked;
++
++static int write_str(const char *path, const char *val)
 +{
-+	cpuset_cpus_allowed(tsk, cpus);
-+	if (cpumask_intersects(cpus, wq->cpu_mask))
-+		cpumask_and(cpus, cpus, wq->cpu_mask);
++	int fd, ret;
++
++	fd = open(path, O_WRONLY);
++	if (fd < 0)
++		return -errno;
++	ret = write(fd, val, strlen(val));
++	ret = ret < 0 ? -errno : 0;
++	close(fd);
++	return ret;
 +}
 +
-+/* Is the current worker on a CPU that a new worker would not get? */
-+static bool io_wq_worker_off_cpus(struct io_wq *wq)
++static int set_cpu(const char *cg, int cpu)
 +{
-+	cpumask_var_t cpus;
-+	bool off;
++	char path[128], val[16];
 +
-+	if (!alloc_cpumask_var(&cpus, GFP_KERNEL))
-+		return false;
-+	io_wq_worker_cpus(wq, current, cpus);
-+	off = !cpumask_test_cpu(raw_smp_processor_id(), cpus);
-+	free_cpumask_var(cpus);
-+	return off;
++	snprintf(path, sizeof(path), "%s/cpuset.cpus", cg);
++	snprintf(val, sizeof(val), "%d", cpu);
++	return write_str(path, val);
 +}
 +
- static int io_wq_worker(void *data)
- {
- 	struct io_worker *worker = data;
-@@ -819,8 +847,7 @@ static int io_wq_worker(void *data)
- 		}
- 		if (!ret) {
- 			last_timeout = true;
--			exit_mask = !cpumask_test_cpu(raw_smp_processor_id(),
--							wq->cpu_mask);
-+			exit_mask = io_wq_worker_off_cpus(wq);
- 		}
- 	}
- 
-@@ -870,9 +897,16 @@ void io_wq_worker_sleeping(struct task_struct *tsk)
- static void io_init_new_worker(struct io_wq *wq, struct io_wq_acct *acct, struct io_worker *worker,
- 			       struct task_struct *tsk)
- {
-+	cpumask_var_t cpus;
++static int join(const char *cg)
++{
++	char path[128], val[16];
 +
- 	tsk->worker_private = worker;
- 	worker->task = tsk;
--	set_cpus_allowed_ptr(tsk, wq->cpu_mask);
-+	/* Without a mask, the worker keeps its creator's CPUs. */
-+	if (alloc_cpumask_var(&cpus, GFP_KERNEL)) {
-+		io_wq_worker_cpus(wq, tsk, cpus);
-+		set_cpus_allowed_ptr(tsk, cpus);
-+		free_cpumask_var(cpus);
++	snprintf(path, sizeof(path), "%s/cgroup.procs", cg);
++	snprintf(val, sizeof(val), "%d", getpid());
++	return write_str(path, val);
++}
++
++/*
++ * Count the io-wq workers of this process, and check that each of them may
++ * run on @cpu only. Returns the count, or -1 if a worker is elsewhere.
++ */
++static int check_workers(int cpu, int report)
++{
++	char want[32];
++	struct dirent *de;
++	int nr = 0, ret = 0;
++	DIR *dir;
++
++	snprintf(want, sizeof(want), "iou-wrk-%d", getpid());
++	dir = opendir("/proc/self/task");
++	if (!dir)
++		return -1;
++	while ((de = readdir(dir)) != NULL) {
++		char path[300], comm[64];
++		cpu_set_t set;
++		ssize_t len;
++		int fd;
++
++		if (de->d_name[0] == '.')
++			continue;
++		snprintf(path, sizeof(path), "/proc/self/task/%s/comm",
++			 de->d_name);
++		fd = open(path, O_RDONLY);
++		if (fd < 0)
++			continue;
++		len = read(fd, comm, sizeof(comm) - 1);
++		close(fd);
++		if (len <= 0)
++			continue;
++		comm[len] = '\0';
++		comm[strcspn(comm, "\n")] = '\0';
++		if (strcmp(comm, want))
++			continue;
++		if (sched_getaffinity(atoi(de->d_name), sizeof(set), &set))
++			continue;
++		nr++;
++		if (CPU_COUNT(&set) != 1 || !CPU_ISSET(cpu, &set)) {
++			if (report)
++				fprintf(stderr, "worker %s: on %d CPU(s)%s, "
++					"want CPU %d only\n", de->d_name,
++					CPU_COUNT(&set), CPU_ISSET(cpu, &set) ?
++					"" : " without it", cpu);
++			ret = -1;
++		}
 +	}
- 
- 	raw_spin_lock(&acct->workers_lock);
- 	hlist_nulls_add_head_rcu(&worker->nulls_node, &acct->free_list);
-@@ -1369,7 +1403,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 
- 	if (!alloc_cpumask_var(&wq->cpu_mask, GFP_KERNEL))
- 		goto err;
--	cpuset_cpus_allowed(data->task, wq->cpu_mask);
-+	cpumask_copy(wq->cpu_mask, cpu_possible_mask);
- 	wq->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
- 	wq->acct[IO_WQ_ACCT_UNBOUND].max_workers =
- 				task_rlimit(current, RLIMIT_NPROC);
-@@ -1574,7 +1608,7 @@ int io_wq_cpu_affinity(struct io_uring_task *tctx, cpumask_var_t mask)
- 		else
- 			ret = -EINVAL;
- 	} else {
--		cpumask_copy(tctx->io_wq->cpu_mask, allowed_mask);
-+		cpumask_copy(tctx->io_wq->cpu_mask, cpu_possible_mask);
- 	}
- 	rcu_read_unlock();
- 
++	closedir(dir);
++	return ret ? ret : nr;
++}
++
++/*
++ * Queue an open of the fifo, forced to io-wq. With no writer it blocks
++ * there, so each one queued while the others wait needs a worker of its
++ * own. Wait for that worker to show up.
++ */
++static int park(struct io_uring *ring, int cpu)
++{
++	struct io_uring_sqe *sqe;
++	int i, before;
++
++	before = check_workers(cpu, 0);
++	sqe = io_uring_get_sqe(ring);
++	io_uring_prep_openat(sqe, AT_FDCWD, fifo, O_RDONLY, 0);
++	sqe->flags |= IOSQE_ASYNC;
++	if (io_uring_submit(ring) != 1)
++		return T_EXIT_FAIL;
++	parked++;
++	for (i = 0; i < 100; i++) {
++		int nr = check_workers(cpu, 0);
++
++		if (nr < 0 || nr > before)
++			break;
++		usleep(10000);
++	}
++	return T_EXIT_PASS;
++}
++
++static void release(struct io_uring *ring)
++{
++	struct io_uring_cqe *cqe;
++	int fd, i;
++
++	fd = open(fifo, O_WRONLY | O_NONBLOCK);
++	for (i = 0; i < parked; i++) {
++		if (io_uring_wait_cqe(ring, &cqe))
++			break;
++		if (cqe->res >= 0)
++			close(cqe->res);
++		io_uring_cqe_seen(ring, cqe);
++	}
++	if (fd >= 0)
++		close(fd);
++}
++
++/*
++ * Start a worker on cpu_old, then move the task to cpu_new: change the
++ * cpuset, or move to the other cgroup. The workers started after that, and
++ * the one cpuset moved, must all be on cpu_new.
++ */
++static int test(int move)
++{
++	struct io_uring ring;
++	int i, ret;
++
++	if (join(cg_a))
++		return T_EXIT_SKIP;
++	ret = io_uring_queue_init(8, &ring, 0);
++	if (ret) {
++		fprintf(stderr, "queue init: %d\n", ret);
++		return T_EXIT_FAIL;
++	}
++	ret = park(&ring, cpu_old);
++	if (ret)
++		goto out;
++	if (check_workers(cpu_old, 1) != 1) {
++		fprintf(stderr, "no worker on CPU %d\n", cpu_old);
++		ret = T_EXIT_FAIL;
++		goto out;
++	}
++
++	if (move)
++		ret = join(cg_b);
++	else
++		ret = set_cpu(cg_a, cpu_new);
++	if (ret) {
++		fprintf(stderr, "moving to CPU %d: %d\n", cpu_new, ret);
++		ret = T_EXIT_FAIL;
++		goto out;
++	}
++
++	for (i = 1; i < NR_PARKED; i++) {
++		ret = park(&ring, cpu_new);
++		if (ret)
++			goto out;
++	}
++	ret = check_workers(cpu_new, 1);
++	if (ret != NR_PARKED) {
++		if (ret >= 0)
++			fprintf(stderr, "%d workers, want %d\n", ret,
++				NR_PARKED);
++		ret = T_EXIT_FAIL;
++	} else {
++		ret = T_EXIT_PASS;
++	}
++out:
++	release(&ring);
++	io_uring_queue_exit(&ring);
++	return ret;
++}
++
++static int run(int move)
++{
++	int status;
++	pid_t pid;
++
++	if (set_cpu(cg_a, cpu_old) || set_cpu(cg_b, cpu_new))
++		return T_EXIT_SKIP;
++	/* a child of its own, so it gets an io-wq of its own */
++	pid = fork();
++	if (pid < 0)
++		return T_EXIT_FAIL;
++	if (!pid)
++		exit(test(move));
++	if (waitpid(pid, &status, 0) < 0 || !WIFEXITED(status))
++		return T_EXIT_FAIL;
++	return WEXITSTATUS(status);
++}
++
++static int setup(void)
++{
++	char buf[256] = "";
++	struct statfs sfs;
++	cpu_set_t set;
++	int fd, i;
++	ssize_t len;
++
++	if (geteuid())
++		return T_EXIT_SKIP;
++	if (statfs(CG_ROOT, &sfs) || sfs.f_type != CGROUP2_SUPER_MAGIC)
++		return T_EXIT_SKIP;
++	fd = open(CG_ROOT "/cgroup.controllers", O_RDONLY);
++	if (fd < 0)
++		return T_EXIT_SKIP;
++	len = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
++	if (len <= 0 || !strstr(buf, "cpuset"))
++		return T_EXIT_SKIP;
++	if (write_str(CG_ROOT "/cgroup.subtree_control", "+cpuset"))
++		return T_EXIT_SKIP;
++
++	if (sched_getaffinity(0, sizeof(set), &set))
++		return T_EXIT_SKIP;
++	cpu_old = cpu_new = -1;
++	for (i = 0; i < CPU_SETSIZE; i++) {
++		if (!CPU_ISSET(i, &set))
++			continue;
++		if (cpu_old < 0) {
++			cpu_old = i;
++		} else {
++			cpu_new = i;
++			break;
++		}
++	}
++	if (cpu_new < 0)
++		return T_EXIT_SKIP;
++
++	snprintf(cg_a, sizeof(cg_a), CG_ROOT "/iowq-cpuset-a.%d", getpid());
++	snprintf(cg_b, sizeof(cg_b), CG_ROOT "/iowq-cpuset-b.%d", getpid());
++	if (mkdir(cg_a, 0755) || mkdir(cg_b, 0755))
++		return T_EXIT_SKIP;
++
++	strcpy(buf, "/tmp/iowq-cpuset.XXXXXX");
++	if (!mkdtemp(buf))
++		return T_EXIT_SKIP;
++	snprintf(fifo, sizeof(fifo), "%s/fifo", buf);
++	if (mkfifo(fifo, 0600))
++		return T_EXIT_SKIP;
++	return T_EXIT_PASS;
++}
++
++static void cleanup(void)
++{
++	int i;
++
++	if (fifo[0]) {
++		unlink(fifo);
++		*strrchr(fifo, '/') = '\0';
++		rmdir(fifo);
++	}
++	/* the workers of the children may take a moment to exit */
++	for (i = 0; i < 100; i++) {
++		if (cg_a[0] && rmdir(cg_a) && errno == EBUSY) {
++			usleep(10000);
++			continue;
++		}
++		if (cg_b[0] && rmdir(cg_b) && errno == EBUSY) {
++			usleep(10000);
++			continue;
++		}
++		break;
++	}
++}
++
++int main(int argc, char *argv[])
++{
++	int ret;
++
++	if (argc > 1)
++		return T_EXIT_SKIP;
++
++	ret = setup();
++	if (ret)
++		goto out;
++
++	ret = run(0);
++	if (ret) {
++		if (ret != T_EXIT_SKIP)
++			fprintf(stderr, "cpuset change failed\n");
++		goto out;
++	}
++	ret = run(1);
++	if (ret && ret != T_EXIT_SKIP)
++		fprintf(stderr, "cgroup move failed\n");
++out:
++	cleanup();
++	return ret;
++}
 
-base-commit: 39c7210e970200f8b17de3767c73efe64173a95f
+base-commit: 67bc5dcc7dc31b81bc623074887e2a231ede3b54
 -- 
 2.43.0
 
