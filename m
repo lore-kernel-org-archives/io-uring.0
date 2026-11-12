@@ -1,154 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.83.57
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.179
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794469958;
-	b=BAEO/WccBCE0KDMpTcdnVNHDsLmfmtNXJil+WqJmcnTuY8Z/pyL1ivOqo2DjKckT4aLk
-	 VxARXocSZooZSWw4QHEUBDQrHxgFI61si5qrc4BOsM7VPjDZVyc1x8xZjsDdHU8DpuL3h
-	 El4Kg7PVsG18oWxAEJov+b/22T4A8fgkQdwdgNS3vsX8JCY4diwg1imk03T4V2hJ9pqer
-	 uhH5Yx5UXxRveRiwvRc3kZ256i3Dh6hVrk/HoZ3eLiC8xESOnyh8VG+FGS5OJUecY5MLe
-	 /hPTM2+HZ89sEP3j1j/ODWifI+z/rGSZ+mC/5hNvwkmmZzFVxmoTOiatmgaNe9nMXOA==
+	t=1794470917;
+	b=eLuOdZ57o4UV4GhTzbbUXSzRB0lEgvf7LdoTQjCB/oQ0rN69jRIGelutF18aqtTa9Vah
+	 dDyhE2bQNg5euVOFhWaYTIZ51138a0LCeINH9PzLu4YF96OVwfru1bI57c6KgmPl6H7IP
+	 0YychJoDLYbF8GcNofK8GhDsp3O7bD1WNw7wRtfZOjRfI4QrfXmERbk79rWUI7GtGthcj
+	 EXoMeUOwk5SwvWBywDUyC3DzbYuynYQQto9Inv+LNwyaWRvYHd5TZglev0sKk2e6RVcZh
+	 5gk3KqeefycfDiUrbmcj6CxWDg2Hj1TtP/y18do9739a9E4WIM7rdYYF/3Uc/UOCz4g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794469958;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 user-agent:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:
-	 x-ms-exchange-atpmessageproperties:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=DAdoh7LSZQ3MVvnG5z0mguhiK4+VIj8eqZUgj3VlfGk=;
-	b=CVpkeIxhrxfRoRuNoH5lVI3sgHDnyqM/YwrYL8zhXOOLncpPFAbz8tsZ1zkIjLydJwGJ
-	 ShmqoKCj4whtQWCzQBwMRwILC4NYM4fwy7yTC6qt8zHpk/00sgTx61S2e33Ea7KmrCZTv
-	 vPFhgqr146tQJjoxKC5eh29Nn1hgYrE3p8/Ys/EMde96aiuGYpPNL82mHxj1sULpBYPeu
-	 yx1YXsUPqMsOlx3PctcO86w7CjAuNsUlYJqpgNXKOfAKpGD1fQpzEtfAnX6yFKcjZNoV9
-	 vY6FTpL39bqYskwsEkle+0Lez0RFl6Ux1FZp1x+hD7TexE3z60aLkP3+8+OzN1cCI7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794470917;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=kDMtd9AuZgk5VE9f/1gIA8QVaFrQdHJET/5OfnQ2nBI=;
+	b=EOsE+5/l/kJ/zmHE9PZlewNd0EVgXh8aWq/XTUBdyGzm4zC/QcHKZa9UAawvRlunDfFs
+	 V/6u6ZpQmvGfapDOWBnbAeAWG9NWnfrPXq3cCX0XjtxssiCyS0bLUlkt5JGkkWfdiswC7
+	 1jYTyE9vge2X+6U2/GwAelkujF7Xzh8T8z+gfyqTcwJyhsh4647hu9XRboQ1uTmapvkZt
+	 mts2j+IxfDp0WrGwzk39kfgXKaTEmjxygUSxTu1WSQkRyBhc9yU8NtGA/UXkTZtV6gm+7
+	 yT2rtcxsZxeDno0Vzja+sCn6TI2ULgvYHwVEerWfFsvtfQVKVilwhLTNE3fSRyNRVIQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=siemens.com;
-	spf=pass smtp.mailfrom=siemens.com;
-	dkim=pass header.d=siemens.com header.i=@siemens.com header.a=rsa-sha256 header.s=selector2 header.b=iOEYTj1L;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.83.57
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013057.outbound.protection.outlook.com [52.101.83.57])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hq1aCalB;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434C6606A335;
-	Thu, 12 Nov 2026 07:52:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 434C6606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8772E606A327
+	for <io-uring@vger.kernel.org>; Thu, 12 Nov 2026 08:08:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8772E606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=siemens.com header.i=@siemens.com header.a=rsa-sha256 header.s=selector2 header.b=iOEYTj1L
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=knqMEpRsXjaf+33Hh+jEdhvgxr3jiAxhxKRFnECPa9WymRCEQK8WFup7zh7vkRv6aP3z/bwqLefIJKF/eP6UxmSwf9L0LkJReFo9VOKgfSjzFB/+fhFCIyrctyF+XiPA1vtdsSe0xLpPYYCIkh1xJQYg+sdCU/3u6wPKTGOFBjIlcgM0YXAqKWIE0unTZCQRZeX9DkotoobWJf2U4vwxxMiPSbYY5Pn//4OALM4HGMMVEvblWuHaieLw1tzBI8koECOz72XjyNgXRnpYLD4LhkjEPPH5ikdHhpRnhX/nZjbeFAasLcwZzSQgDwXxxBGIYt3762BPnjYlGfpEU3O06g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DAdoh7LSZQ3MVvnG5z0mguhiK4+VIj8eqZUgj3VlfGk=;
- b=rmFpKqNVLc6Zw8dA5Yfllg8KTWJd+qYk5vJTekLaGxyszcGjIupjVb8RvTcfaolrFycFYIh7hwi4/5PJnJPW5yXy4Mwpxxg+RLy3ZhjZfJvo+ahQdMFQqJgURefKCzGMoSCNF/DCYwadUNzSpOMgt9isPYk16cWEPp4j7XqBu/O/CnZpzHHZmTrN1KtrNTEpX4m6gOtg7hc9wXQCL/Fi1oNnoDG1XTDP56V7/Ahye54mwpECBamYF9xXQEFZkRNZAggwEQ+B8i3ZOtAkVIjrma4DkB6zsBP47CT5c0ENW4GezBB6N2eL3Ai0A2JQr650AvIpgbYOP7IKiKwIk81NDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DAdoh7LSZQ3MVvnG5z0mguhiK4+VIj8eqZUgj3VlfGk=;
- b=iOEYTj1LSZOPtqaCElWJ3KICVqyxjGcXMOOIxAECAe0BmBQ3y93hIs+kvCUJeXBMMqJ2UyNbknf4AOR+hm57V1800fsW2+aMVPCgN1mH2q9ECVPoT2JT1sOHqlFJL2mCe2DnFe9jm9IPYXercP+JPCBUXOiyHwbU0br0ybBsFfpG2f+ODiLZOl3mMnAPqMPII9zYZquzbtyKk7yITt352d/aoUOx2GPEcBzO+TnipzngjPGZHRZpmja+pMfsbwMt6lRMqxeMwO5WdmB2sbXV5Uwh03IrMuJ6emI8TxpCNIqb1Swqbts/AYY023rl0fbzEHNm0/YMZqVGwMcInzMqcQ==
-Received: from AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:17e::10)
- by GVSPR10MB901912.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:718::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.0; Thu, 12 Nov
- 2026 07:52:33 +0000
-Received: from AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::c54c:ccd8:ebbf:477c]) by AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::c54c:ccd8:ebbf:477c%3]) with mapi id 15.21.0639.000; Thu, 12 Nov 2026
- 07:52:33 +0000
-From: "Moessbauer, Felix" <felix.moessbauer@siemens.com>
-To: Mikhail Malyshev <mike.malyshev@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
-CC: Pavel Begunkov <asml.silence@gmail.com>, Josef Bacik
-	<josef@toxicpanda.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>
-Subject: Re: [PATCH] io_uring/io-wq: apply the current cpuset to new workers
-Thread-Topic: [PATCH] io_uring/io-wq: apply the current cpuset to new workers
-Thread-Index: AQHdcfmANWPqBFpjNkqX9tZrkILVRrcqEZmA
-Date: Thu, 12 Nov 2026 07:52:33 +0000
-Message-ID: <b95051ac2caf63d3266bd02b326d0e0166a138b6.camel@siemens.com>
-References: <20261111162705.1150983-1-mike.malyshev@gmail.com>
-In-Reply-To: <20261111162705.1150983-1-mike.malyshev@gmail.com>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.56.2-10+b1 
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM7PR10MB3956:EE_|GVSPR10MB901912:EE_
-x-ms-office365-filtering-correlation-id: c5ba1fa2-7c96-49ae-8849-08df4091e931
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|366016|23010399003|1800799024|22082099003|18002099003|261009223027099003|55112099003|11063799006|56012099006|10067099003|261102123227099003|261022105027099003|261022075727099003|261028144727099003|261021135927099003|261026140227099003|261026121527099003|261021121427099003|261021123027099003|38070700021;
-x-microsoft-antispam-message-info:
- Qyqj7SGTPAawE0iCF2QTjf6Tw8t20+09SEAN2aDwuO0IqEQsW0qOEiqkd8bYk9IfQ3FK57VzLrhpBiaCxXEDZXNorBOyWHEDuG6lNjDG+iifdygo3m//BrRTshhjQIlIhvw7QfXrFsFjmwBCTCqufI1fYZlxatWSat3ZosaRQRM2oo9+3RONAjbQeqG1KXvmLrnNQDTR3OoyY7gayccZqFuXRVSTzKP/QHQccunA7FcL6XykbmfZJHE9Y91i3hezdxKWZR+QNDDCKX0h9r123etiqkX7vISEEH1LzEM4BdWUbutA2VJ+1DzeeAOoSnbWWmHWW0MWz0OQpmKmh16Ccz2hscPgh12qsT8mJoAdunqmG9MGKjq5FmJozwhS8Wj3TPOJCzoRZpr9A05JNL5ZGOVXdxI8WYNoL6el4Q93Xf6oLOO+v5txOMlkgFMsgUomvVGHp6VkQckQJVDOflZi59nmeptwXKp/Tbq1uFp4OS6DtfyswyrLSntevmqGPbg7LJfh5lODh2/jpB129pOxRNGiqKpJ2HVhVRiC6ESH9k3+hUjuEgkWIVuDfYlmXFk4J+bobWk1gFTnKDYOmWeF9YqspBDhS7W5h/9S6MzOw1z9Zia8NjRtGlCPP00ibM8EYpV8kW4CG96jlQA6B0uY6bzpamIDtGH5ewpMiWBVXy22rQvHvmUuZoSlO8rXVM6k6BfdO1t8af/pp2KJXDpM7g==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(23010399003)(1800799024)(22082099003)(18002099003)(261009223027099003)(55112099003)(11063799006)(56012099006)(10067099003)(261102123227099003)(261022105027099003)(261022075727099003)(261028144727099003)(261021135927099003)(261026140227099003)(261026121527099003)(261021121427099003)(261021123027099003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?UHI5ckJBZHBZMWF5eDllei9PUElScEtZY0p2YTRZZnArWU9iL01wYW15QjF0?=
- =?utf-8?B?UGh1MlRHZlVxUG15MDJhMzZIeTZOLzdpVXFnSU5RMTd6Um4wdVZZSjZjV1Y1?=
- =?utf-8?B?Tkh4SE4wVFdPdFVNc1l3MzdPNHg3eFNYMExtcHNDdEpTeUJqVmhscy9GNk4v?=
- =?utf-8?B?b3B1bWJCbVFKdWhCQ0hnN1FZaGRiRGFSMkdJUjc3QXd4aHkycGZoT2hpamZu?=
- =?utf-8?B?cit2WEFoam1HU3lXeGZRRWMyQkpoNVdieTNEMlBiN0pBcFZiZ2FpSkIyVUJW?=
- =?utf-8?B?akU2NEMzaTFhWmZxSlAwZ2dsZ1F5NlB6ZXE1Qld4ZjhzL2kzazFVRW5TWEcy?=
- =?utf-8?B?VU92dGhEbUY5Si85UkhyVGkzaHAzclhmNGZDcC93TjlBbkZUTmdwRy9XRnZQ?=
- =?utf-8?B?ZnI4a05xRUtEL2NDOXVNaHl1N0VEb2JzNkNndWxUdTkrNVJYSjJLQ2Mrb1kx?=
- =?utf-8?B?eVUxcmxRdkZNaGhUcUQxUk5mZTBjdHh2VURTOUhvMWxXdmhjckFYZjhSc2tG?=
- =?utf-8?B?MzlRU2l1NndKLy95RmoxVU95L1BFWDI1RnlQRUtKeU45a1lHbVZRSXp4a0VW?=
- =?utf-8?B?Mm9pVjRKbUVVM3p1Q0NPS0pGLytSeUw3ZFFZSjZkWS92TFpqbGNVZk1yZExB?=
- =?utf-8?B?ajlRbzlSbnR1TnNDVThNbitXWjJrMkp6bDVCNjB3blhndmN2VHJmc1VDM1Js?=
- =?utf-8?B?eEVUQzZMQnJhVVYwUE94cWV1RnlxanJuUGlTYmNzemdjWFNTd3lESlB4eUg0?=
- =?utf-8?B?U2Y1SXlZTFJUUnllS0JTVk54OC9rZjJyaGd5aWM5ZHBER3hsYUZXU3BqaDho?=
- =?utf-8?B?WlIyZWYzVnVNR1JDcGRJNzhvL2svNFE2Y3ZsOXRsYjZJV0xVK0dMa0dEMlZ6?=
- =?utf-8?B?OFJNRlN5cE85dlRsajJHYlBmdjB2cEdzVjJMQ3FaOVhrUG1FTXJ5WldnOGgz?=
- =?utf-8?B?Y2JyeTJXQzJnK2tWNktnZDJtQ1N4ZGV2M3dEVTVhQWI4N2orM1VKUGhOSjlD?=
- =?utf-8?B?THBwclkzYURpSTVvYWVBYlFueFoxcHFTU0VXSkZxaG1vRWlBd28yWFQ5eU90?=
- =?utf-8?B?dVp4WklYbmYxUFdBUkFTdUdWU05BYy9kWkJLbWlLL01ZUG41Umh5L2NIVnJt?=
- =?utf-8?B?a3pVeWNNUmYxVEFyb254SE4zUElwWUZIK1p6TWdvSm56QjJabkZlTGcxaU15?=
- =?utf-8?B?QkYxUnZBRE5GTXF2b0RHNGpXNnlMdzU0TG9YdGNpNGNjeUFmcWpFdHRKVW55?=
- =?utf-8?B?cjJ1SjRab21VVE5yRHQ1ckh1WGJqN0Zwa01OWWM5dE02OGJudXRrNmE3cTlJ?=
- =?utf-8?B?Slk0ZHFVUklzNThSanEva25DT3JhRjJSQnNnOHNVYk0vcGlZMHdKcStKS0Ez?=
- =?utf-8?B?V3JrMW1pWjEvUGxBQWtRYjhJb2VxUVJXYUdMeXlneWdWR3luSkdnaFBtaEo0?=
- =?utf-8?B?Yk5PeXNzMVZGM01HekY2cEhadW04MzJFOXRONlJ1NkttNzZXTlRWQ2dlbU1r?=
- =?utf-8?B?VStwdU94THVRc3dOWHFIM3N3ckkrRTI5MUM5S0syTHp0eUVMeVVsY0ZFN0Ru?=
- =?utf-8?B?TlcwTzNtMkR6UFJSVzdwTXdtMXRSc3d5NC9WdG5CTjRDU3dwR3JoQUlrOU5J?=
- =?utf-8?B?WEFHRXpsRFFXZUlnVm5YaEFaVThoZS9ZQ3ptdlRQU0JPMHM4SXFXNVRCOWhK?=
- =?utf-8?B?UmZJOVYvRU5zY05lNyswN2pWM25TNUsvekRNMkhuWG4yUVkyTS9CZjdxTHJU?=
- =?utf-8?B?TVNkelZqaWtQYloyUlMrMVBXUW54RkNLbjR4SGltTCtrbDlPa2tsOG1Lb1lR?=
- =?utf-8?B?a1orQkEvQnpHMTVydWtZU0l5R3liM2F5dHYzZXl1UGN0dmp1KzRJYldtek0w?=
- =?utf-8?B?M3BpdUcrZng4QndmOUR3UUQ4aFhGSU84RW1SUGdneTFtTUtrSlhNNWcrU2xW?=
- =?utf-8?B?dkRHUDljZDBEZS93UWlGSFJDTHc2VkFraEwyTlJpMU1YZG85K1VtbURvUVNp?=
- =?utf-8?B?SmFLTE1hSnZKM3NPQVJJS1FNcW4xZWdOc0JkUllWZjVNaWpJMDdhZzdTL1or?=
- =?utf-8?B?MElUcVF2Wnl1elpXNG9DbENXRUY4UUZqM1IyM2V3VDN1ZlpUaCtoMTBnMTlG?=
- =?utf-8?B?MGJYVkF5bGUvSEZMQUl3eU1hOWhobE1WOUh1b0JEZXg0Z1N1TThSczdZWjRk?=
- =?utf-8?B?RG9BTUlrczVNaWE4WC9uZDNpRVdLQ1BKTzFaM1JCMi8wRlo3NVE5ZDJsR2xC?=
- =?utf-8?B?b2RIaytPOGdudGRaZnFLMDUxSnVlK3ZQd2JsUHBsS29saHEvQ2VDSVl4NDFk?=
- =?utf-8?B?dTlzZFNDQTNkakxJcVluSk9QWktMdWR6TFBGbTF3V3VleXllYlczUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B3E5B215BD84E418CE10580EE1E0F09@EURPRD10.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hq1aCalB
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b67f25e6e1so2009184b3a.0
+        for <io-uring@vger.kernel.org>; Thu, 12 Nov 2026 00:08:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794470916; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fhNO/z2It6VmybvOc05mDtkb+jm+RqYJ5ThRlhavShPkQM8PGUnE57jwQJn95FqPB6
+         AlDJCgDFOSwCyj9zkxnOnL6gIQ4hnTWTebRp50spf2W9eiC3UPoAJHWo0VmgZWvMuCqr
+         MSt6GS+PflPvThqGrbW9k6Jdv2nnELNVvyIpnKIAxhrLg8C8f8clOwVKlQNO1i64HmRY
+         uwQIY8d+aRUXmpvb4H/8Ak5mVTjBPzs1g+R9f6riXNudfW/WH99RwFoqXegXf3F5ZagY
+         opVTFz6SenuCK9DSfM5a8Q7XWioNxZ3ss/DLrEePyUcijoeAo5M6iflIKJU5k+T81ZKs
+         Lrtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kDMtd9AuZgk5VE9f/1gIA8QVaFrQdHJET/5OfnQ2nBI=;
+        fh=kSkCXosG2S+ksG5C2J+8wkjGgkqrXcwf+Q9VdVFYKvc=;
+        b=mpiulL52XlmzSEFmTTwNdSvPWGEwAjjg4+E/QeKJmHWOFcAAX0nmQV6sPqNY8hGkcG
+         eD9VtJvyo4X9AmthubjJzbGQd2mM08i+QoBZyYHiTNNwDim4smeMnJ5BRRcBlNBk8o7m
+         My0kwjyJpmlIx2Op7n6C9i1L7XbKzsBVZKbszzBdzQgn/PGUtJOvyVGxO9hJUPo9amPy
+         HZalnBup8Dca9N7GLKU12TblQnbrAzyg7x8x07h7TU8durLJc9TTKrLub4XPuw8DyAts
+         NYdrrQQy/8LJjPpcAtcp/4dGa9EmywIPxkN8S3xKCqrWkJ3DZ9112QKgCQj71pYLpYir
+         RjbQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794470916; x=1795075716; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kDMtd9AuZgk5VE9f/1gIA8QVaFrQdHJET/5OfnQ2nBI=;
+        b=Hq1aCalBjUX+hftGAF0sQQvOE5y/T1N0TfViPwPBboDD/eT0ynKEYkdVjhd7Co1CAW
+         iL5JHDieuIsiIepq75M/Ty4DMIJzCobwGeA8sC6YmiUgTTrc0QJE2kCM6wfvbclgFpAu
+         ZJNbAwo/MZH53DIjLbUWyOdr4YxWkT7pmm7kmEDEkM0ziWOjpbXG8gvRw94C5tyt8lKN
+         /yJn9UdUQ3e0S843pAIH5fn1WzRVkSnLEsAyi6ouE1AUzY5VbwLz/atxipHHhfXZKgI7
+         80uJRVNdM5znG7ZsC9xoaN6eizYfIg0bWkMqVp2KpO6FY+QyxVCGiy3CEhMwN5jAm6km
+         9OJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794470916; x=1795075716;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kDMtd9AuZgk5VE9f/1gIA8QVaFrQdHJET/5OfnQ2nBI=;
+        b=2e9zCSRpHdZoHLv36g7J1cKONyC4MsH9hDHds0FzXddarlRkm9HgOWywWTu0vTrx3d
+         Z52Qp2pcmBUkSetcKs5gJJBLm/pvTIdXuIsfeEfxA7vvyh/KXeqmuEaMnpQCCcaV57/T
+         lIBJJYxBsq3D0GO6sr3iaVXu32tQsYsLUhLzHwyORf/F748w6Bk+ayg+Jzv1xP4eJxjF
+         O6EV1MsiLonVe5iUZ1DJSEFuATtphDb/PNgBWAc3x25nvrcpA9pfRb+bOBlHObT69ZJK
+         xDUW4j7u8qdfOKNP4uQKntob9rjZq6lEb4G6rGqET+KTQVQkD10W3dPF9EzwneGi4YRD
+         X29Q==
+X-Forwarded-Encrypted: i=1; AL+hErHwFGV7EpqGXj3zwBSSzoBcuZUxeCjYcBDG5AhbzyLTCpiJyg1u6Dz/ZTWUEwpoh9mAvGy+Gr/W2w==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Y2Lx/uDeySURp08s5P3VXsui9VKFn0Qa4HqiyoZA+2D64xwVZ
+	ZacIc04QGd4+tECUSLRPLTKtbR5N/LZcpAbM6neC0jxFQ1fcKCvsgt0yPVE/Me68AD07I7Purar
+	jvyca/oCpeHdd1G6roHNPijHwDpXNUJ8=
+X-Gm-Gg: AYBFou1DFX2z0y7nYuwrXCNqVn6MvDUzR4A2xkMAFS5JllFxK4Q8LgF8cjb3rp08pE3
+	E/50EVXOhD4yER+eEzLa1/D8VVNgMAqhJOP3i1YmwdORrefN4cCii/ycJWYtdS9i6JE8z+T4p0L
+	QnPZ+KkU0+Z0DzZA/71yVkRd+6doLjxWHbYKEK5zWTa1ULKrVU9InC/842IdnuYXa7vZNvwhxAt
+	z8NodLuJg1mTyB/a4xpZsc66694/E1SiJ1y4WiRQhlZv9BwZZfyb+P1gOVwYJoMFCwmqvlFZGYf
+	YW3lo3k+jw7TVqStRKlJy7NyjrHwkpKtpyWMNmUiBdCVOqZm/J5QkYiYarD6ckmZJrPYV8VfTLM
+	S2Tn5KD5Lzh5phVfj68m9VcLz8iMwWQGrlOXmrRw=
+X-Received: by 2002:a05:6a20:eec8:10b0:3e8:ef7a:36 with SMTP id
+ adf61e73a8af0-3f2fe1b1765mr3423325637.31.1794470915725; Thu, 12 Nov 2026
+ 00:08:35 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -158,136 +104,275 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5ba1fa2-7c96-49ae-8849-08df4091e931
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2026 07:52:33.6277
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xn9Z2xi53uyr3UX89cj6VyUL00RabYYZLQJ6o57E+HkJhBkIh2YMybwHMSBtqC43fjpzKLDBrDwEYY+6vWXqjNSiWiUO1y2Yiq1FHlVKdPU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVSPR10MB901912
+References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-6-bjorn@kernel.org>
+ <CAJ8uoz2JMEKkzO-V7jtreS9q1Btmo0URosXzBGW7f=jhFnUzxg@mail.gmail.com> <875wy3890k.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <875wy3890k.fsf@all.your.base.are.belong.to.us>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Thu, 12 Nov 2026 09:08:21 +0100
+X-Gm-Features: AclHuK9uAFcDfAXPRS66WSxOqj4MPsdyk4TznHA4ZGIRxwNJp8XNoIhiQkWvOq8
+Message-ID: <CAJ8uoz3MYvKnrHrPee3pYHx5HGCteisAauah1+wjYz+eH3EKCw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 05/11] xsk: Install UMEM page pool providers
+ in the core
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
+	Mina Almasry <almasrymina@google.com>, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gV2VkLCAyMDI2LTExLTExIGF0IDE2OjI3ICswMDAwLCBNaWtoYWlsIE1hbHlzaGV2IHdyb3Rl
-Ogo+IFNpbmNlIGNvbW1pdCA4NGVhY2YxNzdmYWEgKCJpb191cmluZy9pby13cTogaW5oZXJpdCBj
-cHVzZXQgb2YgY2dyb3VwIGluCj4gaW8gd29ya2VyIiksIGlvX3dxX2NyZWF0ZSgpIGNvcGllcyB0
-aGUgY3B1c2V0IG9mIHRoZSBjcmVhdGluZyB0YXNrIGludG8KPiB3cS0+Y3B1X21hc2ssIGFuZCBp
-b19pbml0X25ld193b3JrZXIoKSBnaXZlcyBlYWNoIG5ldyB3b3JrZXIgdGhhdCBjb3B5Lgo+IEEg
-Y3B1c2V0IGNoYW5nZSwgb3IgYSBtb3ZlIG9mIHRoZSB0YXNrIHRvIGFub3RoZXIgY2dyb3VwLCB1
-cGRhdGVzIHRoZQo+IHdvcmtlcnMgdGhhdCBleGlzdCBidXQgbm90IHRoZSBjb3B5LCBzbyB3b3Jr
-ZXJzIHN0YXJ0ZWQgbGF0ZXIgcnVuIG9uCj4gdGhlIENQVXMgdGhlIGNncm91cCBoYWQgd2hlbiB0
-aGUgaW8td3Egd2FzIGNyZWF0ZWQsIHdoaWNoIG1heSBzaW5jZQo+IGhhdmUgYmVlbiBnaXZlbiB0
-byBvdGhlciB0YXNrcy4gV29ya2VycyBjb21lIGFuZCBnbyBmb3IgdGhlIGxpZmUgb2YgdGhlCj4g
-aW8td3EsIGFuZCBhIHdvcmtlciB0aGF0IGNwdXNldCBtb3ZlZCBpcyBhbHNvIHJldGlyZWQgYXQg
-aXRzIG5leHQgaWRsZQo+IHRpbWVvdXQgYW5kIHJlcGxhY2VkIG9uIHRoZSBvbGQgQ1BVcy4KCkhp
-LAoKdGhhdCdzIGEgdmFsaWQgZmluZGluZy4KCj4gCj4gS2VlcCB3cS0+Y3B1X21hc2sgZm9yIHRo
-ZSBhZmZpbml0eSBvZiB0aGUgaW8td3EgaXRzZWxmLCBhbGwgQ1BVcyBvciB0aGUKPiBtYXNrIHNl
-dCB3aXRoIElPUklOR19SRUdJU1RFUl9JT1dRX0FGRiwgYW5kIGludGVyc2VjdCBpdCB3aXRoIHRo
-ZSBjcHVzZXQKPiBvZiB0aGUgd29ya2VyIHdoZW4gdGhlIHdvcmtlciBzdGFydHMsIGZhbGxpbmcg
-YmFjayB0byB0aGUgY3B1c2V0IGlmIHRoZQo+IHR3byBkbyBub3QgaW50ZXJzZWN0LCBhcyBfX3Nl
-dF9jcHVzX2FsbG93ZWRfcHRyKCkgZG9lcy7CoAo+IAoKV2h5IG5vdCBzaW1wbHkgZmFpbCB0aGUg
-d29ya2VyIGNyZWF0aW9uIGlmIHRoZSBpbnRlcnNlY3Rpb24gaXMgZW1wdHk/Ckp1c3QgZmFsbGlu
-ZyBiYWNrIG1lYW5zIHRoYXQgdGhlIHdvcmtlciB0aHJlYWRzIHJ1biBvbiBDUFVzIHdoZXJlIHRo
-ZXkKLSBpbnRlbnRpb25hbGx5IC0gc2hvdWxkIG5vdCBydW4uCgo+IFVzZSB0aGUgc2FtZQo+IG1h
-c2sgaW4gdGhlIGlkbGUgZXhpdCB0ZXN0LCBhbmQgZ28gYmFjayB0byBhbGwgQ1BVcyB3aGVuIHRo
-ZSByZWdpc3RlcmVkCj4gYWZmaW5pdHkgaXMgcmVtb3ZlZC4KPiAKPiBGaXhlczogODRlYWNmMTc3
-ZmFhICgiaW9fdXJpbmcvaW8td3E6IGluaGVyaXQgY3B1c2V0IG9mIGNncm91cCBpbiBpbyB3b3Jr
-ZXIiKQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnCj4gU2lnbmVkLW9mZi1ieTogTWlraGFp
-bCBNYWx5c2hldiA8bWlrZS5tYWx5c2hldkBnbWFpbC5jb20+Cj4gLS0tCj4gVGVzdGVkIG9uIHg4
-Nl82NCB1bmRlciBRRU1VL0tWTSAoOCBDUFVzLCBjZ3JvdXAgdjIsIFBST1ZFX0xPQ0tJTkcsCj4g
-REVCVUdfQVRPTUlDX1NMRUVQLCBDUFVNQVNLX09GRlNUQUNLKSBvbiBpb191cmluZy03LjQgd2l0
-aCBhbmQgd2l0aG91dAo+IHRoaXMgcGF0Y2guIEEgdGVzdCBwcm9ncmFtIGJsb2NrcyByZXF1ZXN0
-cyBpbiBpby13cSB3b3JrZXJzIGFyb3VuZAo+IGNwdXNldCBjaGFuZ2VzIGFuZCBjaGVja3MgdGhl
-IGFmZmluaXR5IG9mIGV2ZXJ5IHdvcmtlcjoKPiAKPiAgIGNhc2UgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB3aXRob3V0ICAgd2l0aAo+ICAgY3B1c2V0IDItMyAtPiA0
-LTUsIG5ldyB3b3JrZXJzICAgICAgICAgICAgICAgIEZBSUwgICAgICBwYXNzCj4gICBpZGxlIHdv
-cmtlciByZXRpcmVkIGFmdGVyIHRoZSBjaGFuZ2UgICAgICAgICAgRkFJTCAgICAgIHBhc3MKPiAg
-IGNwdXNldCBncm93cyAyLTMgLT4gMi01ICAgICAgICAgICAgICAgICAgICAgICBGQUlMICAgICAg
-cGFzcwo+ICAgdGFzayBtb3ZlZCB0byBhIGNncm91cCB3aXRoIDQtNSAgICAgICAgICAgICAgIEZB
-SUwgICAgICBwYXNzCj4gICBJT1JJTkdfUkVHSVNURVJfSU9XUV9BRkYgMi0zLCBjcHVzZXQgMy02
-LCAgICAgRkFJTCAgICAgIHBhc3MKPiAgICAgdGhlbiA0LTUsIHRoZW4gdW5yZWdpc3Rlcgo+ICAg
-Q1BVIG9mZmxpbmUgYW5kIG9ubGluZSAgICAgICAgICAgICAgICAgICAgICAgIHBhc3MgICAgICBw
-YXNzCgpUaGlzIHRlc3QgcHJvZ3JhbSBzaG91bGQgYmUgYWRkZWQgdG8gdGhlIGxpYnVyaW5nIHRl
-c3RzdWl0ZSwgc2hvdWxkbid0Cml0PwoKPiAKPiBObyBsb2NrZGVwIG9yIHNsZWVwaW5nLWluLWF0
-b21pYyByZXBvcnRzLiBUaGUgbGlidXJpbmcgdGVzdCBzdWl0ZSBnaXZlcwo+IHRoZSBzYW1lIHJl
-c3VsdHMgd2l0aCBhbmQgd2l0aG91dCB0aGUgcGF0Y2ggKGlvd2FpdCBmYWlscyBpbiBzb21lIHJ1
-bnMKPiBvbiBib3RoIGtlcm5lbHM6IDUgYW5kIDcgb2YgMjApLiBBIGxpYnVyaW5nIHRlc3QgZm9y
-IHRoaXMsCj4gdGVzdC9pb3dxLWNwdXNldC5jLCBmb2xsb3dzIHNlcGFyYXRlbHk7IGl0IGZhaWxz
-IHdpdGhvdXQgdGhlIHBhdGNoIGFuZAo+IHBhc3NlcyB3aXRoIGl0Lgo+IAo+IFRoZSBjb3N0IGlz
-IG9uZSBjcHVzZXRfY3B1c19hbGxvd2VkKCkgcGVyIHdvcmtlciBzdGFydCBhbmQgcGVyIGlkbGUK
-PiB0aW1lb3V0IG9mIGEgd29ya2VyLCBub3QgcGVyIHJlcXVlc3Q6IDAuMy0wLjQgdXMgYWdhaW5z
-dCBhYm91dCA2MCB1cwo+IGZvciBjcmVhdGVfaW9fd29ya2VyKCksIG1lYXN1cmVkIHdpdGggdGhl
-IGZ1bmN0aW9uIGdyYXBoIHRyYWNlci4KPiAKPiBUaGUgcGF0Y2ggYXBwbGllcyB1bmNoYW5nZWQg
-dG8gZm9yLTcuNS9pb191cmluZyBhbmQgdG8gNi4xOC55LCB3aGVyZQo+IHRoZSByZXN1bHRzIGFy
-ZSB0aGUgc2FtZS4gVGhlIGJ1ZyB3YXMgZmlyc3Qgc2VlbiBvbiByZWFsIGhhcmR3YXJlIHdpdGgK
-PiA2LjE4OyB0aGUgZml4IHdhcyB0ZXN0ZWQgb25seSB1bmRlciBRRU1VLiBOb3QgdGVzdGVkOiBh
-cmNoaXRlY3R1cmVzCj4gb3RoZXIgdGhhbiB4ODZfNjQsIGFuZCBjZ3JvdXAgdjEgY3B1c2V0cy4K
-ClNob3VsZG4ndCB0aGF0IGFsc28gYXBwbHkgdG8gNi4xMiAoaXQgdGVjaG5pY2FsbHkgZG9lcyBu
-b3QgYXBwbHkgYnV0CnNlbWFudGljYWxseSBpdCBzaG91bGQpPyAKCkJlc3QgcmVnYXJkcywKRmVs
-aXgKCj4gCj4gVGhpcyBwYXRjaCB3YXMgZGV2ZWxvcGVkIHdpdGggQ2xhdWRlIENvZGUgKEFudGhy
-b3BpYywgQ2xhdWRlIE9wdXMgNS41KS4KPiBUaGUgcHJvYmxlbSBjYW1lIHVwIHdoaWxlIEkgd29y
-a2VkIHdpdGggaXQgb24gQ1BVIGlzb2xhdGlvbiBmb3IgVk1zIGluCj4gRVZFIChMRiBFZGdlKTog
-YXNrZWQgd2hldGhlciBRRU1VJ3MgaW8td3Egd29ya2VycyBjYW4gYXBwZWFyIGFmdGVyIGEgVk0K
-PiBoYXMgc3RhcnRlZCwgaXQgZm91bmQgaW4gdGhlIGNvZGUgdGhhdCB3b3JrZXJzIHN0YXJ0ZWQg
-YWZ0ZXIgYSBjcHVzZXQKPiBjaGFuZ2Uga2VlcCB0aGUgb2xkIENQVXMsIGFuZCByZXByb2R1Y2Vk
-IHRoYXQuIEl0IHRoZW4gd3JvdGUgdGhlIGZpeCwKPiB0aGUgY2hhbmdlbG9nLCB0aGUgdGVzdCBw
-cm9ncmFtIGFuZCB0aGUgUUVNVSBzZXR1cCwgYW5kIHJhbiB0aGUgdGVzdHMKPiBhYm92ZS4gSSBo
-YXZlIHJldmlld2VkIHRoZSBwYXRjaCBhbmQgdGhlIHRlc3QgcmVzdWx0cy4KPiAKPiAgaW9fdXJp
-bmcvaW8td3EuYyB8IDQ0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0t
-LS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAzOSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQo+
-IAo+IGRpZmYgLS1naXQgYS9pb191cmluZy9pby13cS5jIGIvaW9fdXJpbmcvaW8td3EuYwo+IGlu
-ZGV4IDkyZGY1NGM2ZjUwY2EuLmYyZjNjM2FhZDE5YjUgMTAwNjQ0Cj4gLS0tIGEvaW9fdXJpbmcv
-aW8td3EuYwo+ICsrKyBiL2lvX3VyaW5nL2lvLXdxLmMKPiBAQCAtNzQxLDYgKzc0MSwzNCBAQCBz
-dGF0aWMgYm9vbCBpb193b3JrZXJfcmV0aXJlKHN0cnVjdCBpb193cV9hY2N0ICphY2N0LCBzdHJ1
-Y3QgaW9fd29ya2VyICp3b3JrZXIpCj4gIAlyZXR1cm4gZmFsc2U7Cj4gIH0KPiAgCj4gKy8qCj4g
-KyAqIFRoZSBDUFVzIGEgd29ya2VyIG9mIEB3cSBydW5zIG9uOiB0aG9zZSBvZiB0aGUgaW8td3Eg
-YWZmaW5pdHkgdGhhdCB0aGUKPiArICogd29ya2VyJ3MgY3B1c2V0IGFsbG93cywgb3IgdGhlIGNw
-dXNldCBpZiB0aGV5IGhhdmUgbm9uZSBpbiBjb21tb24sIGFzIHRoZQo+ICsgKiBzY2hlZHVsZXIg
-ZG9lcyB3aXRoIGEgdGFzaydzIHJlcXVlc3RlZCBhZmZpbml0eSB3aGVuIGl0cyBjcHVzZXQgY2hh
-bmdlcy4KPiArICogUmVhZCB0aGUgY3B1c2V0IGVhY2ggdGltZTogaXQgY2FuIGNoYW5nZSB3aGls
-ZSB0aGUgaW8td3EgZXhpc3RzLgo+ICsgKi8KPiArc3RhdGljIHZvaWQgaW9fd3Ffd29ya2VyX2Nw
-dXMoc3RydWN0IGlvX3dxICp3cSwgc3RydWN0IHRhc2tfc3RydWN0ICp0c2ssCj4gKwkJCSAgICAg
-IHN0cnVjdCBjcHVtYXNrICpjcHVzKQo+ICt7Cj4gKwljcHVzZXRfY3B1c19hbGxvd2VkKHRzaywg
-Y3B1cyk7Cj4gKwlpZiAoY3B1bWFza19pbnRlcnNlY3RzKGNwdXMsIHdxLT5jcHVfbWFzaykpCj4g
-KwkJY3B1bWFza19hbmQoY3B1cywgY3B1cywgd3EtPmNwdV9tYXNrKTsKPiArfQo+ICsKPiArLyog
-SXMgdGhlIGN1cnJlbnQgd29ya2VyIG9uIGEgQ1BVIHRoYXQgYSBuZXcgd29ya2VyIHdvdWxkIG5v
-dCBnZXQ/ICovCj4gK3N0YXRpYyBib29sIGlvX3dxX3dvcmtlcl9vZmZfY3B1cyhzdHJ1Y3QgaW9f
-d3EgKndxKQo+ICt7Cj4gKwljcHVtYXNrX3Zhcl90IGNwdXM7Cj4gKwlib29sIG9mZjsKPiArCj4g
-KwlpZiAoIWFsbG9jX2NwdW1hc2tfdmFyKCZjcHVzLCBHRlBfS0VSTkVMKSkKPiArCQlyZXR1cm4g
-ZmFsc2U7Cj4gKwlpb193cV93b3JrZXJfY3B1cyh3cSwgY3VycmVudCwgY3B1cyk7Cj4gKwlvZmYg
-PSAhY3B1bWFza190ZXN0X2NwdShyYXdfc21wX3Byb2Nlc3Nvcl9pZCgpLCBjcHVzKTsKPiArCWZy
-ZWVfY3B1bWFza192YXIoY3B1cyk7Cj4gKwlyZXR1cm4gb2ZmOwo+ICt9Cj4gKwo+ICBzdGF0aWMg
-aW50IGlvX3dxX3dvcmtlcih2b2lkICpkYXRhKQo+ICB7Cj4gIAlzdHJ1Y3QgaW9fd29ya2VyICp3
-b3JrZXIgPSBkYXRhOwo+IEBAIC04MTksOCArODQ3LDcgQEAgc3RhdGljIGludCBpb193cV93b3Jr
-ZXIodm9pZCAqZGF0YSkKPiAgCQl9Cj4gIAkJaWYgKCFyZXQpIHsKPiAgCQkJbGFzdF90aW1lb3V0
-ID0gdHJ1ZTsKPiAtCQkJZXhpdF9tYXNrID0gIWNwdW1hc2tfdGVzdF9jcHUocmF3X3NtcF9wcm9j
-ZXNzb3JfaWQoKSwKPiAtCQkJCQkJCXdxLT5jcHVfbWFzayk7Cj4gKwkJCWV4aXRfbWFzayA9IGlv
-X3dxX3dvcmtlcl9vZmZfY3B1cyh3cSk7Cj4gIAkJfQo+ICAJfQo+ICAKPiBAQCAtODcwLDkgKzg5
-NywxNiBAQCB2b2lkIGlvX3dxX3dvcmtlcl9zbGVlcGluZyhzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRz
-aykKPiAgc3RhdGljIHZvaWQgaW9faW5pdF9uZXdfd29ya2VyKHN0cnVjdCBpb193cSAqd3EsIHN0
-cnVjdCBpb193cV9hY2N0ICphY2N0LCBzdHJ1Y3QgaW9fd29ya2VyICp3b3JrZXIsCj4gIAkJCSAg
-ICAgICBzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRzaykKPiAgewo+ICsJY3B1bWFza192YXJfdCBjcHVz
-Owo+ICsKPiAgCXRzay0+d29ya2VyX3ByaXZhdGUgPSB3b3JrZXI7Cj4gIAl3b3JrZXItPnRhc2sg
-PSB0c2s7Cj4gLQlzZXRfY3B1c19hbGxvd2VkX3B0cih0c2ssIHdxLT5jcHVfbWFzayk7Cj4gKwkv
-KiBXaXRob3V0IGEgbWFzaywgdGhlIHdvcmtlciBrZWVwcyBpdHMgY3JlYXRvcidzIENQVXMuICov
-Cj4gKwlpZiAoYWxsb2NfY3B1bWFza192YXIoJmNwdXMsIEdGUF9LRVJORUwpKSB7Cj4gKwkJaW9f
-d3Ffd29ya2VyX2NwdXMod3EsIHRzaywgY3B1cyk7Cj4gKwkJc2V0X2NwdXNfYWxsb3dlZF9wdHIo
-dHNrLCBjcHVzKTsKPiArCQlmcmVlX2NwdW1hc2tfdmFyKGNwdXMpOwo+ICsJfQo+ICAKPiAgCXJh
-d19zcGluX2xvY2soJmFjY3QtPndvcmtlcnNfbG9jayk7Cj4gIAlobGlzdF9udWxsc19hZGRfaGVh
-ZF9yY3UoJndvcmtlci0+bnVsbHNfbm9kZSwgJmFjY3QtPmZyZWVfbGlzdCk7Cj4gQEAgLTEzNjks
-NyArMTQwMyw3IEBAIHN0cnVjdCBpb193cSAqaW9fd3FfY3JlYXRlKHVuc2lnbmVkIGJvdW5kZWQs
-IHN0cnVjdCBpb193cV9kYXRhICpkYXRhKQo+ICAKPiAgCWlmICghYWxsb2NfY3B1bWFza192YXIo
-JndxLT5jcHVfbWFzaywgR0ZQX0tFUk5FTCkpCj4gIAkJZ290byBlcnI7Cj4gLQljcHVzZXRfY3B1
-c19hbGxvd2VkKGRhdGEtPnRhc2ssIHdxLT5jcHVfbWFzayk7Cj4gKwljcHVtYXNrX2NvcHkod3Et
-PmNwdV9tYXNrLCBjcHVfcG9zc2libGVfbWFzayk7Cj4gIAl3cS0+YWNjdFtJT19XUV9BQ0NUX0JP
-VU5EXS5tYXhfd29ya2VycyA9IGJvdW5kZWQ7Cj4gIAl3cS0+YWNjdFtJT19XUV9BQ0NUX1VOQk9V
-TkRdLm1heF93b3JrZXJzID0KPiAgCQkJCXRhc2tfcmxpbWl0KGN1cnJlbnQsIFJMSU1JVF9OUFJP
-Qyk7Cj4gQEAgLTE1NzQsNyArMTYwOCw3IEBAIGludCBpb193cV9jcHVfYWZmaW5pdHkoc3RydWN0
-IGlvX3VyaW5nX3Rhc2sgKnRjdHgsIGNwdW1hc2tfdmFyX3QgbWFzaykKPiAgCQllbHNlCj4gIAkJ
-CXJldCA9IC1FSU5WQUw7Cj4gIAl9IGVsc2Ugewo+IC0JCWNwdW1hc2tfY29weSh0Y3R4LT5pb193
-cS0+Y3B1X21hc2ssIGFsbG93ZWRfbWFzayk7Cj4gKwkJY3B1bWFza19jb3B5KHRjdHgtPmlvX3dx
-LT5jcHVfbWFzaywgY3B1X3Bvc3NpYmxlX21hc2spOwo+ICAJfQo+ICAJcmN1X3JlYWRfdW5sb2Nr
-KCk7Cj4gIAo+IAo+IGJhc2UtY29tbWl0OiAzOWM3MjEwZTk3MDIwMGY4YjE3ZGUzNzY3YzczZWZl
-NjQxNzNhOTVmCj4gLS0gCj4gMi40My4wCg==
+On Wed, 11 Nov 2026 at 20:26, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrot=
+e:
+>
+> Magnus Karlsson <magnus.karlsson@gmail.com> writes:
+>
+> > On Tue, 10 Nov 2026 at 11:36, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> =
+wrote:
+>
+> >> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> >> index 18966bbdb5b7..c620a0c32c17 100644
+> >> --- a/net/xdp/xsk_buff_pool.c
+> >> +++ b/net/xdp/xsk_buff_pool.c
+> >> @@ -104,10 +101,30 @@ struct xsk_buff_pool *xp_create_and_assign_umem(=
+struct xdp_sock *xs,
+> >>         pool->fq =3D xs->fq_tmp;
+> >>         pool->cq =3D xs->cq_tmp;
+> >>
+> >> -       for (i =3D 0; i < pool->free_heads_cnt; i++) {
+> >> +       return pool;
+> >> +
+> >> +out:
+> >> +       xp_destroy(pool);
+> >> +       return NULL;
+> >> +}
+> >> +
+> >> +/* Only copy mode and driver zero copy use heads */
+> >> +int xp_alloc_heads(struct xsk_buff_pool *pool)
+> >> +{
+> >> +       struct xdp_buff_xsk *xskb;
+> >> +       u32 i;
+> >> +
+> >> +       if (pool->heads)
+> >> +               return 0;
+> >> +
+> >> +       pool->heads =3D kvzalloc_objs(*pool->heads, pool->heads_cnt);
+> >> +       if (!pool->heads)
+> >> +               return -ENOMEM;
+> >> +
+> >> +       for (i =3D 0; i < pool->heads_cnt; i++) {
+> >
+> > Now I get why you are not reusing the existing xdp_buff_xsk infra, you
+> > are removing them here for the PP case. Please mention this in the
+> > cover letter of the previous patch. There might be a good argument for
+> > it at least in aligned mode. It is wasting memory versus performance.
+> > Today when memory is expensive and also for umems that are shared
+> > between many sockets, the current scheme in the xsk_buffer pool for
+> > aligned mode might not be worth it.
+>
+> Will do!
+>
+> > I have two questions for you. What would the performance be if you
+> > moved the aligned mode over to use the same free_list as unaligned
+> > mode and then use that in PP? Would reuse more code, but would it be
+> > fast enough?
+> >
+> > If that is not performant, what if you instead decreased the cost of
+> > the current pre-allocated xskbs in aligned mode by just creating a
+> > single copy per umem and using those in PP? Might be a good thing for
+> > regular xsk drivers too these days, but do not know if it will work
+> > for you.
+> >
+> > I do not know if any of these suggestions would work, but I think you
+> > should examine them as less code paths is generally a good thing. You
+> > might also improve the non-PP case too by optimizing it for your case!
+>
+> Neither would help the provider. The page pool hands out net_iovs, so it
+> needs one per chunk anyway, and the driver brings its own xdp_buff.
+> net_iov, reuse and state are 69 bytes per chunk, against 128 for an
+> xdp_buff_xsk; free_list would add those 128 on top. Nor is reuse on the
+> hot path: the page pool recycles in its own cache and ring, and gives
+> chunks back only when it is destroyed or its ring is full. The hot path
+> is the FILL claim and the RX ring flush.
+>
+> I don't like the reuse[] fixes size tho...
+>
+> One copy per UMEM doesn't work either: an xdp_buff_xsk holds pool, rxq,
+> DMA addresses and cb, so it can only be shared by pools of the same
+> device and queue, and those already share the pool.
+>
+> For driver ZC I agree, heads add up with a shared UMEM: 32 MB per pool
+> for 1 GB of 4K chunks. Unaligned mode allocates a head per chunk too,
+> though, so moving aligned mode to free_heads saves nothing by itself;
+> heads would have to be sized by the rings. Worth a look, with numbers,
+> but in a separate series.
+
+Agreed, that would be too much tangential work for this series.
+
+> >>                 xskb =3D &pool->heads[i];
+> >>                 xskb->pool =3D pool;
+> >> -               xskb->xdp.frame_sz =3D umem->chunk_size - umem->headro=
+om;
+> >> +               xskb->xdp.frame_sz =3D pool->chunk_size - pool->headro=
+om;
+> >>                 INIT_LIST_HEAD(&xskb->list_node);
+> >>                 if (pool->unaligned)
+> >>                         pool->free_heads[i] =3D xskb;
+> >> @@ -115,11 +132,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(s=
+truct xdp_sock *xs,
+> >>                         xp_init_xskb_addr(xskb, pool, (u64)i * pool->c=
+hunk_size);
+> >>         }
+> >>
+> >> -       return pool;
+> >> -
+> >> -out:
+> >> -       xp_destroy(pool);
+> >> -       return NULL;
+> >> +       return 0;
+> >
+> > Agree with Stan that these changes should be in a separate commit.
+> > Think also about if it would make sense to put your page_pool changes
+> > in yet another commit.
+>
+> ACK!
+>
+> >>  }
+> >>
+> >>  void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info =
+*rxq)
+> >> @@ -212,9 +225,24 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >>          */
+> >>         hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
+> >>
+> >> -       if (force_copy)
+> >> +       if (force_copy) {
+> >>                 /* For copy-mode, we are done. */
+> >> +               err =3D xp_alloc_heads(pool);
+> >> +               goto out;
+> >> +       }
+> >> +
+> >> +       if (xsk_pp_supported(netdev)) {
+> >> +               err =3D xsk_pp_bind(pool, netdev, queue_id);
+> >> +               if (err)
+> >> +                       goto err_unreg_pool;
+> >> +
+> >> +               pool->umem->zc =3D true;
+> >>                 return 0;
+> >> +       }
+> >> +
+> >> +       err =3D xp_alloc_heads(pool);
+> >> +       if (err)
+> >> +               goto out;
+> >>
+> >>         if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) !=3D NETDEV_XD=
+P_ACT_XSK) {
+> >>                 err =3D -EOPNOTSUPP;
+> >> @@ -267,8 +295,10 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >>  err_unreg_xsk:
+> >>         xp_disable_drv_zc(pool);
+> >>  err_unreg_pool:
+> >> -       if (!force_zc)
+> >> -               err =3D 0; /* fallback to copy mode */
+> >> +       /* An old page pool may still own chunks of a failed provider.=
+ */
+> >> +       if (!force_zc && !pool->pp)
+> >> +               err =3D xp_alloc_heads(pool); /* fallback to copy mode=
+ */
+> >> +out:
+> >>         if (err) {
+> >>                 pool->umem->flags =3D umem_flags;
+> >>                 xsk_clear_pool_at_qid(netdev, queue_id);
+> >> @@ -301,7 +331,10 @@ static void __xp_clear_dev(struct xsk_buff_pool *=
+pool)
+> >>         struct net_device *netdev =3D pool->netdev;
+> >>
+> >>         netdev_assert_locked_ops_compat(netdev);
+> >> -       xp_disable_drv_zc(pool);
+> >> +       if (pool->pp)
+> >> +               xsk_pp_unbind(pool);
+> >> +       else
+> >> +               xp_disable_drv_zc(pool);
+> >>         xsk_clear_pool_at_qid(netdev, pool->queue_id);
+> >>         hlist_del(&pool->dev_node);
+> >>         pool->netdev =3D NULL;
+> >> @@ -474,7 +507,7 @@ static void xp_check_dma_contiguity(struct xsk_dma=
+_map *dma_map)
+> >>
+> >>  static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dm=
+a_map *dma_map)
+> >>  {
+> >> -       if (!pool->unaligned) {
+> >> +       if (!pool->unaligned && pool->heads) {
+> >>                 u32 i;
+> >>
+> >>                 for (i =3D 0; i < pool->heads_cnt; i++) {
+> >> diff --git a/net/xdp/xsk_pp.c b/net/xdp/xsk_pp.c
+> >> index fdd55265a6cd..c2214e718cdb 100644
+> >> --- a/net/xdp/xsk_pp.c
+> >> +++ b/net/xdp/xsk_pp.c
+> >> @@ -8,6 +8,9 @@
+> >>   *       +-----RX ring-------+
+> >>   */
+> >>
+> >> +#include <net/netdev_lock.h>
+> >> +#include <net/netdev_queues.h>
+> >> +#include <net/netdev_rx_queue.h>
+> >>  #include <net/page_pool/helpers.h>
+> >>  #include <net/page_pool/memory_provider.h>
+> >>  #include <net/xdp_sock_drv.h>
+> >> @@ -15,6 +18,8 @@
+> >>  #include "xsk.h"
+> >>  #include "xsk_queue.h"
+> >>
+> >> +#define XSK_PP_DMA_ATTR        (DMA_ATTR_WEAK_ORDERING | DMA_ATTR_SKI=
+P_CPU_SYNC)
+> >> +
+> >>  enum xsk_pp_chunk {
+> >>         XSK_PP_USER,    /* owned by userspace */
+> >>         XSK_PP_POOL,    /* owned by a page pool */
+> >> @@ -30,6 +35,8 @@ struct xsk_pp {
+> >>         refcount_t refs;
+> >>         u32 nr_pools;
+> >>         bool dma_need_sync;
+> >> +       /* RX queue of the provider, NULL once it is removed */
+> >> +       struct netdev_rx_queue *rxq;
+> >>         u8 *state;
+> >>         u32 reuse_cnt;
+> >>         u32 reuse[];
+> >> @@ -236,11 +243,225 @@ static int xsk_pp_nl_fill(void *mp_priv, struct=
+ sk_buff *rsp,
+> >>         return 0;
+> >>  }
+> >>
+> >> +/* The queue no longer uses the provider, and its DMA stopped */
+> >> +static void xsk_pp_detach(struct xsk_pp *pp)
+> >> +{
+> >> +       pp->rxq =3D NULL;
+> >> +       spin_lock_bh(&pp->lock);
+> >
+> > Just curious, but why this protection of the fq here?
+>
+> After a normal unbind the queue is already stopped, so nothing reads
+> FILL anyway. It matters when the restart fails and the old queue keeps
+> running; I have a net fix that keeps the provider on such a queue until
+> a retry succeeds... but maybe it's better to introduce the lock then.
+> Let me noodle on it for the next rev.
+>
+>
+> Bj=C3=B6rn
