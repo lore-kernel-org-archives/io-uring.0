@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794513458;
-	b=1anX/uCg2hwk/P/8eMTdM61jHBrAPfemEo697vniGIg4i9436W2+FzYM5+CARlRVjRpL
-	 N3fkzXNkZLskJjsSCmx71PwEAwG+IDOTGfxRvc3ycICXcIZJJv63CNOPOHqJfm+GzaWYC
-	 U8DrAT4ZgDM4aUhidB8/zrUQ5InK7sIEQCMn9yKSFveMpvEjt1oBaMCTMh61Cirqkm40G
-	 6VCJwWmKWNjhTSFAZwtKUM6N5OIvUE7WbT4v8WUaM2db37ecuQBNirV0kHtaJsNnLiYM3
-	 H+tthZzGXzTmsUW7oW6lD9eIywuYRq7ZURvzWLgvKOneNzzzOS5ksx2uhK/+SnjiRdg==
+	t=1794513832;
+	b=iqn3qs2yNwFjIXP8ocezaozZY63Db8QoGkoZxSyw3o4FYi2aEipI/Y9Auisn3f9L2pDF
+	 L+Ygd80gMVKzf2yCTHLw2n5fwuHczhln0nvuGG3E2rr1Ki2Htkef/CmQSomSvlNtXYrNA
+	 nOS/Vk2jnv3C1Lielvpv45mJVY9SmhYy1ZWLlq3bDqpqNysp10VjeIFzC0yVVLKXg5t5N
+	 HCldfVA2bbgWnBFhTy6Qw4NZ3zzbzLrdIMZT3JuTpBs3Xe2gxcjHg3c0pVi9tx9Dy0KqQ
+	 bwlgsNSM32rEXEzz8BtDJ7PRb+HonK5a16+hQbxPXXXLnoIP1hjFgpqhGPwDsqB0K3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794513458;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794513832;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=7guJMRRaIyBXSu5q1TNtm5fdzWXrkWkE2iKaLV14h3U=;
-	b=kvJJnBIpXnEqbemn+vE3lTmWItKPdXdrUOdApZUt/qlOGSO3cRJ6ECavnAfNrmhbjNSA
-	 74VGnb/jq3zhXW7f3mRbSiX9pZSoJUFqdB+RywRvkwTt4MZjis1pBCTk3TjM/t3fCVVZ5
-	 8MH1ZInPpc2nzSmI9QjmQKmu1jybeROeS+1gxtVeuMWSo6xwdskIIs7IUrxOQj8Q16upu
-	 j8upr/x2L8YhAOU1e8DhbTeqncDi6e2RPjP9vmODWLtjmKoylbjDpXcH3oNr7C/322LSl
-	 W8lbYEdPNQQqy46n+l77h6hD/R8tevzwIM6/k3WwCXVe0Xr71MDMMxUDW1+FClL+lSA==
+	bh=5gV/6C2AHmV+xeANCfCNQ0nPfep5V3gLCUrkMNmMk7o=;
+	b=tI4FYjdjQwCkUwUbvpcKLYNXgapMZgdEK8WGGmgb3LDt3jO9nZFB01u9yPBQJyt4rwU8
+	 W/MJFm72q0LaO2rI3B2bfPx1sTnFwbXvIJiuTMMWwhqe6qtvLSwIWt5g0KqvHob7VLooW
+	 jDfE1i9IRlscI5tDGWYJX0mE+tFLUU/aZdGfte9FeABjOqoEzrUnI5tlSnNyR4gfuwTPV
+	 x7+fcqdactIWv9c6IZPiAmITO53qk1B4f9KAwL93d7WhAnYiKM7AijHTIedupYmKsi1DJ
+	 gfKyIrTqE6JEMpT0/HSFAZM6o4A2p1SDFWM7TxWZzR2xivLMbmP4aegYhwEaL34CpUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WwR0zLi9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOPa7Utz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBFE606A88F;
-	Thu, 12 Nov 2026 19:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F10606A31C;
+	Thu, 12 Nov 2026 20:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WwR0zLi9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE151F000C5;
-	Thu, 12 Nov 2026 19:57:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOPa7Utz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEC91F000C4;
+	Thu, 12 Nov 2026 20:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794513458;
-	bh=7guJMRRaIyBXSu5q1TNtm5fdzWXrkWkE2iKaLV14h3U=;
+	s=k20260515; t=1794513831;
+	bh=5gV/6C2AHmV+xeANCfCNQ0nPfep5V3gLCUrkMNmMk7o=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=WwR0zLi94YNDct3dcB3nW3opR+n+eZhSHuebehNpSFyoYQJYcRB/uTok6f0VIEsn8
-	 VhNnmCYLnslIOCeD3XHMyPbA/szoNfexl/h4UkRdQdnkKQS+t4viFQd0RF5sIrS+7w
-	 94NnR1EI7kWlcUYSg5DeygJD9WLbjg6lApMtl06hUAl/P2fwWHzg6oLoFiO4b46RcW
-	 EtTonZU6mxNjqp2zNmo0stc9wJcpwtqAxzNRKlZulu64/zsMZDedhlHfcdt4xWq8eU
-	 vUh5tJKBKk+fh7k+Z924uIN9JJy6j+hnV411pXsULtaOC6Ei5AfRW5f5NXXqASN3YD
-	 y+XV789RFCh3g==
+	b=AOPa7Utzo8hGrUb1g8FR1eUscVISdpgMMukqb5E77PFz1A8oOG1n10ayV5uUs444j
+	 eJnxzADNKmBB3Vwh9EJ1Pe/3gv4rcKrb1JU+OhK2yEWVVomgQ6wUaxFZb047h7NHpL
+	 DIZgkt4JT09zQIeICTMmwEOyyFAn1dvBornsClCTI6h6Mpw/2H32Uc5lgJb3btjgKm
+	 ypPwalQ1RyZ1Vpw84/9q5qMgENrEb7R/NTCyXeBtfqiMVyzwcDyuhDhnfgdhZge+Tx
+	 9Q7K+DwerqtOhtHOleBO8z1GdZZTP9rcqgxaO7ycg70Jj0exD6Is3Kt76yEs/5/C2C
+	 2o8PEYlS22reg==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
@@ -64,13 +64,13 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
  Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
  <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 07/11] xsk: Deliver provider chunks without
- copying
-In-Reply-To: <avWua/xvHrUa5wUI@boxer>
+Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
+ zero copy
+In-Reply-To: <avWk5as19fvZoEJA@boxer>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-8-bjorn@kernel.org> <avWua/xvHrUa5wUI@boxer>
-Date: Thu, 12 Nov 2026 20:57:34 +0100
-Message-ID: <875wy1rff5.fsf@all.your.base.are.belong.to.us>
+ <20261110102039.1002605-12-bjorn@kernel.org> <avWk5as19fvZoEJA@boxer>
+Date: Thu, 12 Nov 2026 21:03:48 +0100
+Message-ID: <87wlqhq0kb.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -85,82 +85,51 @@ Content-Transfer-Encoding: quoted-printable
 
 Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-> On Tue, Nov 10, 2026 at 11:20:28AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
->> A provider socket still receives through the copy path, which takes
->> FILL entries without the provider's ownership checks: a chunk that a
->> page pool holds could be handed out twice. No driver opts in yet.
->>=20
->> Put packets whose buffers all belong to the socket's provider on the
->> RX ring as they are, and copy others into chunks the provider claims.
->> Only the queue NAPI may produce to such a socket, so generic XDP and
->> CPUMAP redirects to it are dropped.
->>=20
->> A device may place payload at chunk offset 0, as fbnic does, so only
->> the first buffer of a packet keeps the UMEM headroom. Such buffers may
->> be sent back as they are, so only descriptors with XDP_TX_METADATA
->> need room for TX metadata in front.
->>=20
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
->> ---
->>  Documentation/networking/af_xdp.rst          |   6 +-
->>  Documentation/networking/xsk-tx-metadata.rst |   3 +-
->>  include/net/page_pool/memory_provider.h      |   2 +
->>  net/core/page_pool.c                         |  34 +++-
->>  net/xdp/xsk.c                                |  82 ++++++++-
->>  net/xdp/xsk.h                                |   5 +
->>  net/xdp/xsk_pp.c                             | 165 +++++++++++++++++++
->>  net/xdp/xsk_queue.h                          |  18 +-
->>  8 files changed, 304 insertions(+), 11 deletions(-)
->>=20
->
-> (...)
->
->> +
->>  static int xsk_pp_nl_fill(void *mp_priv, struct sk_buff *rsp,
->>  			  struct netdev_rx_queue *rxq)
+> On Tue, Nov 10, 2026 at 11:20:32AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+
+>> @@ -538,6 +547,13 @@ static int fbnic_bpf(struct net_device *netdev, str=
+uct netdev_bpf *bpf)
 >>  {
->> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
->> index 1bc42c8902f4..b9464b917a88 100644
->> --- a/net/xdp/xsk_queue.h
->> +++ b/net/xdp/xsk_queue.h
->> @@ -156,17 +156,24 @@ static inline bool xp_unused_options_set(u32 optio=
-ns)
->>  	return options & ~(XDP_PKT_CONTD | XDP_TX_METADATA);
->>  }
->>=20=20
->> +static inline u32 xp_desc_meta_len(struct xsk_buff_pool *pool,
->> +				   struct xdp_desc *desc)
->> +{
->> +	return desc->options & XDP_TX_METADATA ? pool->tx_metadata_len : 0;
+>>  	struct bpf_prog *prog =3D bpf->prog, *prev_prog;
+>>  	struct fbnic_net *fbn =3D netdev_priv(netdev);
+>> +	const struct xsk_rx_check *check;
+>> +
+>> +	if (bpf->command =3D=3D XDP_VALIDATE_XSK_POOL) {
 >
-> How is it related to this patch? I know I trimmed, but I didn't see any
-> references above to tx_metadata_len, only some documentation bump.
+> do you really need a separate command here? why not rely on existing
+> XDP_SETUP_XSK_POOL ?
+>
+> here it doesn't look like things being validated are something unique that
+> you could not check during XDP_SETUP_XSK_POOL and XDP_SETUP_PROG.
 
-Provider frags start at chunk offset 0, and an application may send them
-back as they are. TX validation wants tx_metadata_len in front of every
-descriptor once the UMEM has it, so such a descriptor fails, though only
-XDP_TX_METADATA descriptors use that room. Driver ZC never puts RX data
-below offset 256, so it never came up. It stands on its own; I'll make
-it a separate patch.
+I'd like to keep it. XDP_SETUP_XSK_POOL means "set up driver ZC for this
+pool": the driver maps the UMEM and restarts its queue, and the core
+WARNs if it didn't map. A provider driver does neither; it only says yes
+or no, before the core maps and installs anything. The same question
+comes up on MTU and program changes of a bound device, with the new MTU
+or program, which XDP_SETUP_XSK_POOL can't carry. One command keeps that
+in one place, and v2 runs it from the core MTU path too, so a driver
+can't forget that case. This is only a burden for the core.
 
-> Besides, the amount of branches introduced to existing hot path is
-> worrying. On next revision, could you provide numbers from xdpsock before
-> and after this set run on existing zc driver?
+> Overall, +400 lines for zc pp-based support...not sure what I was
+> expecting and I know we need Tx side implementation.
 
-(FWIW, I've left a all my performance patches out, to keep the size of
-set down.)
+fbnic had no AF_XDP at all. Of patch 11, about 120 lines are TX and 58
+are docs; the rest is RX setup, refill and the checks. 08-10 add XDP
+redirect, netmem heads and whole buffers to fbnic, which aren't
+ZC-specific.
 
-Will do, but the only one I got is mlx5. Would be awesome if you or
-Magnus could take it for a spin on Intel NICs.
+> However, I am wondering if better example for this change set would be the
+> driver that already supports pp *and* carries the separate ZC data path
+> (ekhm, see ice?). Then you could show case at least in diffstat how much
+> less work is needed for AF_XDP support.
 
-Single-buffer RX on driver ZC gets no new per-packet branch: xsk_rcv()
-leaves through xsk_rcv_zc() first. The rest is one test per flush, one
-XDP_TX_METADATA test per TX descriptor, and a flag test in the
-multi-buffer and XDP_PASS/redirect helpers. v2 also moves pool->pp next
-to fq, which the flush reads anyway, and drops the frag walk in
-xdp_buff_needs_copy(), as agreed with Stan.
-
-Anything specific, or just in general?
+ice RX is on page pool through libeth, but ice has no queue API, and
+libeth can't select a provider yet; that's also why ice can't do devmem
+or io_uring zcrx. The provider has no unaligned mode either, which ice
+supports. mlx5 or gve already have page pool RX, the queue API and their
+own ZC path, so one of those would show the deletion with less
+groundwork. I can do that as a follow-up.
 
 
 Bj=C3=B6rn
