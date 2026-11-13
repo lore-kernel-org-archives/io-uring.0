@@ -1,88 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794601761;
-	b=yKTY62WUM7Owhvik+oGTu9Dq0p6dQKiqw5dl4MOEwqByRUJNOmgDkSgHfTpaN9kvMP5+
-	 hurwgeJRxn28LTyR7UIWKaamcVeVtiv2KO1lybjvbwC2COkgVfc4XCH7wvENo4iV2+a0l
-	 Jdna7NB6ybmUFh/V4q/Uq3MPIwYyItcrRcJy+0R28LX7ktRTRp0rIFHEQBfcZLaEaDCWG
-	 4FnnvN8Q7aBUFuuOocZShMHCfTxOjWvOUp1IC9/ENJMwE5z0bgFpVdcYJo6KIBZbkmNUQ
-	 UzKUT4reI3mzB+J9plL6d2eBy/croDc9kb1SUoZejPP1fdDmykhJUpqinukbc29IpsA==
+	t=1794612167;
+	b=PDVYSW99rAOyWK8KnXzLEYpZdTopqo5aOFKgYaZT0XPV7j72fzlt7CpSRAhWISDaA0YI
+	 gQHomtLTUT7NS6uhqgGPMPTXWGxpP4WdYw2vuGW46x/YIKtQjbg8cW/zYEHsBnWbzDMzA
+	 HFrSr7aqUk3KAGGg8sBQXimhUUcF4pUngcbTwp+dYJeteMJN3bFm/5pUqZMgDFJrwW0z2
+	 49udHn1GRdH+UC8vVaZJG3QdB+JvYdoC3PfRDRKXNYmm9cx2J9w9M5btnUu11YtPiAr6M
+	 D9wx3lgt3FpIxtNhOX/vfwmQDrubVpUBwmaFm+JvzYGZy3ZhHBVZDqsJBk/pAEQoHWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794601761;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Content-Language:To:From:Subject:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794612167;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=eGK229zTl2YIYMYm17ryPYIBYFN9VGC2KfrPMFqV8wE=;
-	b=g8OkcTrK4lCR5Jvm62SxL4Bqnl2jTTLNHfXExZRn31Tl5o4Wo06emnI95DahSVIEuCg3
-	 FAdnD4r77UOE0L51xqKui+Z/2uov/SgdF4seCn5tSl+tSr76qMaWEtigV2TDA37x0fF4p
-	 VNTl2Ywb9FbfDKdezSNCDPKCNQY2WTaLwIfC8jhPDT/XZrshGUhBYc54ipSSUv8C5ThNc
-	 0REm6gD+rvZDOW9858vMOGm03wRo6YKGC+PWOV84ZHAvuh83P28vcNWLDokSWst4LIHdK
-	 ZI2NG7xfrqt/kbeBJoiCJ7uqHXo3dyKLKQ0RHg38QTojExEs300SrLbR2ZR2MY/hTrA==
+	bh=4JlziOrXTNMS1OhckK/k5WsJMtCd7SWbYKjtbZqWsQo=;
+	b=GM3F4JThTeXfdUvDWMSZO1+SgvDNpgJgUqZ8+V2KR2JoJbyz3zKUI3CVIe2GWFJ5IDHe
+	 6FOt/BKgDZmpc06pHQ5vTVlP908nkNDrOCcwLhF8OWg544PsaPU0d801h/H2Fadz4fKxn
+	 2QC+W94yvt869ZmyQuSolmQctzz6tIL5pO1DyOS3rFKnVtUYGp0i//NWtkm1oWyuGkdVv
+	 2xsnmZNZp57/1MAH62GA/aefpIMLDGYeQjwaulUWz05CpjDIVSPRHhOfzNDabfbVIf/uN
+	 SkkPZFASofxYgZiIJxMdYHP7FhgqPihmekPDgZZIiOvroOPsPayEzxFgTnwtY2tbgQg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AJeLohf5;
-	arc=none smtp.remote-ip=74.125.82.50
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=rebasedinc.com;
+	spf=pass smtp.mailfrom=rebasedinc.com;
+	dkim=pass header.d=rebasedinc.com header.i=@rebasedinc.com header.a=rsa-sha256 header.s=protonmail header.b=od+AOXz+;
+	arc=none smtp.remote-ip=79.135.106.116
+Received: from mail-106116.protonmail.ch (mail-106116.protonmail.ch [79.135.106.116])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34415606A333
-	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 20:29:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34415606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A109F606A8B4
+	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 23:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A109F606A8B4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rebasedinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rebasedinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=AJeLohf5
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1b3b4bcbfc9so1314654c88.1
-        for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 12:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794601759; x=1795206559; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:subject:from:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=eGK229zTl2YIYMYm17ryPYIBYFN9VGC2KfrPMFqV8wE=;
-        b=AJeLohf5gcbRoXbPXvX59++uuDF4YnBieFI22p4LMioNj7ap+bSOLxEmdz7N4Qn5+f
-         HbTat07fQ/s6Tyg42CdzHi8iH7/oEI/I05EKHVV+5OTFmtPYrY3S9u3dV54f1BfFf6FL
-         9iLj/qkUqiF5rshX2+CEOUXIFHY5jL7T0KpFiECr8dlVD8y7pQx62qUoDWcsIqAqKMbh
-         mEk2qYKwQuaWkSeoMjmQWjSpAPgwvWzYTgNksIQoTidmcdTGsbt7JZgtGZSQNcw9511B
-         BPF71L+wQGV/vqdtye+L1WGWzNN/wXwA0LVdeMXZ1ctygy9eX8EagaagsiIRXcXZHiHM
-         9IYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794601759; x=1795206559;
-        h=content-transfer-encoding:content-type:subject:from:to
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eGK229zTl2YIYMYm17ryPYIBYFN9VGC2KfrPMFqV8wE=;
-        b=Gx6QUS+hEBkVsdoLgB0eiWmuP39BjsCr8pdLuXIpXTj+TA2eAuPLNvEiy1RdL9ic7q
-         nzAkPs06x93uuIVpvQSLf1xL5L326n1ktf2KpkvvcWtYpTftkdGz7TDAl+MzUC9FDLs3
-         Cd9fj6RSyyVOJ9c83Fkv2AEsQTUdecnNfSRXMVp1jH6dlyCmVezB7+Gsz8S0rgq634LL
-         xHq4W7W+5u47RqHlKywtJ/iP8voA85bpIa/7vm76yJIWbPvy9CE98UYpT4l6IGMLsoz7
-         rkGNibZFTRvfBdNt3GlYf171Z2kdYlW6/Oct/kRni9FNfUX9L8OkswHzms06Dy8UgaYX
-         QTQA==
-X-Gm-Message-State: APuU4Z9Oaf/klr1dsmlLmGYQL+jWavszoLPM4i/o2TDnBaIFpmGwF694
-	jkxEdxu2DSz3jytGC9vW9NaHaCU/gWtEaTPlLReJz9sGLXTbGuiYsEIdESF0mD45TMI4HhC+cFQ
-	wqEaBj/E=
-X-Gm-Gg: AYBFou0uOYPHkjkFCIA75utCbhYF4bpwoz0S6d4Tx8UCUT2SirXPZetvlnq+ZBC8YM1
-	p4DcQxR3Pf6wZMTBZPOnIOJPfRjMBnzJI/3AfyoAo2zmGR3wyuI9yNUrqxl3mmjI4UyN2DhQovg
-	LDcbZS0XAfv5MmJqCrVKo/sRCJemXiB7kcgUOY2iT67HA4JSx1kPhpXiY2EZL8scX15kXCez5F5
-	afbtlIJ28KBxaJERkToQIr/2+SqnwM6JiWlgS2yPsoXpTb2unBq5QczOPwsViBHa07nP1FKYlCf
-	K77plT1XSPh44Jr+UVHTRBxpN2dy1EL22pcr5XGtjxQKmEsvG7NXk9B8Xo36XanvRDosxyDmQp8
-	N9EyAWUODtbHS/IgHk0GWMMYPHj5/YAX0qfEpCqkrsIIcbItmSooC1/FJ1Vhg7cGePoVBPLWO/g
-	Q2sh4Xv76Hy/1RiZEgk8WtMY1be76JC7Yzrr8PuN/5/SItV/5OLa3PYwzDAjt69BYGKb+oCaMen
-	8eECB4thPUtV8g4FXQ+KmOp9PJ9IOXIE/o7Nk/hd//JI7jwTQhf4dhdep56nZKIZy5UzVuFQMou
-	wPme/gS7ShI6R+Ltu/wbhhhiWgdHohIxL8P4QjvRYoEQ2SNfX/V2+Yws6FUeLpq2h/G79eMHHSr
-	FRutRBrbzJul0
-X-Received: by 2002:a05:7022:ea56:10b0:1b3:aceb:b8dd with SMTP id a92af1059eb24-1b50317aa00mr3572732c88.38.1794601759115;
-        Fri, 13 Nov 2026 12:29:19 -0800 (PST)
-Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795533170csm10023692eec.7.2026.11.13.12.29.18
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 12:29:18 -0800 (PST)
-Message-ID: <c37d54df-93a6-408e-9ae4-e5d941a16106@kernel.dk>
-Date: Fri, 13 Nov 2026 13:29:17 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=rebasedinc.com header.i=@rebasedinc.com header.a=rsa-sha256 header.s=protonmail header.b=od+AOXz+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rebasedinc.com;
+	s=protonmail; t=1794612162; x=1794871362;
+	bh=4JlziOrXTNMS1OhckK/k5WsJMtCd7SWbYKjtbZqWsQo=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=od+AOXz+19tDJkD+yV6nmkbza29Ypz/7Zj0wWY78Za4QOwmBBWpI/CR7Fi/fXSPxs
+	 YRNv6O/JPFU1vrNIcwQV43MbD3+AEV4i+2vvVyI2yhCCOdHg8FiIHJvhYH1aog7pQQ
+	 /G5I+gAwRKOElqpZCBXzSMgpaSe934imq3cDy+eZCbDEVtzK3WDv657PvVbjf7+6zX
+	 7b+hFAz6Tv/KmuURSKtf1AmTtBxIjDCYq++Ltl1nlT4QMh//kkEWaka/GuwfN91dYa
+	 iw6XhSIA4vVNoeWrgrtjANbUUC3uQrzGcfQnJ/g32NSrZWSoKNTlCWAYANauph1o5i
+	 GpEa+e51zqUBQ==
+Date: Fri, 13 Nov 2026 23:22:38 +0000
+To: "stable@vger.kernel.org" <stable@vger.kernel.org>
+From: dev@rebasedinc.com
+Cc: "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>, Yufan Chen <yufan.chen@linux.dev>
+Subject: Subject: io_uring/eventfd: registered eventfd signals only once after the cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
+Message-ID: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
+Feedback-ID: 231970246:user:proton
+X-Pm-Message-ID: 474fd90d362d4966a5836b434317232f3aed01b8
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -92,89 +61,50 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: io-uring <io-uring@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring: don't run canceled local work from a foreign mm on
- release
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Since commit 89baa3154a72 ("io_uring: run cancelations synchronously on
-ring release"), the task dropping the last reference to a ring runs the
-first cancelation pass itself. For DEFER_TASKRUN, that includes running
-the pending local work in cancel mode. That task need not be the one
-that submitted the requests, a forked child holding an inherited ring fd
-is one example.
+While working on my own async runtime on io_uring, I found what looks like =
+a defect in the stable backports. I first saw it on Ubuntu 26.04's kernel, =
+and I can't find any existing report of it.
 
-Only run canceled local work from a task that shares the mm of the
-submitter, or from a kthread like io_ring_exit_work() where such copies
-fail.
+A registered io_uring eventfd stops signaling after its first deferred sign=
+al on kernels that carry the backport of cd305ee3633a ("io_uring: defer eve=
+ntfd signaling when queued from a wakeup handler") but not 04fe9aeb4f3c ("i=
+o_uring/eventfd: reset deferred signal state").
 
-Reported-by: Yingjie Wang <x-professor@outlook.com>
-Fixes: 89baa3154a72 ("io_uring: run cancelations synchronously on ring release")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+What I see, on Ubuntu 26.04 7.0.0-1016-aws, x86_64 and arm64. Ubuntu's 7.0 =
+kernel took the cd305ee3633a backport through the 6.18.49 stable update:
+ =20
+1. A ring with IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN | IO=
+RING_SETUP_TASKRUN_FLAG, and an eventfd registered with IORING_REGISTER_EVE=
+NTFD.
+2. Two IORING_OP_RECV on a nonblocking TCP socket. Each gets -EAGAIN, arms =
+poll, and later has data.
+3. The first receive's task work signals the eventfd. For the second, traci=
+ng shows io_uring_task_add, but the eventfd never becomes readable, and pol=
+l() on it blocks.
+4. io_uring_enter with IORING_ENTER_GETEVENTS then runs the work and posts =
+the completion.
 
----
+Debian 12's 6.1 kernel does not show this.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5db57bf675f0..39bb18b96cb9 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2550,6 +2550,10 @@ static __cold void io_ring_ctx_wait_inflight(struct io_ring_ctx *ctx)
- 	/* Only wait if this task has attached to the ring */
- 	if (!tctx || !xa_load(&tctx->xa, (unsigned long)ctx))
- 		return;
-+	/* Requests may sit in local work that only exit work can run */
-+	if ((ctx->flags & IORING_SETUP_DEFER_TASKRUN) &&
-+	    !io_local_work_cancel_allowed(ctx))
-+		return;
- 	if (atomic_read(&tctx->in_cancel))
- 		return;
- 
-diff --git a/io_uring/tw.c b/io_uring/tw.c
-index 0b5066f97224..b4a9e28ce779 100644
---- a/io_uring/tw.c
-+++ b/io_uring/tw.c
-@@ -286,10 +286,11 @@ void __cold io_cancel_local_task_work(struct io_ring_ctx *ctx)
- 	 * The work list consumer side is serialized by ->uring_lock, see
- 	 * __io_run_local_work(). Grab it to guard against racing with normal
- 	 * task_work running, as the task may be exiting. The ring is going
--	 * away, run the entries in cancel mode right here - the callers
--	 * provide the same process context the per-ctx fallback work that
--	 * they were previously punted to ran in.
-+	 * away, run the entries in cancel mode right here, if allowed.
- 	 */
-+	if (!io_local_work_cancel_allowed(ctx))
-+		return;
-+
- 	guard(mutex)(&ctx->uring_lock);
- 
- 	while (!mpscq_empty(&ctx->work_list)) {
-diff --git a/io_uring/tw.h b/io_uring/tw.h
-index 3ade5ad577fd..6bc69a234f05 100644
---- a/io_uring/tw.h
-+++ b/io_uring/tw.h
-@@ -88,6 +88,17 @@ static inline int io_run_task_work(void)
- 	return ret;
- }
- 
-+/*
-+ * Canceled local work may still copy to user memory. Only run it from a kthread,
-+ * where such copies fail, or from a task that shares the mm of the submitter.
-+ */
-+static inline bool io_local_work_cancel_allowed(struct io_ring_ctx *ctx)
-+{
-+	struct task_struct *tsk = ctx->submitter_task;
-+
-+	return !current->mm || (tsk && current->mm == READ_ONCE(tsk->mm));
-+}
-+
- static inline bool io_local_work_pending(struct io_ring_ctx *ctx)
- {
- 	return !mpscq_empty(&ctx->work_list);
+What I THINK is going on (I read the source, w/ help from Opus 5.5; please =
+correct me if I'm wrong): after cd305ee3633a, task work queued from a poll =
+wakeup signals through the deferred path, which sets IO_EVENTFD_OP_SIGNAL_B=
+IT. Without 04fe9aeb4f3c, io_eventfd_do_signal() never clears that bit, so =
+each later deferred signal is skipped.
 
--- 
-Jens Axboe
+Where it applies: cd305ee3633a is in 6.18.49 and 6.12.114. 04fe9aeb4f3c (Fi=
+xes: 60b6c075e8eb, in v7.1, no stable tag) is in neither branch, and I didn=
+'t find a copy in the stable queue. I read this in the source of the linux-=
+6.18.y and linux-6.12.y heads, but I didn't run those kernels.
 
+If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks l=
+ike the right fix; it keeps the CVE-2026-80920 fix in place. The 6.12.y cod=
+e differs, so it may need a small change. I will obviously leave the fix to=
+ you, but I'm happy to test a candidate on the affected Ubuntu kernel.
+
+Thanks,
+
+Nathan - Founder, Lead Developer @ Rebased, Inc.
