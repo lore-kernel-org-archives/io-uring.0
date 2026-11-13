@@ -1,100 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794598046;
-	b=LtIvUxXmquqX6XWDDTSTwZiQgJf49j1C99/V5aB9jjuJx9wWKp8sP+vo0S9RTH8xPFy9
-	 fwpZ0T2DOskRj6y+SUzXUxqoKKCHspqBNr3UosvJDUl2YnXkzoBFDdHIKnkJh48FZlODh
-	 HAyGTzZh2VXyfjpxGhhSOizRTHesiTtvusD0olh3ZyupQWNSQOco+OaXHX6W7A9z6m6+k
-	 DXRlzPIaAElaHbOJZh7TiC4s+ivrMEN1/e3GLS0jHLV3bL8B7X3lBKrUs9CphFZH0DBrm
-	 q21w5cUcOFg8AYd2NgbAp2yQajGNXO0QUBBChNKScZG5NVS/w1N1RNy7iM8kwbdrsyQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794598046;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794598334;
+	b=lCYgpwrNT7yGQ1rw4sLHtBGUXFD06vxiD+k0ES3lNcjRcoSgVVA/neGYbjEclXbcajDB
+	 CcaIC6cb4fq0Hr6phviX5oZJyy6JEwezTqm9eMlEMb34BoaJUXyBhdKhqHZXDzHc5zlrC
+	 dXoIXPzio1iriXufzeeyOD5wQxqKSzuabRtIBqRWfAJ7lHx4tmLGosPI64PyGLJiBPoMw
+	 t4xlIzj9mBy8YIitz3ibaPBq4BqiTBoAMwuoZwxT6aKLO5fFcWPJfcG785IcVdTS5AJU6
+	 64xkuGC2ckG9g3sUJRKNcbLukBs/7TUYoBerLfL2/lMeaILaeoKvxDY0jBk2EiXKRqw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794598334;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rWNSB/aKf2gXUDjDW2lO9uiQwvj+Xxn71g5+dKmym3c=;
-	b=hf1vBEjLi4AVnJdzvfYBduL/Ac6ukgZPahYRm6u9MLq3wnTpkhboZZJy0W4ti4oF9YUV
-	 K6zVI1NylXSbWB3lDN3N4EiJqTF8spIpFE/OsYEugA4avxlLGaVsBIS/DKjgkuIqKWHNk
-	 LN7cGtnGO19atTILuNcqojO4VcXWieNdnPNRurc9pSVqJCGoiIw2nL9h642mKOjVrQYcl
-	 VzRec9w04CrXdFF6yAf5QY5VzUsDyjggqveoTcgNuIZ9sKaWbBeUhFb+j+MSOkZLqDXpD
-	 R1HvGhThn2gnI6ZmioDXWUEkYN6rjtxtS1uhBlzDo1tS/suJPULScRxw5+VA5184x+Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gL8jZDdW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.44
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=bnlASUcVZVQjeudfMK53MjyqDP2Xl4cY7Qkr6/6buq4=;
+	b=sehIR7FmpzajCO+88QRiWvju2BuRqfQIixRXkJ+P6m1bX1LnCOXq3ei2KFvxhKh7xQJa
+	 68AaK5kzXaRtf3V3JpQ5N/zr5vewd1DZTJAVrHpoY4wrNLtJhHfJx+dA/fVuLbg+uzHJU
+	 Lp0XWKLGNtPPgYXBHe7cQw0B4J3Hm7WiZSkp+QzCbMsR59wEtOmSz/ge0Cq4pZ1ioI7HT
+	 TQ3HLRMkUdboBFcv7REfmWLtSnqmyl8iU+IyxzX1QsUMI1tR6EsEQ3w7DoSv2mebHiw7+
+	 trz7HUfK1RVLW0OzaKW9QeJ+x+EXkZbcVOGO1Ut2+kMnb77+H0SdXPUyU5yfFi3ufRQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DPhYw3qf;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A467F606A339
-	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 19:27:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A467F606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9444B606A32D
+	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 19:32:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9444B606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gL8jZDdW
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6b791a4b732so1170a12.1
-        for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 11:27:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794598044; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AQ9zVfi04kMw1fCNzMEPQn2yhhW1S8PHriQH3z1updS4OjbRAlKhhQ0Hg9a4kRGRBV
-         d59Xg08q4eQdEZm69hC7cLTlEy73cuqhjoro1fN6fGXard4BOs99mrygCKrsQya1+1eB
-         m8UD6G6N5jXD4SONNegYji+vynqfA+rfUlGjCX0i55gbqX+n4RmdweSLXIIt/1r47/Ad
-         Sdg8rpMa/5VNllM1rIT9xF9XUBWp0x0BdH7WznWWeQjcf8tjF7MgY11SQTUrUBbvuNft
-         41Ha/0Zxcunkpfa8Do17RQCRN5IL9s2nzCFs2QMd0Y/3MGMtXpSBhACfhJ5Yb0JG/E/7
-         otlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rWNSB/aKf2gXUDjDW2lO9uiQwvj+Xxn71g5+dKmym3c=;
-        fh=FlAYoAfL5CTZy/vZGg+yX5f90490tq2JTyLHe8PNBAk=;
-        b=PmyhnTyLlcy+SpwQe6FSPwZtSUWGc7DiVYvmtJh5tRwpkP0Ci/Ez8gMFIckm5eAAaG
-         MKaXtu2iG90YY+ovXwhEn8Os+876ZszSwgNreDX8mV+zdPbPsRiZY/fm7PXk2jkyqzlz
-         6DOVrQCMuZ8yhx2LkriTNU9t9bDeyOLGjB+4FNWSHnCu500MjuGxgNLk6/zbK+jnS1NO
-         1FeMQ8a5StSHwA864uLfRzz49WzqWz8s30X0bfVvukQZvi3sBtJWwCD14ZclahmGeSk8
-         ZmUFNYVclfW1b1JTRpsHHbQ8UGIOHWaK0vdHlzPLLaePiQzAyHAqTu9ZR4eForQxMEaw
-         SqOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DPhYw3qf
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-37071c0f42aso2042219eec.0
+        for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 11:32:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794598044; x=1795202844; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rWNSB/aKf2gXUDjDW2lO9uiQwvj+Xxn71g5+dKmym3c=;
-        b=gL8jZDdWoijYOUqqlj8DOAFvK6zCt6P1zN7hO5bgTFypZZ4sQKlyeApMVL5tn//P0M
-         6kW3UYi9iCdBDhHfk6wKFTzI+2CfsAFBw7Rqv9Vk1nFOxXNXN/aD1X2E3ajfnJ6UGuBm
-         glDsl536MTl2iP4zdDhrwJ/LeGsb/n7BT1C7dJ/ov1VxHcpDm2TAmCZoixEJlYoKVorI
-         ShfqoCaCnn5MgtpAfxRcrwijJhRmF2tjMYr+EO4otzUnXlUcb3HThkZkliJTv9xT5miG
-         cFjd4sB1mm4TKPqC2fzbcGlemMbI6HKTVpEDf72EISt32sXh2M3a08l80d0nxf1IFaH4
-         Jg6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794598044; x=1795202844;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794598331; x=1795203131; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rWNSB/aKf2gXUDjDW2lO9uiQwvj+Xxn71g5+dKmym3c=;
-        b=tEkV1sN4FoATBsehUYypkxtxzNOl25u2IHBT/Qw0Qovrrf4/opNsWN6mckcI6d2LTm
-         p1S5+JtpEMcopMDWGte9blcsYkE5oGIYpILeIbvPa0jn7EQITf9b690Ckc2WV3Vks8th
-         r1e5KmJsrA/3C9/Z3ky6KSTy5ObXajIqb8OsxTIDNIeECu3cGL/8CFArXM1pIhbMZzYR
-         LwhdlGmVMc4Gp9D+jBl0NESz09jmXB977d7i3FDRHwrouFCKPzbfpwxvFBcstueJd03u
-         0KnEvMYhPv6RuvCLUh9KTXnIMaAM1ztv6kd7qffg343myA/SKMeWhKDuv8R9Ft0guYlX
-         psEw==
-X-Forwarded-Encrypted: i=1; AL+hErG0LxThMHoh59vSFSKHU/Ij0gCYy4K66ZDqAqkj2VuoLXO3X5wSoQjAdl/ZkXOZllpYVk9NSSj/Hw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9GqOEryvlm2FBoZCr8RnEq6ZCUiyLs/CiV+UIH58+NdAl0ZMzu
-	HACytrVPruSoC5m6d9djKbia29VFZL3BCoHZBiofVDG8PgVFzfsQBvbFdS0k4K5YLkn4ITdK9zv
-	2tcayl6w2Y/cREobKxlBwFC4a3r9Ad2enFVxpjj1n
-X-Gm-Gg: AYBFou1/mrGXdFuC47zLo+pJX7rHEzbRiHC3VvBAGkfhUrx3Mv0fCBX8Dqwt2XiLSA4
-	nmKngNEcSsG7sgtkEpCzGuhzdVolm2FByVn7UjYdBhM+VvrT7icR/oZmDFf6snQFSIfV8b8jmnk
-	Zu4szjq+9KUVBjuXeqejjXL4Tc7egamnOyCRs2u6gc7X8cqgbQEa2iIoMgb/naLqCi+3w3jpfB0
-	MCTopcNlWgGCQcgq82NGBXLlWdxgAJb8yDRdOpiNbaWlhCVyK02PTDYMsVkJS1QXiF0sYzEpdB9
-	XG9wenKTl3RyENw2x+IT1PMq8x4bADYajSAFaPOtpQTfqQ70ahgCM551R2AoDCOEG2EMFeKfXe8
-	KKGKNONWAwXFwS1d5NxIlCJxsdbDxX/Jagr7p47Ij4jMKoQQyQf40TRVQarneWLoZxEM=
-X-Received: by 2002:aa7:c60c:0:b0:6b5:5d24:5d90 with SMTP id
- 4fb4d7f45d1cf-6b7e064b605mr11515a12.3.1794598043562; Fri, 13 Nov 2026
- 11:27:23 -0800 (PST)
+        bh=bnlASUcVZVQjeudfMK53MjyqDP2Xl4cY7Qkr6/6buq4=;
+        b=DPhYw3qfwLnJCkl9fJo/MyrHc4TuHJa0JDWBGUxtIN0puyGyRTD6VZ+W16Dcl5DTqi
+         7Q/bjhVlrR/mhnMIdOgqKStjfzkJiay+Q9MrOWEYjPPJuHqP7f51D0zLWChkSErrfanx
+         vH9vodqlopWIzCk/nAuLoGuKicQVSUF1Tqt8AhyTGvFpxT/zVnAryWQ1Gu9T/WKJiAcL
+         9XNWKaKWzBSXa4cRzPrOliMINgQBaAOB4lLr/6BLUVqvdIGjOwpImvEzrNEP+jtEb5JW
+         pS78Jxomrz5HfDIrqheLR4qWkrZiAYRVjiX82VFYRYpbVvGq4VYJZ5j9FzdOqxVdSVRB
+         1YWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794598331; x=1795203131;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bnlASUcVZVQjeudfMK53MjyqDP2Xl4cY7Qkr6/6buq4=;
+        b=H7Pnp/6Syhcj9u+tKVf/aFzc7WetwACI28XU/z0AWquWxbPGr54Ly3dkz7YXjrcRj9
+         eLd0SkScgJDOtEb1sfCKKDcNMFiC6+8hr1ncHMfAIYj3Koxqq92mddrCoA7SQ78ov1AB
+         8v4/Mn2pPvcxCqyMv4jgJ9e2vTox/yPNjznOYClf67LxIiG7yuYU0xku8xL8I7c6rdeC
+         JqtorgFDe1s6pNkmriF5ruhoe/628QkhlFcc+KQIJ6rBNWx02JuzAgstMuJaS5DPseTx
+         bjJIqLSr/hBqFxOlbAMC6AqwchXBfmbHu3MCBmElgUGTQzavglD5qG9OUKaHZMkl/5Vy
+         +2Vg==
+X-Gm-Message-State: APuU4Z9i3dkvn3/9XsgGgOx3xAHew3646SbKMw0epFFBM6RNKcNDikMC
+	qWOyp9ASKEIdzJeGW8HDDOD3WQvCBIhsV1ffKQUty+C7wHjxpMXCGjzY+PGiB1sT9XpFNQtD9XJ
+	+J1EM+6Q=
+X-Gm-Gg: AYBFou1D9ryAt2glx8cnDWDxKNS7u5Gab6v7gUXGS5wq3Z3pXRqYBZkbRpjdDdrC1MC
+	qF3b5Ns3+mZWKUyFqhck5SKeUZGli+vNj15W+1a26kwWeCfr4+94938FQTlihFtLHiHz5M+2mjM
+	i3Ox+OsplNVdAPbOEtu5Ywz+jwJnPTcZ8CdDqxsRSD2yu5VxQHdT0TidjdaY2PurQKOR/azNaU/
+	v8gnf3Dh2kInqRzw9/R2q+EhOzptXoCVSTxRLT8kF0cjpKbCxMUEndwEOZ1ohCTHkoU8cpIJC7N
+	gIazoMdbVBsGoit8jstA0IQSjKEp8VJoyNok5Vu0gHjRoGl180dNc7IgKsRlv67mYqIdmb4ZUOz
+	xVMEz8FssaMrEnoSHC+e1v6hHVN3TFWXjKbEulTmpuWYApq50GcHQm1wenMS/29KwDmFHnC0xQw
+	Ai1n5xp2phZ9ohIivnZBHQjoUXb8vlFzWS38IT8UXiLagxVnvD6YzrTfoJzyKuVmpfHceu8l1bq
+	bxK34w5ovIFlwZLgu0mRJ2j5K9C7LmFg+BXO+0/50GsDP5CU2j/Zzh0tl3/6mSekTkjKvzZOpJT
+	Yyadfo09OhdIdcBqpm7TRRcCBHjuETD3Qzij6lgzp/E/U1vT0flcUuP4MrWvpGxDKfbi1dqAX/a
+	UtJ6RO9zqlykd
+X-Received: by 2002:a05:7300:f694:b0:376:203e:7d7b with SMTP id 5a478bee46e88-3796337436amr4436023eec.2.1794598330478;
+        Fri, 13 Nov 2026 11:32:10 -0800 (PST)
+Received: from [192.168.1.142] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379560f5e06sm12579074eec.19.2026.11.13.11.32.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Nov 2026 11:32:10 -0800 (PST)
+Message-ID: <d0106b31-ad9e-414c-a32e-00877a91a0f2@kernel.dk>
+Date: Fri, 13 Nov 2026 12:32:07 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -104,49 +92,53 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-10-bjorn@kernel.org>
-In-Reply-To: <20261110102039.1002605-10-bjorn@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 13 Nov 2026 11:27:11 -0800
-X-Gm-Features: AclHuK8F8Y_DVnfmHCZelVEZmvLdtuJXie3zRJu-e7GqKDc7mN1PxeFQiqOooCY
-Message-ID: <CAHS8izNyMM3pSJJXZga+OL6QMHFgnF-gu-+vzk6DO=EC4CLfuQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 09/11] eth: fbnic: Use netmem for RX headers
- and XDP_TX
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: fail soft links on negative IOU_COMPLETE
+ results
+To: Yang Xiuwei <yangxiuwei@kylinos.cn>
+Cc: io-uring@vger.kernel.org
+References: <20261113094805.1881266-1-yangxiuwei@kylinos.cn>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261113094805.1881266-1-yangxiuwei@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 2:22=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
-.org> wrote:
->
-> fbnic reaches header and XDP_TX buffers through struct page, which a
-> provider net_iov does not have. Use netmem for both, and set up the
-> xdp_buff with xdp_init_buff_netmem(), so XDP_PASS copies heads that
-> must not leave the RX poll.
->
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+On 11/13/26 2:48 AM, Yang Xiuwei wrote:
+> Handlers such as fsync return IOU_COMPLETE with a negative cqe.res.
+> The old io_req_complete() path called req_set_fail() for res < 0.
+> After completions moved into the core, that check was dropped,
+> so IOSQE_IO_LINK dependents kept running after the head failed.
+> 
+> Fixes: 97b388d70b53 ("io_uring: handle completions in the core")
+> Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
+> ---
+>  io_uring/io_uring.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 5db57bf675f0..742322c1fcc3 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -1540,6 +1540,8 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
+>  		/* not all handlers take care of the internal restart codes */
+>  		if (unlikely(req->cqe.res <= -ERESTARTSYS))
+>  			req->cqe.res = io_fixup_restart_res(req->cqe.res);
+> +		if (unlikely(req->cqe.res < 0))
+> +			req_set_fail(req);
+>  		if (issue_flags & IO_URING_F_COMPLETE_DEFER)
+>  			io_req_complete_defer(req);
+>  		else
 
-Acked-by: Mina Almasry <almasrymina@google.com>
+Why not take the chance to improve this a bit:
 
---=20
-Thanks,
-Mina
+if (unlikely(req->cqe.res < 0) {
+	if (req->cqe.res <= -ERESTARTSYS)
+		req->cqe.res = io_fixup_restart_res(req->cqe.res);
+	req_set_fail(req);
+}
+
+?
+
+-- 
+Jens Axboe
