@@ -1,76 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794513832;
-	b=iqn3qs2yNwFjIXP8ocezaozZY63Db8QoGkoZxSyw3o4FYi2aEipI/Y9Auisn3f9L2pDF
-	 L+Ygd80gMVKzf2yCTHLw2n5fwuHczhln0nvuGG3E2rr1Ki2Htkef/CmQSomSvlNtXYrNA
-	 nOS/Vk2jnv3C1Lielvpv45mJVY9SmhYy1ZWLlq3bDqpqNysp10VjeIFzC0yVVLKXg5t5N
-	 HCldfVA2bbgWnBFhTy6Qw4NZ3zzbzLrdIMZT3JuTpBs3Xe2gxcjHg3c0pVi9tx9Dy0KqQ
-	 bwlgsNSM32rEXEzz8BtDJ7PRb+HonK5a16+hQbxPXXXLnoIP1hjFgpqhGPwDsqB0K3Q==
+	t=1794530523;
+	b=Zh9i9O2aBHhLGZv+JWSuXoc5SH/oGltYe4/b/BzA9HATw84qyYDC1aGNZTESYtr3fr1K
+	 fo3AeAHwAE+uN4B99I8XJePhlSoGdIYQ9P61vuUr8HXIBck88ZfbYR4Ts4eBDCDgIAQ4f
+	 hQzjmb9cfM2jTTZ6Q0ChifUAxPUWLjdEX2sNaJOPraV+yEne6yVQAHDBI3icS1ppnJok0
+	 Of8JPaQeAMH/KYVnCDsI0D08hSl3ZEEyjJzizYO/UDlsFAoH7RC969mpSR+EDsYxkGs29
+	 M92Pg66GOqL5hoM+z3jSxC8t+Tl5kP/vowzbjKWRuBEDduTdKybDfn6qA/8Vwqxo9IA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794513832;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=5gV/6C2AHmV+xeANCfCNQ0nPfep5V3gLCUrkMNmMk7o=;
-	b=tI4FYjdjQwCkUwUbvpcKLYNXgapMZgdEK8WGGmgb3LDt3jO9nZFB01u9yPBQJyt4rwU8
-	 W/MJFm72q0LaO2rI3B2bfPx1sTnFwbXvIJiuTMMWwhqe6qtvLSwIWt5g0KqvHob7VLooW
-	 jDfE1i9IRlscI5tDGWYJX0mE+tFLUU/aZdGfte9FeABjOqoEzrUnI5tlSnNyR4gfuwTPV
-	 x7+fcqdactIWv9c6IZPiAmITO53qk1B4f9KAwL93d7WhAnYiKM7AijHTIedupYmKsi1DJ
-	 gfKyIrTqE6JEMpT0/HSFAZM6o4A2p1SDFWM7TxWZzR2xivLMbmP4aegYhwEaL34CpUg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794530523;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=rN0Ie5yME6hsx7pm+x3UNEKpXeb1k8nlYJCB408a9fM=;
+	b=IpdmujSJTAkQUvA0JA+1wH+G9za91psouBu4hadIMYNXOZu+sT5dn6/5FMO65oZ5+Vrk
+	 wW0s2IGvqZQ8zB76b6r4QBB8oxecQPqgiSsh4F0M1cXKdhRdrqOvfaZXkwm+Xu5SYQM7b
+	 eNCY66TQqL5kHvc7GklobRbUQvObONQQkz/gLA4bRtzOEZr4ARXkgpwM827hIjwx8CeZn
+	 4kZmW1+ZWTe7+ojwp/5GMS97QoxAGFQuX6Db3GqBiRWkqVWNm+sTvK7u0KEtlm4oN1Rs+
+	 Jz5YfNP9dpCC8okEwfS7QNxCDvuqss5wdjkqra+8HE6U7nBkqkgRLVXXicTBKpxJP6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOPa7Utz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wS4wsUX6;
+	arc=none smtp.remote-ip=74.125.229.4
+Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F10606A31C;
-	Thu, 12 Nov 2026 20:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1FA606A331
+	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 00:42:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F1FA606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOPa7Utz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEC91F000C4;
-	Thu, 12 Nov 2026 20:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794513831;
-	bh=5gV/6C2AHmV+xeANCfCNQ0nPfep5V3gLCUrkMNmMk7o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=AOPa7Utzo8hGrUb1g8FR1eUscVISdpgMMukqb5E77PFz1A8oOG1n10ayV5uUs444j
-	 eJnxzADNKmBB3Vwh9EJ1Pe/3gv4rcKrb1JU+OhK2yEWVVomgQ6wUaxFZb047h7NHpL
-	 DIZgkt4JT09zQIeICTMmwEOyyFAn1dvBornsClCTI6h6Mpw/2H32Uc5lgJb3btjgKm
-	 ypPwalQ1RyZ1Vpw84/9q5qMgENrEb7R/NTCyXeBtfqiMVyzwcDyuhDhnfgdhZge+Tx
-	 9Q7K+DwerqtOhtHOleBO8z1GdZZTP9rcqgxaO7ycg70Jj0exD6Is3Kt76yEs/5/C2C
-	 2o8PEYlS22reg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
- <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
- Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, "Mike
- Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
- <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
- Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
- <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
- zero copy
-In-Reply-To: <avWk5as19fvZoEJA@boxer>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wS4wsUX6
+Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36f758312e0so137192eec.0
+        for <io-uring@vger.kernel.org>; Thu, 12 Nov 2026 16:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794530522; x=1795135322; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rN0Ie5yME6hsx7pm+x3UNEKpXeb1k8nlYJCB408a9fM=;
+        b=wS4wsUX6ixKaKqiYjQsFCJYaIJKn2BaV3f3zkmlFUG5frnXleY4I+yDFt5BO59cWXS
+         E5JETtLS9PRnKnT4J1LIE09WxVAAseI/wWSe9ZZeOV6x8kziPaEXsCY6VA4BF3ndFAYK
+         RWSIBklti8rhZx7Uw73mxUbumVjoZyDIRHpcBnNQhm2oyRlOtVBUnzHH7YKMa/VKxtK6
+         XRHkKorE0Qv/+WieykgVMwoTnmMHuUtoJt685pJPRiQLmu8VwLBvHw1reor7fxpobajo
+         9lGqkOBDxWRjtpOvgGDO8xvWJO5ml5wtEjHhs/tWxIBi40DGSxddqrSQp+uaaq/lq/0t
+         sryw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794530522; x=1795135322;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=rN0Ie5yME6hsx7pm+x3UNEKpXeb1k8nlYJCB408a9fM=;
+        b=uV5siNJCTr4AZPlUxiNMF/mDGG+S7UIy1tQkQQ3Uqk3LksISX0b8KbmdF0Zrpn5/W7
+         WjJ78BH+QrYSxlakvouPitdZEwwVZS6surSr9aJc1OUWygDCYhOGxycah/Ros+hVSLxq
+         IqZHDyO4iJs5oRxqmVI/Slk/aHSqZ/BspuDALxx9qaddcyCw6SADZJB0mctnr6aLF42+
+         PH6log2GQfQcv9nDW3KBSx9efNC5dB5OV7g0Bd+DCpruqmG16soWJowK2SS2LYlQCTNq
+         3txcREGdfXEKfql0cTs2iDYAVVIIlSnf6dnOQAuDc+lJw6j6+JOXukHC2Oqi2BHPJjil
+         i5FA==
+X-Forwarded-Encrypted: i=1; AL+hErFfWPTLDbj83C4uX2WTO+DC+D8aosLm6wgcGNigzVUDj18OJ29w+G7rLwHcu57KzbZrOADP1RgWCg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8XlvTuW1zO1AiOqVWPaXqi1ObVS8zoN4kw56Zg02vPiqfH35on
+	HsFxycKKvEOYhLHk5WNlJa6CWAKxrI8+BQmgF171KVir+haypA+baX+X
+X-Gm-Gg: AYBFou2Z10CQVkohj+yOxGjwghTdeD4wnvdqGX1ZjQ8okW/MbxVszB4YZd9HqDQ/ihi
+	j0q3DJymeXYNvO4kffMIe4QmEm+/1BpuAfE2PaVZqIq+LARIZU4FxwzQLaxWUtd5b11W+ZorzaZ
+	w/vciH9YUM4pRHpJyHWSJKEg0u8s09pDRfV2VAnfyFBLm2zj2c7xLokL7KzANjgPqqQhbpkbkcK
+	BrIrtkhNi/tZ+lLpQgRWwUvHD3qBDrdzfgHQgV5rzfyIAaDkr/9kvvVyeQqGgdH/FnFxMfdOMXI
+	BwuH7Q6BA10UbHqQwPCXsWXq4ZS78zS4PY20nPMR2cppLhMq9dnHT4JX59HWwavWDcNHR4VR1Wt
+	Vr+XeMTomvHbb7+32d3VIfJZofLiI6uuPJXCqoYPGPsIoT0PwD83lwxJpz+XcQk7qH9CIbj5J9D
+	MQyS8OjmFBwt/ZXtdfwGtSLrwolmOZaHtUXxBmbIgUYBzp57SgzYjYseyrZg30EhCFN6IFvsBTb
+	60yaSHW6ZOvNNlieE4weEfu0SITIiXZ+3W7qkt/hdFLTXjHCoUuU5oTPzwsDjahpN4vc2XI68gH
+	P9CRw7p0SE/wIHT6+myEkhMn
+X-Received: by 2002:a05:693c:8852:b0:36a:1452:8dad with SMTP id 5a478bee46e88-37966f32039mr734196eec.20.1794530522135;
+        Thu, 12 Nov 2026 16:42:02 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:71::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379553316f2sm1934134eec.9.2026.11.12.16.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 16:42:01 -0800 (PST)
+Date: Thu, 12 Nov 2026 16:21:27 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Stuart Clark <stuclar@meta.com>
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+Message-ID: <avZXuHWBUTJvJnEu@devvm16445.scu0.facebook.com>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-12-bjorn@kernel.org> <avWk5as19fvZoEJA@boxer>
-Date: Thu, 12 Nov 2026 21:03:48 +0100
-Message-ID: <87wlqhq0kb.fsf@all.your.base.are.belong.to.us>
+ <20261110102039.1002605-3-bjorn@kernel.org>
+ <avOYe27x-AlxmyK9@devvm16445.scu0.facebook.com>
+ <87mrrfa6c4.fsf@all.your.base.are.belong.to.us>
+ <avTy21_cSnyMdbb5@devvm16445.scu0.facebook.com>
+ <87cxsarvwd.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -81,55 +121,53 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87cxsarvwd.fsf@all.your.base.are.belong.to.us>
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+On 11/12, Björn Töpel wrote:
+> Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+> 
+> > On 11/11, Björn Töpel wrote:
+> >> Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+> >> > On 11/10, Björn Töpel wrote:
+> 
+> >> >> +	if (static_branch_unlikely(&page_pool_mem_providers) &&
+> >> >> +	    WARN_ON_ONCE(!page_pool_supports_frag(pool)))
+> >> >> +		return 0;
+> >> >>  	if (WARN_ON(size > max_size))
+> >> >>  		return 0;
+> >> >>  
+> >> >
+> >> > What's the deal with that? How do we get here?
+> >> 
+> >> Hey! Thanks for taking a look at the series!
+> >> 
+> >> An explicit frag call on a whole-buffer provider is a driver bug: UMEM
+> >> chunks can be smaller than a page, and RX gives the whole chunk to
+> >> userspace.
+> >> 
+> >> But page_pool_alloc_netmem() also picks frags for small requests, so a
+> >> valid call can warn.
+> >> 
+> >> I think it would be better to make it return a whole buffer and its
+> >> actual size. The WARN stays in the frag API, before taking a new buffer?
+> >> Wdyt?
+> >
+> > I see.. Idk, I'd still return 0 here, but without a warn. Not sure
+> > we want a warn for any api misuse? Returning no netmem is gonna be enough
+> > to debug things? As for the calls from page_pool_alloc_netmem, I'd also
+> > handle it explicitly? if (size > max_size || !page_pool_supports_frag) ?
+> > But no strong preference, up to you, was mostly trying to understand
+> > what we are warning against here :-)
+> 
+> Yes, page_pool_alloc_netmem() gets the explicit check. Thanks!
+> 
+> For the frag API I'd keep a WARN_ON_ONCE, like the size check right
+> below it. A silent 0 looks like an empty provider: the queue just
+> stalls, and nothing points at the driver. With the helper fixed, only an
+> explicit frag call on such a pool gets there... Wdyt? I'll probably take
+> that route for v2.
 
-> On Tue, Nov 10, 2026 at 11:20:32AM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
-
->> @@ -538,6 +547,13 @@ static int fbnic_bpf(struct net_device *netdev, str=
-uct netdev_bpf *bpf)
->>  {
->>  	struct bpf_prog *prog =3D bpf->prog, *prev_prog;
->>  	struct fbnic_net *fbn =3D netdev_priv(netdev);
->> +	const struct xsk_rx_check *check;
->> +
->> +	if (bpf->command =3D=3D XDP_VALIDATE_XSK_POOL) {
->
-> do you really need a separate command here? why not rely on existing
-> XDP_SETUP_XSK_POOL ?
->
-> here it doesn't look like things being validated are something unique that
-> you could not check during XDP_SETUP_XSK_POOL and XDP_SETUP_PROG.
-
-I'd like to keep it. XDP_SETUP_XSK_POOL means "set up driver ZC for this
-pool": the driver maps the UMEM and restarts its queue, and the core
-WARNs if it didn't map. A provider driver does neither; it only says yes
-or no, before the core maps and installs anything. The same question
-comes up on MTU and program changes of a bound device, with the new MTU
-or program, which XDP_SETUP_XSK_POOL can't carry. One command keeps that
-in one place, and v2 runs it from the core MTU path too, so a driver
-can't forget that case. This is only a burden for the core.
-
-> Overall, +400 lines for zc pp-based support...not sure what I was
-> expecting and I know we need Tx side implementation.
-
-fbnic had no AF_XDP at all. Of patch 11, about 120 lines are TX and 58
-are docs; the rest is RX setup, refill and the checks. 08-10 add XDP
-redirect, netmem heads and whole buffers to fbnic, which aren't
-ZC-specific.
-
-> However, I am wondering if better example for this change set would be the
-> driver that already supports pp *and* carries the separate ZC data path
-> (ekhm, see ice?). Then you could show case at least in diffstat how much
-> less work is needed for AF_XDP support.
-
-ice RX is on page pool through libeth, but ice has no queue API, and
-libeth can't select a provider yet; that's also why ice can't do devmem
-or io_uring zcrx. The provider has no unaligned mode either, which ice
-supports. mlx5 or gve already have page pool RX, the queue API and their
-own ZC path, so one of those would show the deletion with less
-groundwork. I can do that as a follow-up.
-
-
-Bj=C3=B6rn
+I guess, yeah, makes sense, let's return full size and warn. Maybe also
+a short comment will help to explain why?
