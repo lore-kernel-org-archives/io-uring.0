@@ -1,93 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794673525;
-	b=5p8s6MzEVEzpaHb3WJnPalFIz7uU7wqrqrE6sZMSwMzEPlCBBy2w8LKGqcFixAeYikqA
-	 my7XQxyplQPwvuRb2liI2BxDyErZ0yK296KOdVyILsRjkyb9WqOXrIs2wUq7d9qzsJqJ6
-	 3E1EIiAudOMBaGBz38J7Rk7eIV0Eq1oszHl/jfb6vT4i/hI1As7zY/rckEN7yP5kom5oM
-	 kXjLOeS10Mpy2Uz/FeHWpY1GUxtcySJuMIV/+AFYqJATudpf07WHbM4jRtYRJ7rPFfeLL
-	 REjk4iNffW7foqFerCdXy5DnDD3MueHnvjKjdoG4zUTsEF7t48/YJvS4nbQmRiRFMRQ==
+	t=1794673528;
+	b=A+YfPoke5I/eVX4Q+R8cj9ahjznlzqMkPiA69HStkEb1DvdPTDWAtO/lTTGSDlKQCBKh
+	 juI5MRiuTCEH52jDwJx9Gfehf6hu6v8ykQsDIHcfITsWUwIBa15pXLIrYUj8gcCbLHQRj
+	 IZE3wJA/fjCgcEmNAfZVvS2Yy95LOkfjF3Y4YiZfwsENzqofVfyhaJ8tF5EhIostKs6Mm
+	 v+LzaqlT10vkcM7sPLiiwFK83xrVQgpTWJnskDVbxZJkWoTBk0uoq68jQ0NaG4b8LYe7+
+	 fmd2EfiNhCe9Pjt94Zc7h+HCFWxcdW7LEmjD7Azhg+RGgyJuj4OijO1nknDzczqQ9TA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794673525;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794673528;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
 	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:X-Mailer;
-	bh=CTiVcC8eq7sdHcAgeRmvEDD1Pq5SKJgbfofygYvagp4=;
-	b=R0f7ZPXSFXHW0huKrwe0v8fo6zspB4G0UuhElGKRzIUfJ/iwPoeVTeBBiQN1GOH+HLhu
-	 aF4A777D50aywngwvhA4A2I7Q2GflzFzmf9OU/UC6VbBobKeBcq6KhhHQtEHwLMg08u38
-	 u57VcLo8nHuGyYvg4N5vtcj7V/rmWsEjbWDE5jHcbqWPdG7LIlyIPdxz/okAofKLYI+Se
-	 sS9TUxoYmtdGffYyDnIBqCx1sp3zf6sZ4tjfEkSNMYNc0zwpZwSBZ8vSnEgvbLsfyONbr
-	 TplFgGuPAKQ/WWg0FNAmyC/Yc2gfslz5dsnFKVgrWd6jEfOFj8EuEjWomMYPV/gzD6g==
+	bh=lXPkYWUZ3Udi9LVDqQlr22wZnWQhsRh3Camx7qJwyCk=;
+	b=ui8iPSyNemZ0zPaterWTiRJzdhzVk30v3gSjk7+QctM3W227jSmaro5KXqdhtt8a1Y8V
+	 UM9ADlqQdgNCT8/F1euwhjnTr99JBeXW7MTJ/Gddb1zdmkF7G3lDaMHwiWAnQiQ6bN/vF
+	 wuNXh3cVXEWrTwYMctEbtiwc/SU0+PP5o8Us2ChLwI9idqcjCQ5vsuFggmziGuMk3dGXa
+	 3fjCYkbcTOXLqzeTlUtsCEIlC/Zr2Ag2+AYnNRlp+JppPuezl6oEUH2LWnNvl9P4byp+l
+	 Tn4uQqxleVo4/gcIS2/o606WEVoJw2y+AFP/djt85xTHXjseTxnaC/eYJQE+S5yIe6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qzYPtFtr;
-	arc=none smtp.remote-ip=74.125.82.49
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=UwHxAxpw;
+	arc=none smtp.remote-ip=74.125.82.173
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1815606A323
-	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 16:25:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1815606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD902606A333
+	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 16:25:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD902606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qzYPtFtr
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1b3a05f8b5bso2491900c88.1
-        for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 08:25:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=UwHxAxpw
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-36e99cf7bb3so2646171eec.0
+        for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 08:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794673524; x=1795278324; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794673527; x=1795278327; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CTiVcC8eq7sdHcAgeRmvEDD1Pq5SKJgbfofygYvagp4=;
-        b=qzYPtFtr7LJ83eWFoq2V22IY7AVYMhmHa2H9fxtycrwRUBBTDkq1/badq8zD7cCX55
-         HUHpmVITbjFIAUz3J9JtXArTr+BZY/TwBSfZxC25wcHllOupH1oJZvF96R8lFk4tSo/c
-         fS6dg9GaxYo8rQlwLYvvzsHcYxk++ZAiAxIPEH3wPXGE2MM7oGotwonRHsVIgcUUO8hx
-         kxoHL8ngcRDqTJN2uLXXMKjI4BtKGj8zqszrJQ5aBoLzfP6g9LHP2b0T/FlTBmemefvU
-         tr4/sP7+VomAZuAdweenCmY3tKr/oRHnH26pEahoja4BEqEaFvkcAQmerG4VxhQ4iUhJ
-         oIdA==
+        bh=lXPkYWUZ3Udi9LVDqQlr22wZnWQhsRh3Camx7qJwyCk=;
+        b=UwHxAxpwSIdnK8weihpuCIPRARd8lIXdmrk4RMTzPo7FqEDIHoCoZ+ISoJ8YfR8l24
+         ScqJ12d/FrAQwQMdoUOq6QrqbNGSpeMYLcNTvRX2yx0pjox3FmBLvEKSROIowZijSq62
+         xWii4o46mSD1Q1tM7SYtW33WaoEuLtsfdVoJtmTtboA6q72gPrJ/7KZxPCvxQTayNNTs
+         dyU8HFDMMBxJeXsK5PP/K3wzsB80QDkuLpbmguyUfgJn5yH2p+70gTZPgE6oCO9IIji4
+         FHSpBlSUVNFi/LD3k1oX8BO3ZsRJpXP9bRVkFVnbWz45v1ab8ZtLbmZSnMTNdkWRdC9O
+         oyxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794673524; x=1795278324;
+        d=1e100.net; s=20260707; t=1794673527; x=1795278327;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CTiVcC8eq7sdHcAgeRmvEDD1Pq5SKJgbfofygYvagp4=;
-        b=I4PXuopBl0iXDU5fbnDrQCwe/6vLDmaZr9Y2ij0W5YKRTsuGoxtJYIdfEa5JpjCayB
-         TjdOnJv6epz/yqqdG8BaGLXAoRGwMl77AiPRwGkyQ20lN4rai8EJicIbVsxzAxRDM2Ys
-         4y8hQ9gJ12TRD5+dg3SEncy63OODcdnhhNTmHAcHlnn2BO8aNBgqoM+Aix3lehJMMxRt
-         FRcB/btLHKVlVZ/GfH4P0KJFY6WQZvzZ/8K6/d7ye6PfcSHncxWMTvJEw1o1knMoRwVS
-         wuVLDskN5Ax5nJ8ntUweBKMapePAHKSq9HuZyUaaD+IPZuxBaOxOyb0NBWiWtYtBM9G5
-         xuNQ==
-X-Gm-Message-State: APuU4Z8hnSDEhto5/6BGFlSQoEnrxCuEL4cLMRzbwwqLi2oaE9QUkt5+
-	s91fa4/A41FLxeMF3GOOKP6l/bx1YVXYJ+zDHWvI1Seb+4wH4FVn5qNYYM6Hh10TsHAsxClcGD/
-	DGOV+voU=
-X-Gm-Gg: AYBFou1mG0MWdd8LolaftHNKzKu+kx05zeMR6JV5vmOxhxSS3Prke+svtN9c0wcWNBP
-	uNQLKmRUQDpDoT6/0kraKJet0Z88rYMMqCd6cGcfrx1MEAfnzUmCXn8BegTo07hqeV9jWavpnSH
-	RpbaiB9sMxnsDXopM/tFqRIxT6BFMHXcNIiHysaRm9Brp0pZ0mIS/NPwuLTsX6YMHQ++lXeH9j0
-	+5X616O3tvt8C44aY5H06+wB9XwlDJXuN0WyPrkF+0ZgiVspoFD/zWO8o+OCRPWRhZHwTlDr9By
-	ddbROuGJ/Nsw+JF21eprYbdJognYIfDBnukYiBpK5+T+PvT7w2BlwpucJLHaY8jvlugtqyweib3
-	zv5gqq912nUmHJjnXdhTJEP3QolZB0ecGSdiTaFXgd9d1hysUU8ApFlSzq0+hWWcBMLsBgMgjNR
-	DD5e7uZ93KU5u8qv94rAYMLo+sRKGu4/DjJZCEkhr3OvrpUb/0Iq/vNCiqkNi3+VEd+oflxIXYl
-	AU4FXMGhJnCak6BsB/UCRTd/6dRxObQnKE1E++gXDf0Cg0L0RTEVd+MrsppjEJchKFeZHanf/eE
-	mq3zhDAHT5b42an14Bm1NkutqyfX8Cr6Xvt06wELT29YjpMcBPufMcl9jrAycfqKwiVcO6o7vIw
-	luu+2eYynmtp+
-X-Received: by 2002:a05:7300:cca2:b0:36e:371:8255 with SMTP id 5a478bee46e88-379603825bemr5071086eec.0.1794673523644;
-        Sat, 14 Nov 2026 08:25:23 -0800 (PST)
+        bh=lXPkYWUZ3Udi9LVDqQlr22wZnWQhsRh3Camx7qJwyCk=;
+        b=Pv+/J1LWPNnbpjlJ4jZC81iNGj1QOc/Olkm+jAZkD0aewNEJerMSmBqPMie0qzwd55
+         SXyUJYM4+4LmPn1dLBDfcjeu0RQC7H7BgbloPikboW+CRLwXuYkAmTQ/3gc9bsQe63cY
+         eZIFwqWM2ZisOL3BNvcsKGEI1XZ4MRY4CedLosl0ja7IKaF9wTTtqjIqjfYOdfQMFkLi
+         MK6vh0+U33zwb7szS260qEX31rs30Wa5AgUOenNhqjsNTUi5O8Nk7Eo3mMQV7S1jbRXl
+         6XFsyx5Cogd0Pj+0sz9vpT0+UmX0m8MggWEdR4IIZ/efotSSHJKEg9RDl7llm2JpuSKF
+         cJWw==
+X-Gm-Message-State: APuU4Z9y0WH3al9EGK1Knya9HMuSF6AVGPHS6vmM5RVL8CXnwGr4g1VE
+	0uZv63gdPPiMkRMdO/3yYpyDSxIo6HKajX3tWYbpU9IRKE8/aEQ9uAJQ41l09wK/ILs3xI5wmjQ
+	LX3fFx2c=
+X-Gm-Gg: AYBFou1VSvdr4ZE8/5P4fpRBU1rm3MgBqQgHmeGrSO7gabSClt32T7wdLj3MAdOBukE
+	PU2OFa0JuDBLfUYoiNQOJSqbUWLg6lGd+cGQ0/pRx11/ey+6l8lKBz+4yJGd9cgS+t0qWy5zdxI
+	VSpCTSSpr+RDQID/9aqNFclDTTcUJBlpcX5jg5a/6PDdo/3uBKXyeGz4jXcXTlQf4SFqOOtRP9u
+	q/FpsW8fok1Sp12LaCegQ6e9EKW44l0vWqKzkBaHx/wNSVw8HDiRWOnwOZ5stfPAD+m1mH1qE/1
+	wf/uAb+bDViGdpEly5TbcgRzZdG4YGmRAV4CgeHFV3LdbWnuyh8vGIpxbspbg26KJJJqZKpHQ+s
+	HIi8Fq3RiggZ/YZqGJ159+YG7pzOoikw48SZ7EYuQj4zQB+/Q/6gXmeWBOQckU33Ct7Nbw5CjEO
+	yOl5vtRIsvSJOuiR0LEVAvuKpCjxee72Df7QVqigFkIXNwW/SC+TFpj/Gy84sXTDCB4tNUs5B3B
+	O4hM28465SCF82RQpgtc865v/gZlj6MaV0+Su1LlvaSFDSwkIzSiZ43z0fEUtOshdvKHPjKCbA8
+	C8azMYzkK2mDLJFrjgGFSLxRojXbx7qWp9Zmq1z/bc+P+Ge1cliqYboz5eYlsKh59WYj3DEDC4d
+	0IMExcYOEPzIV
+X-Received: by 2002:a05:693c:4007:b0:379:730d:db52 with SMTP id 5a478bee46e88-379730de704mr5172270eec.32.1794673526554;
+        Sat, 14 Nov 2026 08:25:26 -0800 (PST)
 Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795378d73dsm18603307eec.2.2026.11.14.08.25.22
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379553316fdsm18414414eec.5.2026.11.14.08.25.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 08:25:23 -0800 (PST)
+        Sat, 14 Nov 2026 08:25:25 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: io-uring@vger.kernel.org
-In-Reply-To: <20261114072246.741950-1-yangxiuwei@kylinos.cn>
-References: <20261114072246.741950-1-yangxiuwei@kylinos.cn>
-Subject: Re: [PATCH 0/2] io_uring: fail soft links on more completion paths
-Message-Id: <179467352282.50967.219991489846054582.b4-ty@b4>
-Date: Sat, 14 Nov 2026 09:25:22 -0700
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20261114031621.2924144-1-csander@purestorage.com>
+References: <20261114031621.2924144-1-csander@purestorage.com>
+Subject: Re: [PATCH 0/4] io_uring: avoid req->flags store-to-load
+ forwarding failures
+Message-Id: <179467352548.51068.17443816757303265088.b4-ty@b4>
+Date: Sat, 14 Nov 2026 09:25:25 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -102,25 +103,33 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Sat, 14 Nov 2026 15:22:44 +0800, Yang Xiuwei wrote:
-> Follow-up to the previously sent:
+On Fri, 13 Nov 2026 20:16:17 -0700, Caleb Sander Mateos wrote:
+> clang likes to set/clear req->flags bits using the narrowest possible or/and
+> instructions (e.g. an 8-bit or if all flag bits are in the same byte). This
+> causes store-to-load forwarding failures on subsequent wider req->flags loads.
 > 
->   io_uring: fail soft links on negative IOU_COMPLETE results
-> 
-> That patch restores req_set_fail() for the common IOU_COMPLETE exit.
-> After sending it, other completion paths that never go through that
-> exit were checked for the same soft-link gap (with AI-assisted review).
-> Two more sites still complete without failing the link: futex wait
-> cancel and IOPOLL short or error IO.
+> For example, clang compiles the req->flags |= REQ_F_ASYNC_DATA in
+> io_uring_cmd_prep() -> io_uring_alloc_cached_async_data() on x86_64 into an
+> orb $0x40, 0x4a(%rdi) instruction, since REQ_F_ASYNC_DATA = 0x40 << 16 and
+> offsetof(struct io_kiocb, flags) = 0x48. The subsequent 64-bit req->flags load
+> for unlikely(req->flags & (IO_REQ_LINK_FLAGS | REQ_F_FORCE_ASYNC | REQ_F_FAIL))
+> in io_submit_sqe() is extremely hot because it can't be served from the store
+> buffer and must wait for the REQ_F_ASYNC_DATA set to hit the L1 cache. On a
+> thread issuing ublk and NVMe passthrough commands, that one req->flags load
+> consumes around 1% of all CPU cycles.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] io_uring/futex: fail soft links when cancelling a wait
-      commit: 9a7cbe50dd95594d6fb3c57b8454ace58d8d8d0a
-[2/2] io_uring/rw: fail soft links on IOPOLL short or error IO
-      commit: 4d3db66c5363dcf42c3d43ebaea330ac2d1888bb
+[1/4] io_uring: return io_req_flags_t from io_slot_flags()
+      commit: 4d81c9390d0a326f2beadea2503d3e3929c739e1
+[2/4] io_uring: add multishot_flags constant in io_wq_submit_work()
+      commit: 91801f8eab5e5963befb1358efa6832e9aa78499
+[3/4] io_uring: add io_req_{set,clear,switch}_flags()
+      commit: 3e5dd5a145214bd8996744e8a828ceb249570301
+[4/4] io_uring: use io_req_{set,clear,switch}_flags()
+      commit: 33e97a6c608064795dc5e36643a9cc66d98bfa99
 
 Best regards,
 -- 
