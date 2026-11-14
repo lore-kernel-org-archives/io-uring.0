@@ -1,57 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794612167;
-	b=PDVYSW99rAOyWK8KnXzLEYpZdTopqo5aOFKgYaZT0XPV7j72fzlt7CpSRAhWISDaA0YI
-	 gQHomtLTUT7NS6uhqgGPMPTXWGxpP4WdYw2vuGW46x/YIKtQjbg8cW/zYEHsBnWbzDMzA
-	 HFrSr7aqUk3KAGGg8sBQXimhUUcF4pUngcbTwp+dYJeteMJN3bFm/5pUqZMgDFJrwW0z2
-	 49udHn1GRdH+UC8vVaZJG3QdB+JvYdoC3PfRDRKXNYmm9cx2J9w9M5btnUu11YtPiAr6M
-	 D9wx3lgt3FpIxtNhOX/vfwmQDrubVpUBwmaFm+JvzYGZy3ZhHBVZDqsJBk/pAEQoHWw==
+	t=1794621621;
+	b=lWugCvlgjNFs3jCm2rUeTLRHr51X9A+rmK8whyxKXW3RvdVQW+95a+Gm7G9uP3Og8AD1
+	 I+dkrCVz/WlOHWeywNaPgmD3nFhI8vW540NqGgyoM0UlPcz+/PVAsoblswVeAvzqtGP2S
+	 ZT2yA4Sd2DEn/RDpMKLb9MvkBKfsgcklYYuDOTOolAjSWeBMq2lE1nlredHxE66Kp+7ti
+	 dHkPiiXm8lDWj/m/K3UpqK6OxWMdFUpRevn3DZGUUUuTsFeSmGpS0Nxz2nZBFF/7Z3VB1
+	 x9793YxKNWHo88T+edC+Sntlf82Wva7QsiouBAdrhNlpiYxCz7Tx6R+A3/ySXveQShA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794612167;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=4JlziOrXTNMS1OhckK/k5WsJMtCd7SWbYKjtbZqWsQo=;
-	b=GM3F4JThTeXfdUvDWMSZO1+SgvDNpgJgUqZ8+V2KR2JoJbyz3zKUI3CVIe2GWFJ5IDHe
-	 6FOt/BKgDZmpc06pHQ5vTVlP908nkNDrOCcwLhF8OWg544PsaPU0d801h/H2Fadz4fKxn
-	 2QC+W94yvt869ZmyQuSolmQctzz6tIL5pO1DyOS3rFKnVtUYGp0i//NWtkm1oWyuGkdVv
-	 2xsnmZNZp57/1MAH62GA/aefpIMLDGYeQjwaulUWz05CpjDIVSPRHhOfzNDabfbVIf/uN
-	 SkkPZFASofxYgZiIJxMdYHP7FhgqPihmekPDgZZIiOvroOPsPayEzxFgTnwtY2tbgQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794621621;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=xoFXsjXLKjXD/H4olKCJ+X+jvlc5wR5AHwlRcd4Ub+0=;
+	b=PaoPOVo6polPYF/Fmz3PMMvuAQGzCoUGduE06hOZjYFUjNruWVXyCkz9kKaZ37QYzjnG
+	 a9D0Vd1Zh+lSdz6aNi2Z8fbSSG4jLnCCx4m5xzeACQlvDbrXTR98foUk3QVpGQg9WchtS
+	 LmYAWv/QdEW6X0keVv2pEn6Xk6t42a9y2RysZbnLnboSGclQX73iwBbe/tl5NMLQlVaa0
+	 dJADlP3nPZcmf4imhv5eNIVZjKPU7nIWAwzikEMx5Es12AteHcwg4S0FjTXJPdTdmibMT
+	 z8oF5ybjqDPe5N8JoNu07RUkysr9a2sWclNJXYzUXnnrDhHeIbxNRmLGzZd6/Z85hSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=rebasedinc.com;
-	spf=pass smtp.mailfrom=rebasedinc.com;
-	dkim=pass header.d=rebasedinc.com header.i=@rebasedinc.com header.a=rsa-sha256 header.s=protonmail header.b=od+AOXz+;
-	arc=none smtp.remote-ip=79.135.106.116
-Received: from mail-106116.protonmail.ch (mail-106116.protonmail.ch [79.135.106.116])
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=ifh8gdb+;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A109F606A8B4
-	for <io-uring@vger.kernel.org>; Fri, 13 Nov 2026 23:22:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A109F606A8B4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rebasedinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rebasedinc.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEDF606A338;
+	Sat, 14 Nov 2026 02:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=rebasedinc.com header.i=@rebasedinc.com header.a=rsa-sha256 header.s=protonmail header.b=od+AOXz+
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rebasedinc.com;
-	s=protonmail; t=1794612162; x=1794871362;
-	bh=4JlziOrXTNMS1OhckK/k5WsJMtCd7SWbYKjtbZqWsQo=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=od+AOXz+19tDJkD+yV6nmkbza29Ypz/7Zj0wWY78Za4QOwmBBWpI/CR7Fi/fXSPxs
-	 YRNv6O/JPFU1vrNIcwQV43MbD3+AEV4i+2vvVyI2yhCCOdHg8FiIHJvhYH1aog7pQQ
-	 /G5I+gAwRKOElqpZCBXzSMgpaSe934imq3cDy+eZCbDEVtzK3WDv657PvVbjf7+6zX
-	 7b+hFAz6Tv/KmuURSKtf1AmTtBxIjDCYq++Ltl1nlT4QMh//kkEWaka/GuwfN91dYa
-	 iw6XhSIA4vVNoeWrgrtjANbUUC3uQrzGcfQnJ/g32NSrZWSoKNTlCWAYANauph1o5i
-	 GpEa+e51zqUBQ==
-Date: Fri, 13 Nov 2026 23:22:38 +0000
-To: "stable@vger.kernel.org" <stable@vger.kernel.org>
-From: dev@rebasedinc.com
-Cc: "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>, Yufan Chen <yufan.chen@linux.dev>
-Subject: Subject: io_uring/eventfd: registered eventfd signals only once after the cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
-Message-ID: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
-Feedback-ID: 231970246:user:proton
-X-Pm-Message-ID: 474fd90d362d4966a5836b434317232f3aed01b8
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=ifh8gdb+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 160661F000C4;
+	Sat, 14 Nov 2026 02:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1794621621;
+	bh=xoFXsjXLKjXD/H4olKCJ+X+jvlc5wR5AHwlRcd4Ub+0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ifh8gdb+dPcTYXRBX0r4StppInPy9SLHfiCuCVthVRM6UGThIex/T6apM7OyMVP7n
+	 PsHBA3I1ENMUt//7BZDNSnCAS2qAjfNg0LSgBvcW2InK6bpF9lLO8bWmApiBK68FGS
+	 AiAYFPmH6iy/k6Mz1S3uRwswx0RnrMo3SiMXE6nk=
+Date: Fri, 13 Nov 2026 21:00:19 -0500
+From: Greg KH <gregkh@linuxfoundation.org>
+To: dev@rebasedinc.com
+Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+	Jens Axboe <axboe@kernel.dk>, Yufan Chen <yufan.chen@linux.dev>
+Subject: Re: Subject: io_uring/eventfd: registered eventfd signals only once
+ after the cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
+Message-ID: <2026111310-pointer-citric-2f11@gregkh>
+References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -61,50 +55,22 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
 
-While working on my own async runtime on io_uring, I found what looks like =
-a defect in the stable backports. I first saw it on Ubuntu 26.04's kernel, =
-and I can't find any existing report of it.
+On Fri, Nov 13, 2026 at 11:22:38PM +0000, dev@rebasedinc.com wrote:
+> While working on my own async runtime on io_uring, I found what looks like a defect in the stable backports. I first saw it on Ubuntu 26.04's kernel, and I can't find any existing report of it.
+> 
+> A registered io_uring eventfd stops signaling after its first deferred signal on kernels that carry the backport of cd305ee3633a ("io_uring: defer eventfd signaling when queued from a wakeup handler") but not 04fe9aeb4f3c ("io_uring/eventfd: reset deferred signal state").
+> 
+> What I see, on Ubuntu 26.04 7.0.0-1016-aws, x86_64 and arm64. Ubuntu's 7.0 kernel took the cd305ee3633a backport through the 6.18.49 stable update:
 
-A registered io_uring eventfd stops signaling after its first deferred sign=
-al on kernels that carry the backport of cd305ee3633a ("io_uring: defer eve=
-ntfd signaling when queued from a wakeup handler") but not 04fe9aeb4f3c ("i=
-o_uring/eventfd: reset deferred signal state").
+Please test the real kernel.org 6.18.y release.  6.18.49 is very old.
 
-What I see, on Ubuntu 26.04 7.0.0-1016-aws, x86_64 and arm64. Ubuntu's 7.0 =
-kernel took the cd305ee3633a backport through the 6.18.49 stable update:
- =20
-1. A ring with IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN | IO=
-RING_SETUP_TASKRUN_FLAG, and an eventfd registered with IORING_REGISTER_EVE=
-NTFD.
-2. Two IORING_OP_RECV on a nonblocking TCP socket. Each gets -EAGAIN, arms =
-poll, and later has data.
-3. The first receive's task work signals the eventfd. For the second, traci=
-ng shows io_uring_task_add, but the eventfd never becomes readable, and pol=
-l() on it blocks.
-4. io_uring_enter with IORING_ENTER_GETEVENTS then runs the work and posts =
-the completion.
+If that still has a problem, please let us know and ideally send us a
+backported patch.
 
-Debian 12's 6.1 kernel does not show this.
+thanks,
 
-What I THINK is going on (I read the source, w/ help from Opus 5.5; please =
-correct me if I'm wrong): after cd305ee3633a, task work queued from a poll =
-wakeup signals through the deferred path, which sets IO_EVENTFD_OP_SIGNAL_B=
-IT. Without 04fe9aeb4f3c, io_eventfd_do_signal() never clears that bit, so =
-each later deferred signal is skipped.
-
-Where it applies: cd305ee3633a is in 6.18.49 and 6.12.114. 04fe9aeb4f3c (Fi=
-xes: 60b6c075e8eb, in v7.1, no stable tag) is in neither branch, and I didn=
-'t find a copy in the stable queue. I read this in the source of the linux-=
-6.18.y and linux-6.12.y heads, but I didn't run those kernels.
-
-If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks l=
-ike the right fix; it keeps the CVE-2026-80920 fix in place. The 6.12.y cod=
-e differs, so it may need a small change. I will obviously leave the fix to=
- you, but I'm happy to test a candidate on the affected Ubuntu kernel.
-
-Thanks,
-
-Nathan - Founder, Lead Developer @ Rebased, Inc.
+greg k-h
