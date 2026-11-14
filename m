@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794679964;
-	b=wEmSMt40y1O4b6C81Ag4Cp12fhD1VD0Z+soJulRTLWd586MCFim0KZ0DdbVGPCdMZxex
-	 LaCr76NernQgDTdrzQZM9ZiB0fNzbuDJJmrs6WhPnM4jALPRS0AOH/D7rf5MkQiP8cEJR
-	 Rp3+bnEH01+ZHp+CIdX8c0OHOCH8EXEhvPBABXUoHGkjLFcdFK2QPQcq0h0YbF9u0KD+W
-	 Qo7n/6iSTxs7gaZ0brQgl9/XSeUGC2mfWzUC0tCWmlWkSjgplYHF58KtIcIjF897jEwba
-	 Qeq6vWbmfmWptWrlPRu9HGa8g9na3eqC2NkUb7mp73IU6RQ7R+vn7cKpRErCeW5By2g==
+	t=1794680228;
+	b=vFwUuOevB3PM26jisNh/qXBSyf0seEz+mxug7d8KRP9Lu+05Jg9F3isbskFIx4LDOoYn
+	 j4U3M+JZNUW5daRTXZj7kbdIy7TzMyzCmETNmFxOdMcYttht2dfKd8aCxmF6cevrT/bB/
+	 RdidQH0ybmUZpssIkSAjAEy+Y4yvVaTUDtXwkpBUF+zggwkl0BX684T7xTnyXTqdvIJAS
+	 kPFp8zghVExKIk1nolCidKJ5zyOrMvTF/zHvagLlBLicR9odObRNwTB9codnGVrRp1Z0d
+	 RzLgYji6CdUpZz4mvchbtpmIBPdSuc+LlR9/6oCf6cvbAW+1UIbqOSe1iW34FEjeR9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794679964;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794680228;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=1HSKcZ386dxsdeEKyF2O6CNbJmYTmTebSN/jET/L4ME=;
-	b=m5fsTsvLwRfNAs52VOz5Qu0maDOrKATzUkw9bWUqWosZp4yiDlyFA/61i7rqLSsCWiq4
-	 SKxGOOAA4+9gPn1UpH/OyIhtzWwdo3oOJJxajqUwo95aTLU2H64YU4xGSB3pJxx+5cloU
-	 OeSbnFCa2P1vmqBE2FgUtVop72HHXLfAqrZ/3tGMAdAuzdwjVb9jI3X1VqYjj7E0EqBal
-	 O8c/9jv1HA+7BWblvHOI8VVOmopc4pQAw91zgfL5mO288cRXzSavhWCtAY/joqt2p0lnb
-	 hGRW9JSCzJ1XG46BOHM2Ly2uKAp/ANKaomZ6oxi7WEtzYNFbqtU9K4E5Osj++nSvfdQ==
+	 MIME-Version:User-Agent:Content-Language:To:From:Subject:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=a4UD8ktoUVDxJ57rJ4EnDivuiBzBoDnoK3pIrPbg/MI=;
+	b=m9kBuZFXnqzlZBpkIxSHnDMK/bpmIub5tK6XFoTgHcRhon3nmDiYyrxs281Nk+PvdXZt
+	 yKsIfNd0rYGsK+ZRo1XXipbPgctQ02Bb1ufdPG91U2HxqbXjCfJjB07GW+080IdNFGttz
+	 O2LzHh8E0me/LuIREQSnwMC3t43VCa82ZUhFZVvmX7s7GWqk4uzFkbS8dW955nqgGKrL4
+	 1/v8rWvEKSFYGGC3hn2A3aMmprrso8IVUrq+hJaz9e/hHn6V4ZqIFbPFAfuPoireJcDgn
+	 cULVdHzAXEz1tsonpv+3dFs3cQLFuFq3Vq0HkfbkN96u1i0tq5XPHgI9UtCCsznonZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=G36KZgS2;
-	arc=none smtp.remote-ip=74.125.82.173
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=CBt1CGbq;
+	arc=none smtp.remote-ip=74.125.82.53
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDDC606A323
-	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 18:12:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDDDC606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DB4606A32D
+	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 18:17:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0DB4606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=G36KZgS2
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-37628596783so3634252eec.1
-        for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 10:12:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=CBt1CGbq
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-15ea896ddc8so2967196c88.0
+        for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 10:17:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794679962; x=1795284762; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1HSKcZ386dxsdeEKyF2O6CNbJmYTmTebSN/jET/L4ME=;
-        b=G36KZgS2YkgFo4UVn91i8GWeVFgU6FJTUeyRnNUic2C9jHhLreydD9U0nFLc1KZUd9
-         DDodhaJhDk0exZwqzMNB8gbvEaS9f5lacEOlx8ZWbXKcXxNKivjfJvuI9itb9n3r+PyL
-         3orAY7qOpRgYrhmOuRyInjYpyUdP1SItWby+udlfr3C6Hr6TC/rm/wlfcVkzmYycft0r
-         QYN4dHu8aVdPU10kBe7XvWexZHyC73A28pZR2SdWq/WeVKOBefenWOT7qeDZGH1qH0ET
-         3Kyp0tSJHVKCvK6JARG4BRLoz5O5Zj/7y2jeQ/SrAgBsIg11Y9jTOZf7Zhz5g4UzhHIz
-         Ivlw==
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794680227; x=1795285027; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=a4UD8ktoUVDxJ57rJ4EnDivuiBzBoDnoK3pIrPbg/MI=;
+        b=CBt1CGbqt+UTyjzQKkLdtbmrjum2ptEgJAjPLjZqiDBRHBnWu1gq1VyT1msyncpDNi
+         wQiS1Z3CMN0iia/+bdsxZIzDQY0BG6/fSJtugEvip9HTs6cIZ0MWZzFO388kFwP/KvUq
+         j16oeSufin4wdAPixLHCFptkAolrErk/Jv1TuUgM+y2/+HvmRz64BlkmM3zaQeNfdRmu
+         iuZJokTqq23V2FmVS63Iaiy6SR94CNRCSfIUYhZlpeEYbC2pMaTIs75Ybjx7eea8ZXiD
+         K83focNxFdbXCB+Mow9ZnzB0hZVa41HapTEw4fOoJptgiZsz1hpXMMKS7WTA2hksq190
+         MsVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794679962; x=1795284762;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1HSKcZ386dxsdeEKyF2O6CNbJmYTmTebSN/jET/L4ME=;
-        b=ATt0x3jN2NLgYUIy2l7HhjfRVDyn1yZSfWai0MCdRfpb/4jLJg2cM+DaiORFa4jHWl
-         g+K2c6aQd999WssUnhr14192Xs24/kcboyAO6AW7QTerle8K4FHN8DOKL4wWQv0cVF76
-         /ceJyKNXs3DMyFBAhKcOpFy7vUKzor686hgDJrFxGPkYg7BHNQq0qdtb1iXDPsQrHeXu
-         /S0W5GO2vSEQ4PmJ8Phujcf0DunfMQYSURwaREkL8K+J7VUaBDziS8MiU9xHjCe0keCl
-         lHL09OHFPq8ePsiYijkg+cb2cab1ypslBRDonZ9jdJfLj96uGKTwRKFpQ6Wq4vKipgDx
-         j2lA==
-X-Gm-Message-State: APuU4Z+Z9Tvrf5HfyDBcQ9KLIIBpXZO+SBBXhI4Kr4bPu42f06IKaQ32
-	Nvo/WrjLs7INDxVwo8yLo6zbPAmRHCPYN7GxsAdO+iMUuRgi9L4Eva/8QK76YhcGEmPElLgzGAY
-	Ja972ewM=
-X-Gm-Gg: AYBFou2QuUsL/XhbuLmQE85HC+pqqtyy6Of979lvB6cnTxWYQQlZKzQ6vAVECMnDSXc
-	fAe0xW4kr/CFYbiGhjHygA3DZ0eTXWaVMDTnLCc7tkMJLpSZawpr1+o/Vu6Ston1Z30eIUdbdE8
-	pWhfzJ/Rw6MZHSTMbU6V8QEGXExYaUjEXK+wNYPmwznnH3Ly3CNi4P9z2HvTDQ2ayxYmfmAfbAk
-	LwdeWXyuPCbgOM3eTplPDr1vIijjukkgs3R5BTpC/FGWE0ZSV+Bkz4EURKIa3N5GVoIFjXDNDas
-	ULU5Klw3OtufZGk3ERpJa8pGypH6L8pR4t/k1CRyQVtwmkCcutPu6obQQ1ZFt3YRaGUIIyzmPTt
-	8Gm2FvfR+WJkYAKIdhAfmEvaQzTMsmdA7oBooeDh5mKHJ761dJfDWm+KU3QNgqmz4txCOIoTjwH
-	1Wws6EdDW8Jv+JuSqIViQK2S5p5fviGsu4Zxq5Y4lZdTmW18YPj5tsLiy6l4KqLhU+Pi0i2chFd
-	MCZu4GRMuFTJtMIIPPINM/rXml1bIkJMDAjn34JTrOu6Eescu1OwnKthSoegQ5WwttUZMw5oncV
-	WBOuejR6I3CzWFAUPMVEENK4jMfYO90Oc8GDK8rtvDM7SSPjlEH9BwnePr+apVL26FhC6gtgs2Z
-	M2I7GAarZPe69
-X-Received: by 2002:a05:7300:f794:b0:36e:58f3:6f0e with SMTP id 5a478bee46e88-379635648c2mr5638645eec.5.1794679961789;
-        Sat, 14 Nov 2026 10:12:41 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794680227; x=1795285027;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=a4UD8ktoUVDxJ57rJ4EnDivuiBzBoDnoK3pIrPbg/MI=;
+        b=zON2rnQa4YZw5kl8SMpjgtDKQkZnG1HVpIKliMzWMa0J+ExjTtftgX8QLvR9n55McT
+         ZA4YWHtl5EqT6/tBU2UbtQi5gC+G2apnO4wItKq8EtBvLBTWfk0DpGWkcDeAiQH4NACn
+         6OIGuqcbtw3QaJ6HfFo2xKy/ClHIp961hQCn53j9PBNHUXnNyqAP+sA/plj21VBZt+IN
+         69V0XN/PbKIlC2cUuAttyN6n1/EyOZ+L3lUTGDf0BWS871wzGKJnR+jKxYmCCxs9ssDZ
+         B8Co8tJ4+LjXS8jdJ0jZkqSkv+cLo8eFyJlGCnCjPg+5LOWedwgVi4srDptZNF3YrHH5
+         zI/Q==
+X-Gm-Message-State: APuU4Z/i04dHspzoAxohks8cw38RIq9y40i5XzcnppIYYXTaRopVvBK6
+	QSIsIJMb/IONPTKYIv0THDA6+mEtWfFdJlQWqGGeNBuDoszxHGchVgS2P4WTE5Cp3iR98EyI0BK
+	xvN5tiGg=
+X-Gm-Gg: AYBFou0W3ftsdbkC1j52SnbdH5MLfe32HeF7ZTaQ8OQtfCH5lkn/uHiTwMv2NYfArQ3
+	3klahLs4fg0NlptA3JcRD/3j0y4rdENJ7eT86fVEcFAE22mqSYl/olc+DnagP16LZrhpCgVsMVq
+	/Udu/f3tigLxcgRsXqP0UQPeLMB7cixANGL6FfrLxCUUJwqAglVjyV9N9w0R8uDpFTEb6RtChZH
+	1CZclGDOU3xZjayZocv1efOhK/S234MJ96jYUeOl/2/LjPGgzmp7GWPRTrVDOOUtTOGogEuwfqq
+	pO301/6Ju106lxRg9AIGXtSyWGYyj378ey+Ff/FHu408ryTIoy9vee7sG1ccIqErDxq3no3aobb
+	fsSDqZr3LHodA5oJA4IHi8NQ/fs3w/qW7ntKGy/ROAAYAvdhjuBp1rWafvOFuuuNBVSXwfjY4Yl
+	jwBYifBk50q5ePtnrHODgSmicp3prRTNm34C/B205kjyp5Dvr9U17vsAJ4A0jlQ5iLrcQxXVMeM
+	K1EqEB/QLRCUOaMYCIs/sxX6x6/UEULTdtkkMQKvMblIm8t8GQ7FC/nS3lucjN8wvTW140NClKF
+	6CCQKuajJ+52CRJfbTE0hSU4WwSAFoHIoddFxtggLFFD259ThTYPIxaRuqNDLUl12YXOvX0mhGO
+	j68WbZ/Dt+cnQ
+X-Received: by 2002:a05:701b:2514:b0:1a7:e1c6:6f33 with SMTP id a92af1059eb24-1b5030cde42mr4790718c88.30.1794680226503;
+        Sat, 14 Nov 2026 10:17:06 -0800 (PST)
 Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795378d73dsm19082212eec.2.2026.11.14.10.12.40
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50316e195sm20816221c88.8.2026.11.14.10.17.05
+        for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Nov 2026 10:12:41 -0800 (PST)
-Message-ID: <5d92861f-9a4d-4810-8700-b9e457ed9c86@kernel.dk>
-Date: Sat, 14 Nov 2026 11:12:40 -0700
+        Sat, 14 Nov 2026 10:17:05 -0800 (PST)
+Message-ID: <9efbf0e0-4654-45a9-87e2-1c8bba6016f0@kernel.dk>
+Date: Sat, 14 Nov 2026 11:17:05 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -93,29 +93,255 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: io_uring/eventfd: registered eventfd signals only once after the
- cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
-To: Sasha Levin <sashal@kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-Cc: "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- Yufan Chen <yufan.chen@linux.dev>, dev@rebasedinc.com,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
- <draft-agent5-0001-re-eventfd-signal@kernel.org>
 Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <draft-agent5-0001-re-eventfd-signal@kernel.org>
+Subject: [PATCH] io_uring: remove handler-local failing of negative results
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/14/26 10:42 AM, Sasha Levin wrote:
-> On 2026-11-13, dev@rebasedinc.com wrote:
->> If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks like the right fix; it keeps the CVE-2026-80920 fix in place.
-> 
-> Queued for 6.18 and 6.12, thanks.
+io_issue_sqe() now marks a request as failed if it completes with
+IOU_COMPLETE and a negative result. Drop the open-coded versions of
+that from the issue handlers.
 
-Yet another bs CVE - Greg, please invalidate this one too, it's NOT CVE material.
-Getting a little tired of chasing these.
+Handlers that fail a request on something other than a negative result,
+may be issued through io_poll_issue() for multishot, or complete through
+task_work are left alone.
+
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+
+---
+
+diff --git a/io_uring/advise.c b/io_uring/advise.c
+index 0073f74e3658..167abea23457 100644
+--- a/io_uring/advise.c
++++ b/io_uring/advise.c
+@@ -101,8 +101,6 @@ int io_fadvise(struct io_kiocb *req, unsigned int issue_flags)
+ 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK && io_fadvise_force_async(fa));
+ 
+ 	ret = vfs_fadvise(req->file, fa->offset, fa->len, fa->advice);
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/cancel.c b/io_uring/cancel.c
+index e3d9fe8fc982..057dfad46244 100644
+--- a/io_uring/cancel.c
++++ b/io_uring/cancel.c
+@@ -262,8 +262,6 @@ int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	ret = __io_async_cancel(&cd, tctx, issue_flags);
+ done:
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/epoll.c b/io_uring/epoll.c
+index b9db8bde27ec..4fb04d4b9136 100644
+--- a/io_uring/epoll.c
++++ b/io_uring/epoll.c
+@@ -69,8 +69,6 @@ int io_epoll_ctl(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (force_nonblock && ret == -EAGAIN)
+ 		return -EAGAIN;
+ 
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+@@ -95,8 +93,6 @@ int io_epoll_wait(struct io_kiocb *req, unsigned int issue_flags)
+ 	ret = epoll_sendevents(req->file, iew->events, iew->maxevents);
+ 	if (ret == 0)
+ 		return -EAGAIN;
+-	if (ret < 0)
+-		req_set_fail(req);
+ 
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+diff --git a/io_uring/futex.c b/io_uring/futex.c
+index 792d37968efc..2d36d6afb9d6 100644
+--- a/io_uring/futex.c
++++ b/io_uring/futex.c
+@@ -272,12 +272,9 @@ int io_futexv_wait(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	ret = futex_wait_multiple_setup(ifd->futexv, iof->futex_nr, &woken);
+ 
+-	/*
+-	 * Error case, ret is < 0. Mark the request as failed.
+-	 */
++	/* Error case, the core marks the request as failed */
+ 	if (unlikely(ret < 0)) {
+ 		io_ring_submit_unlock(ctx, issue_flags);
+-		req_set_fail(req);
+ 		io_req_set_res(req, ret, 0);
+ 		io_req_async_data_free(req);
+ 		return IOU_COMPLETE;
+@@ -358,8 +355,6 @@ int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
+ done_unlock:
+ 	io_ring_submit_unlock(ctx, issue_flags);
+ done:
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+@@ -375,8 +370,6 @@ int io_futex_wake(struct io_kiocb *req, unsigned int issue_flags)
+ 	 */
+ 	ret = futex_wake(iof->uaddr, FLAGS_STRICT | iof->futex_flags, NULL,
+ 			 iof->futex_val, iof->futex_mask);
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index abf44f5dba26..6d35fcd45f2b 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -623,8 +623,6 @@ int io_manage_buffers_legacy(struct io_kiocb *req, unsigned int issue_flags)
+ 	ret = __io_manage_buffers_legacy(req, bl);
+ 	io_ring_submit_unlock(ctx, issue_flags);
+ 
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
+index 3067c9343991..3b2192cfac05 100644
+--- a/io_uring/msg_ring.c
++++ b/io_uring/msg_ring.c
+@@ -323,11 +323,8 @@ int io_msg_ring(struct io_kiocb *req, unsigned int issue_flags)
+ 	}
+ 
+ done:
+-	if (ret < 0) {
+-		if (ret == -EAGAIN || ret == IOU_ISSUE_SKIP_COMPLETE)
+-			return ret;
+-		req_set_fail(req);
+-	}
++	if (ret == -EAGAIN || ret == IOU_ISSUE_SKIP_COMPLETE)
++		return ret;
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 183425f28b0c..04927fa5d242 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -1824,7 +1824,6 @@ int io_socket(struct io_kiocb *req, unsigned int issue_flags)
+ 			return -EAGAIN;
+ 		if (ret == -ERESTARTSYS)
+ 			ret = -EINTR;
+-		req_set_fail(req);
+ 	} else if (!fixed) {
+ 		fd_install(fd, file);
+ 		ret = fd;
+@@ -1910,8 +1909,6 @@ int io_connect(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (ret == -ERESTARTSYS)
+ 		ret = -EINTR;
+ out:
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+@@ -1970,10 +1967,8 @@ int io_bind(struct io_kiocb *req, unsigned int issue_flags)
+ 		return -ENOTSOCK;
+ 
+ 	ret = __sys_bind_socket(sock, addr, bind->addr_len);
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+-	return 0;
++	return IOU_COMPLETE;
+ }
+ 
+ int io_listen_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+@@ -1998,10 +1993,8 @@ int io_listen(struct io_kiocb *req, unsigned int issue_flags)
+ 		return -ENOTSOCK;
+ 
+ 	ret = __sys_listen_socket(sock, listen->backlog);
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+-	return 0;
++	return IOU_COMPLETE;
+ }
+ 
+ void io_netmsg_cache_free(const void *entry)
+diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+index 24cf3ce2e2bc..71e45fc00abd 100644
+--- a/io_uring/openclose.c
++++ b/io_uring/openclose.c
+@@ -179,8 +179,6 @@ int io_openat2(struct io_kiocb *req, unsigned int issue_flags)
+ 						open->file_slot);
+ err:
+ 	req->flags &= ~REQ_F_NEED_CLEANUP;
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+@@ -266,8 +264,6 @@ int io_close(struct io_kiocb *req, unsigned int issue_flags)
+ 	/* No ->flush() or already async, safely close from here */
+ 	ret = filp_close(file, current->files);
+ err:
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+@@ -309,8 +305,6 @@ int io_install_fixed_fd(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	ifi = io_kiocb_to_cmd(req, struct io_fixed_install);
+ 	ret = receive_fd(req->file, NULL, ifi->o_flags);
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 07813d45a1d4..6dc0325b155b 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -641,8 +641,6 @@ int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
+ 		io_ring_submit_unlock(ctx, issue_flags);
+ 	}
+ 
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index fa54846ed4ce..47446900f63e 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -591,8 +591,6 @@ int io_timeout_remove(struct io_kiocb *req, unsigned int issue_flags)
+ 		raw_spin_unlock_irq(&ctx->timeout_lock);
+ 	}
+ 
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
+diff --git a/io_uring/waitid.c b/io_uring/waitid.c
+index 0d3c248f375c..6e3c397296da 100644
+--- a/io_uring/waitid.c
++++ b/io_uring/waitid.c
+@@ -376,8 +376,6 @@ int io_waitid(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	io_ring_submit_unlock(ctx, issue_flags);
+ done:
+-	if (ret < 0)
+-		req_set_fail(req);
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_COMPLETE;
+ }
 
 -- 
 Jens Axboe
