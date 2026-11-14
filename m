@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794629515;
-	b=SBLMwIncfAB9S+jsafNF2aBjtvN1jm3JArPIu2Wq52XP+OKcyLFu07b05MF1pQ7b/9Dt
-	 L7aY5tHAP6godlnnFBn+uogKyW/um113hBZkdylELfDfovaSQcG8AA7P28zgRxMG84s4r
-	 rer3yYT2EiYWlJFRqEadl/x+6ikAfTjNLKn0b5NOZ7Nla4qwoZt4iXZytPmrjHTzu2iSG
-	 3CaoJ63u4X82+mLeDiNwYMN+dxQFbfLJP7WO6E4j2fMkQusJhxmTHAvX52PbmjeG7i42V
-	 2qlBu/8nw6YP0Z0EDrBZMemq6Qsk61yyYWVswYfNZ53rZib6SXWvdB8dqxtCxmWCMUQ==
+	t=1794640990;
+	b=BVOHEVhmf7S5bbLyF8ManBAjDR0QwHTKgBOpW7a8WDrWZeUIGcFcyVnD+WdIaHYj7O5r
+	 /Jig5x4rhz/o7Em6Le5K458SE/34VO+BiYL5R6pEhjvH5WwFV+MFesy/Vix8H28tJVqUf
+	 nT8VbM++Lit8bNZttJIfQLFKe2snncRhndynAnwEdXX1bQNXXTfhXiAKvUd+jZly7531G
+	 hj9WWohGw2sT2mutLt0lmUsM9n1/ym3o6e23M3zs6Bxz8k+r3uKUr43zR7d5vLhtrnkkN
+	 +xqmtMKZYFPLpRPS8/7Nf78x95gEbuIxWQsgNs0tFkFYH1eoJn/82/UbevQ3YqKNLtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794629515;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794640990;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
 	 X-CM-TRANSID:X-Coremail-Antispam:Sender:X-CM-SenderInfo;
-	bh=4UJvOL4sCe43jvcgqxOVMPKm3ZWW4j+CZgovTLX54Gk=;
-	b=foPIxEoKVF+gxFQ6pixW/emBv52SruApw5FYJ0BU3+XqLbkqRdS0atPs+utbY4M7doAG
-	 tWdAdE4vFMHdWj8FXRXRNroz6gKU1nPrAlBqMyjmsfnK7YtD5QxPbJ8TXCdL1YtbncYh3
-	 JwYjVskKZXGi9rnfSF7blVTnOYmD46FnVKBMxRpFPwI21DIUlKYFAAxM5jn5eD99lx8aL
-	 AGFr7vcECMixnG4qCjU3RLK3okGwI616zBHpagpVCUrc+CparAePJfBMtOToQ1y2gdsjN
-	 IUxEeURl61fH8W0trpAJCdTDQtqiLswJxheBOQ9w39TFfmWOSC3Di6DD/TyKs7SDsog==
+	bh=/bg27bjm65CdbJJ+TqHQGFg4ccpkg1yc79s7WA1+zYQ=;
+	b=C0mTQP6n/76cdlcP/yNfo4oEt2ZrTjgb6QI9jLMGjBKRKXjXCfoW6E0OshCZc8vL+nMc
+	 89iG+snXjw3MlJHvsSoVo1NEh/BI2QMfXHhUJV7mDTf0Ht7vssdHPmPFhjQGueYxkZ6uX
+	 KhjP6kfRKCSDxvx9rZcORMxK4uqVgohZnNS47SjydJXEzw1y8NYeFCI+E6+R4Ro72nB4S
+	 jfscCVfTrIg8DmIfj03Y/n4pxj/UPDjxknmAmZfBW51bldrxL/KVXMoqNQHWD+L+/xpIn
+	 DcMHkZc4Z8OAM3WiiyT6GWiT+M8nzVUIx3zvTimng/VRzdWzuGXyyv/nAGYG8b4ChDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kylinos.cn;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=bAEsEq7u;
-	arc=none smtp.remote-ip=117.135.210.2
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=iUo58z9c;
+	arc=none smtp.remote-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034EE606A323
-	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 04:11:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 034EE606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C842D606A32D
+	for <io-uring@vger.kernel.org>; Sat, 14 Nov 2026 07:23:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C842D606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=bAEsEq7u
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=iUo58z9c
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4U
-	JvOL4sCe43jvcgqxOVMPKm3ZWW4j+CZgovTLX54Gk=; b=bAEsEq7uRQ14//p7WE
-	66jzRqbkcGH7JTru1wt/2JNlvI8rMIRqW16w3HS14oap9Wd6V0nVKtB+fG3cAC6X
-	jXXgiZtL4GQOJM9GKlNryjwXeiDt4pNFT5ydAoOTov5QU4XXwd4sgDBfthvd0fp/
-	OuzmzbHwnT441KLlhQyoGiMxQ=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=/b
+	g27bjm65CdbJJ+TqHQGFg4ccpkg1yc79s7WA1+zYQ=; b=iUo58z9cOAu/jzchxM
+	awsSLW6AOoI3hu8u8958/iDnClQcRwvuC0VI/QeOawW2Ks47BE5ucPbTHAjXzLEn
+	kO7OHbmWi250QquSgo49WVTqmItb3KgalTJd+06kQWp8pS15Qu09sEJyLVTBfXMt
+	rDxMW7LImXjAOW2RlwxNHIH+A=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3X9Rt3_dqNezSHA--.53092S2;
-	Sat, 14 Nov 2026 12:11:26 +0800 (CST)
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3v9tIDPhqC2tdHA--.18420S2;
+	Sat, 14 Nov 2026 15:22:49 +0800 (CST)
 From: Yang Xiuwei <yangxiuwei@kylinos.cn>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org,
 	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v2] io_uring: fail soft links on negative IOU_COMPLETE results
-Date: Sat, 14 Nov 2026 12:11:23 +0800
-Message-Id: <20261114041123.109163-1-yangxiuwei@kylinos.cn>
+Subject: [PATCH 0/2] io_uring: fail soft links on more completion paths
+Date: Sat, 14 Nov 2026 15:22:44 +0800
+Message-Id: <20261114072246.741950-1-yangxiuwei@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -60,48 +60,32 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3X9Rt3_dqNezSHA--.53092S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF48Xw48AryxZF1fAr13Jwb_yoW8Gr1Upr
-	y5GF1UKFZ8CFyIva17XF4UJa47CF1vyFWxGrWI9wnxCrn3ZFySqF4rtF1F9F12g3s2v34a
-	vw4xtFWDuFn8Aa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uymh7UUUUU=
+X-CM-TRANSID:_____wD3v9tIDPhqC2tdHA--.18420S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrAF43Gr47GFWUKFWkCrWUXFb_yoWxWwc_u3
+	yjg34xZr1xXF4UAa18Ca1FqF1Ykr4rAF15WrWDJr17XFy5Aa95CrZ5JFySka43X3W2qa43
+	Grs5ua4Yya4a9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbwvKUUUUUU==
 Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6Q6rPGr3326dKgAA3r
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6gntfmr4DEnLjAAA3g
 
-Handlers such as fsync return IOU_COMPLETE with a negative cqe.res.
-The old io_req_complete() path called req_set_fail() for res < 0.
-After completions moved into the core, that check was dropped,
-so IOSQE_IO_LINK dependents kept running after the head failed.
+Follow-up to the previously sent:
 
-Fixes: 97b388d70b53 ("io_uring: handle completions in the core")
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
+  io_uring: fail soft links on negative IOU_COMPLETE results
 
-v2: fold the negative-result handling into a single block as suggested
-by Jens.
+That patch restores req_set_fail() for the common IOU_COMPLETE exit.
+After sending it, other completion paths that never go through that
+exit were checked for the same soft-link gap (with AI-assisted review).
+Two more sites still complete without failing the link: futex wait
+cancel and IOPOLL short or error IO.
 
- io_uring/io_uring.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Yang Xiuwei (2):
+  io_uring/futex: fail soft links when cancelling a wait
+  io_uring/rw: fail soft links on IOPOLL short or error IO
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5db57bf675f0..5ee314ab100a 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1537,9 +1537,11 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	ret = __io_issue_sqe(req, issue_flags, def);
- 
- 	if (ret == IOU_COMPLETE) {
--		/* not all handlers take care of the internal restart codes */
--		if (unlikely(req->cqe.res <= -ERESTARTSYS))
--			req->cqe.res = io_fixup_restart_res(req->cqe.res);
-+		if (unlikely(req->cqe.res < 0)) {
-+			if (req->cqe.res <= -ERESTARTSYS)
-+				req->cqe.res = io_fixup_restart_res(req->cqe.res);
-+			req_set_fail(req);
-+		}
- 		if (issue_flags & IO_URING_F_COMPLETE_DEFER)
- 			io_req_complete_defer(req);
- 		else
+ io_uring/futex.c | 1 +
+ io_uring/rw.c    | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
 -- 
 2.25.1
 
