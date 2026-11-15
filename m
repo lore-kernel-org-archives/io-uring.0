@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794755453;
-	b=5R2xxJQ5W8GqU7ooUdnuflOSpaOWuPnrI8u2EBTrCboygp75/9BwOgz7UNhVtvQjP5MY
-	 REQV307kQnHp4Xz/l8E4boZgKPRgY9nrIAnRuowBciinMV8uFoEILYUuLdlciVPMpBe16
-	 TfYX6wBI/vsNU8CnEbfWRwoD9EkK8hx+ebVXKFK+8soqKKLACfzNCwIhpIqEtJ+3uijUx
-	 aTN5Qqu4CY89OmE8rhP/YV+cFNnASyybIeWRBDj6rFfq6dUl5hbCHoOZmz3dQF7Q0lMzB
-	 I0Y+YaV4/K570hshgFzxdndC6QQ2/zSpNiV7WsnwknjGb5dS2s5KxXI3lxfFu/fOIZQ==
+	t=1794756143;
+	b=CsyCM6Qne+vwZu/b4fQivuPr0oT34kIkGVCE1vGvY8dlx44IJUO73lbKIm7zpfG+iXXl
+	 IDmdUMdghgbr6dW4uIfyyqVfDOe0AYk88fC2k21CkaL14usW9zxbTU0mYEalywO/mCKod
+	 FKRjYNZg53bfHdGL3bPpgNcMVV5HBSvEJc1Prl/5MmQOZtpUDMRKdN+7d9xvSrKHLl2xp
+	 ecB7uFHy1OTtQEdpuNeys6hM2enkoheLlvrSq7HBjqfijJ9MLZ0Z6mTslg+XPJ5BpSEoV
+	 gImpTOIoAS8M/jN9XssuqhCG8QWdNK3vboKTdKhPFOA9z3gm34VewViTr0NQRok4tFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794755453;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794756143;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Content-Language:To:From:Subject:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=+daLeqx/lxVUIzrCUHcjunWtWzpqthykT9sEDQIc3m4=;
-	b=fKi9QVIEobTAkU9iBpMHnIox75GciwPbTkCXPtSiQmNtB/pPDc+iUQjV7ffRKFyLOD+N
-	 TgpwYyQdyxrSVesn+YOLE7IQqDc5mKpNbx8apcbEE2hdPDGCVdhJpYshoX41+lR+Q9uFe
-	 r2jnC0OFVX5KgKdkbW30FN0FNYqGh/TTqj7vCcsIaNK5ZBAjVmVQtYQHu/AEGfPk8Wq8X
-	 hIEN1XBdxH31VQjWd5pIdOmMX4erZXz/VngnoN/BZEAry7Lg5HdeXuILuDIY0v1jeH44v
-	 nXga6VX4GooD/xqcK0VHiojGcSq5TxlLfU49G8ysS422a7rqTPA51vx3q1x5AqQVNnQ==
+	bh=GXRlkSfh9P7H+WzFyD+5CF3sbI2VhxyU3eV8QBlajVc=;
+	b=m6w1FErqdCSnvxQN3N90w1ATZzEAq6XsusNuOPu0rQfq3tkSUG9OU8oLWv8gNBsuuFGC
+	 qn65ODEZm8GfeSZGS+Tas5ySxg4ovFyzt+Fpv5MML8ODu0BJiXWdQFHY0llx5Ian0pKXz
+	 QKX+feH4Af6pKZfBcyufU2XWLI3BPBLuGEyBOjPpxhHsg1UOd3L/SQ73lO8sQA93bha7h
+	 VpqgCjC/j9PCUMTvQ4rvD+4sJF1Plg0arUS2njNaxxN0pDWNp/2MmjFAqg6sDM5tYKBsy
+	 LfbzCkFv63LsBnh52IrxP3pa36sd6PkEVGpJO2KceZ8+fHGRHuXV64CcXvp6MWGyL6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ruH808aN;
-	arc=none smtp.remote-ip=74.125.82.48
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=oFJpBqTu;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2761606A31D
-	for <io-uring@vger.kernel.org>; Sun, 15 Nov 2026 15:10:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2761606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BA4606A31A
+	for <io-uring@vger.kernel.org>; Sun, 15 Nov 2026 15:22:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53BA4606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ruH808aN
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-15dd124bbe7so88219c88.1
-        for <io-uring@vger.kernel.org>; Sun, 15 Nov 2026 07:10:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=oFJpBqTu
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-37198ed3727so4154940eec.0
+        for <io-uring@vger.kernel.org>; Sun, 15 Nov 2026 07:22:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794755452; x=1795360252; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+daLeqx/lxVUIzrCUHcjunWtWzpqthykT9sEDQIc3m4=;
-        b=ruH808aN9cP1sUIbECxmrxkFrFybCv9DxGIo81u4xiIW7K2Ty1uMEjPEa8HO4Y0n9m
-         H4b7+q8O4bgBRPas4m5BOVRwEVx+9wQj/NuGAznsYgIA+bHlmmiE7iT1TeWU8H3TB1TL
-         Y8r+MQKk/Wf+PKUT+LvoTnCjrblTLSJoBSUXXuTJSEhXIKdotABYjiQjRiRuTP/X2oLE
-         B3/bFZ6fvfYx1bYwS3OQ0acMJPVxv6bRbP3O2yN9W9ofN+iT/2Hcn6bzSSXermOmLKrY
-         +c/q0RldU0SqJ9PxXTp3z8WZ4aMvDmTADMkZWx0U3w3Zheeox1qbV5rZj6h/FryOUN4X
-         P8WQ==
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794756141; x=1795360941; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GXRlkSfh9P7H+WzFyD+5CF3sbI2VhxyU3eV8QBlajVc=;
+        b=oFJpBqTu8Q6eikW6NvNL+v3AyJ/xA7IaQnRetd7WmO4CkfuXePynTFru58epSfLwbi
+         ZeOAuALpqN9WbWiHNbr/HFt2J0G2S60tZVqlbmP+/84RCgcTnGnhXDPmoM19DokQ5Pbq
+         BqOEmj8MJ7Mavt+WOJlMSYb6peFphXKe+8OoVKWyvWlBnzH1DSe4ZQQqwxzZvEwzMXLl
+         oPoTZtCP1IJnc1hmGPEcC/JpfLxBO0w4P1rxqihumcLRvf7fSiLMHkXzKs7TllwhaR5R
+         9RFK0gnhKkZRIo00UbH2u8S8DCt3DPUobdWbyqDZawjtUaQkRjCSVrt57NVOHF/FT/GA
+         21rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794755452; x=1795360252;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+daLeqx/lxVUIzrCUHcjunWtWzpqthykT9sEDQIc3m4=;
-        b=AQKy1zdfZh8QjMy0u7jSbpcrHONfyCTJ5yO+zdwNGUdOW1C+1zEXuVySFIrYi31Ri3
-         kVE5QqwTExis36Rro4eh2WVMBTprGLNc5kzHPOySJ8xincJPusizj8FiMSoL2wGaN+un
-         DUvsKuK223iyJrPf6srseuaBl+o9XiQCJSzQzedHwnkyc/N0m7TNsRCc4qoTHvs2u4rs
-         LQFAfauV4iJ9hkV0ucq59pJcmfZVyB24xZEET7n8wNQFCPKSnylkZDv9S74h2v99QEEC
-         Itd4e7fsFdDkHDsbqpUypvAKxCc3bEn+gTLdxaCbT1ddJq+Uddv+WkGmqI//lGnLdoeu
-         i28Q==
-X-Forwarded-Encrypted: i=1; AL+hErHj5W2koaf+NoICkopIbrbFgGcU/o55QMAu5eB/ZoGF+EMlGb54AMZAxyD7SPGA/aWeolikvb6NMA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z8SkqzQgoe9+oMqvzNQxuWmioMbc0vjHZZkUYFPaDcX8r/p3ZEB
-	m/4G+zm6nZuv6fAtYcIx122QVXq98b1DRfIFf6F1VI+R3Vm0PpWcKnhwd2t4OPfuN9A=
-X-Gm-Gg: AYBFou2X/dtmvJCfFJ/He8qXiAAa9oXBs5aHAkwJqwQSCuS9GAaCwEdeT/1jCp3wD2/
-	Ltm+bci+a1n8E85/RrATSzQxdoKaqFGpF8RF4WMq3Ek9lV3zfgppqegFcFwlvqYPrFx6XqVK6++
-	QRTtXQzjYzsFZ88jFrPTwjfVhUeRQRfGJvhItBpzlGX1bWrAkwrH/EmAK6aSm6iYQO1Gzhr7KlY
-	UcN+h+M5Z27bhl9Y7oVz1B6imgxed6yJAzS+AX2FAyg/XaT7Z78rKt/SVDcrpnZIeMAobie88Hw
-	vk+zeedTKsanYPL3h2bek/iFBFR2ReUr69f2PUGAfcZQeznjLI9eU8n6MgepVC3FCeosK5+fgH1
-	NpKAcyh+TJFKVWvr7LpGuJLrKYRqRNPm0dB+xfOD34HZIj5x/085aKe1kXhA2xbDRMUqEpZ8zgN
-	FV5NZUTRdQdQ7HZuPQpPmjy4Uk4Kw/qJZoPYnYDbEp14HVKpTMtAUMDGe9g4poY5Fg+CqJKvtAR
-	z2eOGQqKEh5CMDQ+kC/q/BUmgyhOdpq0JAaAr+a94+ECqHmPR7ppMWYjgKc5uz7K/FSeUyNtRxW
-	MPZILl8vm0L2A/rwji9yzw15xsVN+XeL1dzSHX/jClH9AoSLFcFViHUKgovSonqO7y9wL4PI+ig
-	BxaCrUv21GOah
-X-Received: by 2002:a05:701b:4182:10b0:1b2:5128:df1b with SMTP id a92af1059eb24-1b5031b7dd3mr7952805c88.45.1794755451719;
-        Sun, 15 Nov 2026 07:10:51 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794756141; x=1795360941;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GXRlkSfh9P7H+WzFyD+5CF3sbI2VhxyU3eV8QBlajVc=;
+        b=ttvWtBx12lQb0/SjZ8A7AnI1lrT86GJ+eNL4N5FKe+r7i95kyc2aMVhLFUEtXZe9SA
+         rJZk6vtIgni47Aq5L/1YKgsxAl3mU+ocaWGHLUA8P6erW2ty/+KxYu6QKHgGOvbvyq+o
+         LS4PyUq/cfS0Jh86ltxRHdS0ENG9uknYWIF8Xar/iJC2A8208gMvsbPEA7kzanlMfgJf
+         rkyUMXd/QszJL57BCENqG/A+U5fKc0ZhN/C1Q+izryu6Asm+IHbsBlFCG5S92WVfq4NO
+         J082RJOqPedZuA2nE38gO2maWIQRl83I+zDAcQQDJtmOYnDd9PUvwnx8IBWLpWIgy/nz
+         MqfA==
+X-Gm-Message-State: APuU4Z9eqV76Bvx95nNJJV+Ls6ZoGsGmqlzZMHz6ZmrjeVF3KWaq2cFA
+	u2az1xhFvkPAEKIJLg6YngRlwuQAS48v8ClOD/okgEBMl59hjv93y8n+S+boS8ayOIFeBmd8V5n
+	JDql557Y=
+X-Gm-Gg: AYBFou2rAGkEaWHWJ3OARen7uzp9eaAQ9zQRq8cUhAde8vnrrB+YQW9rPjfcW+8ZNsi
+	N1deMKmyDHJkSDF0qbZ25pjtmi90CxsdLGFP4RMToWHoeCMs9Qy3XHTRceMRqNVn7GDgxtoDPxP
+	DrsKkBhnWpvY0Ygk3/RobLkSY3dANyGzKFzboXXg96ahGeklXxHbvYhLKgcigiLAfPpmZFuOMru
+	Wv5iYU13iL/iDCk38WlOXq5cAy/fAAiRiU8jnIG6L7Y3v9+hUUSJvMDhbaonRhi8zRB+Q1xareb
+	LSkOi2OFBkBx1WWe4vmMZFdwPALcA+Ycgu7YquMIzH0iypF36JhasyVeCLIo1HMWcYr+H+8xObp
+	bs07AWvt4TIQt7CNkMQ1IO3mllFjlKh1JWMgJkAxttFyuVtmXjpakCP+XlXn3LTY7LOl4YlJDb8
+	KD/Il86lKmhjImA+ivc4jKyR4oVZ9pOOh2iCU8tagE+NnliiMbBChXWa9y8BODOBJW6wu1nMfDy
+	QqEXxpkiRYoPqwmKQIiZZciVL6bWbPBD+VAmhHlvLcFN6cY5FxwhplhFcGc/KHlcrs1uxmPM/ER
+	Zp4B7r9R0yQuM+aNBHJXk9mLC6iNw1l+1bIdQzntw7u6iDBGa2i7w1TRXuZBb99W8tU5D6LVih0
+	i7+EgKXw0mFaI
+X-Received: by 2002:a05:693c:884a:b0:376:7640:9668 with SMTP id 5a478bee46e88-377e15f05a9mr9900180eec.19.1794756141184;
+        Sun, 15 Nov 2026 07:22:21 -0800 (PST)
 Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50300e5dcsm20992451c88.0.2026.11.15.07.10.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955f01d68sm25209089eec.17.2026.11.15.07.22.20
+        for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Nov 2026 07:10:51 -0800 (PST)
-Message-ID: <d5e8a108-c563-4c1d-8339-f50d2b7aa1db@kernel.dk>
-Date: Sun, 15 Nov 2026 08:10:50 -0700
+        Sun, 15 Nov 2026 07:22:20 -0800 (PST)
+Message-ID: <ccaf839d-97f0-4f39-94ec-57f978cc477b@kernel.dk>
+Date: Sun, 15 Nov 2026 08:22:20 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -93,89 +93,87 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [io-uring?] WARNING in io_wq_put_and_exit (2)
-To: syzbot <syzbot+b0d54b9e81de55179e47@syzkaller.appspotmail.com>,
- elzeigel@gmail.com, io-uring@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kernel@vger.org,
- syzkaller-bugs@googlegroups.com, tom.leiming@gmail.com, zcgao@amazon.com
-References: <6af9509c.07d0a7c9.39b765.0026.GAE@google.com>
 Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <6af9509c.07d0a7c9.39b765.0026.GAE@google.com>
+Subject: [PATCH] io_uring/io-wq: show stuck workers rather than WARN on a slow
+ exit
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/14/26 11:26 PM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    aacb77975041 Merge tag 'ovl-fixes-7.4-rc3' of git://git.ke..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1105ee3d580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1cf189394a856f11
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b0d54b9e81de55179e47
-> compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1093cb69580000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b0d54b9e81de55179e47@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> time_after(jiffies, warn_timeout)
-> WARNING: io_uring/io-wq.c:1482 at io_wq_exit_workers io_uring/io-wq.c:1482 [inline], CPU#0: syz-executor273/6014
-> WARNING: io_uring/io-wq.c:1482 at io_wq_put_and_exit+0x372/0x9d0 io_uring/io-wq.c:1511, CPU#0: syz-executor273/6014
-> Modules linked in:
-> CPU: 0 UID: 0 PID: 6014 Comm: syz-executor273 Tainted: G S                  syzkaller #0 PREEMPT(full) 
-> Tainted: [S]=CPU_OUT_OF_SPEC
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/06/2026
-> RIP: 0010:io_wq_exit_workers io_uring/io-wq.c:1482 [inline]
-> RIP: 0010:io_wq_put_and_exit+0x372/0x9d0 io_uring/io-wq.c:1511
-> Code: 00 00 0f 85 7d 05 00 00 48 8b 15 e9 74 8a 0a 4d 89 e7 31 ff 49 29 d7 4c 89 fe e8 f9 fd d7 fc 4d 85 ff 79 aa e8 4f 03 d8 fc 90 <0f> 0b 90 eb 9f e8 44 03 d8 fc 4c 8d 63 08 48 b8 00 00 00 00 00 fc
-> RSP: 0018:ffffc90003abfb10 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: ffff888038fb1000 RCX: 0000000000000000
-> RDX: ffff88802b0d2580 RSI: ffffffff85367db1 RDI: 0000000000000007
-> RBP: fffffbfff1f81e50 R08: 0000000000000000 R09: ffffffffffffd785
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000100001f9b
-> R13: 0000000000000064 R14: ffff888038fb1018 R15: ffffffffffffd785
-> FS:  00007f00678c46c0(0000) GS:ffff88812246c000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffe270457d0 CR3: 0000000023abe000 CR4: 00000000003526f0
-> Call Trace:
->  <TASK>
->  io_uring_clean_tctx+0x117/0x180 io_uring/tctx.c:261
->  io_uring_cancel_generic+0xa9e/0xb00 io_uring/cancel.c:771
->  io_uring_files_cancel include/linux/io_uring.h:52 [inline]
->  do_exit+0x344/0x2a00 kernel/exit.c:920
->  __do_sys_exit kernel/exit.c:1090 [inline]
->  __se_sys_exit kernel/exit.c:1088 [inline]
->  __x64_sys_exit+0x42/0x50 kernel/exit.c:1088
->  x64_sys_call+0x156c/0x1570 arch/x86/include/generated/asm/syscalls_64.h:61
->  do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
->  do_syscall_64+0x123/0x7b0 arch/x86/entry/syscall_64.c:89
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7f00678f9a99
-> Code: c0 79 93 eb d5 48 8d 7c 1d 00 eb 99 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 d0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f00678c3fd8 EFLAGS: 00000246 ORIG_RAX: 000000000000003c
-> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f00678f9a99
-> RDX: 00007f00678f9086 RSI: 0000000000000001 RDI: 0000000000000000
-> RBP: 00007f00670c3140 R08: 0000000000000000 R09: 0000001000000008
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f00670c3004
-> R13: 00007f006796b0e5 R14: 0000000000000006 R15: 00007f00678c40e0
->  </TASK>
+io_wq_exit_workers() triggers a WARN_ON_ONCE() if it has waited more than
+IO_URING_EXIT_WAIT_MAX for the workers to exit. That can be triggered at
+will, for example with an open on a FUSE mount where the server never
+replies to the lookup. The worker can't be canceled, and the exit waits
+until the server goes away.
 
-There's nothing wrong here. Your reproducer has a stuck request, which is an
-IORING_OP_OPENAT on a fuse mount that never responds. Hence it's stuck and
-can't get canceled. This btw is different than the original report,
-which was the usual silly "let's generate giant reads against MSR" where
-MSR reads are really slow, and yes that can then also take a while to
-complete if they are already executing.
+The stack trace from the WARN isn't useful either, as it's that of the
+exiting task and that is always the task exit, exec, or SQPOLL thread
+exit path. Print a message and show the workers that are still around
+instead, that's where the interesting stack traces are.
 
-IOW, they are both bogus, and I think the only sane recourse here is to
-change that WARN_ON_ONCE() to a pr_warn_once() with the necessary
-details. The entry point to the io-wq exit can be gleaned from a bunch
-of minor things like task etc, so won't really lose us anything. But
-it'd prevent noise like this report in the future.
+Reported-by: syzbot+b0d54b9e81de55179e47@syzkaller.appspotmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-#syz invalid
+---
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 92df54c6f50c..52ba4b06b5af 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -9,6 +9,7 @@
+ #include <linux/init.h>
+ #include <linux/errno.h>
+ #include <linux/sched/signal.h>
++#include <linux/sched/debug.h>
+ #include <linux/percpu.h>
+ #include <linux/slab.h>
+ #include <linux/rculist_nulls.h>
+@@ -1448,6 +1449,22 @@ static void io_wq_cancel_tw_create(struct io_wq *wq)
+ 	}
+ }
+ 
++static bool io_wq_worker_show(struct io_worker *worker, void *data)
++{
++	sched_show_task(worker->task);
++	return false;
++}
++
++/* The exit path is always the same, show what the workers are stuck on */
++static void io_wq_show_stuck_workers(struct io_wq *wq)
++{
++	pr_warn("io-wq: %s/%d stuck waiting for workers to exit\n",
++		current->comm, task_pid_nr(current));
++	rcu_read_lock();
++	io_wq_for_each_worker(wq, io_wq_worker_show, NULL);
++	rcu_read_unlock();
++}
++
+ static void io_wq_exit_workers(struct io_wq *wq)
+ {
+ 	unsigned long timeout, warn_timeout;
+@@ -1469,8 +1486,8 @@ static void io_wq_exit_workers(struct io_wq *wq)
+ 	 *
+ 	 * where completely overloading the system with tons of long running
+ 	 * io-wq items can easily trigger the hung task timeout. Only sleep
+-	 * uninterruptibly for half that time, and warn if we exceeded end
+-	 * up waiting more than IO_URING_EXIT_WAIT_MAX.
++	 * uninterruptibly for half that time, and show the stuck workers if
++	 * we end up waiting more than IO_URING_EXIT_WAIT_MAX.
+ 	 */
+ 	timeout = sysctl_hung_task_timeout_secs * HZ / 2;
+ 	if (!timeout)
+@@ -1479,7 +1496,8 @@ static void io_wq_exit_workers(struct io_wq *wq)
+ 	do {
+ 		if (wait_for_completion_timeout(&wq->worker_done, timeout))
+ 			break;
+-		WARN_ON_ONCE(time_after(jiffies, warn_timeout));
++		if (time_after(jiffies, warn_timeout))
++			DO_ONCE_LITE(io_wq_show_stuck_workers, wq);
+ 	} while (1);
+ 
+ 	spin_lock_irq(&wq->hash->wait.lock);
 
 -- 
 Jens Axboe
+
