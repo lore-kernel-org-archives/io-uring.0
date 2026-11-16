@@ -1,72 +1,68 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794827884;
-	b=wqmuZOebbJipeHRYYxzcGXDdNmg8Lo41fWX+O6bt5v3WoBe0buwMnOL6AdAlB0obfhOp
-	 SnWdFyraiGLzCAr9cGC3zEhtDdFGj0QrVOGWpkhFtKuNWw7WNizXrBCS4NMefgkJYczHX
-	 naqVkSwNxhlnkufcfbstlpYVzvXG0m1s8CR/MwIxygeIuCGj8eNrnyYGe4GYCWzh5OLsy
-	 JXNM+fZ0Clf+dPzeodXb093jn4zaGV2o1R81xpaFMU7Nvtr/Wqul0h0UrL0rBT6LyIPTp
-	 A1QkL5ZNRQQObiGGCYsTxvjIFqHSYVfUhLxRBLJ+cegwEcFg/JNMr0Y91v4bI2WzMTA==
+	t=1794827889;
+	b=SWU1ClllEFqtfOgrC3ioa5U5nTN/mw903toYgLhLuoazKI4B76DKnA+lDzQF1TXfCfpu
+	 iA39FRu7HdnRF7KN/7iCSoUrSk8dUPP9UpWY2p/sN2DarBNdNmdiJHw23uTjsKfsq5rUx
+	 bLRKbVMyOTxzVbXteLrYLNOEk35asBzgvAq500BIgorZlb0ABoZzrCYZ835BPPddg/rk1
+	 rRtbnpzj6Sw9dQZkn3OWdK1JaAqNXs6BIqo5hroZsOL9Pb/G86wo9oX95bgoB1L5adorx
+	 bcJB7mCYio/SYaqGgadPK5Pee4TLhamNaU8qHqxifN4nefU5hr3hdgA0D9nTc3bW8Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794827884;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794827889;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:X-Proofpoint-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=dOoLNcOA145dbGgRO3HFr8CXny0Ow8aS7Stp+f4QsPU=;
-	b=4oLmAGIsWgpAvcatIPjc0HpBHsr0EJbgzEu4V4e0C5rN2Q3x9j4WFb5+DH6ytahrYvM5
-	 xlP8m8RGgjNGjc/Akrh2RLV4ErXgGLcgRa7Z6NdNa64uotP0+MMr2eMTA1fOUQcFSweGh
-	 2ln+YuReq0jNqAd+HxU1C26DPLRekTxyvhbNP3SsQp/HNFvrAO90EtmrW5o/G84Zgu29D
-	 OCrKs+5lNcSeNnJbiO267BtnKXIDKzuhV34q/CpduI0Bg5GglAgYG5sWkWMH5xF7kzu9b
-	 NMK8Mw/Cq+/5AN+lYt2+9nb8Ot0j6kIy5Q6EDd01sIge8YugsFcKerlm/PO9sCnsUdw==
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-Authority-Analysis:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version;
+	bh=106LuhNkFCRGEUor5y3mizO0ZEf92F3tH32RHmcxfcU=;
+	b=mgggOEgpcb1W+phn198WT4vESGz7ZG2mqg6b0gJvnuSV2R9Pw3r58rUsJ+LFv9yU8Sl2
+	 P64WXipIPnFrUbsTEaSfZdL/0ZOyQQlOhs1C5SpY0+qdfaVnmEWWCBP4lTMfgA78ZGAtD
+	 VEFXTAhy12i3cGBh/eOvE4f2oK4x8aSILYHNdcsarIT2TyVKE7VhO1ZqNfuYR3B2833DI
+	 BHL5c74hgkD/vQ2+SuZ5hjpKzLKYrSg8IwtWkTimweVNmxpsN+Jrc9qlaoF9Rz0j/FDot
+	 i3QpZMBLGxqCBONZZvFiJx/H6D0EqS/5Dy/8g9FaW9VmanITVnFExXTQCvUd7hqKjtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=meta.com;
 	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=IOfadrRx;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=LCpZ564Z;
 	arc=none smtp.remote-ip=67.231.145.42
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736E6606FA41;
-	Mon, 16 Nov 2026 11:18:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 736E6606FA41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F268606FA5D;
+	Mon, 16 Nov 2026 11:18:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F268606FA5D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=IOfadrRx
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AG7dYfS1606045;
-	Mon, 16 Nov 2026 03:18:01 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=LCpZ564Z
+Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AG7d7l8849792;
+	Mon, 16 Nov 2026 03:18:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=dOoLNcOA145dbGgRO3HFr8CXny0Ow8aS7Stp+
-	f4QsPU=; b=IOfadrRxYNMuJU19xtAWFqKL3LC/vaqE8iCCjDKsbrHCLcXQYk39L
-	Y/h+/9xWvWP0he/9RvEigco6zJRPIxZ+ftBEDP5VtWitnVFjiy3VyvkfNKm6DK7f
-	uCE0DzN8doBTllHZigofAbKnHE1oTT/1mxaCrkgNdoCiPBwt/TjTLIJTZLbazVK9
-	/GEGiWETY928MQf2uVONq+eE5BRqZ/H1Mc7ANXK7a1nN1AFXlJDgFbqIBEJRvPcJ
-	LExcmTw95EfO6fUBKUMe9H5ugPRGmzSca/VOFthRvFHCYWqlVxit8pm6T8IcWgYd
-	8v1Uqwfb9ysBrBcf5vVJ3H68VMSZOu7Yg==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hxnmcr8u6-2
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=106LuhNkF
+	CRGEUor5y3mizO0ZEf92F3tH32RHmcxfcU=; b=LCpZ564ZZ99RgS8Ep1/NgNnZO
+	5yssuBb4R+NQJ2GaHAgGu4a99G/J40eYXP63hDfIqfkYwyYJGS7+AS+VBsstDxwO
+	Pmrmk/U9pjam2Zz+kQILPCDfhsVKmGEFzJ8PRdEq4P/kTjaqztEM+0wI/zP0fwjp
+	QuOagEVeFjRLwWk30uLSu2FzgSnL1ujGUb3smQCiMrRTDszfgKhJSeI8cRmoM1nP
+	4+oUqp/nLDkLkpr+FsY7zTw8rv+5aH5/e2AIZiSb0Me/Y3dmHpjsFQONV4MSc1qr
+	q+ZjpZuPqG//tjlie4OEFCA2LyXKkmYJMh3zOiyJVCiET/2+5Ka0MxSIUdfAg==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hyd4qm1y9-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 16 Nov 2026 03:18:01 -0800 (PST)
-Received: from localhost (2620:10d:c0a8:1c::11) by mail.thefacebook.com
- (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 16 Nov 2026 03:18:07 -0800 (PST)
+Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Mon, 16 Nov
- 2026 11:18:00 +0000
+ 2026 11:17:56 +0000
 From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
 To: Jens Axboe <axboe@kernel.dk>
 CC: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>,
         <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] io_uring/net: Factor out receive buffer selection
-Date: Mon, 16 Nov 2026 03:17:36 -0800
-Message-ID: <20261116111744.702159-2-cleger@meta.com>
+Subject: [PATCH 0/2] io_uring/net: Add bundle support for multishot recvmsg
+Date: Mon, 16 Nov 2026 03:17:35 -0800
+Message-ID: <20261116111744.702159-1-cleger@meta.com>
 X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261116111744.702159-1-cleger@meta.com>
-References: <20261116111744.702159-1-cleger@meta.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -78,183 +74,56 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: O-q-RhI4uRxrhv-23rCYz7qpAd5Pmllr
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE2MDA0NCBTYWx0ZWRfX4GTGNJ1M/Zo1
- tFkvCWolXt6l9qnG5o0NF8U7MsLweyNXG2mqzs99dnjXWZGMeti6oxCUC2zIHDR7tLtpnpM01k9
- n7lXmUdZdLFKFTERwYLhauPMkUMo1jM=
-X-Proofpoint-GUID: O-q-RhI4uRxrhv-23rCYz7qpAd5Pmllr
-X-Authority-Analysis: v=2.4 cv=EMKTQFZC c=1 sm=1 tr=0 ts=6afae669 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+X-Authority-Analysis: v=2.4 cv=btnZl0ai c=1 sm=1 tr=0 ts=6afae66f cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M51BFTxLslgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22
- a=VabnemYjAAAA:8 a=wjFNdW0xE5YP9TeFXlsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE2MDA0NCBTYWx0ZWRfX85fCQ68LlXaM
- MRIigO4b5dYr29axmwe2Z9tw1Yq0a0ja9i3auT4th/sKY0IHENfks0lxRWIGNqFgU8ZeQhicqr3
- mdNLFy94Kgm0VBA+879bEMAfjlefw6FRv0adL4ieKjgQd+fsLeWWYj5rK5+PQxpvUUHawK+Rg3X
- M2gHdKoin5IgZ8M4syp6cJfvmL3eskBdG2i2Wh+Pm+ifJrFS5PH4smLH6P5Pm3TQ22M9B97fMj8
- yl6zpmxyZoPlHF/Rf7lfcKnVVgoT3v52rtWnmvPlPQZIQYRBV38Clu5komFPruGGRZGK2LsqJQn
- Uoi5zmKbEvart9l3OqTSg730kebmpnp/bVbwirVIW+AxEuT0nbiGofY+FOJE9jbDjEoshrwOuSm
- GmDwl9FjrIHt2eG113Ns8qTyBlTpnfkHwLipngtQrzjHpsEdUa1iue6Li8/SYJvRXiYFQaeI1qT
- RpSJYJslKEOG2AT9YoQ==
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=_1IyUuN4QrATX339ibzo:22
+ a=dh8xkkVarwHNG_fGBwMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: qDQjg3FRkTlaS1vN_nxwyvro5UHT9zLc
+X-Proofpoint-ORIG-GUID: qDQjg3FRkTlaS1vN_nxwyvro5UHT9zLc
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE2MDA0NCBTYWx0ZWRfX6HPyiON3hneG
+ vtts/8jFJPIEnEE091eBzdCyIf9aqykLQyLlMOEf2I1pP5NqLgNqgbNRQ7kSgFedlk9+sMP7aKy
+ WvBV/Ej1g7TYXadb01Jpz5WBarR18fU=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE2MDA0NCBTYWx0ZWRfX7AkhczotWs3C
+ wn07g2/pmHq7ZDgNMc9zsTkt5LIJ46z6cjQTCkIKGpHcWJgur+KI78ZUIekTNX52+vYnVXaSyUk
+ hcjujT6Rn4DHSFv+t+NbTTpphSzF3I+/Y7V2yUQXprETMBPE1WqZ8u5xrOmEJdEJUK4/RtSfqrM
+ O5Nugf8BK7/AIhiiRvnrkFzwGjnmAjmppq4VVQzEEp6Zh5KrlyWwfQuBh5U4uRD3mKQLmoqkh7e
+ +pPoYhQlF7hUY16Vkhg4Abwxm1oCyBUSTcifhgKeZkLe8utVuN9LI+ebc30noR7W0LPW8+z0CBU
+ 1i/hQjDuWBm9Hf+/tffWgt4dNE2564jbDJqzpLx0qzZCW8brqJBi9wHlcJ+4ZTjmhMa9xzsumj8
+ m3QlJjskFfumE74yLpAqPVQTRBH/nlE0jErk9HnukQOlnqX22Xn8dNg7gE8e2g3XT2btnV7R2Oe
+ BKVnd7L/sDbmnG2oiiQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-16_03,2026-11-11_03,2025-10-01_01
 
-In preparation of bundle support for recvmsg, split out the provided
-buffer ring peek into io_recv_bundle_peek() and the existing recvmsg
-buffer setup into io_recvmsg_buf_select(). No functional change
-intended.
+IORING_RECVSEND_BUNDLE is currently supported for IORING_OP_RECV but
+rejected with -EINVAL for IORING_OP_RECVMSG, since the recvmsg output
+envelope (struct io_uring_recvmsg_out, name and control data) was never
+accounted for when bundling a receive across multiple provided buffers.
 
-Signed-off-by: Clément Léger <cleger@meta.com>
+This series enables bundles for multishot recvmsg. Patch 1 is a
+preparatory refactor with no functional change. Patch 2 adds the bundle
+path for multishot recvmsg.
+
+Note that contrary to plain recv which handles retry and can append more
+data to a bundle, recvmsg does not support that since each payload is
+associated to an envelope. trying to enqueue more data in an existing
+bundle would leave an envelope in the middle of some payload buffers
+which is not expected at all. The envelope must remain at the start of
+the buffer.
+
 ---
- io_uring/net.c | 110 ++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 72 insertions(+), 38 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 533afd335627..2f106a1fc69d 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1039,6 +1039,68 @@ static int io_recvmsg_multishot(struct socket *sock, struct io_sr_msg *io,
- 			kmsg->controllen + err;
- }
- 
-+static int io_recv_bundle_peek(struct io_kiocb *req,
-+			       struct io_async_msghdr *kmsg,
-+			       struct io_br_sel *sel, struct buf_sel_arg *arg,
-+			       size_t max_len)
-+{
-+	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-+	int nr_iovs;
-+
-+	*arg = (struct buf_sel_arg) {
-+		.iovs = &kmsg->fast_iov,
-+		.nr_iovs = 1,
-+		.mode = KBUF_MODE_EXPAND,
-+		.buf_group = sr->buf_group,
-+		.max_len = max_len,
-+	};
-+
-+	if (kmsg->vec.iovec) {
-+		arg->nr_iovs = kmsg->vec.nr;
-+		arg->iovs = kmsg->vec.iovec;
-+		arg->mode |= KBUF_MODE_FREE;
-+	}
-+
-+	nr_iovs = io_buffers_peek(req, arg, sel);
-+	if (unlikely(nr_iovs < 0))
-+		return nr_iovs;
-+
-+	if (arg->iovs != &kmsg->fast_iov && arg->iovs != kmsg->vec.iovec) {
-+		kmsg->vec.nr = nr_iovs;
-+		kmsg->vec.iovec = arg->iovs;
-+		req->flags |= REQ_F_NEED_CLEANUP;
-+	}
-+	if (arg->partial_map)
-+		sr->flags |= IORING_RECV_PARTIAL_MAP;
-+	return nr_iovs;
-+}
-+
-+static int io_recvmsg_buf_select(struct io_kiocb *req,
-+				 struct io_async_msghdr *kmsg,
-+				 struct io_br_sel *sel,
-+				 unsigned int issue_flags)
-+{
-+	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-+	size_t len = sr->len;
-+	int ret;
-+
-+	*sel = io_buffer_select(req, &len, sr->buf_group, issue_flags);
-+	if (!sel->addr)
-+		return -ENOBUFS;
-+	len = min_t(size_t, len, MAX_RW_COUNT);
-+
-+	if (req->flags & REQ_F_APOLL_MULTISHOT) {
-+		ret = io_recvmsg_prep_multishot(kmsg, sr, &sel->addr, &len);
-+		if (ret) {
-+			io_kbuf_recycle(req, sel->buf_list, issue_flags);
-+			return ret;
-+		}
-+	}
-+
-+	iov_iter_ubuf(&kmsg->msg.msg_iter, ITER_DEST, sel->addr, len);
-+	return 0;
-+}
-+
- int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-@@ -1068,20 +1130,10 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 	sel.buf_list = NULL;
- 	len = sr->len;
- 	if (io_do_buffer_select(req)) {
--		sel = io_buffer_select(req, &len, sr->buf_group, issue_flags);
--		if (!sel.addr)
--			return -ENOBUFS;
--		len = min_t(size_t, len, MAX_RW_COUNT);
--
--		if (req->flags & REQ_F_APOLL_MULTISHOT) {
--			ret = io_recvmsg_prep_multishot(kmsg, sr, &sel.addr, &len);
--			if (ret) {
--				io_kbuf_recycle(req, sel.buf_list, issue_flags);
--				return ret;
--			}
--		}
--
--		iov_iter_ubuf(&kmsg->msg.msg_iter, ITER_DEST, sel.addr, len);
-+		ret = io_recvmsg_buf_select(req, kmsg, &sel, issue_flags);
-+		if (unlikely(ret < 0))
-+			return ret;
-+		len = iov_iter_count(&kmsg->msg.msg_iter);
- 	}
- 
- 	kmsg->msg.msg_get_inq = 1;
-@@ -1153,39 +1205,21 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
- 	 */
- 	if (!(issue_flags & IO_URING_F_UNLOCKED) &&
- 	    sr->flags & IORING_RECVSEND_BUNDLE) {
--		struct buf_sel_arg arg = {
--			.iovs = &kmsg->fast_iov,
--			.nr_iovs = 1,
--			.mode = KBUF_MODE_EXPAND,
--			.buf_group = sr->buf_group,
--		};
--
--		if (kmsg->vec.iovec) {
--			arg.nr_iovs = kmsg->vec.nr;
--			arg.iovs = kmsg->vec.iovec;
--			arg.mode |= KBUF_MODE_FREE;
--		}
-+		struct buf_sel_arg arg;
-+		size_t max_len = 0;
- 
- 		if (sel->val)
--			arg.max_len = sel->val;
-+			max_len = sel->val;
- 		else if (kmsg->msg.msg_inq > 1)
--			arg.max_len = kmsg->msg.msg_inq;
-+			max_len = kmsg->msg.msg_inq;
- 
- 		/* if mshot limited, ensure we don't go over */
- 		if (sr->flags & IORING_RECV_MSHOT_LIM)
--			arg.max_len = min_not_zero(arg.max_len, sr->mshot_total_len);
--		ret = io_buffers_peek(req, &arg, sel);
-+			max_len = min_not_zero(max_len, sr->mshot_total_len);
-+		ret = io_recv_bundle_peek(req, kmsg, sel, &arg, max_len);
- 		if (unlikely(ret < 0))
- 			return ret;
- 
--		if (arg.iovs != &kmsg->fast_iov && arg.iovs != kmsg->vec.iovec) {
--			kmsg->vec.nr = ret;
--			kmsg->vec.iovec = arg.iovs;
--			req->flags |= REQ_F_NEED_CLEANUP;
--		}
--		if (arg.partial_map)
--			sr->flags |= IORING_RECV_PARTIAL_MAP;
--
- 		/* special case 1 vec, can be a fast path */
- 		if (ret == 1) {
- 			sr->buf = arg.iovs[0].iov_base;
+Changes in v1 (previously RFC)
+ - Factorize header size computation
+ - Remove unreachable check for length
+
+Clément Léger (2):
+  io_uring/net: Factor out receive buffer selection
+  io_uring/net: Add bundle support for multishot recvmsg
+
+ io_uring/net.c | 244 +++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 196 insertions(+), 48 deletions(-)
+
 -- 
-2.53.1-Meta
-
+Clément Léger
