@@ -1,112 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.176
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794858736;
-	b=w2QuJz8u1HoChUgiOqiX35tqrURBZJ3DT3FTotWr2dj0KBrgIp1eIajIhKq1K7uzIyjZ
-	 OTusL3FODBINzNavOwCXZz7i14/rXNKdGU9DyH9bpGD9/vONAFA82KJ+dAdFrrgNU6ViL
-	 P+XE8bHiEn6CjHnn1uLHPfAIZdRjZBWInw6wvlJKFk9vgH3tWzFCaSGsAOqiJiJqvhpgt
-	 5/7um2oZD/BCLzeZ1cuvauKYKd/qBj3dEFWvo46EDsjzNJCCYGOkF89/8eSxhuEOOqPaG
-	 tuiIREN3JhoSbiceVMxWH7B5xRHO4517ZOB8NBxy3BzM72SGB3bUB+ioLXx+lgHL8Sw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794858736;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794859646;
+	b=W1BwvNfjh5z9UMvKA2PTMwN0uQLM1Si8odYk3OZAu483IR0stzUvcRlxUJBPWY4dK9vL
+	 21sthqtmh7xivXfMd8zK7VxDU1SBmt3iuxjd2ZFz6gaXTCY6/iEBeyJvZAn0kS/EVFVYF
+	 YGups+nqhu6ereYey0yIOH2lS+zOLfFnrUBhpEs+a0osVZfUB0I7ewoyH2rA+Xer6TKv4
+	 gUk5yAusVwpQVH20r3iPWU191do0Nqvlv6SFuDFJqmMGzEF4H9DaxaxUtptBdmoxPsGRo
+	 OGwch+8Pray0YawnUP0Vzd+BNLu9GD7D+ATeMSCYXZF/zBV5aPnxxFzvB67Q1oEViZA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794859646;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
-	b=Xy96CVjY2A27hD1Sjovp/vZwzIRbilGX02Y2BAl4rAyM2WMBi++i48kSOfbSRlaGoL7k
-	 ebinSxvSGAxGm0IT43VDodqnH2KWr+l8uFGooXKUPx+kR0UHoii2NznQZSGASsudlEe+4
-	 0FbdDXLBBqFZkOAniq9aYm/f0zyBh6VL3VQvYSJebufbvgqmzG3A91cf7KP7Q8h3HCXvM
-	 LXfUaNgGjmRH4nAAYhVuEIURqytW1+Sw1/lJ71onSlwI3q57ouVCVe1QcqymNtxpBF4m2
-	 FLhQWZlzRry4cZBI2cqboPSMGc7LZwL75nH9oaBgUnaZSRyRAGlE03SssqqbXN78M0Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=ziepe.ca;
-	spf=pass smtp.mailfrom=ziepe.ca;
-	dkim=pass header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=YcqWJI31;
-	arc=none smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=EZDAQV8yhgMyPQgwR3U/5djFDS4+SZxlS+9+Esw/bYc=;
+	b=zOz9lJL+80Z50utxxX9oPIHFMLHPBIn+ckC5HVX+rxW7opusgInNIEYERWFWTC7NJIKv
+	 cH/1fAaY35QzDc5YoHhmfNd8t28pZPMHXHSotspiZUopLsqGLNSZ5BHWFVT2JYsdUC+XS
+	 on15WayjngfJrnpqPqx8DJmvCuH4s7EfPThSGs/kK/lDGkrEcN1IfrRk4UmCfNEpGvgDc
+	 CU9yVu0fYrbOxl3hwwUVEWWoGJyQbPrZFdGCCgfui/a+rF4iQLypITGIl6/++cDNXKht2
+	 SRrOECGFaWWdc06f73H2ugm83m0SptVE3baj9f2vuYl5wtEW4SbANU3aKOhLgqqk2nA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XFDBy0c2;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BAE606A331
-	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 19:52:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18BAE606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2856D606A31C
+	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 20:07:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2856D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=YcqWJI31
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-55d2dcbb905so19718911cf.3
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 11:52:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XFDBy0c2
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso24829935e9.2
+        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 12:07:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794859644; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WJYyjXmqlj0GFntXguM31/KkTjEPBBK1B6vSQTMzVnxGMXE/RSYQ5hpmlayq4MY0Io
+         pHEUJUtG+c5HgheqSkBNbBZZpX4WcKRuoHq7W/H/RaNXDQst8EcC79qzrEZoVTAcnncK
+         rdzw4D7Zbt1el8++F9EXmrY3VALt0bDPlefBLRd2Dz6O0lBjdjG01gplE8Wlv/704P8+
+         nT+IHUJAcuYjCYic1VW1PzaCF94tTi4WBlU1x2cPVT3Ajghls+xKMNXR6nlgruvbyPfv
+         xNAVU4D1/COYejJLjwaFyw3P+BrkiMmxJmViEt0pNzMVHVwYvTuLne6e3WpP11Kv1+PH
+         AY9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EZDAQV8yhgMyPQgwR3U/5djFDS4+SZxlS+9+Esw/bYc=;
+        fh=2n/EEMo/KwG3jiKL3LfVC1kXjqarbGRIvwOW56QC+R8=;
+        b=jzS8qLgrtIgjHtESiV2kyva2sVrMQh+i/xoGXEYa3UQZSXOlSESkoC5qaagoqmM5uk
+         j7FKFyIPpWaMAj8gMa5Uw04/CXybi4O78ExtdaPPFa9jd8FIH5dG18pQz+QdXJ30Euxi
+         u3SCplsnjPdhAICn+BXvdUuAF/y2zqFMTVctCha8kT0hzhxQl9Kvua/8zd0F2RCdgRSI
+         2eUTluEDSOPCWd9OSdfreBExVwCijuYFhGAWFgx3W57S1KbLt6Yg2V8m3h4zvv3aTBIY
+         7RjirQoQFjViSC8qzYg5uI9jZnrz/IZBqaRMB7ZTGJkS6mjxisejucAbyEH4HrzNAJVc
+         JOYg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1794858735; x=1795463535; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1794859644; x=1795464444; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
-        b=YcqWJI31Q3We3zqNvL52aNkFr++cowdUSJ0aOSCLtCZgOyPTfxfZMV4aawKPfLKj7g
-         4m2sGeUiA0CXGadMrFuMRIl89TE0lacup406nbrhvwqwPIX8FxoVlYidwE8/s7P7Wszm
-         OrbfdLGk33YGmzpkBYmsq4F3Mxnt+4Lu+TymHPjdbgW2SfeAeQs52uRWqh/1XVhhLOxn
-         GvpMlDfLIXvCkNJG/BKPMpLBeKmXfFzSUPrKKeUURMUv+fsornqCLKr9GiRTo2LK7Tab
-         rlciZWXd7u0mEyCoyMVRbS74CtgQ2ZcTLr22IpH7H7u3DgVnSQkVWAwVkGPORAQHY8UQ
-         R7qQ==
+        bh=EZDAQV8yhgMyPQgwR3U/5djFDS4+SZxlS+9+Esw/bYc=;
+        b=XFDBy0c2q6nTYiJ4dwLENH1mguXX/IcFF58gOeYQArjps79P1XpkrhGZpUclTyZwpS
+         r/ZYwRoOG8WhRg+8JvLZN08T5FQLHs7jA/CzeQCQsJeulI93s02F+iYtli/pBjYHG+CR
+         W2MoU0n/+grSPpLZW83MAsn9WQiLh5CCwtBf/0GxLqRHC416IFZ4i13TeIFhLxmbz0il
+         NPxDzLDOL7N17VVYsTOL0jDLDvB5woBcjlvcU+oGB0Wrnz6q9rCc3VHuwmdjl71ac6+n
+         fuvYHmykPJU4vuSvTSKMetyKY9BqLddb2of0qXOJ87q21uNxSrudqkhk+T/+cyqihyd7
+         2YNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794858735; x=1795463535;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794859644; x=1795464444;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
-        b=XYjH7uDxVYDIGIRFQWScvWj2YEkZte7vFSpRZLLTYZeDqSazp1ZeI9ZZhtOc9HbRzj
-         cE1CnanJy7A+lbOI9Kjdyv6+HQrBlekT0lgm0t/3JvLjsWVu2jaBeIx9nseTcmJTztZe
-         8srR9HmyKmFUe+j7j2jwnMTfdryru2KDbN12/SuyrxhQ4PXOXI7X32jIqW0MwaqoAG7S
-         ewEjIYh5eL25x/wiU5FXKM2pUwkTYece6MtBhqKr/57J/dJ7RyHysvR84iT5K34QUPlO
-         TD7zXBLncN3gwWMRgF2ikYTM7+hA/eqllc/AXwRvXVycAZco3D8b3PcEIQGoLTOZH8fD
-         JSbg==
-X-Forwarded-Encrypted: i=1; AL+hErELblEyciPTYjwLs61zJpw5j5pekxJzu2a4K/FZERcDVh5t23vM+mfZsoC1fhG5qfJSldCPO6N4zA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/lAPOp5Vj78RxHc8wxuA7bZw2DW52cPvp53sxZkauJ+rdgjucx
-	eL24zM6/rPlOIBtsqsjQ2lciB47z6g61aLsGxJWKZaSgUnyBvukifG8VYSWrbwupPR8=
-X-Gm-Gg: AYBFou1CJ++rIkyE1dHB7zxHkJvvKvasl5fbJm7T3vNPBn9WBoWqK7lI6qx3BCrepsN
-	2cWQFSMc9qOpqneR1f2t1a1jmZvD3N7/Lt7Xj+Aqa1DBvduMo9taBrUhy+abUnGRGhFk1uC85dr
-	lxisVMYqS29wWKkwUgsDfL3mB1wDqqA9rbCnGgAuA1SA+5td36F8JO+YOLxe9jOVkB6cS7yOdUC
-	NJmb8+4vnezPOlqfvUSy4+kP22FK7JryxZbL/jaeQZh6dTznh7fnYdwPCb2vWzHJrBgm2GLwGaz
-	7hmx1xa6r/WscRnIvQXchUbS/qmzqZH9wcmIWm8iFGf75hiiTO3Cgd9BhQXQz08FcIJy9Y6axJt
-	PT+aEE7oNtV1kY5Xf2zEJiyRUSnn0Yu43B/bJdhXLAUnIy9r6lG+IqaYyTYr1Y2YLWpWyouzf9f
-	Ak5vUslNSNDhWn9FNCD9Vp2i9xgDZuX7+dzgUQA88mUebh8EYUuX935zhAyyXXjBKAR9yaW1oB8
-	oWfXNmQZXJXn8B0nIiNb7rl1OeQ1IZOmKXbF76ZfNJUNQ3iFURQvub6IuG1TcOWADIm+RQJecbz
-	LRrbbA==
-X-Received: by 2002:a05:622a:13c6:b0:55c:c7ab:4445 with SMTP id d75a77b69052e-55cc7ab469bmr121785021cf.29.1794858734926;
-        Mon, 16 Nov 2026 11:52:14 -0800 (PST)
-Received: from ziepe.ca ([142.166.156.71])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f8319d44bsm48973876d6.4.2026.11.16.11.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 11:52:14 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1xT2kP-0000000ALbT-12cG;
-	Mon, 16 Nov 2026 15:52:13 -0400
-Date: Mon, 16 Nov 2026 15:52:13 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: akpm@linux-foundation.org, dgilbert@interlog.com, mkp@kernel.org,
-	loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com,
-	vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com,
-	eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
-	rostedt@goodmis.org, vdonnefort@google.com, mhiramat@kernel.org,
-	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
-	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
-	christian.koenig@amd.com, phasta@kernel.org, joro@8bytes.org,
-	will@kernel.org, linux-scsi@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bobbyeshleman@meta.com,
-	mathieu.desnoyers@efficios.com, robin.murphy@arm.com,
-	mason@kernel.org, aesteve@redhat.com, tjmercier@google.com,
-	harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
-Subject: Re: [PATCH 5/7] iommufd: account the hw_queue page array to memcg
-Message-ID: <20261116195213.GF2452510@ziepe.ca>
-References: <20261106131829.3228926-1-cui.tao@linux.dev>
- <20261106131829.3228926-6-cui.tao@linux.dev>
+        bh=EZDAQV8yhgMyPQgwR3U/5djFDS4+SZxlS+9+Esw/bYc=;
+        b=gi/qVDSeyzG2kMqAZX2bvwAIY32aAmm2S6ZELlEyLMd16/VjS1Hd8u96jPzzgY9z75
+         W5GSC9RnUezrVT8e4SNlkQWGtPqzasNfKeyAbI0LVqhLVqYJSH9xRSO/3VX9xuZY7is1
+         xulgduR1JI9dajGhRLj5fnjoeXrwBd/bq0UyJe3MoJHOGIJ5H3MLH3fzQC/hOKHKtUuG
+         ADqt0J7IBYweIN8hnUzXiMaGIvVT4mw2ajVYzurPCCPr+V6Sgd5PeQefL4o9gSEP8iSo
+         1HQwqp7DmTq+LUz9RFaFcKJr+cKIT9PzoI2PDJCnSo3SCc58ypi08is2K42MkbSKjCAL
+         BlIw==
+X-Forwarded-Encrypted: i=1; AL+hErHquCwslhm25gJnTKZyS/F0aUln708O11UV+tBTYf30SX9XCpponBukDLOV2cCBzdtJuHjoEFpNCQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+BhPKO/08+qn8N+ibWXJHzmjAwuvu0ErWIHX4Mpk4PFSWzZSlU
+	U5hrCODIpH/U9mcvyQcmGLgT/Ku7SAW1pDpECQDm3fRHuMOvdGn7ISffHhRDg7Jtfh8wJffECCP
+	zou/9e69UyvaskXqWax8Nl0WIJTsiMks=
+X-Gm-Gg: AYBFou0UH6o60O47eQw0MkU/WOw8Rl0j2aIVQJDqamOfbTycx+r5qJTBewiEDxPa69E
+	WmtQ/uI1C/UuuT5mMV4xx4Ep0TobtQyERsg+yc+cy0SHqAu4cxMpKIt6+lZ+80xRt+E4TJkPNnK
+	TU3408yQzxKmelld6OF+WGtkx1dnWGTO2kLLiiJ/oc2cjiJtd++oY10Ywu/RxtFr8ZT5CoQKePC
+	VAtDyBNxn4kBiyxkyQU/i3t1ruP0Xjue2FVcSQwxg3/yKd2H0NawM+JpqwGm9Wku2ZYNQwcxRPn
+	XVw+lIIfTbPHZ8Ex/bkFEs4GngLKjoMy/AlZAEnGxYiyVYRrEOup1gfu6r4NPPPgX9oC1tiGKh6
+	1laPb9+LGcuvR9CpTwtj/7FSFfHTd8P7vizt1zyc+2J8jPAyOqKwWpZwtslvjMx3JrPAQmzjoMU
+	roS8QkWbIRtivNc5gHvA==
+X-Received: by 2002:a05:600c:506:b0:4a1:f377:5c6c with SMTP id
+ 5b1f17b1804b1-4bb55a5d6bbmr165067875e9.10.1794859644313; Mon, 16 Nov 2026
+ 12:07:24 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -116,30 +105,92 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106131829.3228926-6-cui.tao@linux.dev>
+References: <20261116-work-fs-frozen_writes-v2-0-ecc4a2aac40e@kernel.org> <20261116-work-fs-frozen_writes-v2-13-ecc4a2aac40e@kernel.org>
+In-Reply-To: <20261116-work-fs-frozen_writes-v2-13-ecc4a2aac40e@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 16 Nov 2026 12:07:13 -0800
+X-Gm-Features: Aa3M54rpWiCplKeR8o5TX-NbYGDID_36BWk-3VAyUzdEoXSYZ7J-t8pfWvm9Fcc
+Message-ID: <CAEf4BzYANM9vtQ8L9-rJPQC-tTcw3YUGsw=qnCaoym3+EU=DBg@mail.gmail.com>
+Subject: Re: [PATCH v2 13/17] bpf: fs/xattr: take freeze protection in the
+ xattr kfuncs
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, io-uring@vger.kernel.org, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, bpf@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 06, 2026 at 09:18:27PM +0800, Tao Cui wrote:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> IOMMUFD_CMD_HW_QUEUE_ALLOC pins up to max_npages pages just to check
-> that a user supplied queue region is physically contiguous, and the
-> page array for that check is plain GFP_KERNEL.  The size comes from
-> cmd->length, a u64 that is only overflow checked, and the array is
-> freed again as soon as the contiguity check fails, so the allocation
-> can be repeated concurrently: a 1GB region costs about 2MB of
-> uncharged memory per attempt.
-> 
-> Every other iommufd allocation that scales with user input is already
-> charged, and the pinned pages charge the mapper at map time.  Charge
-> this array like the rest.
-> 
-> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+On Mon, Nov 16, 2026 at 3:13=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> bpf_set_dentry_xattr() and bpf_remove_dentry_xattr() go through
+> __vfs_setxattr() and __vfs_removexattr() which leave freeze protection
+> to the caller. BPF LSM programs call them from sleepable hooks such as
+> file_open where nobody holds it. So a program can modify a frozen
+> filesystem.
+>
+> The hook may already hold freeze protection or locks a frozen
+> filesystem would make us wait under. So don't wait for a thaw. Fail
+> with -EBUSY if the filesystem is frozen.
+>
+> The _locked variants are only used from hooks that run inside setattr,
+> setxattr, removexattr, unlink and rmdir. Their callers hold freeze
+> protection already.
+>
+> Fixes: 56467292794b ("bpf: fs/xattr: Add BPF kfuncs to set and remove xat=
+trs")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 > ---
->  drivers/iommu/iommufd/viommu.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  fs/bpf_fs_kfuncs.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+LGTM
 
-Jason
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> index 35ccd98a4de64..7f61e2efa08ba 100644
+> --- a/fs/bpf_fs_kfuncs.c
+> +++ b/fs/bpf_fs_kfuncs.c
+> @@ -295,9 +295,13 @@ __bpf_kfunc int bpf_set_dentry_xattr(struct dentry *=
+dentry, const char *name__st
+>         if (!inode)
+>                 return -EINVAL;
+>
+> +       /* The hook may hold locks or freeze protection already. */
+> +       if (!sb_start_write_trylock(inode->i_sb))
+> +               return -EBUSY;
+>         inode_lock(inode);
+>         ret =3D bpf_set_dentry_xattr_locked(dentry, name__str, value_p, f=
+lags);
+>         inode_unlock(inode);
+> +       sb_end_write(inode->i_sb);
+>         return ret;
+>  }
+>
+> @@ -323,9 +327,13 @@ __bpf_kfunc int bpf_remove_dentry_xattr(struct dentr=
+y *dentry, const char *name_
+>         if (!inode)
+>                 return -EINVAL;
+>
+> +       /* The hook may hold locks or freeze protection already. */
+> +       if (!sb_start_write_trylock(inode->i_sb))
+> +               return -EBUSY;
+>         inode_lock(inode);
+>         ret =3D bpf_remove_dentry_xattr_locked(dentry, name__str);
+>         inode_unlock(inode);
+> +       sb_end_write(inode->i_sb);
+>         return ret;
+>  }
+>
+>
+> --
+> 2.53.0
+>
+>
