@@ -1,113 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.171
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794861220;
-	b=21q8CkfRLwEu/FrMa8vIDoaxhBAXLLt3jljpAjuw7W1TA6rNniVxvg/NKYjBQiqbDZ6t
-	 L9byIKucjXt2Ex5789QtSHt8JtTJUqIXTMUj6amBhlE8Vs0etFKJGwjGAYDWTChUc1mh0
-	 fK6/flnVEVYst0/b9PadaJEz/R9srqcxGe9tNlYhpcDVsCCoLbyy3aGveg3QEo5R/oj6e
-	 VuxeRpMoNhML8esgvZ3BjpO/bioZfnPHmKIvZzJOhlUM1OVF7I890qtTJf2h+J8xZFyFV
-	 AmFi+UdPGkV2dcQoqHJENTgiLJ+/beMTk+zjz7fYl2G/Cu7r4SyeQFn7j1AXrrn99rw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794861220;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.44
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794862929;
+	b=s7jUysGJoeLsO0EN4JzH8FBANEPqdgeUnedBFpq/RxRM27ACfXzfPmsLW4WAA3LS3v+5
+	 ITXilH9tjNA1v3NP36aVvOz4mizRmoJX8uJhPYyE71rFgt9+YSUIbsffGbv3h7pHBkdcv
+	 MSvRZiz1tx5/lTnScRE3bLQv2wNV/uGR8KzWXt24kw5oXEPPz3ttHgJkNYdHVuZFkufmn
+	 RSf4ax2q3ix0aCrdnZZQc6v2nEJ/YInEVVUZ8KLd4JYD/gyb1raa/vTlpsIJFks5NZiP4
+	 tP0N2WNahhdoBN4Tb0N0rl9Zb2wHx1O9tdlylmyKKkTwqIx0+zzZT20xAini/D+NzNA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794862929;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=FRUBObM4vFL1TGf3o6s1ZDBsKZdTJ/3jimI0MzXw8Fk=;
-	b=RHgAiVKQ35f/piCL3YNd+QVPemWhEAQbjwp0u5swc/B1g9DsWT86YubvYOD5y5SahkkR
-	 BarSAZZsIn1+cgA4HX+Oufew+MbFk+AoKQwRoFbdvRHdvuErj6BBktOQpQ2hWTSMFhygX
-	 o4ejcJ9+YUJ5GO+TKCnCRil+Me86s9vCdusspSBW7vob7j5yYMsX6F0ZJdkGduYVgi6J0
-	 KdxzFG+H3df+o2SMq67Ov0eAVLrJGciDbwLq4lDYUB950k1bB+jHaOurzbwPXajjQodAI
-	 YFD/VaBjunoY0SaDzzGllw9hp7/mIIi8AuwJ42CCE37dA9X8C08SfHbR+bqwlabR8+A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=ziepe.ca;
-	spf=pass smtp.mailfrom=ziepe.ca;
-	dkim=pass header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=W8qlgedU;
-	arc=none smtp.remote-ip=209.85.222.171
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
+	b=HTumhLTd+WHsOUT+/G5jnIOTqh57yBpGdWLEhtddeXhK3yJuk0E1h2IAHp1ihpYy34kc
+	 ki88MpFmjABFr2WPXYWFvMvwFeAlqGtzOx7p/XmIsTHCTziAp4ELHd17uXSqynrCDzA7O
+	 5vvw5o40iPFWfxOSR5ZWz/uclh+xh5AooNQ1Qo9TetXj0MZfucu35U2MTfg6iKZWFplLK
+	 WIwEh2W/7mpY7EZZdN2I6iPR+rsmS8paAaNKMKfoY4Ahi1Uz1NGIyyisoq19Bs7ZM3SCq
+	 kfz50A1WNVoBixuTQQ3g5W5x6GpQiax9HEaxfGty9X0wCvYJlbWrh0wcgHSWhgPdUbQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=l7j4lma6;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.44
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244AB606A339
-	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 20:33:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 244AB606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD164606A322
+	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 21:02:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD164606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=W8qlgedU
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-93f3c616c84so367356685a.1
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 12:33:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=l7j4lma6
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-150ef97e790so160c88.1
+        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 13:02:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794862928; cv=none;
+        d=google.com; s=arc-20260327;
+        b=p+Wk45vykwyY2Tw2IbD/jhonvOrAVlXHgYtHclYnORPGYI+EDJApXffIwFanRuX9GQ
+         IiqPUtbW/p4AYOpwJNphr9JT/qvUh7tFBGi0pVk7Wa4F7zT8v3TsFQD0eJiZfCr46f8l
+         pP+F8n3R2Qsh0KPkxuyGjcOIIWDFYWyqpuaAVzrp8g5B681TEZldnmawhT8xGubN3o+1
+         +pnj0BHLy8GcG91FjE1SwQNJ4jc2XPIst819WvJ2eyajhextX39U6Quyq+WWtk3zEKVW
+         nkzuyJG3sQZ1wmvKQHsHQxYG6bdduduV8zTF7my0FK3zp7lNJmTW/i/J8i/pTKengvsI
+         i/ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
+        fh=q+5qgAS5eTJ600R9lGIMzdOYgLsEbXqRcwQ83QH06gg=;
+        b=k+6p1hdamkX1FCuaS0Vxcg+gGB5Q5/j3WG7Pu0qbq29jJR7yEw+Y3HN7bJ6BvkKjIx
+         Sc3JpcB4uX0Zxkj4jLkBh/nEL1IO/pTCmI2KkaURg6/Db56szmtg6+uch+yv9idK3ioF
+         ygxA4SKhBGZVsLx3BUTtFVo93ZdwdoknE8bOvi7mbLKyCEfxYSXb/WKYCXQPx98QL5gH
+         EETiT6+xqF/c2+asGALPrpyOU2/BJh3QrbrVxM0C+baIvvziaTPtJSaGVX6IOc4soxlp
+         T7/0okSFXN9TtuopcLToPSulIgBFI+NmLVzwFvVcrpJMAhRtbfNkKhT3cV8II+iZof1F
+         cwYg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1794861219; x=1795466019; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=google.com; s=20260707; t=1794862928; x=1795467728; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=FRUBObM4vFL1TGf3o6s1ZDBsKZdTJ/3jimI0MzXw8Fk=;
-        b=W8qlgedUXT2a/t6lhLP87IFTcy14JLKYa/mLodRolDlr9xZZQGxtW5Noy7E031dblU
-         MZyTiD0CS6csrzNdM/y/kT9cZThOJzBfJnBjyuudT36134JK9rL5Y+cJlR9PkLw6In16
-         I1GQFmpXC+GQjLACTJo0WVW99izKDBVRyEpioO38WVT6BB7yoB56iiO/mZo9HLJwUqYy
-         WRepiT2m5sdFzS0WIaIky8pQ9PM9gsPwA3F1oZ8AlieRWNRm9qrQr3NdwmjMdkz0t3US
-         NP5znb8aU6kvol1hpUX4T2gg8E0YcF+imIMZKWdgwp2eC1/JJZ5bvYf6eHZddNlll3GG
-         nyWA==
+        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
+        b=l7j4lma6OIn67WMfsxxB8uEh6xG03Yq88f1nPAQ4YInGe7EdctTT+ampSCS3Oe9cgL
+         1ppSFpVwbB3cQZ6DR+9z2pJc2Z5okFLv26O7AOnGLnchsWxXZetzufv2sZRiFf6QUGyp
+         PHtYo+rxVm1hWHX/md1cnc6ROLsjn0kEqcS64JUMmE8Me55yF7FIzAuR5aD+5J1rNDPp
+         1p4p+dBbWdG7C7+PvLijHT+AjmG95M56l62Xr+KtEH+3MPhxnTCwgYUbZKNbJa7QElCu
+         GUz+G4moo2XffnQMhAzh4/0v0phnOgaWQspJ3475uaZ9YBfKfEa8m9FIZ8QvJLG/6slD
+         O0EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794861219; x=1795466019;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794862928; x=1795467728;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FRUBObM4vFL1TGf3o6s1ZDBsKZdTJ/3jimI0MzXw8Fk=;
-        b=LAqpxYTpY9cjMbb0HSmBPjmHoqSTHl/Cd5yoxqyLtoKtToYFg36wjjTyjxRux7zeNQ
-         WbpCIPnWX3VBxQKRkf5BqmFaFpzZiyakNIIDZV6FRbaKKaoYvyoJGvl4CQbZTnVBsTV6
-         iaK20zDSOdP4eLS19Jn2IwHyFBMwhVJAAY6I2L1WC6AbWEBp4KHXEvniRNbALCZJ101K
-         0hiWS/MF+uNPXB4CpPxXfYdmzGuLvolozjbizKC7LaWhN5D8cdi1pA/eTEYyOlCFVOqH
-         xlaiHuDiMaenwGk7Wi3pdOtq7Sfi9ORcRL5wEwerbT7eflHweOiaA+YWm2ewDlbN20Gr
-         fjCg==
-X-Forwarded-Encrypted: i=1; AL+hErF6/LIBcb7jzEwgBke9Aeij2tWVc/2+9bo+EKgpDCrcLOYEWnVvyay0WT+ZfLCNKqpWH01s/44t0A==@vger.kernel.org
-X-Gm-Message-State: APuU4Z85VY2Dr10LxyJ4Y/hIILsVH8fckOgzs9mLWBGipOlF+7/Z+8Dv
-	rXLOW3mo4RO3/qdH92tPi6dcGZFpdhDEKqFxBJbZuSga1rkTxcYj6YJOefcoa1pgFaA=
-X-Gm-Gg: AYBFou3XA86kb7PmHvwG4VFNQwXs5JIKA0ahx2hYzolLyhFKY9dI+trbTEaUvsgO5Xf
-	w9UpjQ/qI8ZAljwl6PQg672OnRfaGOO8wgC85U4rLcn8mZlb1xccA55MsrQZCKovvUmvvleljHy
-	mfd7CJk2YFlMXlUgX910c1aVyXrxW5kWBVvIoHnLjz3kZEhzZIYbHPlNzOpg4zI7aC1P8q0c2ty
-	+yrsUK9/uWCOqHHNTIMKTu3+L/KIWkvisJbzeprutb5JiPEBv3cd21xcRd0sVNe5d7bqClUYGoP
-	/T2dHw2P//LovpHcdY8qEQIgo9H2ReWeNYmivTIw7AHItcqpxXil61O8z0KnW3gvOBjOfcnQsxk
-	SE+um5/hMSXGk85ZRKIhdziPk12gZQW/r0zRWKRUrzNE2pQMPoPSmCUTGy5UZfaTCFBb2qZ0pAz
-	1y/NWf7Y/GesmbK+EBNJzTKs4JF4QxZvDQqSpFsdWeXVRZmUxVGfv/8scpuQENiS0SPQvB+kmVn
-	6BKYZaDEgtrb74Lt2eTtqmgYenLZdMfHI8LsJx2HGZDOjoWm9Ab8DLyMiggCrbXDDOJzS2sm0zZ
-	/ACSjA==
-X-Received: by 2002:a05:620a:46a6:b0:949:733e:ddd8 with SMTP id af79cd13be357-949733ee766mr1034555085a.54.1794861219140;
-        Mon, 16 Nov 2026 12:33:39 -0800 (PST)
-Received: from ziepe.ca ([142.166.156.71])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9494c804f9esm930800685a.11.2026.11.16.12.33.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 12:33:38 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1xT3OT-0000000ARJs-2rZa;
-	Mon, 16 Nov 2026 16:33:37 -0400
-Date: Mon, 16 Nov 2026 16:33:37 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: akpm@linux-foundation.org, dgilbert@interlog.com, mkp@kernel.org,
-	loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com,
-	vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com,
-	eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
-	rostedt@goodmis.org, vdonnefort@google.com, mhiramat@kernel.org,
-	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
-	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
-	christian.koenig@amd.com, phasta@kernel.org, joro@8bytes.org,
-	will@kernel.org, linux-scsi@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bobbyeshleman@meta.com,
-	mathieu.desnoyers@efficios.com, robin.murphy@arm.com,
-	mason@kernel.org, aesteve@redhat.com, tjmercier@google.com,
-	harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
-Subject: Re: [PATCH 5/7] iommufd: account the hw_queue page array to memcg
-Message-ID: <20261116203337.GA2481588@ziepe.ca>
-References: <20261106131829.3228926-1-cui.tao@linux.dev>
- <20261106131829.3228926-6-cui.tao@linux.dev>
- <20261116195213.GF2452510@ziepe.ca>
+        bh=sCS5KZMGBLoezFGXiUNPAPDsKb/lPpeScZna/DR+4wA=;
+        b=2Ws+K885bDvWOlIPtp/YZFVNzAqauwxSnfN1/ex9I5fKy/EuasmK1Y67dccngowlgD
+         UMhvgs5Zrd8PoG7kxR6ZSy6bFWVTwbfQvBxUQOsbZ/A/T9zk3k0qChEsjAQsUpYmgccX
+         5m+YKSm/qQORTZy8gPbLTp02UIh+tW9uAvVcUmyS7PDMPAjPHZiCvrfgulAoHWGZlVGN
+         O0LWdyi81Exh5+Hf7s42B4SqEBEs4uYb+/vEKna6Iiv8PTQ+inFtNrmwBf83f8krbG6S
+         So9Yxs8GORgP4IyvWBZP/gwCjBlV6kOmMxqHZJKCjjcH5EqFGwWoKGJbYklXbcmATWwF
+         1dxA==
+X-Forwarded-Encrypted: i=1; AL+hErGySFZWEw0yO4xknBhmpIZn0tnVRhjNYTqZPRI/enM3/E9NPfXCr+DXIWT+8WReT/JYPGa8ozr6qg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8vgB+3nUeQ4oz9+xDuh6qov+kWwk5Y0Q8gv1S7vllqKd2rbI0s
+	ILn+z2KQtmoa+3iwVpNfy8I09rY5e8S5Y1r5aTXXAjva56umtOrbnVtgRU9oRLLapROSqaKmH2m
+	a0Wbb1y0AmB2zhA7EIOOpSc0yedqZV4zMYkm22NAi
+X-Gm-Gg: AYBFou3xJqdOcpXwuswEoqKyi2Rj1YaJO5DhBKTbVpN75bUdeBR36Rj78bgbh3SCsPO
+	WNJVdR2UgWpWBmZTZmhAsp9M/oyvNP87+3js30Z2ho3heahNl75jZwsfNxfVspHr1toIcZnA6Uk
+	cQgUvtiI7vv1D+UDtAtDYNbBPhDyb1fCONxpZXFdzAvouk2le/V85d464qLvTCDT37K2erC1cA0
+	/a5xPyL0Mozf7nm3uE3/ggvjO95ERndHMW/CJZxfkM2bzkKmdERaKlT/eB84hVTrAjQmm+VZ6GI
+	C+IY43EFwZUHFFuegZf4SlwBXpsxhm0SL1jfHlVIJVNVMWzFBkuhzwojghF1ja2F78+C0w6xDLv
+	lxTPX7IdMRaCX/U2II/k8LEdzjdou26esAa8=
+X-Received: by 2002:a05:701b:290a:b0:1b1:d8c:1ed9 with SMTP id
+ a92af1059eb24-1b53b1c51a2mr13906c88.18.1794862926873; Mon, 16 Nov 2026
+ 13:02:06 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -117,33 +104,116 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116195213.GF2452510@ziepe.ca>
+References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-3-bjorn@kernel.org>
+ <CAHS8izMaAv6gX1NeJR+QCf43CL+DC4DgePRNNxSLoE31jxHU0g@mail.gmail.com> <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 16 Nov 2026 13:01:46 -0800
+X-Gm-Features: AclHuK8rxGqdW2QY8q6YZLLoufNsDrdyzNs-Y5WE5rB9qXBUxJnfIT9hDTQTu7k
+Message-ID: <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2026 at 03:52:13PM -0400, Jason Gunthorpe wrote:
-> On Fri, Nov 06, 2026 at 09:18:27PM +0800, Tao Cui wrote:
-> > From: Tao Cui <cuitao@kylinos.cn>
-> > 
-> > IOMMUFD_CMD_HW_QUEUE_ALLOC pins up to max_npages pages just to check
-> > that a user supplied queue region is physically contiguous, and the
-> > page array for that check is plain GFP_KERNEL.  The size comes from
-> > cmd->length, a u64 that is only overflow checked, and the array is
-> > freed again as soon as the contiguity check fails, so the allocation
-> > can be repeated concurrently: a 1GB region costs about 2MB of
-> > uncharged memory per attempt.
-> > 
-> > Every other iommufd allocation that scales with user input is already
-> > charged, and the pinned pages charge the mapper at map time.  Charge
-> > this array like the rest.
-> > 
-> > Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> > ---
-> >  drivers/iommu/iommufd/viommu.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+On Sun, Nov 15, 2026 at 10:47=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kerne=
+l.org> wrote:
+>
+> Mina Almasry <almasrymina@google.com> writes:
+>
+> > On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@ke=
+rnel.org> wrote:
+> >>
+> >> The core treats every memory provider as unreadable: installing one
+> >> needs header split and no XDP program, and any page pool that allows
+> >> unreadable netmem takes it. An AF_XDP UMEM provider is readable, needs
+> >> XDP, and hands out whole buffers.
+> >>
+> >> Describe providers by MP_CAP_READABLE and MP_CAP_FRAG; devmem and
+> >> io_uring keep their behavior with MP_CAP_FRAG. A page pool takes a
+> >> readable provider only with the new PP_FLAG_MEM_PROVIDER:
+> >
+> > Why do we need this? I thought whatever creates the pool actually
+> > shouldn't get to pick whether the pool picks up the memory provider. I
+> > thought if core has configured the rxq for a memory provider then the
+> > pool is forced to take it.
+>
+> Thanks for looking at series, Mina. ...this needed some thinking.
+>
+> It isn't forced today either: only pools with
+> PP_FLAG_ALLOW_UNREADABLE_NETMEM take the queue's provider. Drivers set
+> it on the pool that holds payloads, and keep headers in host memory: in
+> a separate pool (fbnic, bnxt), or outside the page pool (gve, mlx5).
+> That works because every provider so far backs payloads only.
+>
+> UMEM doesn't. The socket gets whole packets, so UMEM has to back the
+> header buffers, and with multi-buffer the payloads too. The flag was my
+> way to get it there, but you're right that it's the wrong knob: it lets
+> the driver opt in, where it should only say what each pool holds.
+>
+> How about this instead. Both sides use the rx_roles bits from patch 5,
+> HEAD and PAYLOAD:
+>
+>  - The provider says which buffers it backs, next to rx_page_size in
+>    pp_memory_provider_params: devmem and io_uring zcrx PAYLOAD, AF_XDP
+>    HEAD, or HEAD|PAYLOAD with multi-buffer.
+>  - The driver says what each pool holds, in rx_roles. A pool without
+>    roles but with PP_FLAG_ALLOW_UNREADABLE_NETMEM holds PAYLOAD, so
+>    existing drivers don't change.
+>  - page_pool_create() gives the provider to a pool whose roles are all
+>    backed; the others get host pages. No opt-in.
+>  - After ndo_queue_mem_alloc(), the core checks that the new pools that
+>    took the provider cover everything it backs, or fails the restart.
+>
+> With fbnic's header and payload pools:
+>
+>   devmem:                header pool host, payload pool devmem
+>   AF_XDP single-buffer:  header pool UMEM, payload pool host
+>   AF_XDP multi-buffer:   one shared pool, UMEM
+>
+> A shared pool on a devmem queue doesn't take devmem, since devmem
+> doesn't back HEAD, so the check fails and the driver has to split.
+> That's the "headers in host memory" rule, without the driver asking
+> which provider it is.
+>
+> Wdyt?
+>
 
-I'll just apply it, thanks
+Hmm, I think maybe the exsiting knobs PP_FLAG_ALLOW_UNREADABLE +
+CAP_READABLE covers your needs.
 
-Jason
+The pp says whether the memory it provides is readable or not via
+CAP_READABLE (or !CAP_UNREADABLE).
+
+The driver says whether it will allow unreadable memory for this pool.
+For header pools, it doesn't specfiy PP_FLAG_ALLOW_UNREADABLE and for
+paylaod pools it specifies ALLOW_UNREADABLE.
+
+The change I think you need to make is: today we disallow any
+providers if the caller did not specify ALLOW_UNREADABLE (because we
+assume mp's are unreadable). After your series we only need to
+disallow memory providers if the mp is unreadable and the caller said
+it's not fine with unreadable.
+
+--=20
+Thanks,
+Mina
