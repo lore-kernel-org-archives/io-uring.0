@@ -1,89 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794854941;
-	b=CO+NE0ux7Uw3RX1yi3Nvvs5RPgBByFiYko4svbiS7iteQTmzKPELSUFzubp1yRv4AEN1
-	 e/56BpYIQL8MrUY6Ruc/VFnCDWBcC0Jq+bJO9D88JFwB684fNTGLR50llzjsYa0zl9VkP
-	 NpXJMZwlMob9YcpX/ho76fW9dNyxDOaIKLlJ+DaF27nkklCMFVcXa7WJJWmxStsoo+MKE
-	 tIwg83F3bvwU+neIhY607AlL49Mxj7f/aqVfY9HAZrDuLkwH24BBlBbBrHOJkfhcBHwPz
-	 6TCKYCWpguvgGoJN7RjoEFQvpXRGV5g3dSuNTQDD8eQA2+XhnLmds9PtD/fmXJtbb7g==
+	t=1794857511;
+	b=F8ib+TjzqymrbghdpC46vLp0FA7TCqWtr7j4porxwIF/lG2HNJD804mMfU+2RgM6buua
+	 XjvTwIWQV3GrXazEl/NPW0TaC2awKgx9d7PIGf5SCF9G4z7Vm1riSS1RpJNHyB5tHe7Wv
+	 LJC8aYfauq/IBMDNcIz+/+DThNVzQ79ka+Q7BE62KnzxxpPF6YIq5LpgTOG55XEE2Zq4S
+	 tbMRQK7u6UCMdPwekLYDdnMrX/eYK2eunSivd1OC6O+kWVPKbwHPb2oHqWOh0XQEjhFa/
+	 2zhGwTzBKQV3xiCei+EMIY0CVN0U4XKgt6O2jDFnAd+Z5kEgzX6UrlCzu7yxWaJCi3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794854941;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794857511;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=j3G1ywiLrx0DaX6rFe9rFmmqvrfjRGltmL0+DsTi2zI=;
-	b=kFf0K9PuKCbYz1H/qhDQEo9T08kScO9Yfq4YurCql3bYieA9yuSUbKN6A8Px/uO5FAUu
-	 R2SoNzNR852xIFyxfmH3mtAP9qq7uAexwcUUmW8Eaube9FpY6bIGCVkmHHcLxNvZZL2tv
-	 66cXt/NZIdQHRPNzHWP+YHL0lDVPcj7tgs9bARWk3hUT8l/8KapZxRynFOeRo9KrOA7rR
-	 ZYVLhPYNxuNuEMUFb2kF74YlUgT7eUclbl3UdfhXzpp/KxzjBOhmcE7ozYTwDaCsq+DSZ
-	 22D1KB+xxj9c68CDp4Mbt2X/K8RvW3hbI6w7ygKm6mVFA6cbIql+dkBOuieIdB3bW4g==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
+	b=LKGWvieJC2RU4fCbxVG96cgRws0OpQ9do2Bj+NDfCAkzZdLz5OQM5lYpVa/YsOH4M5E4
+	 QsiQJN4nXMdGk3oxlJTlgStFhLdWjbV3HcbDFD/cwt6Q8YeBfoLexZ+8G7pZpLadLBHLs
+	 L6elUZtarK0oXraewhoyMF/SKgvrfcFyYR7F1Gf7M+AhBQOGcirYgOInByix/rBZpN5BH
+	 uSAQxEHREG27DTiJ9/MaEG5nboN4fy96NwcbhNf4A5hDbdFS4TvlbF259aQ9i9y/vtDg4
+	 puWr8C+GWssLEWG5ejRm0xeo1C89LdMpLL+k7Cy6Gdm+6QT+UdbTzxyXG4vxdJsTVmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ti7O2lyS;
-	arc=none smtp.remote-ip=74.125.82.52
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=arYGXhR9;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A207606A881
-	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 18:49:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A207606A881
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F142E606A322
+	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 19:31:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F142E606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ti7O2lyS
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1b3beeaf6f9so4478850c88.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 10:49:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=arYGXhR9
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc147d86bebso185593a12.0
+        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 11:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794854940; x=1795459740; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=j3G1ywiLrx0DaX6rFe9rFmmqvrfjRGltmL0+DsTi2zI=;
-        b=ti7O2lySHCTLXENn+2qZUo5FRBVZlA0I6T2IOZpmIwwxcnkaSSreB0i9zTCN3jr+Fy
-         cR6eIpnV+OSt/fkY0MdDkn5VfLZG9F/VEzhWw8o9EZQp8IKM2ZVLyFHUlwQDObWYmXMh
-         J2fSx+Xb8aCLffsT9MBsqq+sqwmc8ZRDCnrWwXLYZnhi6VhV6qiwZADb8n88jfZxJ5g7
-         TlN+FxjpLI7YL/k1S8nuYl/7S6iXA0widaEItDoGCZlnNnHJ5aSWvmlkvPusNZm5AnZ0
-         3cnpm0J81lfiY1qXqlBTFSAxXAcFo8u569ov+vf1GkTBpfjxxBS6tzS2mRroKEiJrbYi
-         kayQ==
+        d=gmail.com; s=20260707; t=1794857510; x=1795462310; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
+        b=arYGXhR9kkD9xsAwOGi+AbeNo5o0hng0zmC2BWsww3vebBxrH2r5JnEaxgv4/uf6Sm
+         1zh0imNKqytgTfMXAnsm/UBfXnn8y7p6jGQF1Gn41uZzqBTvBBdeHPWaVNfj2Hdga8N5
+         v8aja3WNbGRXk5UIJNt9F9gLII6cvvEqQn/jiDP9abzvE0kEec3fAHTidodISySfQ8mA
+         /8Y5JFL68CLBpyA/6g/53KuESnJGE2DfuAtylvGcpj+dBs5pgxvL43PeU5swMMzFCDfF
+         xgDcDz8wP/AVdGyTl5c35f3h8xBSk2oKHuxKG+0E3oTRGHejWrx84ApdjzXfVd07NpdQ
+         yU6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794854940; x=1795459740;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794857510; x=1795462310;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=j3G1ywiLrx0DaX6rFe9rFmmqvrfjRGltmL0+DsTi2zI=;
-        b=PQ6AqdtQ2tr/i2WH4coCg7dD2NDYwH2fMcOJsY+LkobxgpbPf1ovWtoKI0quMj9GU9
-         jQMruteDvC+upavI18rg8T9u66DEAJLMf5Ps+7XGmkT6EsRWGJ1URU+ymbBPsyIsCpgY
-         /scT6VZyVF8CFWwIBHXtz4eOwufkUkSdcnxh8O88DLrRD9J1gmKp/5VY8fZU70elpvYx
-         4EilfC7azw600VT/kW1w/sSQsERuHera8hFmOaOwQOox+uiW7fQLjhB7HvScOynfYFGE
-         fDoplqloFMSXLzwSP6npvybfZo9QlkC/B2nlSWrFOlnYb2CLjfQC+pv1P9eJic4N3vJk
-         +/2w==
-X-Forwarded-Encrypted: i=1; AL+hErFvCd3mArUvbZH9Eb18TB8gnzM65Zv/Gh7J/AlWfF2Sbemus50Q9AavZwJ0exHv40EQmKC58uVCTg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/xsUsQH2UdvJbvoNccXU7uy9XSmuRb7/lB4uAYu0pqH1OFbQ0P
-	qIIlkwmAAOn0zvPM/bGx9XzQTml4S3Pas+LuhjZ17CqPkQgJz+Ra/fUB
-X-Gm-Gg: AYBFou2tFrkXQ1wkZeg9qIRD7Ts2zFNeGWALlwLpSWvEqpxfL8zb4cP/kCxv+KIdLLK
-	GtG4XSX5DZF+c5bmFBI0zSE9FMDZjvOWXJGcAj0b0jYBMrmpewiz2awO1W73aa510FnMg0p+ZRX
-	HzjEwxdDPMZtPmlUMBj6e44wzWAQ93cgNBQKAfzriVrz9yYm0WrTaEY4MNp/nGyln6TqN05fHJw
-	2Z8adRoIshkuy/93oslkJr6NBwdwU5iJWqrbDSk0FF1Ao4SHP9t1tbLHN2Wru9qFdSKNHQt0sD8
-	vNd0VV0vhtDpvAeGufEylOFzktQodvNkzEg0oXI6pfBiIx65tmjVn8xLvfRW3dO6xfSImHKnENG
-	Sa9FjkKuJuNkHXnH6aaOu7DnQAW3+goaFWxuxrEn+2R/TWygp8D6CFAy0e757a8k/mdGa64J4n7
-	fNLtfADzkcJPLqueCfTmdD55/E8AORp1vOHxs+0mzbBmhs7WlTQGpTXkSTcqbYsKtZRIfT+jW5t
-	nj4+2fz4Ckfcc3ZpsYMmiXFpxN5w1ctCtsah7guXi8Kh9JvpotV7s2sVvV2EFHwGgb4s94Lk6+w
-	P3d6QirUC7FEQi/hRQ2xZc4XfNevgmjchffZWj0rJ08nakHdzYKgqtHtfYL7IJgT6eIHdl9BE12
-	5d2XcH4M5Gs5L0Y4dnW6HbenElU7ZhR1ruixI2A==
-X-Received: by 2002:a05:7022:b902:b0:1b2:4cc7:7db2 with SMTP id a92af1059eb24-1b503175e5dmr10752909c88.47.1794854940305;
-        Mon, 16 Nov 2026 10:49:00 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1151:15:c24:4ad9:f660:1904? ([2620:10d:c090:500::7:3f76])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50309b27dsm33383125c88.2.2026.11.16.10.48.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 10:48:59 -0800 (PST)
-Message-ID: <6303b161-0f35-47ee-ab70-ebd4e802ae09@gmail.com>
-Date: Mon, 16 Nov 2026 10:48:53 -0800
+        bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
+        b=vS2b892OgUHynhq790IzHHJJmwdF2wb+0i3392L7OPyEJB2HSfptF5Q9lz2ajo00Ec
+         vFSQ4CVby8gXdv+qofZ+E4upCFAANScDtbGBao38dHRnjRhv7Xc6VPz/9Ae6vLIUa+Dj
+         XzQTF1RwY1PxWrEpUUAE7Zzym9Py0J9Fm2EIpayHXv4uC9QkhTuJcPJFHyHNierberL6
+         SS+xeHUED6b0S0z9WfN+msdx7Uu7BDtdBQUoV84mk7awJYP5JlxVS63S5vpDK694Jo9f
+         cOhatTv+7Yz8gdDRVKSWNKPaFXO0ZzKQyH47bouNnNS0TBul7GA6ZVCk9S7PBKlvC1t/
+         fW6Q==
+X-Gm-Message-State: APuU4Z/XJ1IkVjroeLyuKmFpEphwgdQdjLU05n6/4aol9+cUDCjZBwpJ
+	G1361O99f1FSaAcA3JQnZROBo8/Hy+j6mICBlVRKk4sJ//fCCkhWzdvkLCot+g==
+X-Gm-Gg: AZFdTZcJEaw4THkGigUJ2pxrS7Iw4HqR/8eYcEKZvz1KffvK31k4RdLPcnw1b/ws1C2
+	IPRJ4yGOOZ6sBoOKVDoRvYrm6MQ4HGg/8NEYpYup4BxWmgwRQcjX1TNYCN/4HY7REL2PNHLKhoV
+	UMt2nITQAObjPhXluj1kXmmF7IOmofU9w4huWCXocdLbjhOvV55FPAX2CM8LwSFsKnYilq6jVcR
+	1YLsFEnU1gKd7qFq1AIWX39w/slISfhi2uFV4R19dbG9YpUKPzpneTPV6FG1uSXHOH2KFqdRr2X
+	yoXm6LkQIq0xMpyUxfgcp6bvvX8B2WBHQcSSbfXVKJomrX2iEF3L2D4z5xNuc5KgUA2l/D2MDaK
+	hyIjbYJXIj9mNX0Hl4/ub398Du+QE9rJxW5Ei6NVSrX8LHxwCpIC2+oi1XHJrhXa79rXSs+xnvx
+	qocvERhtT+zwwYYlUjLvEhWEYOnw02YndosqBXx0y9Qqg9OCqqcwxHN39/J7zHJ1GmY4WcZt8OG
+	qPTbTVEphD8jmXjdVUmcKvQBFUSti7MsEe/WP/ZWwY8F2R23i1UhYpr7BqNghXgFVpCTHyOIoUb
+	TKZMbzgJgAnVD1RJsG+9NXd51DPwTq/c4jS59mdO9MmZa1lR4HnhRveujPOO8mZ1OHgIuo8QGYY
+	B69uYmLJ6hpayAdPD5+ftSP2mhKETRFf+8V/jVCIhxhra41EQ6UsclP+FOXboSeoCsBQrtW5Bn/
+	Wc1wQH8ZSLEswB4q0HinP8v4RlBXahzaF0rFIi4n8L
+X-Received: by 2002:a17:90b:4d06:b0:3b1:bd6d:fcc2 with SMTP id 98e67ed59e1d1-3b3abe7e796mr215871a91.40.1794857510114;
+        Mon, 16 Nov 2026 11:31:50 -0800 (PST)
+Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3abe77179sm539396a91.11.2026.11.16.11.31.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 11:31:49 -0800 (PST)
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rachel Menge <rlmenge@gmail.com>,
+	Hardik Garg <hargar@linux.microsoft.com>,
+	Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Subject: [PATCH v1 1/1] io_uring/kbuf: initialize arg->out_len from arg->max_len in io_buffers_select()
+Date: Mon, 16 Nov 2026 19:31:46 +0000
+Message-ID: <20261116193146.65315-1-sidchintamaneni@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -93,330 +97,34 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
- zero copy
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
- kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, io-uring@vger.kernel.org,
- Mina Almasry <almasrymina@google.com>
-Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
- Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov
- <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-12-bjorn@kernel.org>
-Content-Language: en-US
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-In-Reply-To: <20261110102039.1002605-12-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/10/26 2:20 AM, Björn Töpel wrote:
-> Header and payload rings share one provider page pool, so refills even
-> them out, and a short pool does not starve one of them. Payload
-> buffers start at chunk offset 0, and the UMEM headroom rules require
-> headroom only in the first buffer. A chunk is one 4 KiB device page,
-> also with larger kernel pages, so rings fed by the provider post one
-> descriptor per chunk.
-> 
-[...]
->  	qt->sub0.page_pool = pp;
-> +	fbnic_bdq_set_page_size(&qt->sub0, xsk ? rx_page_size : PAGE_SIZE);
->  	qt->hdr_max = 0;
->  	if (!page_pool_supports_frag(pp))
-> -		qt->hdr_max = fbnic_whole_hdr_max(FBNIC_RX_HROOM);
-> +		qt->hdr_max = fbnic_whole_hdr_max(qt->rx_hroom);
->  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
->  		pp_params.order = get_order(rx_page_size);
->  		pp_params.max_len = rx_page_size;
->  		pp_params.flags |= PP_FLAG_ALLOW_UNREADABLE_NETMEM;
->  		pp_params.dma_dir = DMA_FROM_DEVICE;
->  
-> +		pp = page_pool_create(&pp_params);
-> +		if (IS_ERR(pp))
-> +			goto err_destroy_sub0;
-> +	} else if (xsk && !xsk_pool_uses_sg(xsk)) {
-> +		pp_params.flags &= ~PP_FLAG_MEM_PROVIDER;
-> +		pp_params.rx_roles = 0;
-> +		pp_params.max_len = PAGE_SIZE;
-> +		rx_page_size = PAGE_SIZE;
-> +
->  		pp = page_pool_create(&pp_params);
->  		if (IS_ERR(pp))
->  			goto err_destroy_sub0;
+io_buffers_select() passes &arg->out_len to io_provided_buffers_select()
+on the legacy provided-buffer path. Because callers initialize
+arg->max_len (from sqe->len) while leaving arg->out_len as 0,
+io_provided_buffers_select() sees *len == 0 and always selects the full
+buffer size buf->len, ignoring the user-specified sqe->len limit.
 
-Maybe I'm misunderstanding, but why is it necessary to create a new page pool for
-sub1 if !sg? All frames should be sent to sub0, and the buffers in sub1 should sit idle.
+Initialize arg->out_len = arg->max_len before calling
+io_provided_buffers_select().
 
-> @@ -1709,6 +1967,7 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
->  		page_pool_get(pp);
->  	}
->  	qt->sub1.page_pool = pp;
-> +	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
->  
->  	return 0;
->  
-> @@ -1717,16 +1976,6 @@ fbnic_alloc_qt_page_pools(struct fbnic_net *fbn, struct fbnic_q_triad *qt,
->  	return PTR_ERR(pp);
->  }
->  
-> -static u8 fbnic_bdq_page_shift(u32 page_size)
-> -{
-> -	return ilog2(page_size / FBNIC_BD_PAGE_SIZE);
-> -}
-> -
-> -static void fbnic_bdq_set_page_size(struct fbnic_ring *bdq, u32 page_size)
-> -{
-> -	bdq->bd_page_shift = fbnic_bdq_page_shift(page_size);
-> -}
-> -
->  static void fbnic_ring_init(struct fbnic_ring *ring, u32 __iomem *doorbell,
->  			    int q_idx, u8 flags)
->  {
-> @@ -1830,7 +2079,8 @@ static int fbnic_alloc_napi_vector(struct fbnic_dev *fbd, struct fbnic_net *fbn,
->  		if (xdp_count > 0) {
->  			unsigned int xdp_idx = FBNIC_MAX_TXQS + rxq_idx;
->  
-> -			fbnic_ring_init(&qt->sub1, db, xdp_idx, flags);
-> +			fbnic_ring_init(&qt->sub1, db, xdp_idx,
-> +					flags | FBNIC_RING_F_XDP);
->  			fbn->tx[xdp_idx] = &qt->sub1;
->  			xdp_count--;
->  		} else {
-> @@ -1977,6 +2227,9 @@ static int fbnic_alloc_tx_ring_buffer(struct fbnic_ring *txr)
->  {
->  	size_t size = array_size(sizeof(*txr->tx_buf), txr->size_mask + 1);
->  
-> +	if (txr->flags & FBNIC_RING_F_XDP)
-> +		size = array_size(sizeof(*txr->xdp_buf), txr->size_mask + 1);
-> +
->  	txr->tx_buf = kvzalloc(size, GFP_KERNEL | __GFP_NOWARN);
->  
->  	return txr->tx_buf ? 0 : -ENOMEM;
-> @@ -2126,20 +2379,19 @@ static int fbnic_alloc_tx_qt_resources(struct fbnic_net *fbn,
->  	return err;
->  }
->  
-> -static int fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
-> -				       struct fbnic_napi_vector *nv,
-> -				       struct fbnic_q_triad *qt,
-> -				       u32 rx_page_size)
-> +static int
-> +fbnic_alloc_rx_qt_resources(struct fbnic_net *fbn,
-> +			    struct fbnic_napi_vector *nv,
-> +			    struct fbnic_q_triad *qt,
-> +			    const struct netdev_queue_config *qcfg)
->  {
->  	struct device *dev = fbn->netdev->dev.parent;
->  	int err;
->  
-> -	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, rx_page_size);
-> +	err = fbnic_alloc_qt_page_pools(fbn, qt, qt->cmpl.q_idx, qcfg);
->  	if (err)
->  		return err;
->  
-> -	fbnic_bdq_set_page_size(&qt->sub1, rx_page_size);
-> -
->  	err = xdp_rxq_info_reg(&qt->xdp_rxq, fbn->netdev, qt->cmpl.q_idx,
->  			       nv->napi.napi_id);
->  	if (err)
-> @@ -2203,8 +2455,7 @@ static int fbnic_alloc_nv_resources(struct fbnic_net *fbn,
->  		struct netdev_queue_config qcfg;
->  
->  		netdev_queue_config(fbn->netdev, nv->qt[i].cmpl.q_idx, &qcfg);
-> -		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i],
-> -						  qcfg.rx_page_size);
-> +		err = fbnic_alloc_rx_qt_resources(fbn, nv, &nv->qt[i], &qcfg);
->  		if (err)
->  			goto free_qt_resources;
->  	}
-> @@ -2598,9 +2849,8 @@ static void fbnic_nv_fill(struct fbnic_napi_vector *nv)
->  	for (j = 0, t = nv->txt_count; j < nv->rxt_count; j++, t++) {
->  		struct fbnic_q_triad *qt = &nv->qt[t];
->  
-> -		/* Populate the header and payload BDQs */
-> -		fbnic_fill_bdq(&qt->sub0);
-> -		fbnic_fill_bdq(&qt->sub1);
-> +		/* Populate the header and payload BDQs; NAPI retries */
-> +		fbnic_fill_bdqs(qt);
->  	}
->  }
->  
-> @@ -2736,14 +2986,20 @@ static void fbnic_config_drop_mode_rcq(struct fbnic_napi_vector *nv,
->  				       struct fbnic_ring *rcq, bool tx_pause,
->  				       bool hdr_split)
->  {
-> +	struct fbnic_q_triad *qt = container_of_const(rcq, struct fbnic_q_triad,
-> +						     cmpl);
->  	struct fbnic_net *fbn = netdev_priv(nv->napi.dev);
-> -	u32 drop_mode, rcq_ctl;
-> +	u32 drop_mode, hroom, rcq_ctl;
-> +
-> +	/* The device aligns the maximum value up to FBNIC_RX_HROOM_MAX. */
-> +	hroom = min_t(u32, qt->rx_hroom,
-> +		      FIELD_MAX(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK));
->  
->  	drop_mode = fbnic_drop_mode(fbn, tx_pause);
->  
->  	/* Specify packet layout */
->  	rcq_ctl = FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_DROP_MODE_MASK, drop_mode) |
-> -	    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK, FBNIC_RX_HROOM) |
-> +	    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK, hroom) |
->  	    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_TROOM_MASK, FBNIC_RX_TROOM) |
->  	    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_EN_HDR_SPLIT, hdr_split);
->  
-> @@ -3028,8 +3284,7 @@ static int fbnic_queue_mem_alloc(struct net_device *dev,
->  	struct fbnic_napi_vector *nv;
->  
->  	if (!netif_running(dev))
-> -		return fbnic_alloc_qt_page_pools(fbn, qt, idx,
-> -						 qcfg->rx_page_size);
-> +		return fbnic_alloc_qt_page_pools(fbn, qt, idx, qcfg);
->  
->  	/* A failed PCIe recovery or resume can leave the datapath torn down
->  	 * while netif_running() is still true.  This ndo runs before
-> @@ -3049,7 +3304,7 @@ static int fbnic_queue_mem_alloc(struct net_device *dev,
->  	fbnic_ring_init(&qt->cmpl, real->cmpl.doorbell, real->cmpl.q_idx,
->  			real->cmpl.flags);
->  
-> -	return fbnic_alloc_rx_qt_resources(fbn, nv, qt, qcfg->rx_page_size);
-> +	return fbnic_alloc_rx_qt_resources(fbn, nv, qt, qcfg);
->  }
->  
->  static void fbnic_default_qcfg(struct net_device *dev,
-> @@ -3086,6 +3341,14 @@ static int fbnic_validate_qcfg(struct net_device *dev,
->  		return -EINVAL;
->  	}
->  
-> +	if (qcfg->rx_headroom &&
-> +	    (qcfg->rx_headroom < XDP_PACKET_HEADROOM ||
-> +	     qcfg->rx_headroom > FBNIC_RX_HROOM_MAX ||
-> +	     !IS_ALIGNED(qcfg->rx_headroom, FBNIC_RX_HDR_ALIGN))) {
-> +		NL_SET_ERR_MSG_MOD(extack, "rx_headroom is not supported");
-> +		return -EINVAL;
-> +	}
-> +
->  	/* Payload fragments occupy multiples of FBNIC_RX_PAYLD_ALIGN bytes.
->  	 * Keep at least one reference in the bias until fbnic_clean_bdq()
->  	 * observes a completion from a subsequent allocation.
-> @@ -3216,5 +3479,6 @@ const struct netdev_queue_mgmt_ops fbnic_queue_mgmt_ops = {
->  	.ndo_queue_stop		= fbnic_queue_stop,
->  	.ndo_default_qcfg	= fbnic_default_qcfg,
->  	.ndo_validate_qcfg	= fbnic_validate_qcfg,
-> -	.supported_params	= QCFG_RX_PAGE_SIZE,
-> +	.supported_params	= QCFG_RX_PAGE_SIZE | QCFG_RX_HEADROOM,
-> +	.xsk_page_pool		= true,
->  };
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-> index 3077d9bbd587..b4baaa914585 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
-> @@ -14,7 +14,11 @@
->  
->  #include "fbnic_csr.h"
->  
-> +struct bpf_prog;
->  struct fbnic_net;
-> +struct netlink_ext_ack;
-> +struct xsk_buff_pool;
-> +struct xsk_rx_check;
->  
->  /* Guarantee we have space needed for storing the buffer
->   * To store the buffer we need:
-> @@ -36,6 +40,8 @@ struct fbnic_net;
->   */
->  #define FBNIC_MAX_RX_PKT_DESC	7
->  #define FBNIC_RX_DESC_MIN	roundup_pow_of_two(FBNIC_MAX_RX_PKT_DESC * 2)
-> +/* All descriptors of a packet but the two metadata ones */
-> +#define FBNIC_MAX_RX_BUFS	(FBNIC_MAX_RX_PKT_DESC - 2)
->  
->  #define FBNIC_MAX_TXQS			128u
->  #define FBNIC_MAX_RXQS			128u
-> @@ -66,6 +72,9 @@ struct fbnic_net;
->  	(ALIGN(FBNIC_RX_TROOM + FBNIC_RX_HROOM_PAD, 128) - FBNIC_RX_TROOM)
->  #define FBNIC_RX_PAD			0
->  #define FBNIC_RX_HDR_ALIGN		128
-> +#define FBNIC_RX_HROOM_MAX \
-> +	ALIGN(FIELD_MAX(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK), \
-> +	      FBNIC_RX_HDR_ALIGN)
->  #define FBNIC_RX_PAYLD_ALIGN		128
->  #define FBNIC_RX_PAYLD_OFFSET		0
->  #define FBNIC_RX_PAYLD_PG_CL		0
-> @@ -73,6 +82,7 @@ struct fbnic_net;
->  #define FBNIC_RING_F_DISABLED		BIT(0)
->  #define FBNIC_RING_F_CTX		BIT(1)
->  #define FBNIC_RING_F_STATS		BIT(2)	/* Ring's stats may be used */
-> +#define FBNIC_RING_F_XDP		BIT(3)	/* XDP TX ring */
->  
->  #define FBNIC_HDS_THRESH_MAX \
->  	(4096 - FBNIC_RX_HROOM - FBNIC_RX_TROOM - FBNIC_RX_PAD)
-> @@ -121,12 +131,18 @@ struct fbnic_rx_buf {
->  	long pagecnt_bias;
->  };
->  
-> +/* XDP TX ring entry: an XDP_TX buffer, or an AF_XDP TX descriptor */
-> +struct fbnic_xdp_tx_buf {
-> +	netmem_ref netmem;
-> +	struct xsk_buff_pool *xsk;
-> +};
-> +
->  struct fbnic_ring {
->  	/* Pointer to buffer specific info */
->  	union {
->  		struct fbnic_pkt_buff *pkt;	/* RCQ */
->  		struct fbnic_rx_buf *rx_buf;	/* BDQ */
-> -		netmem_ref *tx_netmem;		/* TWQ1 */
-> +		struct fbnic_xdp_tx_buf *xdp_buf; /* TWQ1 */
->  		void **tx_buf;			/* TWQ */
->  		void *buffer;			/* Generic pointer */
->  	};
-> @@ -167,6 +183,10 @@ struct fbnic_q_triad {
->  	struct fbnic_ring sub0, sub1, cmpl;
->  	struct xdp_rxq_info xdp_rxq;
->  	u16 hdr_max;	/* Header bytes for whole header buffers, or 0 */
-> +	u16 rx_hroom;	/* Headroom before a header */
-> +	u16 rx_hdr_first; /* Offset of the first header in a buffer */
-> +	u16 rx_frame_off; /* Offset of the frame in a header buffer */
-> +	struct xsk_buff_pool *xsk_pool;	/* AF_XDP pool of an RX queue */
->  };
->  
->  struct fbnic_napi_vector {
-> @@ -178,6 +198,7 @@ struct fbnic_napi_vector {
->  	u16 v_idx;
->  	u8 txt_count;
->  	u8 rxt_count;
-> +	u8 xsk_tx_next;		/* RX queue that sends socket TX first */
->  
->  	struct fbnic_q_triad qt[];
->  };
-> @@ -203,6 +224,8 @@ void fbnic_aggregate_ring_tx_counters(struct fbnic_net *fbn,
->  void fbnic_aggregate_ring_xdp_counters(struct fbnic_net *fbn,
->  				       struct fbnic_ring *xdpr);
->  
-> +int fbnic_xsk_validate(const struct xsk_rx_check *check,
-> +		       struct bpf_prog *prog, struct netlink_ext_ack *extack);
->  int fbnic_alloc_napi_vectors(struct fbnic_net *fbn);
->  void fbnic_free_napi_vectors(struct fbnic_net *fbn);
->  int fbnic_alloc_resources(struct fbnic_net *fbn);
+Fixes: 35c8711c8fc4 ("io_uring/kbuf: add helpers for getting/peeking multiple buffers")
+Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+---
+ io_uring/kbuf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index abf44f5dba26..873d66a06b36 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -370,6 +370,7 @@ int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
+ 				req->flags |= REQ_F_BUF_MORE;
+ 		}
+ 	} else {
++		arg->out_len = arg->max_len;
+ 		ret = io_provided_buffers_select(req, &arg->out_len, sel->buf_list, arg->iovs);
+ 	}
+ out_unlock:
+-- 
+2.43.0
