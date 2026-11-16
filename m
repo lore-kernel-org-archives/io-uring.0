@@ -1,56 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.188
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794788364;
-	b=LHtTyb/GhpIgFDnU4F+9H/PZFRe24MlWuIfjurbbzN1W3/09J7q5ksfvyOHnf5lHFyMy
-	 7oAebLQFoN/P/oTwx6jmmiWoFSVNZyK0FkHpdu7JEKeFEAu+EbPk0TNyo1OzwFdscgrTh
-	 e1CNek10w4qm0UpMzfNGUUSOo0zlUmn1lgqiOhioeNFaAqb7HivPspsl7a+mCfuFh2zOX
-	 b3A1akHZzJEy78NPqk0nuDAQF+JWLPHQVQxmPu5s0Xh5aGDJg0kbsrraSI7YXzfn77+4p
-	 Tb2oOckbHUiCkPUQ904qg96OVWgT7CrXVj9OB4GqFWaRAEOertCFA4+803WAToWkGWA==
+	t=1794788371;
+	b=ZmvReYEEb4y3gcF5BokP5GckNm2RePBbF81olMQykLdMhsqqo6OhgFQlnhcsr+IqmIWK
+	 1OZUpzH3vmnbafokWU5WX5HHw5EYpn8YZ0F/ShTTGSEk3XnOk7zTDpU+AvpDDtoEmUTDt
+	 wDIQSczsXx5wmmgXuinjxUIQnqUGyfvObVW49AzRnZQdxCMiFi8cHnzY/OWsUJhRKQMAe
+	 d7vLdWVAOVc1SMLWYlPKkxa7dJYTNeAUTGhVV5XoXOTa09bXmAOq80LghhylIgIx0+Zxy
+	 G0nzskmjNnEjmmNqMR2OEnQBiBz0NfFyxFmUARhV0UJ40ZrvwMPxBHaIxW+scf3cXYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794788364;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794788371;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
 	 In-Reply-To:To:Cc:X-Mailer;
-	bh=qu6DBgMxRkupt4HnGpADZC2d8uM7xTpXMjch9KCI1b0=;
-	b=MFibXprogOkAI8DvBFowbwCVJg7TO4NKCb+mu/XHhxlgAVNHrxYwkt4mZpjCbJvXbMJk
-	 9yKUptJqUWEHDj4CNuaIzwepqGAPXeG6U8nnICOORAZxbgdnQ0vS2WsnHUmMVRZYbP+f5
-	 AYplk85MZ1ORwxqpvK0KruFl02pV3VyEZwsHCNHrAF0u/mHafwML64eCgc0wzJjdjd+Xb
-	 Thb9JPJdTXSYOdhlw70qNUlsg5klPWc4Mm+eKudT+nvN1jkdA/jECioHQINUNqhaaT7LB
-	 YsYLtDkI6uETZW5HO3YhEn041Np6TW+ur3CQCHSs0OXz6kz4sdiLcamDQmoFqQDsi8w==
+	bh=nhnHtLieQMdo/OcyKxpaCFLTNFcPVZQRcEluKyBdufo=;
+	b=Ay8359bswuHSKL902HuUnRJ5eH/bwFnG8xIWEpqGFZcJ4s0ei4efWVHkFYXV9IecpNQ0
+	 Eb/TtMIuabzGMzTn3bRc8tTDdBBy2P9AKKk0qPPlCXCG6rpM6IevIl74iavJSXEba8d8s
+	 1iDoSI89fsfx7rH9l23NRBkvxPJ+1l17nJ0VwS9TjS4j5Q41YnqVRiz5IiYtGY9unyGvt
+	 W73xeY29d2ePQgXPUI70b+p2LiEZ+YjpzrD3tJt2pePxcI+rJ4d29Q2fB7IrvytfjULIc
+	 /7BQhDT09Iyz8VJinT3FPaHOwyugZW7bmXVP4KePGWRGLWh2nSX+1+08H6fkxBgVo9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CIL+vkSm;
-	arc=none smtp.remote-ip=91.218.175.30
-Received: from mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=duLJ6bqq;
+	arc=none smtp.remote-ip=95.215.58.188
+Received: from mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E58606A333
-	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 00:19:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3E58606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71920606A332
+	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 00:19:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71920606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CIL+vkSm
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=duLJ6bqq
 X-Envelope-To: io-uring@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=x2PPpgQO2VQnEUdFymh0p2TYLS7IgGWyu3wj9qKiZds=;
+DKIM-Signature: a=rsa-sha256; bh=GE0AmWzzUkTntY8b3KCGh9uV2eo1z/UgLx990fOkw7c=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794788362; v=1; x=1795393162;
- b=CIL+vkSmH5XJbor5YoJnIOT1uF6HwPiH1RBiKwyoUwz9A1GGIZm7yUj9miUKovHulYn3ThYG
- R9p6FxTQZ4BhnX/8pgNq5UhO0CYMJP8yx6fzg/D+1qqnLoLpMH5xIe7Fa+4XtN2pNor8IKO6YPi
- 51MyVvw/bb8LSFOLGpXretqs=
+ t=1794788368; v=1; x=1795393168;
+ b=duLJ6bqqAim6rotM3f+vgw8STJSF5W/XrYx0D5tloRenWdzJv9k3zC9oyG0UMcDhDUKt6PQ6
+ bkRJmrIisLoS75xrTPhUdxtdHePv9tZyrEli9e4v5zYKyq64iuxcoijwEoGUEy4Bx/3LT3m/yy3
+ yEdraU59edDItWh0dBvvRuhc=
 X-Envelope-To: io-uring@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f350d4b32e6c5b5a;
-	Mon, 16 Nov 2026 00:19:22 +0000
-X-Mizu-Trace-ID: f350d4b32e6c5b5a
+Received: by smtp.migadu.com with ESMTPS id 9651313902837610;
+	Mon, 16 Nov 2026 00:19:28 +0000
+X-Mizu-Trace-ID: 9651313902837610
 X-Migadu-Flow: FLOW_OUT
 From: Qiliang Yuan <qiliang.yuan@linux.dev>
-Date: Sun, 15 Nov 2026 19:18:03 -0500
-Subject: [PATCH RFC 10/18] scsi: target: uring: Time out commands the
- server does not complete
+Date: Sun, 15 Nov 2026 19:18:04 -0500
+Subject: [PATCH RFC 11/18] scsi: target: uring: Drop aborted commands that
+ are still queued
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -62,7 +62,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261115-feat-target-core-uring-v1-10-28cdc137eac6@linux.dev>
+Message-Id: <20261115-feat-target-core-uring-v1-11-28cdc137eac6@linux.dev>
 References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
 In-Reply-To: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
 To: "Martin K. Petersen" <mkp@kernel.org>, Shuah Khan <shuah@kernel.org>, 
@@ -76,213 +76,89 @@ Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
  Qiliang Yuan <qiliang.yuan@linux.dev>
 X-Mailer: b4 0.13.0
 
-Commands of a target_core_uring device wait on a pending list until a
-server fetches them, and then for the server to commit them.
+When a command is aborted, the core waits for the backstore to complete
+it.
 
-Without a server, or with one that hangs, they wait forever, and so
-does everything that waits for them, such as removing the LUN.
+A target_core_uring command that no server has fetched only completes
+when it times out, which delays the abort by up to cmd_time_out.
 
-Add the cmd_time_out parameter, 30 seconds by default, and fail the
-commands that are older. A delayed work scans the queues when the oldest
-command is due. A timed out command that the server works on is
-completed, but the server keeps the tag until it commits it.
+Implement tmr_notify() and complete the aborted commands that are still
+on a pending list with TASK ABORTED status. Track them through
+se_cmd->priv, which is set only while a command is pending.
 
 Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
 ---
- drivers/target/target_core_uring.c | 80 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 2 deletions(-)
+ drivers/target/target_core_uring.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/drivers/target/target_core_uring.c b/drivers/target/target_core_uring.c
-index 2978dd08c99cf..0f83bdc55e06a 100644
+index 0f83bdc55e06a..629419a4c8f46 100644
 --- a/drivers/target/target_core_uring.c
 +++ b/drivers/target/target_core_uring.c
-@@ -21,6 +21,7 @@
- #include <linux/slab.h>
- #include <linux/uio.h>
- #include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
- #include <scsi/scsi_proto.h>
- #include <target/target_core_base.h>
- #include <target/target_core_backend.h>
-@@ -31,6 +32,7 @@
- #define TCMUR_MAX_IO_SIZE	(4U << 20)
- #define TCMUR_DEF_QUEUE_DEPTH	128
- #define TCMUR_DEF_BLOCK_SIZE	512
-+#define TCMUR_DEF_CMD_TIMEOUT	30
+@@ -175,6 +175,7 @@ static void tcmur_io_start(struct tcmur_queue *q, struct tcmur_io *io,
+ {
+ 	lockdep_assert_held(&q->lock);
  
- /* Set while the file is open, to allow one server at a time */
- #define TCMUR_DEV_OPEN		0
-@@ -46,6 +48,7 @@ struct tcmur_dev;
-  * @desc:	What the server is asked to do
-  * @ref:	Held by the tag or the pending list and by data copies in
-  *		progress
-+ * @deadline:	When to give up waiting for the server
-  * @status:	SAM status to complete @se_cmd with
-  */
- struct tcmur_cmd {
-@@ -55,6 +58,7 @@ struct tcmur_cmd {
- 	u32			sgl_nents;
- 	struct tcmur_io_desc	desc;
- 	refcount_t		ref;
-+	unsigned long		deadline;
- 	u8			status;
- };
- 
-@@ -102,8 +106,10 @@ struct tcmur_dev {
- 	u32			block_size;
- 	u16			nr_queues;
- 	u16			queue_depth;
-+	unsigned int		cmd_timeout;
- 
- 	struct tcmur_queue	*queues;
-+	struct delayed_work	timeout_work;
- };
- 
- /**
-@@ -190,6 +196,8 @@ static void tcmur_queue_cmd(struct tcmur_dev *udev, struct tcmur_cmd *tcmd)
- 	struct tcmur_io *io;
- 
- 	refcount_set(&tcmd->ref, 1);
-+	if (udev->cmd_timeout)
-+		tcmd->deadline = jiffies + udev->cmd_timeout * HZ;
- 
- 	spin_lock(&q->lock);
- 	io = list_first_entry_or_null(&q->idle, struct tcmur_io, node);
-@@ -205,6 +213,9 @@ static void tcmur_queue_cmd(struct tcmur_dev *udev, struct tcmur_cmd *tcmd)
- 
- 	if (ucmd)
- 		io_uring_cmd_complete_in_task(ucmd, tcmur_fetch_tw_cb);
-+	if (udev->cmd_timeout)
-+		schedule_delayed_work(&udev->timeout_work,
-+				      udev->cmd_timeout * HZ);
- }
- 
- static sense_reason_t tcmur_submit(struct se_cmd *se_cmd, u32 op, u64 offset,
-@@ -244,6 +255,58 @@ static sense_reason_t tcmur_execute_rw(struct se_cmd *se_cmd,
++	tcmd->se_cmd->priv = NULL;
+ 	io->cmd = tcmd;
+ 	io->owned = true;
+ 	q->descs[io - q->ios] = tcmd->desc;
+@@ -207,6 +208,7 @@ static void tcmur_queue_cmd(struct tcmur_dev *udev, struct tcmur_cmd *tcmd)
+ 		io->ucmd = NULL;
+ 		tcmur_io_start(q, io, tcmd);
+ 	} else {
++		tcmd->se_cmd->priv = tcmd;
+ 		list_add_tail(&tcmd->node, &q->pending);
+ 	}
+ 	spin_unlock(&q->lock);
+@@ -255,6 +257,31 @@ static sense_reason_t tcmur_execute_rw(struct se_cmd *se_cmd,
  			    se_cmd->data_length, sgl, sgl_nents);
  }
  
-+static void tcmur_timeout_work(struct work_struct *work)
++static void tcmur_tmr_notify(struct se_device *dev, enum tcm_tmreq_table tmf,
++			     struct list_head *aborted_cmds)
 +{
-+	struct tcmur_dev *udev = container_of(work, struct tcmur_dev,
-+					      timeout_work.work);
-+	unsigned long now = jiffies, next = 0;
-+	struct tcmur_cmd *tcmd, *tmp;
++	struct tcmur_dev *udev = TCMUR_DEV(dev);
++	struct tcmur_cmd *tcmd;
 +	struct tcmur_queue *q;
-+	struct tcmur_io *io;
-+	bool rearm = false;
-+	LIST_HEAD(expired);
-+	unsigned int i, j;
++	struct se_cmd *se_cmd;
 +
-+	for (i = 0; i < udev->nr_queues; i++) {
-+		q = &udev->queues[i];
++	/* Drop the aborted commands that no server has picked up yet */
++	list_for_each_entry(se_cmd, aborted_cmds, state_list) {
++		q = tcmur_cmd_queue(udev, se_cmd);
 +
 +		spin_lock(&q->lock);
-+		list_for_each_entry_safe(tcmd, tmp, &q->pending, node) {
-+			if (time_after(tcmd->deadline, now)) {
-+				if (!rearm || time_before(tcmd->deadline, next))
-+					next = tcmd->deadline;
-+				rearm = true;
-+				break;
-+			}
-+			list_move_tail(&tcmd->node, &expired);
-+		}
-+		for (j = 0; j < udev->queue_depth; j++) {
-+			io = &q->ios[j];
-+			tcmd = io->cmd;
-+			if (!tcmd)
-+				continue;
-+			if (time_after(tcmd->deadline, now)) {
-+				if (!rearm || time_before(tcmd->deadline, next))
-+					next = tcmd->deadline;
-+				rearm = true;
-+				continue;
-+			}
-+			/* Leave the tag to the server until it commits it */
-+			io->cmd = NULL;
-+			list_add_tail(&tcmd->node, &expired);
++		tcmd = se_cmd->priv;
++		if (tcmd) {
++			se_cmd->priv = NULL;
++			list_del(&tcmd->node);
 +		}
 +		spin_unlock(&q->lock);
++
++		if (tcmd)
++			tcmur_cmd_end(tcmd, SAM_STAT_TASK_ABORTED);
 +	}
-+
-+	if (!list_empty(&expired))
-+		pr_warn_ratelimited("tcmur%d: command timed out\n",
-+				    udev->dev_id);
-+	tcmur_end_cmds(&expired, SAM_STAT_CHECK_CONDITION);
-+
-+	if (rearm)
-+		schedule_delayed_work(&udev->timeout_work, next - now);
 +}
 +
- /* Take a reference on the command the server works on in (@q_id, @tag) */
- static struct tcmur_cmd *tcmur_get_cmd(struct tcmur_dev *udev, u16 q_id,
- 				       u16 tag)
-@@ -331,7 +394,10 @@ static int tcmur_commit(struct tcmur_queue *q, struct tcmur_io *io, int result)
- 	io->owned = false;
- 	spin_unlock(&q->lock);
- 
--	tcmur_cmd_end(tcmd, result ? SAM_STAT_CHECK_CONDITION : SAM_STAT_GOOD);
-+	/* Skip a command that timed out already */
-+	if (tcmd)
-+		tcmur_cmd_end(tcmd, result ? SAM_STAT_CHECK_CONDITION :
-+					     SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -639,6 +705,8 @@ static struct se_device *tcmur_alloc_device(struct se_hba *hba,
- 	udev->nr_queues = 1;
- 	udev->queue_depth = TCMUR_DEF_QUEUE_DEPTH;
- 	udev->block_size = TCMUR_DEF_BLOCK_SIZE;
-+	udev->cmd_timeout = TCMUR_DEF_CMD_TIMEOUT;
-+	INIT_DELAYED_WORK(&udev->timeout_work, tcmur_timeout_work);
- 
- 	device_initialize(&udev->cdev_dev);
- 	udev->cdev_dev.class = &tcmur_class;
-@@ -723,6 +791,8 @@ static void tcmur_destroy_device(struct se_device *dev)
+ static void tcmur_timeout_work(struct work_struct *work)
+ {
+ 	struct tcmur_dev *udev = container_of(work, struct tcmur_dev,
+@@ -278,6 +305,7 @@ static void tcmur_timeout_work(struct work_struct *work)
+ 				rearm = true;
+ 				break;
+ 			}
++			tcmd->se_cmd->priv = NULL;
+ 			list_move_tail(&tcmd->node, &expired);
  		}
- 		spin_unlock(&q->lock);
- 	}
-+
-+	cancel_delayed_work_sync(&udev->timeout_work);
- }
- 
- static void tcmur_free_device(struct se_device *dev)
-@@ -731,7 +801,8 @@ static void tcmur_free_device(struct se_device *dev)
- }
- 
- enum {
--	Opt_dev_size, Opt_block_size, Opt_nr_queues, Opt_queue_depth, Opt_err,
-+	Opt_dev_size, Opt_block_size, Opt_nr_queues, Opt_queue_depth,
-+	Opt_cmd_time_out, Opt_err,
- };
- 
- static const match_table_t tcmur_tokens = {
-@@ -739,6 +810,7 @@ static const match_table_t tcmur_tokens = {
- 	{ Opt_block_size,	"block_size=%u" },
- 	{ Opt_nr_queues,	"nr_queues=%u" },
- 	{ Opt_queue_depth,	"queue_depth=%u" },
-+	{ Opt_cmd_time_out,	"cmd_time_out=%u" },
- 	{ Opt_err,		NULL }
- };
- 
-@@ -794,6 +866,9 @@ static ssize_t tcmur_set_configfs_dev_params(struct se_device *dev,
- 			else
- 				udev->queue_depth = val;
- 			break;
-+		case Opt_cmd_time_out:
-+			udev->cmd_timeout = val;
-+			break;
- 		}
- 	}
- 
-@@ -812,6 +887,7 @@ static ssize_t tcmur_show_configfs_dev_params(struct se_device *dev, char *b)
- 		      udev->block_size);
- 	bl += sprintf(b + bl, " Queues: %u Queue depth: %u", udev->nr_queues,
- 		      udev->queue_depth);
-+	bl += sprintf(b + bl, " Command timeout: %u", udev->cmd_timeout);
- 	bl += sprintf(b + bl, "\n");
- 	return bl;
- }
+ 		for (j = 0; j < udev->queue_depth; j++) {
+@@ -920,6 +948,7 @@ static const struct target_backend_ops tcmur_ops = {
+ 	.destroy_device		= tcmur_destroy_device,
+ 	.free_device		= tcmur_free_device,
+ 	.parse_cdb		= tcmur_parse_cdb,
++	.tmr_notify		= tcmur_tmr_notify,
+ 	.set_configfs_dev_params = tcmur_set_configfs_dev_params,
+ 	.show_configfs_dev_params = tcmur_show_configfs_dev_params,
+ 	.get_device_type	= sbc_get_device_type,
 
 -- 
 2.43.0
