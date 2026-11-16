@@ -1,93 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794857511;
-	b=F8ib+TjzqymrbghdpC46vLp0FA7TCqWtr7j4porxwIF/lG2HNJD804mMfU+2RgM6buua
-	 XjvTwIWQV3GrXazEl/NPW0TaC2awKgx9d7PIGf5SCF9G4z7Vm1riSS1RpJNHyB5tHe7Wv
-	 LJC8aYfauq/IBMDNcIz+/+DThNVzQ79ka+Q7BE62KnzxxpPF6YIq5LpgTOG55XEE2Zq4S
-	 tbMRQK7u6UCMdPwekLYDdnMrX/eYK2eunSivd1OC6O+kWVPKbwHPb2oHqWOh0XQEjhFa/
-	 2zhGwTzBKQV3xiCei+EMIY0CVN0U4XKgt6O2jDFnAd+Z5kEgzX6UrlCzu7yxWaJCi3A==
+	t=1794858736;
+	b=w2QuJz8u1HoChUgiOqiX35tqrURBZJ3DT3FTotWr2dj0KBrgIp1eIajIhKq1K7uzIyjZ
+	 OTusL3FODBINzNavOwCXZz7i14/rXNKdGU9DyH9bpGD9/vONAFA82KJ+dAdFrrgNU6ViL
+	 P+XE8bHiEn6CjHnn1uLHPfAIZdRjZBWInw6wvlJKFk9vgH3tWzFCaSGsAOqiJiJqvhpgt
+	 5/7um2oZD/BCLzeZ1cuvauKYKd/qBj3dEFWvo46EDsjzNJCCYGOkF89/8eSxhuEOOqPaG
+	 tuiIREN3JhoSbiceVMxWH7B5xRHO4517ZOB8NBxy3BzM72SGB3bUB+ioLXx+lgHL8Sw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794857511;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794858736;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
-	b=LKGWvieJC2RU4fCbxVG96cgRws0OpQ9do2Bj+NDfCAkzZdLz5OQM5lYpVa/YsOH4M5E4
-	 QsiQJN4nXMdGk3oxlJTlgStFhLdWjbV3HcbDFD/cwt6Q8YeBfoLexZ+8G7pZpLadLBHLs
-	 L6elUZtarK0oXraewhoyMF/SKgvrfcFyYR7F1Gf7M+AhBQOGcirYgOInByix/rBZpN5BH
-	 uSAQxEHREG27DTiJ9/MaEG5nboN4fy96NwcbhNf4A5hDbdFS4TvlbF259aQ9i9y/vtDg4
-	 puWr8C+GWssLEWG5ejRm0xeo1C89LdMpLL+k7Cy6Gdm+6QT+UdbTzxyXG4vxdJsTVmA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
+	b=Xy96CVjY2A27hD1Sjovp/vZwzIRbilGX02Y2BAl4rAyM2WMBi++i48kSOfbSRlaGoL7k
+	 ebinSxvSGAxGm0IT43VDodqnH2KWr+l8uFGooXKUPx+kR0UHoii2NznQZSGASsudlEe+4
+	 0FbdDXLBBqFZkOAniq9aYm/f0zyBh6VL3VQvYSJebufbvgqmzG3A91cf7KP7Q8h3HCXvM
+	 LXfUaNgGjmRH4nAAYhVuEIURqytW1+Sw1/lJ71onSlwI3q57ouVCVe1QcqymNtxpBF4m2
+	 FLhQWZlzRry4cZBI2cqboPSMGc7LZwL75nH9oaBgUnaZSRyRAGlE03SssqqbXN78M0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=arYGXhR9;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dmarc=none header.from=ziepe.ca;
+	spf=pass smtp.mailfrom=ziepe.ca;
+	dkim=pass header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=YcqWJI31;
+	arc=none smtp.remote-ip=209.85.160.176
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F142E606A322
-	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 19:31:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F142E606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BAE606A331
+	for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 19:52:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18BAE606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=arYGXhR9
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc147d86bebso185593a12.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 11:31:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=YcqWJI31
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-55d2dcbb905so19718911cf.3
+        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 11:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794857510; x=1795462310; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
-        b=arYGXhR9kkD9xsAwOGi+AbeNo5o0hng0zmC2BWsww3vebBxrH2r5JnEaxgv4/uf6Sm
-         1zh0imNKqytgTfMXAnsm/UBfXnn8y7p6jGQF1Gn41uZzqBTvBBdeHPWaVNfj2Hdga8N5
-         v8aja3WNbGRXk5UIJNt9F9gLII6cvvEqQn/jiDP9abzvE0kEec3fAHTidodISySfQ8mA
-         /8Y5JFL68CLBpyA/6g/53KuESnJGE2DfuAtylvGcpj+dBs5pgxvL43PeU5swMMzFCDfF
-         xgDcDz8wP/AVdGyTl5c35f3h8xBSk2oKHuxKG+0E3oTRGHejWrx84ApdjzXfVd07NpdQ
-         yU6Q==
+        d=ziepe.ca; s=google; t=1794858735; x=1795463535; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
+        b=YcqWJI31Q3We3zqNvL52aNkFr++cowdUSJ0aOSCLtCZgOyPTfxfZMV4aawKPfLKj7g
+         4m2sGeUiA0CXGadMrFuMRIl89TE0lacup406nbrhvwqwPIX8FxoVlYidwE8/s7P7Wszm
+         OrbfdLGk33YGmzpkBYmsq4F3Mxnt+4Lu+TymHPjdbgW2SfeAeQs52uRWqh/1XVhhLOxn
+         GvpMlDfLIXvCkNJG/BKPMpLBeKmXfFzSUPrKKeUURMUv+fsornqCLKr9GiRTo2LK7Tab
+         rlciZWXd7u0mEyCoyMVRbS74CtgQ2ZcTLr22IpH7H7u3DgVnSQkVWAwVkGPORAQHY8UQ
+         R7qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794857510; x=1795462310;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GRJhsAcI15idx0cLc3j7efy8qNOYnMelLH4aXWx29N4=;
-        b=vS2b892OgUHynhq790IzHHJJmwdF2wb+0i3392L7OPyEJB2HSfptF5Q9lz2ajo00Ec
-         vFSQ4CVby8gXdv+qofZ+E4upCFAANScDtbGBao38dHRnjRhv7Xc6VPz/9Ae6vLIUa+Dj
-         XzQTF1RwY1PxWrEpUUAE7Zzym9Py0J9Fm2EIpayHXv4uC9QkhTuJcPJFHyHNierberL6
-         SS+xeHUED6b0S0z9WfN+msdx7Uu7BDtdBQUoV84mk7awJYP5JlxVS63S5vpDK694Jo9f
-         cOhatTv+7Yz8gdDRVKSWNKPaFXO0ZzKQyH47bouNnNS0TBul7GA6ZVCk9S7PBKlvC1t/
-         fW6Q==
-X-Gm-Message-State: APuU4Z/XJ1IkVjroeLyuKmFpEphwgdQdjLU05n6/4aol9+cUDCjZBwpJ
-	G1361O99f1FSaAcA3JQnZROBo8/Hy+j6mICBlVRKk4sJ//fCCkhWzdvkLCot+g==
-X-Gm-Gg: AZFdTZcJEaw4THkGigUJ2pxrS7Iw4HqR/8eYcEKZvz1KffvK31k4RdLPcnw1b/ws1C2
-	IPRJ4yGOOZ6sBoOKVDoRvYrm6MQ4HGg/8NEYpYup4BxWmgwRQcjX1TNYCN/4HY7REL2PNHLKhoV
-	UMt2nITQAObjPhXluj1kXmmF7IOmofU9w4huWCXocdLbjhOvV55FPAX2CM8LwSFsKnYilq6jVcR
-	1YLsFEnU1gKd7qFq1AIWX39w/slISfhi2uFV4R19dbG9YpUKPzpneTPV6FG1uSXHOH2KFqdRr2X
-	yoXm6LkQIq0xMpyUxfgcp6bvvX8B2WBHQcSSbfXVKJomrX2iEF3L2D4z5xNuc5KgUA2l/D2MDaK
-	hyIjbYJXIj9mNX0Hl4/ub398Du+QE9rJxW5Ei6NVSrX8LHxwCpIC2+oi1XHJrhXa79rXSs+xnvx
-	qocvERhtT+zwwYYlUjLvEhWEYOnw02YndosqBXx0y9Qqg9OCqqcwxHN39/J7zHJ1GmY4WcZt8OG
-	qPTbTVEphD8jmXjdVUmcKvQBFUSti7MsEe/WP/ZWwY8F2R23i1UhYpr7BqNghXgFVpCTHyOIoUb
-	TKZMbzgJgAnVD1RJsG+9NXd51DPwTq/c4jS59mdO9MmZa1lR4HnhRveujPOO8mZ1OHgIuo8QGYY
-	B69uYmLJ6hpayAdPD5+ftSP2mhKETRFf+8V/jVCIhxhra41EQ6UsclP+FOXboSeoCsBQrtW5Bn/
-	Wc1wQH8ZSLEswB4q0HinP8v4RlBXahzaF0rFIi4n8L
-X-Received: by 2002:a17:90b:4d06:b0:3b1:bd6d:fcc2 with SMTP id 98e67ed59e1d1-3b3abe7e796mr215871a91.40.1794857510114;
-        Mon, 16 Nov 2026 11:31:50 -0800 (PST)
-Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3abe77179sm539396a91.11.2026.11.16.11.31.48
+        d=1e100.net; s=20260707; t=1794858735; x=1795463535;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jqnrRoTh5TcWr/Py+gEgzzX7wdMhzTlFxFkfLcpGuJM=;
+        b=XYjH7uDxVYDIGIRFQWScvWj2YEkZte7vFSpRZLLTYZeDqSazp1ZeI9ZZhtOc9HbRzj
+         cE1CnanJy7A+lbOI9Kjdyv6+HQrBlekT0lgm0t/3JvLjsWVu2jaBeIx9nseTcmJTztZe
+         8srR9HmyKmFUe+j7j2jwnMTfdryru2KDbN12/SuyrxhQ4PXOXI7X32jIqW0MwaqoAG7S
+         ewEjIYh5eL25x/wiU5FXKM2pUwkTYece6MtBhqKr/57J/dJ7RyHysvR84iT5K34QUPlO
+         TD7zXBLncN3gwWMRgF2ikYTM7+hA/eqllc/AXwRvXVycAZco3D8b3PcEIQGoLTOZH8fD
+         JSbg==
+X-Forwarded-Encrypted: i=1; AL+hErELblEyciPTYjwLs61zJpw5j5pekxJzu2a4K/FZERcDVh5t23vM+mfZsoC1fhG5qfJSldCPO6N4zA==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/lAPOp5Vj78RxHc8wxuA7bZw2DW52cPvp53sxZkauJ+rdgjucx
+	eL24zM6/rPlOIBtsqsjQ2lciB47z6g61aLsGxJWKZaSgUnyBvukifG8VYSWrbwupPR8=
+X-Gm-Gg: AYBFou1CJ++rIkyE1dHB7zxHkJvvKvasl5fbJm7T3vNPBn9WBoWqK7lI6qx3BCrepsN
+	2cWQFSMc9qOpqneR1f2t1a1jmZvD3N7/Lt7Xj+Aqa1DBvduMo9taBrUhy+abUnGRGhFk1uC85dr
+	lxisVMYqS29wWKkwUgsDfL3mB1wDqqA9rbCnGgAuA1SA+5td36F8JO+YOLxe9jOVkB6cS7yOdUC
+	NJmb8+4vnezPOlqfvUSy4+kP22FK7JryxZbL/jaeQZh6dTznh7fnYdwPCb2vWzHJrBgm2GLwGaz
+	7hmx1xa6r/WscRnIvQXchUbS/qmzqZH9wcmIWm8iFGf75hiiTO3Cgd9BhQXQz08FcIJy9Y6axJt
+	PT+aEE7oNtV1kY5Xf2zEJiyRUSnn0Yu43B/bJdhXLAUnIy9r6lG+IqaYyTYr1Y2YLWpWyouzf9f
+	Ak5vUslNSNDhWn9FNCD9Vp2i9xgDZuX7+dzgUQA88mUebh8EYUuX935zhAyyXXjBKAR9yaW1oB8
+	oWfXNmQZXJXn8B0nIiNb7rl1OeQ1IZOmKXbF76ZfNJUNQ3iFURQvub6IuG1TcOWADIm+RQJecbz
+	LRrbbA==
+X-Received: by 2002:a05:622a:13c6:b0:55c:c7ab:4445 with SMTP id d75a77b69052e-55cc7ab469bmr121785021cf.29.1794858734926;
+        Mon, 16 Nov 2026 11:52:14 -0800 (PST)
+Received: from ziepe.ca ([142.166.156.71])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f8319d44bsm48973876d6.4.2026.11.16.11.52.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 11:31:49 -0800 (PST)
-From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rachel Menge <rlmenge@gmail.com>,
-	Hardik Garg <hargar@linux.microsoft.com>,
-	Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Subject: [PATCH v1 1/1] io_uring/kbuf: initialize arg->out_len from arg->max_len in io_buffers_select()
-Date: Mon, 16 Nov 2026 19:31:46 +0000
-Message-ID: <20261116193146.65315-1-sidchintamaneni@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Mon, 16 Nov 2026 11:52:14 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1xT2kP-0000000ALbT-12cG;
+	Mon, 16 Nov 2026 15:52:13 -0400
+Date: Mon, 16 Nov 2026 15:52:13 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: akpm@linux-foundation.org, dgilbert@interlog.com, mkp@kernel.org,
+	loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com,
+	vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com,
+	eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
+	rostedt@goodmis.org, vdonnefort@google.com, mhiramat@kernel.org,
+	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
+	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
+	christian.koenig@amd.com, phasta@kernel.org, joro@8bytes.org,
+	will@kernel.org, linux-scsi@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bobbyeshleman@meta.com,
+	mathieu.desnoyers@efficios.com, robin.murphy@arm.com,
+	mason@kernel.org, aesteve@redhat.com, tjmercier@google.com,
+	harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
+Subject: Re: [PATCH 5/7] iommufd: account the hw_queue page array to memcg
+Message-ID: <20261116195213.GF2452510@ziepe.ca>
+References: <20261106131829.3228926-1-cui.tao@linux.dev>
+ <20261106131829.3228926-6-cui.tao@linux.dev>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -97,34 +116,30 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261106131829.3228926-6-cui.tao@linux.dev>
 
-io_buffers_select() passes &arg->out_len to io_provided_buffers_select()
-on the legacy provided-buffer path. Because callers initialize
-arg->max_len (from sqe->len) while leaving arg->out_len as 0,
-io_provided_buffers_select() sees *len == 0 and always selects the full
-buffer size buf->len, ignoring the user-specified sqe->len limit.
+On Fri, Nov 06, 2026 at 09:18:27PM +0800, Tao Cui wrote:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> IOMMUFD_CMD_HW_QUEUE_ALLOC pins up to max_npages pages just to check
+> that a user supplied queue region is physically contiguous, and the
+> page array for that check is plain GFP_KERNEL.  The size comes from
+> cmd->length, a u64 that is only overflow checked, and the array is
+> freed again as soon as the contiguity check fails, so the allocation
+> can be repeated concurrently: a 1GB region costs about 2MB of
+> uncharged memory per attempt.
+> 
+> Every other iommufd allocation that scales with user input is already
+> charged, and the pinned pages charge the mapper at map time.  Charge
+> this array like the rest.
+> 
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> ---
+>  drivers/iommu/iommufd/viommu.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Initialize arg->out_len = arg->max_len before calling
-io_provided_buffers_select().
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Fixes: 35c8711c8fc4 ("io_uring/kbuf: add helpers for getting/peeking multiple buffers")
-Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
----
- io_uring/kbuf.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index abf44f5dba26..873d66a06b36 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -370,6 +370,7 @@ int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
- 				req->flags |= REQ_F_BUF_MORE;
- 		}
- 	} else {
-+		arg->out_len = arg->max_len;
- 		ret = io_provided_buffers_select(req, &arg->out_len, sel->buf_list, arg->iovs);
- 	}
- out_unlock:
--- 
-2.43.0
+Jason
