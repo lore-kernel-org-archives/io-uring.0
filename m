@@ -1,55 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.111.35.158
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794890493;
-	b=OA/+RHQQedT4/WUd8ucBrJVgf4BFoe+T2L6nR+rk2TZApZGx9aUDo2sfTjNnS4uhhkQA
-	 kMmq0SG15C9/dVqpgHjgXz+W/IMOWvvQPOk6nnZhibc+YSluqhZMrNG7xG7j7jRtrnEPR
-	 bvtXsLfssmQtO+U7k28caV/oxYgxdt7IM1FKsHZDv7oRz0f2LKIp7V0WGkYKhwWs2ki+Q
-	 pdr26S8nWwvaTunAh+o6y6sp1pnz+hbeNhcY8uH/9WgHymG95+ofB/w2V0pC+h/M2DwG3
-	 FfjYjdjQsZN0A8K09ibkxSafN/5AiRFR4kn1UMzFEgFcjTBmLF7cADTLo8dYt9sHtpw==
+	t=1794901363;
+	b=in/3Lowwbe2Rh+aTg4AnOI3qUqLPP1l2BQWq7ET0/SWWwcayVUc8Np66CgYaFCBEgXUT
+	 c9u8TfR33+uzo4RCtaYlaI8+Q5DpIvuVySRd4UHmbCWc2QFt7Sos/Rs/kD1QP/D36OICu
+	 7gFtzXKQ+igpIhJ3wQdEKrSU3deS3udCv4dJjaZGBvg1MXUdd5V068VPL1otuAPtSNJjS
+	 E4u85T4erC6vD9u4HSGK4xJ5aaqi+ucNkwxyFoVuBOGTnYCfsPtY8r/zdEcPZ+V8gI12F
+	 j5SIP5iisZmPRsdFP8wA93j61oWpU2Y+sIrN761uJ9Z9nIuXsdK0+HKK6sL11e+blPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794890493;
-	h=DMARC-Filter:X-Originating-IP:X-Works-Smtp-Source:Received:
-	 DKIM-Signature:X-Session-ID:MIME-Version:Message-ID:Date:From:
-	 In-Reply-To:References:Importance:To:Cc:Subject:X-Originating-IP:
-	 X-Works-Send-Opt:Content-Type:Content-Transfer-Encoding;
-	bh=niFXUB9dLz/IyDbir8jyhTxXozRONvjAvDjzMsZJrFA=;
-	b=EswXh0OR01PiDTtS6be4YJWKIzGJW1NGen4U4LJTzQq5m6Vl8gUd8tFKoYGyz67rV9nh
-	 m/XOcUFM8vN+oVx+Rw5xsuAYcTFtfxvy95X4f+OgHn4AZuaidR7JHhOGCfS5v4SWkqNfq
-	 RGuJG9sUGnZqoc3rbG23ncXycZtHz4ArJlW87CWV+0PoeREdeqRJzxBWReePn2lNgdk7I
-	 S7gsQQrpjqYOeBIr//LSzKp+ug0gj0fwfOm8QU0TieFBoHp5/LI3yvWTJsX5RwDTUCKzP
-	 Qr0MAO1AIYr6RInKblgdCNcc7C6hX8lmmx/GVSHMcdNBqWOT1xSDyunS8M9JQeIvBTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794901363;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=71rWNQosyZapuLeWqtv0uoV+azwsO/OtRmOKGXRa1s8=;
+	b=Iu1A4hPWkpsBWELOnP8pdYIsGLZv3zdbSydJiuqwACE2S9ZiuJNiE93TmPHBsS2ZpRPr
+	 5r0qzw2Ewq4FvRS/D96ak3bkIUfAx8us4mXupst493Ar/O+q5uG3WyNXvpK7yEGl98CKJ
+	 xCFQxlmqxTbO6s7Thlibl9PR2NGeLbE5YkYxOSho4Udw0l9XhkY5mJ/K/fhqhDYQ0eMaL
+	 PstjP6Ko2e4ChlkC2CeAou81umZNYA4XkZYCwFgPT7DmAQFID+2AOwngJ7If9YcELczVu
+	 07OG6BgnOXAymlQNeimDIQ9LnIFSFxFihVygoWTx3eQPItNqAL7pbUcGEigUegIXTUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=naver.com;
-	spf=pass smtp.mailfrom=naver.com;
-	dkim=pass header.d=naver.com header.i=@naver.com header.a=rsa-sha256 header.s=s20171208 header.b="f793/JtV";
-	arc=none smtp.remote-ip=114.111.35.158
-Received: from cvsmtppost15.nm.naver.com (cvsmtppost15.nm.naver.com [114.111.35.158])
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=qX1QkTb5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9590606A31C;
-	Tue, 17 Nov 2026 04:41:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9590606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=naver.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64041606A335;
+	Tue, 17 Nov 2026 07:42:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256 header.s=s20171208 header.b=f793/JtV
-X-Works-Smtp-Source: VrY9aAtlFqJCpNmdaAg/WHF0
-Received: from nv1m-hmac-real-7 ([10.174.201.121])
-  by cvsmtppost15.nm.naver.com with ESMTP id 57TqJ3PjRcW4HzvQkmgjlg
-  for <multiple recipients>;
-  Tue, 17 Nov 2026 04:41:24 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=naver.com; s=s20171208;
-	t=1794890483; bh=niFXUB9dLz/IyDbir8jyhTxXozRONvjAvDjzMsZJrFA=;
-	h=Message-ID:Date:From:To:Subject:From:Subject:Feedback-ID:
-	 X-Works-Security;
-	b=f793/JtVoLcls055Zexa4bTKfiGL3yPPZvQuPB9SoKLtlCrv6XJ8HtduVMIZFdlPE
-	 NkyCscZmcQF7gjRFGm6Z0EMZmDBVBNhg7xf7Vws4tYFfYTXb0+V8jmflM7vJevDsWW
-	 kgdmUt4QDnpQIyqKfeMM8a1pm1n8L7lunuiaRl7jn8MXA60kFOFyvQ6xR6JiOble7o
-	 dIMvv27ZPW0zr8IopUsAk9cGQAv5AP4uLY80uSj7JXvEwsDCGbj7I04uLYkDqk6WNS
-	 1+FnC53jbY6WASries5DqZ0Zfyzjh3/YvmeH0caLpRdnr097AJCoD9ZsvDNGPnQsWN
-	 rhPxNjBukcbdA==
-X-Session-ID: 1fa9f93f43cc9c2547e6decbb5923f4a02abba9332889e8350c11476aa3a609f
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=qX1QkTb5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF5F1F000C4;
+	Tue, 17 Nov 2026 07:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1794901362;
+	bh=71rWNQosyZapuLeWqtv0uoV+azwsO/OtRmOKGXRa1s8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=qX1QkTb5QYz4/deP7nXKDmeZM4uDkb5szhFlh33pXNEC2X7H5RJilBy/iG8B/GBAk
+	 Z3PUjBXccqCV1zdIBFXKWganrW7Fwok69Yxv3IGBlGh7lVEeLCGhnBAD+A9xGuhiS6
+	 5JaPfyX6yFs08zSvsy8yFka0Y0SVupQu5f4yaTMs=
+Date: Tue, 17 Nov 2026 08:42:31 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Sasha Levin <sashal@kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+	Yufan Chen <yufan.chen@linux.dev>, dev@rebasedinc.com
+Subject: Re: io_uring/eventfd: registered eventfd signals only once after the
+ cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
+Message-ID: <2026111722-unfocused-ride-065c@gregkh>
+References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
+ <draft-agent5-0001-re-eventfd-signal@kernel.org>
+ <5d92861f-9a4d-4810-8700-b9e457ed9c86@kernel.dk>
+ <2026111605-deskbound-clobber-a4a1@gregkh>
+ <07947062-2974-4630-90db-1556e25b50bb@kernel.dk>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -59,69 +60,34 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-ID: <d22b71efbe22b3dab362e4c94062e073@cweb005.nm>
-Date: Tue, 17 Nov 2026 13:41:23 +0900
-From: =?utf-8?B?U2lldW4gWWFuZw==?= <didtldms2525@naver.com>
-In-Reply-To: <652bf9fd6e20ef231652b95efa65355@cweb018.nm>
-References: <652bf9fd6e20ef231652b95efa65355@cweb018.nm>
-Importance: normal
-To: <dsterba@suse.com>
-Cc: <mason@kernel.org>,
-	<linux-btrfs@vger.kernel.org>,
-	<axboe@kernel.dk>,
-	<io-uring@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?W1BBVENIXSBidHJmczogcmVqZWN0IGVuY29kZWQgcmVhZHMgZnJvbSB3cml0ZS1vbmx5IA==?=
-	=?utf-8?B?ZmlsZSBkZXNjcmlwdG9ycw==?=
-X-Works-Send-Opt: +9Fdpz0vjHmZFxiqW63nFBmmjA+YKxtwFA2wKqbqaBwtxBmwjAg=
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07947062-2974-4630-90db-1556e25b50bb@kernel.dk>
 
-QlRSRlNfSU9DX0VOQ09ERURfUkVBRCBhbmQgdGhlIG1hdGNoaW5nIGlvX3VyaW5nIGNvbW1hbmQg
-cmVxdWlyZQpDQVBfU1lTX0FETUlOLCBidXQgbmVpdGhlciBjaGVja3MgRk1PREVfUkVBRC4gQSBj
-YWxsZXIgY2FuIHRoZXJlZm9yZQpyZWFkIGZpbGUgY29udGVudHMgdGhyb3VnaCBhbiBPX1dST05M
-WSBkZXNjcmlwdG9yLCB3aGVyZWFzIHJlYWQoKSBhbmQKSU9SSU5HX09QX1JFQUQgb24gdGhhdCBk
-ZXNjcmlwdG9yIHJldHVybiBFQkFERi4KClRoaXMgaXMgb2JzZXJ2YWJsZSB1bmRlciB0aHJlZSBy
-ZWFkIHJlc3RyaWN0aW9ucyB3aGlsZSBDQVBfU1lTX0FETUlOCmlzIHJldGFpbmVkOgoKLSBMYW5k
-bG9jayBkZW5pZXMgUkVBRF9GSUxFLiBBIG5ldyBPX1JET05MWSBvcGVuIGZhaWxzIHdpdGggRUFD
-Q0VTLCBidXQKICBhbiBPX1dST05MWSBvcGVuIHN1Y2NlZWRzIGFmdGVyIHRoZSByZXN0cmljdGlv
-biBpcyBpbnN0YWxsZWQuCi0gREFDIG1vZGUgMDIwMCBkZW5pZXMgT19SRE9OTFkgYWZ0ZXIgQ0FQ
-X0RBQ19PVkVSUklERSBhbmQKICBDQVBfREFDX1JFQURfU0VBUkNIIGFyZSBkcm9wcGVkLCBidXQg
-YWxsb3dzIE9fV1JPTkxZLgotIFdpdGggQ09ORklHX0JUUkZTX0ZTX1BPU0lYX0FDTD15LCBhIFBP
-U0lYIEFDTCBncmFudHMgb25seSB3cml0ZSBhY2Nlc3MKICB0byBhIG5hbWVkIHVzZXIuIFdpdGgg
-ZnN1aWQgc2V0IHRvIHRoYXQgdXNlciBhbmQgdGhlIERBQyBieXBhc3MKICBjYXBhYmlsaXRpZXMg
-ZHJvcHBlZCwgT19SRE9OTFkgZmFpbHMgYW5kIE9fV1JPTkxZIHN1Y2NlZWRzLgoKT24gTGludXgg
-Ny40LjAtcmMzLWc2NjY1MzllZWNkZjQsIGJvdGggZW5jb2RlZC1yZWFkIHBhdGhzIHJldHVybmVk
-CnRoZSBzYW1lIDgxOTIgYnl0ZXMgZnJvbSBhbiB1bmNvbXByZXNzZWQgQnRyZnMgZXh0ZW50IGlu
-IGVhY2ggY2FzZS4KTm9ybWFsIHJlYWQoKSBvbiB0aGUgT19XUk9OTFkgZGVzY3JpcHRvciByZXR1
-cm5lZCBFQkFERi4KCkNoZWNrIEZNT0RFX1JFQUQgaW4gYm90aCBlbnRyeSBwb2ludHMsIG1hdGNo
-aW5nIHRoZSBGTU9ERV9XUklURSBjaGVja3MKYWxyZWFkeSBwcmVzZW50IGluIHRoZSBlbmNvZGVk
-LXdyaXRlIHBhdGhzLiBCb3RoIGVuY29kZWQgcmVhZHMgdGhlbgpyZXR1cm4gRUJBREYgZm9yIE9f
-V1JPTkxZOyBPX1JET05MWSBjb250cm9scyB3aXRoIHJlYWQgcGVybWlzc2lvbiBzdGlsbApzdWNj
-ZWVkLiBUaGUgTGFuZGxvY2sgYW5kIERBQyBjYXNlcyB3ZXJlIGFsc28gdmVyaWZpZWQgb24gTGlu
-dXggNy4zLjQuCgpGaXhlczogMTg4MWZiYTg5YmQ1ICgiYnRyZnM6IGFkZCBCVFJGU19JT0NfRU5D
-T0RFRF9SRUFEIGlvY3RsIikKRml4ZXM6IDM0MzEwYzQ0MmUxNyAoImJ0cmZzOiBhZGQgaW9fdXJp
-bmcgY29tbWFuZCBmb3IgZW5jb2RlZCByZWFkcyAoRU5DT0RFRF9SRUFEIGlvY3RsKSIpCkNjOiBz
-dGFibGVAdmdlci5rZXJuZWwub3JnClNpZ25lZC1vZmYtYnk6IFNpZXVuIFlhbmcgPGRpZHRsZG1z
-MjUyNUBqbnUuYWMua3I+Ci0tLQp2MjogUmVzZW5kIHdpdGggQVNDSUkgc3BhY2VzIGluIHRoZSBk
-aWZmIGNvbnRleHQuIFRoZSB2MSBlbWFpbCBoYWQKICAgIFUrMDBBMCBhdCB0aGUgc3RhcnQgb2Yg
-Y29udGV4dCBsaW5lcy4gTm8gY29kZSBjaGFuZ2VzLgoKIGZzL2J0cmZzL2lvY3RsLmMgfCAxMCAr
-KysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBh
-L2ZzL2J0cmZzL2lvY3RsLmMgYi9mcy9idHJmcy9pb2N0bC5jCmluZGV4IDZiYTg4M2RiMS4uZjFl
-NDZiNGU2IDEwMDY0NAotLS0gYS9mcy9idHJmcy9pb2N0bC5jCisrKyBiL2ZzL2J0cmZzL2lvY3Rs
-LmMKQEAgLTQzOTIsNiArNDM5MiwxMSBAQCBzdGF0aWMgaW50IGJ0cmZzX2lvY3RsX2VuY29kZWRf
-cmVhZChzdHJ1Y3QgZmlsZSAqZmlsZSwgdm9pZCBfX3VzZXIgKmFyZ3AsCiAJCWdvdG8gb3V0X2Fj
-Y3Q7CiAJfQogCisJaWYgKCEoZmlsZS0+Zl9tb2RlICYgRk1PREVfUkVBRCkpIHsKKwkJcmV0ID0g
-LUVCQURGOworCQlnb3RvIG91dF9hY2N0OworCX0KKwogCWlmIChjb21wYXQpIHsKICNpZiBkZWZp
-bmVkKENPTkZJR182NEJJVCkgJiYgZGVmaW5lZChDT05GSUdfQ09NUEFUKQogCQlzdHJ1Y3QgYnRy
-ZnNfaW9jdGxfZW5jb2RlZF9pb19hcmdzXzMyIGFyZ3MzMjsKQEAgLTQ3NzksNiArNDc4NCwxMSBA
-QCBzdGF0aWMgaW50IGJ0cmZzX3VyaW5nX2VuY29kZWRfcmVhZChzdHJ1Y3QgaW9fdXJpbmdfY21k
-ICpjbWQsIHVuc2lnbmVkIGludCBpc3N1ZQogCX0KIAlzcWVfYWRkciA9IHU2NF90b191c2VyX3B0
-cihSRUFEX09OQ0UoY21kLT5zcWUtPmFkZHIpKTsKIAorCWlmICghKGZpbGUtPmZfbW9kZSAmIEZN
-T0RFX1JFQUQpKSB7CisJCXJldCA9IC1FQkFERjsKKwkJZ290byBvdXRfYWNjdDsKKwl9CisKIAlp
-ZiAoaXNzdWVfZmxhZ3MgJiBJT19VUklOR19GX0NPTVBBVCkgewogI2lmIGRlZmluZWQoQ09ORklH
-XzY0QklUKSAmJiBkZWZpbmVkKENPTkZJR19DT01QQVQpCiAJCWNvcHlfZW5kID0gb2Zmc2V0b2Zl
-bmQoc3RydWN0IGJ0cmZzX2lvY3RsX2VuY29kZWRfaW9fYXJnc18zMiwgZmxhZ3MpOwoKYmFzZS1j
-b21taXQ6IDY2NjUzOWVlY2RmNGRiNjIzZjVlM2MzZTU1Y2Y5ZjJkZmFkMjRhYTQKLS0gCjIuMzku
-NQoKCgo=
+On Mon, Nov 16, 2026 at 07:21:38PM -0700, Jens Axboe wrote:
+> On 11/16/26 2:52 AM, Greg Kroah-Hartman wrote:
+> > On Sat, Nov 14, 2026 at 11:12:40AM -0700, Jens Axboe wrote:
+> >> On 11/14/26 10:42 AM, Sasha Levin wrote:
+> >>> On 2026-11-13, dev@rebasedinc.com wrote:
+> >>>> If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks like the right fix; it keeps the CVE-2026-80920 fix in place.
+> >>>
+> >>> Queued for 6.18 and 6.12, thanks.
+> >>
+> >> Yet another bs CVE - Greg, please invalidate this one too, it's NOT CVE material.
+> >> Getting a little tired of chasing these.
+> > 
+> > Now rejected, sorry about that.
+> 
+> Not sure how we improve on that, it's really annoying to catch these bogus
+> ones after the fact?
+
+How about we make the "rule" that we don't assign any kernel CVEs to
+io_uring things unless you ask for us to?  We do this already with the
+xen portions of the kernel, but it requires you to remember to ask us
+for an id "manually" if you want one.
+
+Or any other ideas?
+
+thanks,
+
+greg k-h
