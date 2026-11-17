@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794935215;
-	b=cNy6dqcKPXcRwJ24yByTtVv9qRcrTlX1/XdG2Z/ZmeJoo6kX+ycbUrFYQJOB/2QhNaVe
-	 CrYr1ERYoGEYbHQzC/z0upv2OzdmwaLjqFZWaDb9e9CBpJXtjAQuDYoOnK+TlkSYxodWC
-	 jVjURMLJJFE+R53iMcqQbV/OecfdoULv45cu0LOHezgOq/0yZk0ppqoelp98I8ro+cP6u
-	 4Va/eoRKRS/8Z0NyLFYeJ11HfLUtqv+ceDl2Z3jvPI4mXZ0bGOWoJSN8oa8/zD0w2ewge
-	 xSlxds3fiBlFkvkIpcJaDPmYtkzdZFzPc0HzkFGjE5XUEVCw32OdI44toHk4Me2mKGw==
+	t=1794935647;
+	b=heMBlxDOUa+Xv6b5dIR8ZXUL34Hq5hZvzRZEzcugHzyB1zWSs0RT+Nk3k62/1hb6NhNq
+	 Seu0S+3mf1U2yXG9/3P0tTDUC6z6j+Lzl13+SIUTLX7OQlU1/90UpZ3PttduiycrFtkuJ
+	 VRxlI1ptXE0EuvEUz6ev0GUqmZCAbM8RKhuxOsVneRhutBEAUdE2gmp1LzqKKjTjlNsfM
+	 fIHAVQHfORd7JJosWrXr5UC+iMNmSjqKgY3eMP5S9y3gy9/QNsouqHwtKjgwbX7bDuwtn
+	 Lba0W8q9NYZ/98P9JUUk9ezS1WuYu64i4MwIeqaLgBRLKofutS2MSJ6AkESPt/FowMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794935215;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794935647;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=3x+0jlSrgAaHaiAOabPc8qLStc9/QqPozrpSv+XIEh0=;
-	b=XwK5V1e/sJXQUP5Mj6pxTxr5EuBlikX90BHtBL+1n31ioUwXuamwQGMSJJQrIia2rBuY
-	 szdohztqufBPDaVfR0vId1pQ7Q6aVBLrEJtF3ljI4RM8NyFU2W1884FE8963RhPsy2jm7
-	 SDKORORQ1EUzNeqPuribsa5nbbYzNAg7wLbCK8ImWBh22K1wHETDbr+joUkkjwUr62Kx4
-	 S5Bp+ofxBAzD1G7UhkzTcISIz9wAA/Z0yl5sYf5YGfAUv1dafiK3eE7H4MP4FsOpRUqKS
-	 XTR9pWRgqz3GAoVzbzW3eGgdmVTM0oSFk9cCNNBLSum1FNTbYt9UeSEn71QprO0dv6w==
+	bh=NRyU0VXlTkdP1/qvlbXfSzmeB6PM6cbuXEo4V1pctGY=;
+	b=4o0M1A629nW4WQ2646DyW7W/Q7mgkWZRFblBxRmcjlw6D7wvhQLOVKSsHCPln8jmcrj7
+	 Pwzo2K8Cn6IBulPYvG6rXTexlFCZPZzdMgEB6I8KxT6mbtSAqJ+RIp6I9ECVmaRhdP5Eh
+	 j7Iy9+1Wso4zXkPVLPKZmKH0ARlT4sV3k/8zi1ng1ucN1PerYYS11SgKQ6nNUXuIbvw8N
+	 WSDj1FxA0gew55UThnK6chOb2d3ODj8WgH69PTb2VD7/HERN9DNEVh14XN2LviYnQIxed
+	 5TqXaMgPG5vI70zyyEzenzi0EBtnwUKUi/lIurSb12KQ+GI4lQEhnxLDX+E4AXKgmvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1CFB4aJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="TNwd9t9/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC16606A880;
-	Tue, 17 Nov 2026 17:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85ECB606A31C;
+	Tue, 17 Nov 2026 17:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1CFB4aJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EC61F000C5;
-	Tue, 17 Nov 2026 17:06:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TNwd9t9/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F061F000C5;
+	Tue, 17 Nov 2026 17:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794935215;
-	bh=3x+0jlSrgAaHaiAOabPc8qLStc9/QqPozrpSv+XIEh0=;
+	s=k20260515; t=1794935647;
+	bh=NRyU0VXlTkdP1/qvlbXfSzmeB6PM6cbuXEo4V1pctGY=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=P1CFB4aJGuX0QRQ3pAADWjoP02+tKboFVQQ03fUP+1g3874UOV1Dpkehu7J0kv3oZ
-	 QESyyaeevXRFo87s6sdstC4TY8S1xeMtU0fa3VEfzwsqQ43p9h5dIVADe6sONUAV+D
-	 Odc7FepYb4Jam0Ha00wlGoNW/2eFNfFc+CW2RXzqFOYWD8rYbjeKAlcUREHZLjA9P3
-	 de01no0XzXMKJk2hhYrjl0X0QGgOjofLHCB2NFjoWIUV9VtD9ZU1gI35uwSG+SowfV
-	 fg+GSWh5zVKjOXRZ1TnttX8oiib8kdCqMZBDLmKEXaP366RKvOcSjN+SZEEKD/xkGo
-	 ++lP1oIISjMnQ==
+	b=TNwd9t9/XGKlncwoxJPsyje6+O4dpP5ku58Mpp7QpykW21hRU24e7OyhFQOFLciD3
+	 29wDKM5s9fQuNCM01MGCMTwcBZHTKwQdsNtqa7KbaUKomgmrOjw4ONVzwknMHgSKWG
+	 1/ngYLQ7fkk6zwnEFmvEkhsBFU0rrWBDVK01KIhZAY8wwmSD8BfUnHzr3O6ECtL3IE
+	 u1gWEaoZknei2o6RPefiK6Y9Pv118lQd9Tbgj+OxIU/l4ZeNMJUeOk7Seiwb4Z23fa
+	 avUcbgeGAljAO6nP3GxtzkHh3NhCflawy+bc6tSkh2Am7hoM2GVwuD99dWB//R/78k
+	 9Tnxc6+M677Ag==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
  <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet
  <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -59,20 +59,20 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
  <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
  netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
- "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
+ Mina Almasry <almasrymina@google.com>
+Cc: "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
  <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
  Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Stuart Clark
  <stuclar@meta.com>
-Subject: Re: [PATCH net-next v1 02/11] net: Add memory provider capabilities
-In-Reply-To: <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 11/11] eth: fbnic: Support AF_XDP page pool
+ zero copy
+In-Reply-To: <6303b161-0f35-47ee-ab70-ebd4e802ae09@gmail.com>
 References: <20261110102039.1002605-1-bjorn@kernel.org>
- <20261110102039.1002605-3-bjorn@kernel.org>
- <CAHS8izMaAv6gX1NeJR+QCf43CL+DC4DgePRNNxSLoE31jxHU0g@mail.gmail.com>
- <87fqx2j5jx.fsf@all.your.base.are.belong.to.us>
- <CAHS8izNVDU8+JzeuwDBmF24C-XqkO+ox01qnTvK665Y8pyWNLA@mail.gmail.com>
-Date: Tue, 17 Nov 2026 18:06:52 +0100
-Message-ID: <87zev71j6b.fsf@all.your.base.are.belong.to.us>
+ <20261110102039.1002605-12-bjorn@kernel.org>
+ <6303b161-0f35-47ee-ab70-ebd4e802ae09@gmail.com>
+Date: Tue, 17 Nov 2026 18:14:04 +0100
+Message-ID: <87se0z1iub.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -85,99 +85,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Mina Almasry <almasrymina@google.com> writes:
+Dimitri Daskalakis <dimitri.daskalakis1@gmail.com> writes:
 
-> On Sun, Nov 15, 2026 at 10:47=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@ker=
-nel.org> wrote:
->>
->> Mina Almasry <almasrymina@google.com> writes:
->>
->> > On Tue, Nov 10, 2026 at 2:21=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@k=
-ernel.org> wrote:
->> >>
->> >> The core treats every memory provider as unreadable: installing one
->> >> needs header split and no XDP program, and any page pool that allows
->> >> unreadable netmem takes it. An AF_XDP UMEM provider is readable, needs
->> >> XDP, and hands out whole buffers.
->> >>
->> >> Describe providers by MP_CAP_READABLE and MP_CAP_FRAG; devmem and
->> >> io_uring keep their behavior with MP_CAP_FRAG. A page pool takes a
->> >> readable provider only with the new PP_FLAG_MEM_PROVIDER:
->> >
->> > Why do we need this? I thought whatever creates the pool actually
->> > shouldn't get to pick whether the pool picks up the memory provider. I
->> > thought if core has configured the rxq for a memory provider then the
->> > pool is forced to take it.
->>
->> Thanks for looking at series, Mina. ...this needed some thinking.
->>
->> It isn't forced today either: only pools with
->> PP_FLAG_ALLOW_UNREADABLE_NETMEM take the queue's provider. Drivers set
->> it on the pool that holds payloads, and keep headers in host memory: in
->> a separate pool (fbnic, bnxt), or outside the page pool (gve, mlx5).
->> That works because every provider so far backs payloads only.
->>
->> UMEM doesn't. The socket gets whole packets, so UMEM has to back the
->> header buffers, and with multi-buffer the payloads too. The flag was my
->> way to get it there, but you're right that it's the wrong knob: it lets
->> the driver opt in, where it should only say what each pool holds.
->>
->> How about this instead. Both sides use the rx_roles bits from patch 5,
->> HEAD and PAYLOAD:
->>
->>  - The provider says which buffers it backs, next to rx_page_size in
->>    pp_memory_provider_params: devmem and io_uring zcrx PAYLOAD, AF_XDP
->>    HEAD, or HEAD|PAYLOAD with multi-buffer.
->>  - The driver says what each pool holds, in rx_roles. A pool without
->>    roles but with PP_FLAG_ALLOW_UNREADABLE_NETMEM holds PAYLOAD, so
->>    existing drivers don't change.
->>  - page_pool_create() gives the provider to a pool whose roles are all
->>    backed; the others get host pages. No opt-in.
->>  - After ndo_queue_mem_alloc(), the core checks that the new pools that
->>    took the provider cover everything it backs, or fails the restart.
->>
->> With fbnic's header and payload pools:
->>
->>   devmem:                header pool host, payload pool devmem
->>   AF_XDP single-buffer:  header pool UMEM, payload pool host
->>   AF_XDP multi-buffer:   one shared pool, UMEM
->>
->> A shared pool on a devmem queue doesn't take devmem, since devmem
->> doesn't back HEAD, so the check fails and the driver has to split.
->> That's the "headers in host memory" rule, without the driver asking
->> which provider it is.
->>
->> Wdyt?
->>
+> On 11/10/26 2:20 AM, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Header and payload rings share one provider page pool, so refills even
+>> them out, and a short pool does not starve one of them. Payload
+>> buffers start at chunk offset 0, and the UMEM headroom rules require
+>> headroom only in the first buffer. A chunk is one 4 KiB device page,
+>> also with larger kernel pages, so rings fed by the provider post one
+>> descriptor per chunk.
+>>=20
+> [...]
+>>  	qt->sub0.page_pool =3D pp;
+>> +	fbnic_bdq_set_page_size(&qt->sub0, xsk ? rx_page_size : PAGE_SIZE);
+>>  	qt->hdr_max =3D 0;
+>>  	if (!page_pool_supports_frag(pp))
+>> -		qt->hdr_max =3D fbnic_whole_hdr_max(FBNIC_RX_HROOM);
+>> +		qt->hdr_max =3D fbnic_whole_hdr_max(qt->rx_hroom);
+>>  	if (netif_rxq_has_unreadable_mp(fbn->netdev, rxq_idx)) {
+>>  		pp_params.order =3D get_order(rx_page_size);
+>>  		pp_params.max_len =3D rx_page_size;
+>>  		pp_params.flags |=3D PP_FLAG_ALLOW_UNREADABLE_NETMEM;
+>>  		pp_params.dma_dir =3D DMA_FROM_DEVICE;
+>>=20=20
+>> +		pp =3D page_pool_create(&pp_params);
+>> +		if (IS_ERR(pp))
+>> +			goto err_destroy_sub0;
+>> +	} else if (xsk && !xsk_pool_uses_sg(xsk)) {
+>> +		pp_params.flags &=3D ~PP_FLAG_MEM_PROVIDER;
+>> +		pp_params.rx_roles =3D 0;
+>> +		pp_params.max_len =3D PAGE_SIZE;
+>> +		rx_page_size =3D PAGE_SIZE;
+>> +
+>>  		pp =3D page_pool_create(&pp_params);
+>>  		if (IS_ERR(pp))
+>>  			goto err_destroy_sub0;
 >
-> Hmm, I think maybe the exsiting knobs PP_FLAG_ALLOW_UNREADABLE +
-> CAP_READABLE covers your needs.
->
-> The pp says whether the memory it provides is readable or not via
-> CAP_READABLE (or !CAP_UNREADABLE).
->
-> The driver says whether it will allow unreadable memory for this pool.
-> For header pools, it doesn't specfiy PP_FLAG_ALLOW_UNREADABLE and for
-> paylaod pools it specifies ALLOW_UNREADABLE.
->
-> The change I think you need to make is: today we disallow any
-> providers if the caller did not specify ALLOW_UNREADABLE (because we
-> assume mp's are unreadable). After your series we only need to
-> disallow memory providers if the mp is unreadable and the caller said
-> it's not fine with unreadable.
+> Maybe I'm misunderstanding, but why is it necessary to create a new page =
+pool for
+> sub1 if !sg? All frames should be sent to sub0, and the buffers in sub1 s=
+hould sit idle.
 
-I'm all in on making v1 simpler -- I'll try this path! So, an unreadable
-provider still goes only to pools that set ALLOW_UNREADABLE. A readable
-provider goes to all RX pools of the queue. The roles and
-PP_FLAG_MEM_PROVIDER are gone.
+(BTW, the reply to your other mail didn't show up on lore for some
+reason, but I hope you got it! If not, holler!)
 
-One addition: a driver must opt in with a readable_mp flag in its
-queue ops. Without it, its pools don't look for a provider. The reason
-is that today only ALLOW_UNREADABLE pools must set queue_idx and be
-created under the instance lock. Other pools may not, so they could
-pick up the wrong queue's provider. Maybe there's a better way?
+You're right, it is not needed. I'll fix this in the next version. Every
+frame fits in one chunk on the header ring, and the device drops bigger
+frames. With SG, both rings share one pool.
 
-Thanks!
+I first tried sharing the pool for non-SG too. But then up to 255 chunks
+sit unused in the payload ring :P
 
 
 Bj=C3=B6rn
