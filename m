@@ -1,89 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794882102;
-	b=GIuopJ79eqDcbzT3abL+PssyOEK8eGKIZmEGkkk5X+6UqmxCUDRslBtqxiI2AktO7uOH
-	 i+xyKh/mBdjEW2w6RVETp7L9jH5nDmYZF8YIW2mCAOE6znyEiZq5RNLd3YDM9hr2TUttH
-	 gwiLOlwMy1d5l8NsiueTmvt1UhGSppjg8UvDiXhytTXqgvlwASbbNLg67ArcxQCGydbYV
-	 +7nOx7Ope4RkQxTCqN86l9ARWtKqF7gAIOTDWAckm1irsEboZXTczZ3VW2SJrpFMH70Kj
-	 GMEA534Bn4t3M9GgbszvH0hHO/T5NM/cdmx7C0JIrw46v4GpBtNIZLvXQ1siEB+bkQw==
+	t=1794883277;
+	b=J3T7CqbATP0b4u5FCkpkd20v9POYEf3tixRtGvIihWxRM1MJOMx6qkq0W3WgX8izPe4S
+	 40KJWW/dO/XUvem9m9BmDXibvYQg+nckJ7hJrhYpO4CcnS22T2Z6lLiiYIcyaKHx9NtOQ
+	 ODTIK+pFXnQIgS5ymZQYw1kMex1VsvSm+cSjWbryenRHAVZ/TnDaZ2ZAAb5QSRHnKoYAf
+	 7CU3rkPNnefW0MLERZIlc1Yhhke3Ii9UF6UHaJp+mgaJkIGPY9pKztp1eQx15Km4bwvko
+	 pkiMUcYylUf+pBhJitEqBWIEea+F7sbx6FBUefgpZr/Q3WCrdbEDZSeTq0JBQd/185w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794882102;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794883277;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
 	 Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=ncld42tDn6XcKva7+KFXwbd1kjlUpIEInfIcN7jos5w=;
-	b=GcLand4YDB6/GEK32hDlirJRIBQQ4t2lyxHh33SevCNy3h2uOURDmyU/dwwYAYhmrI0j
-	 +nQ1cNnyxdtKl8QawfQF03Ff/aNb6JShG6VjzyEeNKXFgNeCjghwRQ2+Lc//zf9JVm/Kb
-	 os8RIfh9zrE7FMEj7YlPIiAt/xQx5HXDWgM7sKMBr+6OOgtRtkr11qO4MguVB73D98y5S
-	 3lRm7yIdoxzd7DOo5/9t7HcmC5FmivHkih4Ke6p145PEq6GPro3e9dEtXBllBzYhdwWfj
-	 cD/e17oRNzpBZIFekZCzZU4LNCIzM29oHgTxQLlYtI0MUhqtl0HLXwrmERtUQGDGzTQ==
+	bh=1Q04N6U4B5Q631xjtJZ+YPrWXutbUwLW0YUT+T/yxok=;
+	b=z9KPwx5eB8tXUyKv9UAaXQYS5lsRJ/q2aSNQN9ceL4kxckuPm8fIy6Jr+acL4yyK/XNQ
+	 8Tmqa2p0m369XEQvyYwImQoUfxWOqwOsJjnXSFQ7tFOi/anGsjdQxbKodETQHWa1FUHHe
+	 DvHgnntssR1wjrTofUy/icZxT8hCuvPpw3aMFPn+KeE4QxMiz4T9mWmjHPvZZhXAnEyrY
+	 fLQ1Sp1jAli8sAhz780e9Y6tgjexkqh5J/VYlH7HDPt+16cmjUzsn1ODWrK4Bn13iEbfA
+	 l4FD5SISKwhhZWBJsPjeYSjz2SzSQJdtJJNU1JmApFBx62hJMZ+0+2Rdkd+PW+lWcFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ap+DPoBE;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qpv7yFj3;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE23606A323
-	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 02:21:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0FE23606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2389606A330
+	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 02:41:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2389606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ap+DPoBE
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-38133db970bso701562eec.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 18:21:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qpv7yFj3
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1a2761c69fbso317027c88.0
+        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 18:41:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794882100; x=1795486900; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794883276; x=1795488076; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ncld42tDn6XcKva7+KFXwbd1kjlUpIEInfIcN7jos5w=;
-        b=ap+DPoBE17krcJNjdiBru2o3KKfNUg1GqppeX7H87tHY0/EgdFC55amn498E/TRGjI
-         XOkt/8dRiA2ZEWoKm2mXahBPIGJj5CP1RNfob9xIUSEk696eyS7bboReH0vs53MS3pxC
-         SlQVJq7Jp5mHiDczDMSuyDBXFvNVWASOX83rt7zkUtQIoJIxe74zqjP3gH0SIdDj8A6L
-         hMX9qTAAGxgqVJ1o7lfHqnl68D0hhTnPhsFqFWopSkWRl55CbFV3SkcrsTgXu7z2jtTT
-         Qj7JHCgSMoyjMokpywBA6Fp3/5cD1ijtcBTMlMdvVgBdt4lYdZDEz8BNu25oJt7J1SVV
-         cv/A==
+        bh=1Q04N6U4B5Q631xjtJZ+YPrWXutbUwLW0YUT+T/yxok=;
+        b=qpv7yFj3Q2nPcAN7KHsRHLBqCNYBADkrVnYKuUVtR6MFdoG3PyldCv+tn8xynudmqf
+         5WBOo/d4tQR7jwng0FNFzJVW8QHMJMJEg/rXm9Rd1Z999K6acAViLSKcBHyZFcpC9T7p
+         eTQg4p0CT8t0fTUgNHgSOvUC5vNrcrM9aOCWvORmSkEwHVXJGFf5NC/WJaUtesFB1RLc
+         3plkN4f4XYdRCTU55lOuY0cKX6RUz85BN0bs1FoFkHNETxr8uOfqgv7uAV72v24kYZ/u
+         gU3sLxI7YDGQmj0JlKG0/ralskhVX4GRtdhP+A3NFPlgFrISqqiDUZ+YmCx4TBfAKDhS
+         gTlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794882100; x=1795486900;
+        d=1e100.net; s=20260707; t=1794883276; x=1795488076;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ncld42tDn6XcKva7+KFXwbd1kjlUpIEInfIcN7jos5w=;
-        b=26RBQnTjyh1NTXVWBmq7uTw42KPdyvs1hhtZNfq2qhkKcPY5HIIEctboPZbabuIwaD
-         YTs7Yowh+otDgy/Dwjf1nlUgpmiMTIcvvJnoJJKEJzNF1UcgwHSY7QI9AiCfacS3X2rb
-         4yKw1bN43L/vPHqEgDgYeR7WXlan6zc2rKp1d+oas5nzj0dLNQCab+bNqr37nx4M55eL
-         LcqL0a7cSdwxJTGSpou8Tna9K19X0SY3jhfxpDJfqloOmwUhSSvELTPf6AvIwFMpIJEd
-         2D83qrQ3pyUZdULuo8/YqPTo70sU/t2p8gEt7ctKDc0tJmt0aswyDH56URTirN8Q42Au
-         o8zA==
-X-Forwarded-Encrypted: i=1; AL+hErEYG8rdK8nmsUVKC46L8Z9OyJsIZ7ne4nMCt36XtdfJhZ7ULe1olwh/VUbZgObzzGtPjmQFdlClQw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Pp+tjmpplb+Vnb3eFeUqlyuF7+kvs0jYYDFfn7jQL+rNxvhC5
-	pYYKp9BzKOFL841bI05DcYN5/eLtH7nThNIXfVVdU4UDexLrB+1CrtZN3Y0TDNxMbFI=
-X-Gm-Gg: AZFdTZcsmo9mtGKR+guMlUn9ZOBBD2Hr5H1oe8Ns8IiLMS3qccf7u6li+06/45a+Qob
-	aHUMc5p/babzZPXMLAc6CZeAfY4S7lEj34gwTwlnD43OW2cgNEW1hvSC/TZ8GtFxSuOmbtiU3W8
-	GBAO5mvgbM/E7D1X5foZvpRmeanzvaKheaaFv9edGI67XMgc5fkqB4fzEuROoTASwuzGqnY8ixz
-	D5sQefStwB5AG9JpNT5tLyn6eQESInIOKiukgTpCtBbhpLNxpcC6mxkvi4gYOlMuKisXk4xOdze
-	amElEPYKDvPQMH/DnOKoo60GSQ2os1DjfEJUOFbl51L7w5Lj7287rsnVBbsoSnl6p59pIrueNyu
-	wyjwhRrDzSDS4RLABLIo91ooTmJoYDrxTiKgRj+ioZArND6Djy6itNqX70ygdKe37YM/3uAy4eo
-	y3JbLCFlrcfxsgXc9pEwomJwMhcxMXDcN4+ZCXgscwP4H3orUgdRoagGsfGuQGNg7KMzWOHX7yt
-	+3/Th4MbKrlxpu/7UlNvI8MksSx4hZ1/WNrW9NcAZ+t9eJA9Ee+Hjk4AIDlQsZt7L694AGR/4hR
-	pTLdY7075Nw01cD9b7MTWIWd1Vy2zL3DasJ9xNBa9/ILKhxBnBkz48xm5RYJkKIYLpiwfyD00RY
-	a7yzNgljgRsnG
-X-Received: by 2002:a05:7300:dd03:b0:351:2958:1740 with SMTP id 5a478bee46e88-379681c67bfmr11608907eec.37.1794882099628;
-        Mon, 16 Nov 2026 18:21:39 -0800 (PST)
+        bh=1Q04N6U4B5Q631xjtJZ+YPrWXutbUwLW0YUT+T/yxok=;
+        b=adHCGMISnPOWgv+B0vU8K5U/41RVTxFyQfA+/SGGRSKE9qX3ljSzmlb8JR5gjRmzVf
+         1l9i+ah96OqoieQpz1+hU8/JmQRxCTVxaMAA+071GesU+wyBrzpGLIymS6Tic3ONazwa
+         zwxrC4UUZPMHnDerdGvcMzIBP3Sk67eLw6GgwSe1qz1kUuF5lAnwd0+QuFsWyOyp6sEl
+         scEIpyS+xRMJi+AA50nBX95/PMG4lq0lH2KUIJP/M6A9TaXNsdux9YXN9HtZVzx5n9V/
+         GcDtNMvUlzFH0tjlxcU0EVtXYRXJTuLAMBYxC7iXs3R+6+Q0jEsJeEE2lMHMj5cAzRDA
+         ObcA==
+X-Forwarded-Encrypted: i=1; AL+hErGjmKx6ou9FiUTB3f4s5yLVENKGdoHJpH3fw45G2qIFt+VYhjPuPP1uXB/f0ZXV0SHomovh6STnfw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8EfqSAeirJCHHnqKiyoMPLpLTQvPOTiuirYG4t/KuTG1Q+xrR6
+	ozEEtsUb0zaPdBOp+lPa8rDKbwhbMnEAntGQlZd5TNFYln518Gqa2ubNdmJUQTa0D15LS8uGxOy
+	Uym58NVc=
+X-Gm-Gg: AYBFou2nzUG4zfa3XKaTsOVG8v+dgMBxo2HIW6/nVEpDWYRcmj5jBVeQxhi3HSGdYJ0
+	q8pbM+qu9N2aMaptfkDlVvbAdIvHQPNhsFGCjskGhNSINjIbeYTaag4e9X/c/Is4IrD0yvVoSXR
+	iui5VBG1GuCKIqhwQU68BSQFvxrNNoA88AVTbFXVKfz2nydQA2DpNDd86yHVxJMOr147F0iIvU9
+	IOPm1h2ybgJp+HhnQfIVcBtw+/XyHmMZnWBrRLz6H4XsznDQXelWjrhzcNAIbuGBs4YKBKz7h8S
+	WkI6whI4/rMrEAXN9XvU5LJNNkTeR/tbtJdRWVVwbqPsWgpS41fjHzzwvoR3WH/ASLbagFUtfYh
+	VP8c/OCLjaaO22QjaROAD3vxKy45NaUuiG9Rq2XMsiPuKjPZuvlEt8jfDTXeRIA+DfNPUHMvQJa
+	E8DRMYn2Vzg3+CgBO3ZJIbOFPFjQtEUNVaNWMBSDL0BBp+v5lcdDrC8zR5wbyudgPtgt4M6m5LO
+	0dudfWOgMcdZQidClOYAqFgk/yMokbZRgRW+z51m07SXCchJCjN7FOLKgXpytTGNQfM6Fgq6P61
+	ex3821Ks33YbdyE6A0qE6QdNl2KmRZh9vkdHlhvWPcX1czijJ8qxSUWyd6bcRhp3iOmR9Jf1pC+
+	6yKZ/NjXUj/CKyjQhE5DWTjJLaGzGsB5OBg==
+X-Received: by 2002:a05:7022:4392:b0:144:c112:5f24 with SMTP id a92af1059eb24-1b503175a36mr18573024c88.25.1794883275826;
+        Mon, 16 Nov 2026 18:41:15 -0800 (PST)
 Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37956bad134sm47264660eec.27.2026.11.16.18.21.38
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50309b27dsm35592113c88.2.2026.11.16.18.41.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 18:21:39 -0800 (PST)
-Message-ID: <07947062-2974-4630-90db-1556e25b50bb@kernel.dk>
-Date: Mon, 16 Nov 2026 19:21:38 -0700
+        Mon, 16 Nov 2026 18:41:15 -0800 (PST)
+Message-ID: <71233dfb-bcac-42df-afd4-45b65dabbc09@kernel.dk>
+Date: Mon, 16 Nov 2026 19:41:14 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -94,38 +95,34 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: io_uring/eventfd: registered eventfd signals only once after the
- cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sasha Levin <sashal@kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- Yufan Chen <yufan.chen@linux.dev>, dev@rebasedinc.com
-References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
- <draft-agent5-0001-re-eventfd-signal@kernel.org>
- <5d92861f-9a4d-4810-8700-b9e457ed9c86@kernel.dk>
- <2026111605-deskbound-clobber-a4a1@gregkh>
+Subject: Re: [PATCH] io_uring/timeout: don't rearm a multishot timeout on
+ cancel
+To: Cheng Yongkang <teel4res@gmail.com>
+Cc: David Wei <davidhwei@meta.com>, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261116044519.281756-1-teel4res@gmail.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <2026111605-deskbound-clobber-a4a1@gregkh>
+In-Reply-To: <20261116044519.281756-1-teel4res@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/16/26 2:52 AM, Greg Kroah-Hartman wrote:
-> On Sat, Nov 14, 2026 at 11:12:40AM -0700, Jens Axboe wrote:
->> On 11/14/26 10:42 AM, Sasha Levin wrote:
->>> On 2026-11-13, dev@rebasedinc.com wrote:
->>>> If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks like the right fix; it keeps the CVE-2026-80920 fix in place.
->>>
->>> Queued for 6.18 and 6.12, thanks.
->>
->> Yet another bs CVE - Greg, please invalidate this one too, it's NOT CVE material.
->> Getting a little tired of chasing these.
+On 11/15/26 9:45 PM, Cheng Yongkang wrote:
+> io_timeout_complete() does not check tw.cancel. When it runs from
+> io_cancel_local_task_work(), a multishot timeout that has not reached
+> its count still posts an IORING_CQE_F_MORE completion and rearms its
+> timer. With a zero interval the timer expires again right away and
+> queues new task work, so the drain keeps running it until posting a
+> CQE fails.
 > 
-> Now rejected, sorry about that.
+> Normally the CQ fills up quickly and the request then completes. But
+> if userspace moves the CQ head far ahead of the tail, for example to
+> cq.tail + 0x7fffffff, posting keeps succeeding and ring teardown is
+> delayed for a long time.
 
-Not sure how we improve on that, it's really annoying to catch these bogus
-ones after the fact?
+But why would the app do that, to shoot itself in the foot?
+
+I think the fix is fine, but the premise of it is very odd.
 
 -- 
 Jens Axboe
