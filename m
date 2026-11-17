@@ -1,95 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.167
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794883610;
-	b=Ixmx/5LFSlldo8T5Cf8p+MMc9Ebu66514NyJLaY+grINj7xffcmqxQdWB5IcQD1kY0mE
-	 /gKSx24ZDC6Rof23Y6QMHaxwRFhju7ChJX3vAVLP/mTKp+fIU59WbWj0gCQ8K7/m3l8by
-	 qdAW6uDvICmOZLQMlLTYelCwdufodeywLJmY93LgHS+0vO+pnW6JFLfXOZMHg6kUajyr3
-	 Ma3ux+ehBsZMh5E1UH6vXoL4AwZFJJFR8B3Pw5GRHX7z0OAJ7ay6uJ2gUqwNSd0vuV1fs
-	 J9qQoaGVpS0YU1GWrERFem/M0/tpMppghY8Hq9oz0hYLPYYuvRlOvo8+W+7L2zHcqrg==
+	t=1794883611;
+	b=Mhdp3cEdHQVZcJDW5AvbTSSdLAIZ7IfaWq94jUkzDBHr8cNS1J4ToDpVLneLcyU8miNd
+	 RXJDrTgtV0SamcuNeNvESJ4Dn1N0ajbvXROuzP1qUwSQL+jv71xwsN8448eboHE19aqVX
+	 VzkXXJ8a6bgTwywleE0i1h/evESIzBfheR2CQMmnniEnDzwk6p/FyGmRGnC+DEocokFRY
+	 2hjV/ceL4PmHY+LD8zpnwnlpixMWzDTKyF5HZS0jLJZsNy5Egq8t4ciEK6nhQaGrtncno
+	 gDT9FbrQV4Iqv8YLfTfnY7OvM/yXWphOhzPzyTiAwjxukqEc6UNYM9tFw6eiG+Q+E9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794883610;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=QRvR9Vcznhv/w1wRd/LL8U5gAXQ3HudvDWpKY1ruICk=;
-	b=NVa05nlLMcnNA8781tE9gEZMyhm1/tUzbxX1x2ZzRO7/i+WlTBbkNuCvcIhQIrxjdTgZ
-	 ENfiPhM2rzyqpvElABl2Ip7Nu8vqtN3Wv/YYnM4xPEXh+bDmqBDiWaSVjLACsbWMb9b7h
-	 94cjVvmi7qgQ0vCRupwqiL/6j6+ZQl7RPGt2Yb6XK3uNV8/MJFrayMEmE58ZizeTeemJE
-	 stHP1mvlIaReXOjec/Nki5ohptBF6jvEeQJOrHi6vXBQwa3b8wwoSp7FZRdE4phk/HxCC
-	 m2HiVWmKbUI4KtoC8hM9gOHLfu0rj36M3NMA+fws5qUqkzzLG8kI9GjyLFLkEZivexg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794883611;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=7czWWVAT5JV9Hgu1J/we5C/Mmw86nPPn7DAH8Olg8dI=;
+	b=2km1+werLIzls9kTNUUnfn40fX47Mq4WjCiPpblJjqCprrYIli0QcfgrAaF3tthn8085
+	 so0V2rvJvOzmpR5g/r2BYbiNxUffVqLxpsXE4ZgoILl7DbHUmbf5N3wLGR2v330oey93T
+	 C9Tg7ICsVbt4b7fM4XxcHkIW4HgWJy+MDTj6Us6F2w81kqUyVibYS/YkadqZ2chWGXh/A
+	 AofmmPWDgpWcWNb4ClZ5DNI6MLXRf/0aMYdQ0fdONC9Rwl27vQNeaEMRGg+9tSvzpH179
+	 46Hseu2XC0/PzFxGAdOglI3HwJRDlNqJ5wINuN0xH3EqNdJ+3KPiBgUf1ABxnatqZsw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Tg7KasK9;
-	arc=none smtp.remote-ip=74.125.82.174
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Eoe2YQDc;
+	arc=none smtp.remote-ip=91.218.175.167
+Received: from mta0.migadu.com (out-167.mta0.migadu.com [91.218.175.167])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E54B606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D1C606A332
 	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 02:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E54B606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07D1C606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Tg7KasK9
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-38133db970bso735952eec.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 18:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794883609; x=1795488409; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QRvR9Vcznhv/w1wRd/LL8U5gAXQ3HudvDWpKY1ruICk=;
-        b=Tg7KasK9GenHBhrAXrzo34P4RoCHPlENdUm0dbB57dGDrdQtm5RXNp0Dz9/Pcspwg6
-         r3uzL8tWzxJ2WsBQudX33ajhMtlgFFWBxLZfKAWuUtBcXKSwb80qfFCRCHQzLg1Ad4Mf
-         ZGihtitnqKdt9X1/NjPRTRt462GUJY1t+VYytGMFAPw96NyMqlwee0Q1rT6cQz3p7fvb
-         +h+C41+J3kgW4AFqxp1OIadcdfo1MyJZk4KGFIXIepRtmPjILl8zW5zhXJR5MEoop5Y5
-         V81GA6v4kQ+fL0P2g2EI/jVGeOjimhD/s1xaUAnKoXkTnfkdIK+qo4oqTaXGn6YuuECj
-         3YBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794883609; x=1795488409;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QRvR9Vcznhv/w1wRd/LL8U5gAXQ3HudvDWpKY1ruICk=;
-        b=SemYIa4d2mjc9WVSb0fFEqox1tZyEOxgCD50U38JcYkmWw+Zg6BktltR3M03raNMl4
-         PITPYOnCr8cmv8ZSp40vcSYARfyfi3EUA0zEwRDwETv3QxutDggJlldwaNwdNH4qtCVn
-         fORoPZWx46l475wpSlZ/Eb9tv9iUiVAzYKMWzDOhY9xgUA/QrrmiKtuVQ/S64K4sAXv/
-         XXjpDN7NKF+8ITA+yRVFNIKmoTQA66+zm8p+xjN/cg95nv9j7OGuqcfkrp8Wqnsu6VZd
-         LnNFbnsnFTKtDOJXERFw+lD3bdfqSw35O3qP1PIa5vwkPTJzCrc1YI+WNFXN77Mtd8K6
-         r7rw==
-X-Forwarded-Encrypted: i=1; AL+hErHyDKby7TcxTd4luNcvhz55P1VSTR2ftJRZnfgDWXWK7XR7I/d7/uJ7Xv1yt71G0oio/JfbGYdR8Q==@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ur+xQJlDH1M6fjexrezZTvzmUDqPc7cWQ778ofQNKPyK7a8TM
-	9jf2zkIWpRxZw9ecX2krRc4NbCks7NvXkfSylkMrTjQTgk9XoO1L/svY
-X-Gm-Gg: AZFdTZcGVnE36bklFMztWog+/o/extsKQ1wxjky/FkhwANFOTNqr4r74hkBcxL8jGP7
-	1Yj44BD7qd4vr0o7b+9x6MFS3OG77m3B1ayQ0drotDDSMSSFW8a23tng8t1mEs7BbbJKhndboSY
-	UTVTrMsRUDxmSE6l8jrf2+ixzRa5M+5Bxb2CDaYxDejKmsAn5tNWNiSQigOxDoM8nz4WN/rtN50
-	fKJD8TxJbvTKgVq+Ho89G1IrmJ+DB0wMJwSLvrPUE6ukxMAJ/S5PY+tioQCnjVnbWedwzzqgLPv
-	XMMEXQuBhwibtFQ1BBSTDe/3j2wEGW5aN+cV7i9+7dva35wLltBf6UQYBJiHbAaz8uKzdSMII1H
-	qOVYL2V4LNhlk+zUE0R5Xqo/0LHxdwlzlbCv/42jmUq47wSzBvWmcxUmZY6bn9laA+4uQp5fiTl
-	559n4iD5OscQeID0Hc/8KgtqThRnRzmRJ5Ox5W7iqOUuiInzU7l5Nv5mF+kzoJw8tz10/FGTzpz
-	slv2SpERJv3wsmEK1m4oDoE0StplCau3TWKdKQgycjJAeG23qbV1qtfIIt7S5jKsHp/hA/wD4i9
-	wcBD8D6mpXQqhpwbnjjAPHLtuwu9q/vlTziO6WabDCyaADW5q1EPUb/0v48bXBAkLhWm
-X-Received: by 2002:a05:693c:894c:20b0:381:a037:b060 with SMTP id 5a478bee46e88-381a037c019mr74628eec.9.1794883609155;
-        Mon, 16 Nov 2026 18:46:49 -0800 (PST)
-Received: from youngkk-vm.localdomain (67.216.200.102.16clouds.com. [67.216.200.102])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955a1c5c2sm39063508eec.14.2026.11.16.18.46.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 18:46:48 -0800 (PST)
-From: Cheng Yongkang <teel4res@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: David Wei <davidhwei@meta.com>,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Eoe2YQDc
+X-Envelope-To: io-uring@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=+lyCNsOGqBEwZGBZXNbbfgivTSkomZxjKHS28V8jHeM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794883609; v=1; x=1795488409;
+ b=Eoe2YQDcrs37v0hCU297WOF3bnEyAH/TMkkjhWVpjtIfopIe2Rr5hf/Ol10oyukvWybRQB5q
+ IAM4nErB/BWWJQM1DcJuIkn1eSFLL3Hug3L3ilQ6DC3bcNxW0O14Tf1pTtCeKzzpyEyE+FrtcC1
+ Q66sxA48nc9HdXHl8OsKufw0=
+X-Envelope-To: io-uring@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id de5ce04a605127d5;
+	Tue, 17 Nov 2026 02:46:48 +0000
+X-Mizu-Trace-ID: de5ce04a605127d5
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+To: Ming Lei <tom.leiming@gmail.com>
+Cc: Qiliang Yuan <qiliang.yuan@linux.dev>,
+	"Martin K. Petersen" <mkp@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] io_uring/timeout: don't rearm a multishot timeout on cancel
-Date: Mon, 16 Nov 2026 18:46:43 -0800
-Message-Id: <20261117024643.478059-1-teel4res@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <71233dfb-bcac-42df-afd4-45b65dabbc09@kernel.dk>
-References: <20261116044519.281756-1-teel4res@gmail.com> <71233dfb-bcac-42df-afd4-45b65dabbc09@kernel.dk>
+	Mike Christie <michael.christie@oracle.com>,
+	Bodo Stroesser <bostroesser@gmail.com>
+Subject: Re: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an io_uring based user backstore
+Date: Mon, 16 Nov 2026 21:46:40 -0500
+Message-ID: <20261117024640.3184554-1-qiliang.yuan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <avprIhtn1TuYLX1b@fedora-laptop>
+References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev> <avprIhtn1TuYLX1b@fedora-laptop>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -99,26 +79,139 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/16/26 7:41 PM, Jens Axboe wrote:
-> But why would the app do that, to shoot itself in the foot?
->
-> I think the fix is fine, but the premise of it is very odd.
+On Sun, Nov 15, 2026 at 08:32:02PM -0600, Ming Lei wrote:
+> This is ublk's uapi re-implemented inside LIO: FETCH/COMMIT_AND_FETCH
+> per tag, pread()/pwrite() with (qid, tag) in the offset, and buffer
+> registration via io_buffer_register_bvec().
 
-Agreed, no sane app would do that. The only thing that made it look
-worth fixing to me is where the cost lands. The drain runs from
-io_ring_exit_work() after the task has closed the ring, so the time is
-spent in a kworker holding uring_lock, and the app can no longer stop
-it by being killed.
+Yes, the interface is modelled on ublk on purpose.
 
-Without the bogus CQ head the timeout is still rearmed during cancel,
-it just stops once the CQ is full, so the change mostly makes the
-timeout handler skip the rearm like the other cancel paths do.
+> 1) If LIO is required (vhost-scsi, FC, SRP, iSER), serve the device
+> with ublk and export it via target_core_iblock. Same per-queue
+> io_uring, same user copy and zero copy path, no new uapi. Please
+> benchmark that configuration, with UBLK_F_USER_COPY and with
+> UBLK_F_AUTO_BUF_REG, same 32 queues and threads.
 
-I can reword the commit message to lead with that instead, if you
-prefer.
+Done, with kublk from selftests/ublk (loop target, -q 32 -d 128, "-u"
+and "--auto_zc") behind target_core_iblock, against this series with 32
+queues. Both serve the same 2 GiB file on tmpfs. Same VM (32 CPUs) and
+fio jobs as in the cover letter, three alternating runs, median.
+
+Over tcm_loop:
+
+  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      201                358    +78%
+  4k randread, 4 jobs                     614               1440   +135%
+  4k randread, 16 jobs                   4456               5899    +32%
+  4k randwrite, 16 jobs                  1206               2077    +72%
+  1M read, 4 jobs                        6444              15465   +140%
+  1M write, 4 jobs                       5638               6941    +23%
+
+  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      195                330    +69%
+  4k randread, 4 jobs                     621               1674   +170%
+  4k randread, 16 jobs                   4051               5773    +43%
+  4k randwrite, 16 jobs                  1140               1952    +71%
+  1M read, 4 jobs                       27568              49666    +80%
+  1M write, 4 jobs                       5326               7262    +36%
+
+Over iSCSI on 127.0.0.1 (iscsi_target_mod and iscsi_tcp in the same
+VM, 16 sessions, one fio job per session):
+
+  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      136                154    +13%
+  4k randread, 4 jobs                     578                698    +21%
+  4k randread, 16 jobs                   2516               2412     -4%
+  4k randwrite, 16 jobs                  1512               1739    +15%
+  1M read, 4 jobs                         613                716    +17%
+  1M write, 4 jobs                       3747               5218    +39%
+
+  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      145                153     +6%
+  4k randread, 4 jobs                     576                679    +18%
+  4k randread, 16 jobs                   2740               2222    -19%
+  4k randwrite, 16 jobs                  1716               1508    -12%
+  1M read, 4 jobs                         778                805     +3%
+  1M write, 4 jobs                       5235               5262     +1%
+
+Through vhost-scsi to a nested KVM guest (16 vCPUs, 16 virtqueues,
+worker_per_virtqueue=on), fio running in the guest:
+
+  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      335                213    -36%
+  4k randread, 4 jobs                    1436                844    -41%
+  4k randread, 16 jobs                   2341               2651    +13%
+  4k randwrite, 16 jobs                  1467               1640    +12%
+  1M read, 4 jobs                        8077              21991   +172%
+  1M write, 4 jobs                       5006               6943    +39%
+
+  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
+  workload               ublk + iblock (MB/s) this series (MB/s)  change
+  4k randread, 1 job                      339                306    -10%
+  4k randread, 4 jobs                    1521               1030    -32%
+  4k randread, 16 jobs                   2589               1987    -23%
+  4k randwrite, 16 jobs                  1518               1669    +10%
+  1M read, 4 jobs                       37494              39978     +7%
+  1M write, 4 jobs                       4519               8240    +82%
+
+So this series is ahead over tcm_loop, about even over iSCSI, and
+behind ublk + iblock for 4k with few jobs through vhost-scsi. I have
+not found out yet where the time goes in the vhost-scsi case. With zero
+copy and 16 jobs ublk is ahead on both fabrics, which I attribute to
+auto buffer registration saving the two extra commands per I/O that
+this series needs.
+
+> 32 threads against one, over tcm_loop with data in memory, measures
+> only the hand-off. Please run a real fabric and explain the -13%
+> single job result.
+
+Same fabrics, data in memory, TCM/USER against this series with one
+queue (one server thread) and with 32. Over iSCSI:
+
+  workload               TCM/USER  1 queue          32 queues
+                           (MB/s)   (MB/s)  change     (MB/s)  change
+  4k randread, 1 job          138      157    +14%        155    +12%
+  4k randread, 4 jobs         538      679    +26%        685    +27%
+  4k randread, 16 jobs        720     1101    +53%       2631   +265%
+  4k randwrite, 16 jobs       859     1228    +43%       2161   +152%
+  1M read, 4 jobs             756      799     +6%        765     +1%
+  1M write, 4 jobs           2263     6075   +168%       5379   +138%
+
+1M reads over iSCSI are limited by the loopback TCP connection for
+every backend here (retransmits and zero window stalls), so that row
+says nothing about the backstores.
+
+And through vhost-scsi:
+
+  workload               TCM/USER  1 queue          32 queues
+                           (MB/s)   (MB/s)  change     (MB/s)  change
+  4k randread, 1 job          201      237    +18%        238    +18%
+  4k randread, 4 jobs        1095      902    -18%        843    -23%
+  4k randread, 16 jobs        957     1119    +17%       2865   +199%
+  4k randwrite, 16 jobs       749     1098    +47%       2599   +247%
+  1M read, 4 jobs            5373    15317   +185%      56532   +952%
+  1M write, 4 jobs           2064    10948   +430%      27074  +1212%
+
+On the single job over tcm_loop: one fio job submits from one CPU, so
+only one queue and one server thread are in use and it is one thread
+against one. The TCM/USER handler finds the data area in its mmap and
+takes a whole batch per wakeup, while the server here issues one
+pwrite() per read on top of the io_uring_enter(). Counted over the
+whole system during that job, that is 1.1 system calls and 0.27 context
+switches per I/O for TCM/USER against 2.2 and 0.39 for this series.
+
+> 2) If the goal is iSCSI for userspace storage, keep the kernel out of
+> the data path entirely.
+
+The goal is the fabrics LIO already has, vhost-scsi and tcm_loop as
+much as iSCSI, for setups that run TCM/USER today.
 
 Thanks,
-Cheng Yongkang
+Qiliang
