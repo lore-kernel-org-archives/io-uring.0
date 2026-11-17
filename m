@@ -1,94 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.111.35.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794883764;
-	b=bm9Ah2rQGfWhFhwrrc2HOdJemPZDXrj0EkX6DXL9E0wQjQFEA6WqUFmRbWAG3u65T34G
-	 VufKyfVMvp/V0wmXih8tt74PeO4krkqClHHiVJud2z9nlbQo2HPq9EqOsjL6X9IQo7yMt
-	 k82Ev57+4P9mr0hlDK+Vg0xGPZPBelZ7b7VsKRIIgZpNazbOzazb+nKVfiseR0wPhNmJs
-	 OGTaJ2hzJkGemYGLaj2ig/vZ3LQ6XzVGAjUGwNCXJw8JHL8H7b5nx/iCjLSvpMbfQ5yF/
-	 qiJWEC0enONCyUgHQ3OFUtDLnitTzEOpU4ZYXqJFH8rEUqr7wHvxZEAkbQt5PUhACrQ==
+	t=1794889755;
+	b=ZPrryM5b9m1u4NOpsQcn8khmHNVEYtuCIAKEBnLZuZ2S9RO17skUuiWvAzAmvtrUOIbU
+	 ehpNo0dSFMykJQurqexGtja02gf2Iv0MLPxRnYi+XIQUdGOFAPwO1yO4bWhvpZxSkOVMh
+	 k8ObdCGO2Ck+gqVh+DnTKd/Hmj5mviUPgCltMDf58fgKC6xgqgjQqb1diEteo5YdVLg3O
+	 vdoLfEPwOwtIB2DzmejVAIy9B6+YaAkdDEAe5dy5IyNxT1p4MlM/hi4OuCIz+WMKXmgUL
+	 cQo8/eN5EWit3PB4AJa7eRdZ3tGnElXOyxw2aLQsshWec5vKpmUx6dDv3wUmC25gfnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794883764;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
-	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Mailer;
-	bh=gUJ/mTAIlGtpLVkM7Z4srYRjyZABwmfl8+lgRfY7VNQ=;
-	b=xqQhJFs/OoVcJzbUhoUFll01CTvyZ7Q8PU50fg9O78Zi67N0Q5DAN+o0wtklxlSzGCjd
-	 k9fV/XBN0u+pP0WHRSRQsShpsofXp2TVcgWErMndcU4pynna1+6I3NzmnZ9Ubh6iX5SKY
-	 3bXks38NEiMM2QsS9acwcRgG+X4RozS61ynX/XKF2dXfiIRSEGUKh4qh1dm67jzcUJj/l
-	 6XblKX/36CSRFkmII3xY5CI1RbqTzgnOh2PMqEkXrOTfw4Ru/eMVaXv1anYeD714e2FdC
-	 gsxVlHWu6XcjylXwySpCFihJHWzWiizF716/LWWg5KgooZeSq6Ihy8k5Mfv/xVuPDNg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794889755;
+	h=DMARC-Filter:X-Originating-IP:X-Works-Smtp-Source:Received:
+	 DKIM-Signature:X-Session-ID:MIME-Version:Message-ID:Date:From:
+	 Importance:To:Cc:Subject:X-Originating-IP:X-Works-Send-Opt:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=VBKHRt+1rWWAgiBbsb4DvQCF9QJO4kV/l0okGQpWWl0=;
+	b=Px+jqqXIiS8Axt/wlI0kqTmleuU48gM6i5Goj/BnaaThKYQUNAJu4jzMcHhE6AhKjRJs
+	 EiIRryzAgtclh6BSwMMFb6qYWrmRSjEnwfnjgaRg4YZuxBsLfyHpVwynHT524PF5UXeQP
+	 Y7aNCK2fHiebgOq7f32G1arct8ULapWCo9CsFlgPbiPAt3/F7dJUUsHdVW9jQS2uRaXp4
+	 84e+2ByPwVP1gkG6ds1/DRABWjCr2GHbRw/XCQ4XNrklJJYRtOWux2dLjOtioIas7yJap
+	 x3padvdwjTDKNyMkljjL+podxsWBcSZwQceK1KH5TvoV1jav33vDurbD//2Nui6//pA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hjaLq9Vr;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=naver.com;
+	spf=pass smtp.mailfrom=naver.com;
+	dkim=pass header.d=naver.com header.i=@naver.com header.a=rsa-sha256 header.s=s20171208 header.b="Q/sjmCuS";
+	arc=none smtp.remote-ip=114.111.35.152
+Received: from cvsmtppost03.nm.naver.com (cvsmtppost03.nm.naver.com [114.111.35.152])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8844E606A33E
-	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 02:49:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8844E606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754B5606A31C;
+	Tue, 17 Nov 2026 04:29:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 754B5606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=naver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=naver.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hjaLq9Vr
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso2037025eec.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Nov 2026 18:49:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1794883764; x=1795488564; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gUJ/mTAIlGtpLVkM7Z4srYRjyZABwmfl8+lgRfY7VNQ=;
-        b=hjaLq9VraRkmZ3WvbkBpbzvfl0aUS6cyn5IGTECbEcV5FGLXjTH2bbiPrB/i4nFdwI
-         9FJqg3WBywSqI0Qv3t0Lxk1L6zqArH+bH4alapmiKhdwVUGjRXPhfQy3brAfnNx02HAY
-         Q36iSD26wpjGgk4+1TduAmiu21VChpK2ysq6NoxhP2lPaElRZwD89TYFXU4kfF9Y5Fyv
-         NxfvLaLtcLORHwY7GGEm8dG5H0EbItGELMfEK8RoUlaPoNR7P4pzUChOEWtrZGCWpq2y
-         FzWcT45l6ZNOgVJOMnpnaPBi9Bef4eVViOjzX5g4yH48wMP6W0uz8rVzDpTokvuS8xr4
-         Eagg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794883764; x=1795488564;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gUJ/mTAIlGtpLVkM7Z4srYRjyZABwmfl8+lgRfY7VNQ=;
-        b=pMyThbK/hg9cfGtSzElGJo5XOhpp6yuS8S/k/75nQWuFvRP8Di4LkTqIGgKAoAC317
-         ePU8PmieXy3GMgn8MICbUyJH/f3djWfLnrHfY7VKvx9KdvX5Cmng83eth2dBBBHmjWzB
-         ZYITcm4j6A4wkEj6q37WFzLAHnH0cjaqkmdUeeaUpH8CI+/7puNMRUYYR2wDLDm+jqNu
-         XXho61C/qaoQXr98B0gb7+9TBZSONH0OYtUixZpcWdPImvxAYVs9ARmnjkM6kZNlLdBF
-         sW08O4MRzj1pBtP/C835j/GmDe6v97TqArZtK3uLCT6iGeEzXaovL9WgaAIC43N+iL6W
-         ESyw==
-X-Gm-Message-State: APuU4Z8SWzlXONZJ0QlNhbB1citS7wJF1mERpQCLaRQGO57yRAn+CkiB
-	3ryEWhqNEoHPa/SvHxysLLBqSc7+auCVgeSTNv/QxFUmMdxPmYJXUyHaf5TC8FN9pZY=
-X-Gm-Gg: AYBFou1ff3d3gfS10z9KBC4OrELnLCp6/JqYT9rbKLJLo3PmFJ49CxAT4WF11KVp26z
-	NWHNKzb2SCuyAJCXpFG8fcf8LdQ0jVC6Uwa3+YGZp3Cq5CNwJKystIEy+oHdSARFOFmMbQkx6Ee
-	RaUGZfCcMKkSOfgPKQko6vPBPvxXIPKWSMw+yHyV68eCdXYjTTzUXB7xMef+3K4y3wa4/YL4NaU
-	vEdPeAPXV8Ib/PDvbrVuBR1z517D33R2902MVvbQgRgC8BG1l287O8Brnr+DJrIRc+vg8HWs2tC
-	blGN+F6Rhf2zE38zk+3g2FopkW46g5dNew0PUABXHdEzVof6JAroRHDkiYXI7vRr2BG79JDjUP6
-	teqz/j2rZwk+owXg/iggN4m8gue+3hyFb7+NzuIpHPTUnlJsD6/zXWMfdlr+g5YNs/92pe1zC2r
-	EkyyI1ALyq8dDsxSnBsrFpv1LJ+He3V/hJYddEXaAuwTMzLaTCp1+OEidpYGLQXII5boGONRl7b
-	1Lee1MAYyayJrpHob+oD9kiYrXJ/hC0g7BII/TG8LVDX5jjhacBVM3nLRxaWpaW5DvJPUTvxLhe
-	aqF7BasaeYgpH7JqitS3Qgg4I8x4DvT5l2bMe8wg/hjrdx86aRtzkgeG5rCZawo2KoqPM3gkPNF
-	4nz2zZnLZTqiP
-X-Received: by 2002:a05:701b:4248:10b0:1b3:b455:93db with SMTP id a92af1059eb24-1b503131b06mr13141980c88.24.1794883763733;
-        Mon, 16 Nov 2026 18:49:23 -0800 (PST)
-Received: from [192.168.1.142] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50309b2b5sm31493244c88.1.2026.11.16.18.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 18:49:23 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Rachel Menge <rlmenge@gmail.com>, Hardik Garg <hargar@linux.microsoft.com>
-In-Reply-To: <20261116193146.65315-1-sidchintamaneni@gmail.com>
-References: <20261116193146.65315-1-sidchintamaneni@gmail.com>
-Subject: Re: [PATCH v1 1/1] io_uring/kbuf: initialize arg->out_len from
- arg->max_len in io_buffers_select()
-Message-Id: <179488376281.22588.16183512803050273616.b4-ty@b4>
-Date: Mon, 16 Nov 2026 19:49:22 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256 header.s=s20171208 header.b=Q/sjmCuS
+X-Works-Smtp-Source: VXK9aAtlFqJCpNmXFAKXWHF0
+Received: from nv1s-hmac-real-24 ([10.180.31.91])
+  by cvsmtppost03.nm.naver.com with ESMTP id KobLbu+YTG+DKyiFa5AIgg
+  for <multiple recipients>;
+  Tue, 17 Nov 2026 04:29:07 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=naver.com; s=s20171208;
+	t=1794889747; bh=VBKHRt+1rWWAgiBbsb4DvQCF9QJO4kV/l0okGQpWWl0=;
+	h=Message-ID:Date:From:To:Subject:From:Subject:Feedback-ID:
+	 X-Works-Security;
+	b=Q/sjmCuS8Gzrk+o1/qb8jsgsoHnd90TyKeYMiFdUxoN8zvGFMvw6bMy05Dkb+HIeM
+	 cxLqStaaf0vmVsFHYehqV7uilB6rNUvjYQxj9ScPnn7osQ4r1fQXO/3HYaBvWayex4
+	 8ar09wB47UHUOsLDlnNWLfGeqe/5h7HhOQLDmVFS2swQZT621JfTMm7D6QuPY8nsOa
+	 snSWN1Jms1qQtspLUY8+6nDWfA6UnSMID341IAXSuQ4FHF42qcxjp6TezAZ5XJpIdK
+	 qj2b6qgFvDYFd6qWaBO3PAH8TXpmZoGgJqYp1QZc/RQ/r0B4gMnWZZtZg+zPPlwJMJ
+	 vHi4Jvgwal5Wg==
+X-Session-ID: 1ec920f968e172c92b77e4e940f71ce214bfd5f279ac19e8cc5a8b28aea1f10e
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -98,31 +59,65 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Message-ID: <652bf9fd6e20ef231652b95efa65355@cweb018.nm>
+Date: Tue, 17 Nov 2026 13:29:06 +0900
+From: =?utf-8?B?U2lldW4gWWFuZw==?= <didtldms2525@naver.com>
+Importance: normal
+To: <dsterba@suse.com>
+Cc: <mason@kernel.org>,
+	<linux-btrfs@vger.kernel.org>,
+	<axboe@kernel.dk>,
+	<io-uring@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: =?utf-8?B?W1BBVENIXSBidHJmczogcmVqZWN0IGVuY29kZWQgcmVhZHMgZnJvbSB3cml0ZS1vbmx5IA==?=
+	=?utf-8?B?ZmlsZSBkZXNjcmlwdG9ycw==?=
+X-Works-Send-Opt: +9Fdpz0vjHmZFxiqW63nFBmmjA+YKxtwFA2wKqbqaBwtxBmwjAg=
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
 
-
-On Mon, 16 Nov 2026 19:31:46 +0000, Siddharth Chintamaneni wrote:
-> io_buffers_select() passes &arg->out_len to io_provided_buffers_select()
-> on the legacy provided-buffer path. Because callers initialize
-> arg->max_len (from sqe->len) while leaving arg->out_len as 0,
-> io_provided_buffers_select() sees *len == 0 and always selects the full
-> buffer size buf->len, ignoring the user-specified sqe->len limit.
-> 
-> Initialize arg->out_len = arg->max_len before calling
-> io_provided_buffers_select().
-> 
-> [...]
-
-Applied, thanks!
-
-[1/1] io_uring/kbuf: initialize arg->out_len from arg->max_len in io_buffers_select()
-      (no commit info)
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+QlRSRlNfSU9DX0VOQ09ERURfUkVBRCBhbmQgdGhlIG1hdGNoaW5nIGlvX3VyaW5nIGNvbW1hbmQg
+cmVxdWlyZQpDQVBfU1lTX0FETUlOLCBidXQgbmVpdGhlciBjaGVja3MgRk1PREVfUkVBRC4gQSBj
+YWxsZXIgY2FuIHRoZXJlZm9yZQpyZWFkIGZpbGUgY29udGVudHMgdGhyb3VnaCBhbiBPX1dST05M
+WSBkZXNjcmlwdG9yLCB3aGVyZWFzIHJlYWQoKSBhbmQKSU9SSU5HX09QX1JFQUQgb24gdGhhdCBk
+ZXNjcmlwdG9yIHJldHVybiBFQkFERi4KClRoaXMgaXMgb2JzZXJ2YWJsZSB1bmRlciB0aHJlZSBy
+ZWFkIHJlc3RyaWN0aW9ucyB3aGlsZSBDQVBfU1lTX0FETUlOCmlzIHJldGFpbmVkOgoKLSBMYW5k
+bG9jayBkZW5pZXMgUkVBRF9GSUxFLiBBIG5ldyBPX1JET05MWSBvcGVuIGZhaWxzIHdpdGggRUFD
+Q0VTLCBidXQKwqAgYW4gT19XUk9OTFkgb3BlbiBzdWNjZWVkcyBhZnRlciB0aGUgcmVzdHJpY3Rp
+b24gaXMgaW5zdGFsbGVkLgotIERBQyBtb2RlIDAyMDAgZGVuaWVzIE9fUkRPTkxZIGFmdGVyIENB
+UF9EQUNfT1ZFUlJJREUgYW5kCsKgIENBUF9EQUNfUkVBRF9TRUFSQ0ggYXJlIGRyb3BwZWQsIGJ1
+dCBhbGxvd3MgT19XUk9OTFkuCi0gV2l0aCBDT05GSUdfQlRSRlNfRlNfUE9TSVhfQUNMPXksIGEg
+UE9TSVggQUNMIGdyYW50cyBvbmx5IHdyaXRlIGFjY2VzcwrCoCB0byBhIG5hbWVkIHVzZXIuIFdp
+dGggZnN1aWQgc2V0IHRvIHRoYXQgdXNlciBhbmQgdGhlIERBQyBieXBhc3MKwqAgY2FwYWJpbGl0
+aWVzIGRyb3BwZWQsIE9fUkRPTkxZIGZhaWxzIGFuZCBPX1dST05MWSBzdWNjZWVkcy4KCk9uIExp
+bnV4IDcuNC4wLXJjMy1nNjY2NTM5ZWVjZGY0LCBib3RoIGVuY29kZWQtcmVhZCBwYXRocyByZXR1
+cm5lZAp0aGUgc2FtZSA4MTkyIGJ5dGVzIGZyb20gYW4gdW5jb21wcmVzc2VkIEJ0cmZzIGV4dGVu
+dCBpbiBlYWNoIGNhc2UuCk5vcm1hbCByZWFkKCkgb24gdGhlIE9fV1JPTkxZIGRlc2NyaXB0b3Ig
+cmV0dXJuZWQgRUJBREYuCgpDaGVjayBGTU9ERV9SRUFEIGluIGJvdGggZW50cnkgcG9pbnRzLCBt
+YXRjaGluZyB0aGUgRk1PREVfV1JJVEUgY2hlY2tzCmFscmVhZHkgcHJlc2VudCBpbiB0aGUgZW5j
+b2RlZC13cml0ZSBwYXRocy4gQm90aCBlbmNvZGVkIHJlYWRzIHRoZW4KcmV0dXJuIEVCQURGIGZv
+ciBPX1dST05MWTsgT19SRE9OTFkgY29udHJvbHMgd2l0aCByZWFkIHBlcm1pc3Npb24gc3RpbGwK
+c3VjY2VlZC4gVGhlIExhbmRsb2NrIGFuZCBEQUMgY2FzZXMgd2VyZSBhbHNvIHZlcmlmaWVkIG9u
+IExpbnV4IDcuMy40LgoKRml4ZXM6IDE4ODFmYmE4OWJkNSAoImJ0cmZzOiBhZGQgQlRSRlNfSU9D
+X0VOQ09ERURfUkVBRCBpb2N0bCIpCkZpeGVzOiAzNDMxMGM0NDJlMTcgKCJidHJmczogYWRkIGlv
+X3VyaW5nIGNvbW1hbmQgZm9yIGVuY29kZWQgcmVhZHMgKEVOQ09ERURfUkVBRCBpb2N0bCkiKQpD
+Yzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBTaWV1biBZYW5nIDxkaWR0
+bGRtczI1MjVAam51LmFjLmtyPgotLS0KwqBmcy9idHJmcy9pb2N0bC5jIHwgMTAgKysrKysrKysr
+KwrCoDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZnMvYnRy
+ZnMvaW9jdGwuYyBiL2ZzL2J0cmZzL2lvY3RsLmMKaW5kZXggNmJhODgzZGIxLi5mMWU0NmI0ZTYg
+MTAwNjQ0Ci0tLSBhL2ZzL2J0cmZzL2lvY3RsLmMKKysrIGIvZnMvYnRyZnMvaW9jdGwuYwpAQCAt
+NDM5Miw2ICs0MzkyLDExIEBAIHN0YXRpYyBpbnQgYnRyZnNfaW9jdGxfZW5jb2RlZF9yZWFkKHN0
+cnVjdCBmaWxlICpmaWxlLCB2b2lkIF9fdXNlciAqYXJncCwKwqAJCWdvdG8gb3V0X2FjY3Q7CsKg
+CX0KwqAKKwlpZiAoIShmaWxlLT5mX21vZGUgJiBGTU9ERV9SRUFEKSkgeworCQlyZXQgPSAtRUJB
+REY7CisJCWdvdG8gb3V0X2FjY3Q7CisJfQorCsKgCWlmIChjb21wYXQpIHsKwqAjaWYgZGVmaW5l
+ZChDT05GSUdfNjRCSVQpICYmIGRlZmluZWQoQ09ORklHX0NPTVBBVCkKwqAJCXN0cnVjdCBidHJm
+c19pb2N0bF9lbmNvZGVkX2lvX2FyZ3NfMzIgYXJnczMyOwpAQCAtNDc3OSw2ICs0Nzg0LDExIEBA
+IHN0YXRpYyBpbnQgYnRyZnNfdXJpbmdfZW5jb2RlZF9yZWFkKHN0cnVjdCBpb191cmluZ19jbWQg
+KmNtZCwgdW5zaWduZWQgaW50IGlzc3VlCsKgCX0KwqAJc3FlX2FkZHIgPSB1NjRfdG9fdXNlcl9w
+dHIoUkVBRF9PTkNFKGNtZC0+c3FlLT5hZGRyKSk7CsKgCisJaWYgKCEoZmlsZS0+Zl9tb2RlICYg
+Rk1PREVfUkVBRCkpIHsKKwkJcmV0ID0gLUVCQURGOworCQlnb3RvIG91dF9hY2N0OworCX0KKwrC
+oAlpZiAoaXNzdWVfZmxhZ3MgJiBJT19VUklOR19GX0NPTVBBVCkgewrCoCNpZiBkZWZpbmVkKENP
+TkZJR182NEJJVCkgJiYgZGVmaW5lZChDT05GSUdfQ09NUEFUKQrCoAkJY29weV9lbmQgPSBvZmZz
+ZXRvZmVuZChzdHJ1Y3QgYnRyZnNfaW9jdGxfZW5jb2RlZF9pb19hcmdzXzMyLCBmbGFncyk7Cgpi
+YXNlLWNvbW1pdDogNjY2NTM5ZWVjZGY0ZGI2MjNmNWUzYzNlNTVjZjlmMmRmYWQyNGFhNAotLSAK
+Mi4zOS41CgoK
