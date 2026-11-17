@@ -1,61 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794920344;
-	b=0sdPQcWl01NUTlQSoXBhncKc+ykT6eaLq4aXOJXN0GmAKAE7IaF9H20VboG5c/mR5jm/
-	 l+hN8mTHG5ufsPRINaPrgOKKSSJ2fsjgOTEVckDQKkTvEhRb6hHsVeU3sgiz9KF4zZlig
-	 shxWxtkov9Y5FLfD0DWN36huO7ZlvTx54BUIxnBk2d+ZJ1l7FwqS/TEzzYz8Xs/SjjCA1
-	 zyCthK6g/VrXE0gZWFZNNlnI7jhANqNYIcvUfJVC3ce8f3z3/jiB6HvWqdApf8N5enp7A
-	 07iwuBk0CzGME0y61ocPuGjLZ3OlGSEr8gofD6lIOqeqx2FLU8cefHYS706GWkGyytQ==
+	t=1794921625;
+	b=Pg5yd0Q6GXyuo3aHcDMKb35smHcP2elCKEsETVDijB09f6+1VZ2ix5CSBhsQ1ghfxDo/
+	 PGfr0nlrIlMQ++8oenhyqTY9lAuQNz7V27lUqVv28i5pJ3BIgQ2iSjAIT5JwVn1i6+BmR
+	 trL9UUiI8kWoMe89jN71JfUK0r/9nRp4mW5ImcZ/V8uNlkoRqHcDdbxhj8EtCmwgw2xa8
+	 bAta9tqjNwhec6Ottun/Fx9UbtkI0S43LRH5M08Nh2QiXrP1gcjzS7LuADFa9LzCwEPEV
+	 X1KIgfeGjU7PF0umsJvI14JI/7/eMbouNqZMu0fYtNoDf02txSgO50nq2CJ1WtVwOfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794920344;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=P/iIhIHbJi0Ry1aV+mvg4mIMdsNQGqRfT0aLhVEY/6g=;
-	b=JISwqcXRX1vHoLHMc53m12ZiPomq6U4x2yFNfChPgSDTXBXqo6hle4cCvmPS+l4zA844
-	 YRO/fSFD5pBFJjVI79UJATjATt2p79Ix7C3YYvZDsydlQiJQdJOvLECEBxHUNn3c04cbW
-	 JIO0ql+0E2PKWCNBYtS4eKj4EdDXh7fjswsFP6LxMSwcIcSKhvk2vISD0IfAEtnlZT/VQ
-	 tIHZY24D5hGwGzIC3TJT1YkXwLIc9h4xX7+dIxLeuXFZx750FqqXCDns0V/kkmCJWubmv
-	 hJEm5Hn+bY2WpfHhNUWhBL6ZrIfuoLqDWaVTazPePYWqOQkDHwNcoOBcH0lyy6IV0tg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794921625;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version;
+	bh=hkiPQtDWTQmK+yT2ZeAiQij6vJvAYkyT+gJVfoUg3U4=;
+	b=Jsaz9aTNySweet1ojomX1LsbSgDkR+GDBreWbLVcsmW37Qi1A3iZmDQUzzvGA7qLH4JA
+	 WWNsXC38rD+GOwasDv8OON/19uVsif+ig/vE0RBYpvBufVNMJCUyv0z1qGXg7JJSRFxei
+	 nR3dcEpfRO5HoGl2cvDJBUeKYkBjOYQxgR9ViF021kFeCf+xC+HS/Np6MbN9eJ0ImdCf+
+	 ATEbOXJQO4N91g2M65zCPaQ9zvqcm+zNEU0Y4YSu/Tpb+VgzKNy8wdIhUV9V5QmqC+wym
+	 zpl/8jpYAlozym466EXN6zzhUl8XWYX4sSMbHjFrhZIpiLbUrdqXhY72eTHo2cFrE/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPAeyU1b;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b="PlibT/J6";
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601D9606A89E;
-	Tue, 17 Nov 2026 12:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DBC606A323
+	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 13:20:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4DBC606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPAeyU1b
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE5D71F000C6;
-	Tue, 17 Nov 2026 12:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794920344;
-	bh=P/iIhIHbJi0Ry1aV+mvg4mIMdsNQGqRfT0aLhVEY/6g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OPAeyU1bcr8bRfKjvwodvxzewD4ztke+RkTghZNG3xec746dQSVKR7e0AMI3CSvEk
-	 9MAxhAYnGHoa99PgtFgvEXOVzdccfvGUD7QS+NXoB79vjmvesVpd0UjcH3UYh/a316
-	 a5hyqbDa3FjuJlJr3dWTM4tpzZvSGLBEidzJ35Qj9M5D1Vnm/XGLKNqqPP9vFFeX32
-	 lNwMB8odTs7mnL/1cGCIpLi5K4j/5nKf6MVoKPCQspaCwvO4g6sCFt9s57Os3JUeAZ
-	 UM2Qnqmj3HyMgYutVzKEMXSVOtf0WDQhoI2ICzWRK1WepJcHnvDfYTj7WcuikOAmYT
-	 rSBM+RpWMoDCg==
-Date: Tue, 17 Nov 2026 07:59:02 -0500
-From: Sasha Levin <sashal@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-	Yufan Chen <yufan.chen@linux.dev>, dev@rebasedinc.com
-Subject: Re: io_uring/eventfd: registered eventfd signals only once after the
- cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
-Message-ID: <avxPlrd77WiXagvs@laps>
-References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com>
- <draft-agent5-0001-re-eventfd-signal@kernel.org>
- <5d92861f-9a4d-4810-8700-b9e457ed9c86@kernel.dk>
- <2026111605-deskbound-clobber-a4a1@gregkh>
- <07947062-2974-4630-90db-1556e25b50bb@kernel.dk>
- <avxLtZ2YLHdbeZxC@laps>
- <8e6c1d69-9910-4c89-832a-34ecd65a0ca7@kernel.dk>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=PlibT/J6
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHBwhKK612597
+	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 05:20:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=hkiPQtDWTQmK+yT2ZeAiQij6vJvAYkyT+gJVf
+	oUg3U4=; b=PlibT/J6z9erNdkYqb2ipa7vzXJDVya6m4J1GwdOg4XMEn93kHKli
+	1nV/H83RAkTZXLeAcUPuNNCSxywNUbV827soM8NjfQEEWNhYfn/ewDbCxDPiGRaQ
+	9XHBPxMwt/OJxdPgKv7CdUut7QArbgC9K9Y3nxNWH153G3udI2Z01sXlMd7mzRJI
+	zbelm62apCzyooAE/tUerntU1bf2xbtvuxxiROAVm1SeQuGDZ91AJRXE5w/vm4lK
+	Pkq4WD1DFaQot1SXiESq/tjsD93QGgD0WMZOkpOszNV9pLjYh4iE8n3qXHgOg9dM
+	xhkNcon/d5h/7oYqowWzWOlkJgbod/0jw==
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0mn0s0fu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 05:20:23 -0800 (PST)
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-4a4beb15836so15269f8f.3
+        for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 05:20:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794921622; x=1795526422;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=drwtClem/ixRXVUJ+7hLDfDXifarjXGS/2diC05y1Es=;
+        b=2jqskV1UPgoyZnb3Ck4Dj1EpwYL/MsW/chdJei1fXzBC+fOVHc7OM6HsAtcfrF0LXN
+         9k3+ZLP4DbG8HBgz0TMa5eG0bg3Bvvl/HAUyGFt5S7FIT3DmR2G6FUsP75i5ohPg47AJ
+         ZiDiENXZ9bfRo7I14TSJV+duYUNKheuHTvrZCnVjK2BNEirSfs38Ac0FyhBF4K8n6/kq
+         NDwe7BCQaSmmJH/ZXmgtDLVqQ2xCffglQ2RUeOZ57uBcx7MPbk6PJSMY9n1sEHa7sIvU
+         PopkFtckoFHIeTgEFMTlrVvdwOW1bptWP8faOmLjApysj1dkn+VgiGIDComxgtyL5D3p
+         HI0Q==
+X-Gm-Message-State: APuU4Z/w5NzIxs/PtVQMFoBplE0AkvKRPR+x2so+TFTcfx+paF35NBkA
+	US6FAl8UUS8wqAQUVSX0gETnsadIke8gH7FUyf7wMkfN64dmMVFDqE6Jn+LPCVAKjiThwWpR9C4
+	/kBKoroILy0mkF/8ZkIQUu276ewn1mw//ra8XYFqClsDk4G4qmNHkCX2Bw5M=
+X-Gm-Gg: AZFdTZeJhalF3gjnIiuMuFYX7/fk6L2f7HUU3UL1FSUEGU3jTxhv3+uTTH1i/g/qlRd
+	64CduAE5RJGStcqGbvFKptIHCc0qbOwXEh8EIvTBmunTwsD1bru5PLNkcNBIoVCv98Kx0eo0pmc
+	7JvNMdbhdvLcQwr84R/6CIDKczyFUCcRFSVwjOADjrWc6cMbtOCKZlqhTXMcShmMghW7SczP4FO
+	lJJNhjmDL1KckJ1fDPfi6RHu5KCqcuUqiaR9T459TgRPo4Hnfyns4kHc0INYoJPqifALsrXM8/w
+	jT6MtWklEuh25IH1tdZw1JmZeUzjGLua/CkOpWkwP3BtMFA8Y1x4WKOuT4QVxmwV+Yt7p74d/7C
+	vFUKWka7Mebg7ghiUtC/c1kYRZOg0VPCwrrd2bt6DfcPzDDEkup3j71ymOafB83rJWglkNRdikI
+	QSTut5bjQnkMYL
+X-Received: by 2002:a05:6000:2212:b0:48c:698b:502c with SMTP id ffacd0b85a97d-49c6d54973amr31394263f8f.1.1794921622049;
+        Tue, 17 Nov 2026 05:20:22 -0800 (PST)
+X-Received: by 2002:a05:6000:2212:b0:48c:698b:502c with SMTP id ffacd0b85a97d-49c6d54973amr31394217f8f.1.1794921621576;
+        Tue, 17 Nov 2026 05:20:21 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:e17:9700:3f7b:7276:a343:d339? ([2a01:e0a:e17:9700:3f7b:7276:a343:d339])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c77393700sm28032388f8f.18.2026.11.17.05.20.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Nov 2026 05:20:20 -0800 (PST)
+Message-ID: <adcaa022-50c5-4754-93a6-a4365ccd09c4@meta.com>
+Date: Tue, 17 Nov 2026 14:20:17 +0100
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -65,55 +98,88 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <8e6c1d69-9910-4c89-832a-34ecd65a0ca7@kernel.dk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] io_uring/net: Add bundle support for multishot
+ recvmsg
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261116111744.702159-1-cleger@meta.com>
+ <20261116111744.702159-3-cleger@meta.com>
+ <19c6db06-d63a-4dc8-9b0d-11fba039b714@kernel.dk>
+ <e29f42de-64df-4c38-888c-64d7c89a81da@meta.com>
+ <9e96afba-66cf-4812-b14c-faa2958caa06@kernel.dk>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>
+In-Reply-To: <9e96afba-66cf-4812-b14c-faa2958caa06@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA1MiBTYWx0ZWRfX6tGpJuB8vXCi
+ Hvfofj3mCBafqZNYozN7it15tH4Q4mrNblRFQ4V5eDwGc9RfAA8PMTclqbGSzh3xqiYU4atJweQ
+ 5FvR44RBPQqB3GF64vg5QYPxW3qdLvY/zE5PbvRReTPe4ZXQjaF/8LZ3jMGTpyAi2BvRfXOb2lD
+ FL1//Ynd+4HThsAFq9it5KHS6g3qBc99Tj5PVx6wNtya9PkteKdmawwlytg9i1Se+LfD/ZxCXSA
+ 8q/3KM64NzfWhZGf/QtsL3CiS9E/WVQG2/tpGJPIuNtGF9LLkbvdlbkwicL/YoC8BAkKH/ejX4l
+ pCSWgn1bLOdC7U8XgtMPX5ZSJy0Gbw8tzETt0hqBkbRvT4YNOZggeRnObfFyTuZfYYQnnGk6Hlj
+ LRWWLBPUxdJnKcn6f3FFY075ibpTqI3nkdIwbQdE8jdlX4lXGlfJ24QXtRJ7+WTMuu7t2Jhzlr3
+ ERWp1Ifylcl2rNLoxDg==
+X-Proofpoint-ORIG-GUID: nsv1sRVZYxPkJ_i6VJq8NoDcbjF_SNR2
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA1MiBTYWx0ZWRfX96EJj9apstiT
+ y3E0UZHxdBoHGGv4qIzhXYXQysGFiK2daoF/PYMMYSzJ7isDqpmws6m2tsirFGpY2iYYl2nYph0
+ tdYHwcN5Phdao9WaRB/POfiVj58ZQSY=
+X-Authority-Analysis: v=2.4 cv=HcmB3SE8 c=1 sm=1 tr=0 ts=6afc5497 cx=c_pps
+ a=CsXZvLRfiTx/ye2xXAwb9g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=zJRp6_cAMcgA:10 a=M51BFTxLslgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22 a=71RdJvaTft_VJkO67YsA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=F7q00xkr9EfWfQvbdVXI:22
+X-Proofpoint-GUID: nsv1sRVZYxPkJ_i6VJq8NoDcbjF_SNR2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-17_02,2026-11-16_01,2025-10-01_01
 
-On Tue, Nov 17, 2026 at 05:45:53AM -0700, Jens Axboe wrote:
->On 11/17/26 5:42 AM, Sasha Levin wrote:
->> On Mon, Nov 16, 2026 at 07:21:38PM -0700, Jens Axboe wrote:
->>> On 11/16/26 2:52 AM, Greg Kroah-Hartman wrote:
->>>> On Sat, Nov 14, 2026 at 11:12:40AM -0700, Jens Axboe wrote:
->>>>> On 11/14/26 10:42 AM, Sasha Levin wrote:
->>>>>> On 2026-11-13, dev@rebasedinc.com wrote:
->>>>>>> If this is correct, a backport of 04fe9aeb4f3c to 6.18.y and 6.12.y looks like the right fix; it keeps the CVE-2026-80920 fix in place.
->>>>>>
->>>>>> Queued for 6.18 and 6.12, thanks.
->>>>>
->>>>> Yet another bs CVE - Greg, please invalidate this one too, it's NOT CVE material.
->>>>> Getting a little tired of chasing these.
->>>>
->>>> Now rejected, sorry about that.
+On 11/17/26 13:26, Jens Axboe wrote:
+> >=20
+> On 11/17/26 5:06 AM, Cl?ment L?ger wrote:
+>> On 11/17/26 03:45, Jens Axboe wrote:
+>>>> On 11/16/26 4:17 AM, Cl?ment L?ger wrote:
+>>>> IORING_RECVSEND_BUNDLE was disabled for IORING_OP_RECVMSG because the
+>>>> envelope and control-message sizing was not implemented. Enable
+>>>> bundled multishot recvmsg by reserving its metadata in the first buffer
+>>>> and accounting for payload spread across the selected buffer run.
 >>>
->>> Not sure how we improve on that, it's really annoying to catch these bogus
->>> ones after the fact?
+>>> Patch 1 is fine (though both need rebasing against for-7.5/io_uring),
+>>> but a few notes on this one:
+>>>
 >>
->> Hi Jens,
+>>> 2) Why not support incremental buffer rings?
 >>
->> Since some of our reviews are LLM based, I was looking to see why this one was
->> flagged as a security issue.
+>> I deliberately left it since it required more wiring/modifications. I
+>> can add it in the next version though.
+>=20
+> I think it's much better if it's complete. As a user, there's nothing
+> more annoying than having random features only work with a subset of
+> others. It's confusing!
+
+Yeah, make sense, it is not actually that much work !
+
+>=20
+>>> And the usual, do you have a liburing test and man page updates as
+>>> well?
 >>
->> From the explanation, and looking at the code, it seems that we can register an
->> eventfd with io_uring, then have epoll watch that same eventfd. When something
->> wakes the epoll, the kernel is holding epoll's wait-queue lock. That wakeup
->> runs io_uring's poll handler, which signals the eventfd, but the eventfd is
->> watched by the same epoll, so it tries to grab that same lock again on the same
->> CPU. The CPU spins forever on a lock it already holds. One core is dead,
->> followed by RCU stalls, machine wedges. Any unprivileged user with io_uring
->> access can do it.
->
->I think you're looking at the parent of that, not the followup. Yes the
->parent is a real fix, it's similar to the eventfd fix in mainline as well
->for that exact issue.
+>> Yes indeed, I have liburing tests, just didn't to send them right
+>> away. I'm missing the man page update though. I'll add it for V2
+>=20
+> Great!
+>=20
+>>> A minor note is that the commenting is a bit excessive... I'd prune
+>>> that for v2.
+>>
+>> I'd usually remove them but they mostly seemed useful to me. I'll
+>> prune that.
+>=20
+> They seem a bit LLM excessive to me. Just something to keep an eye on. I
+> like them to be shorter and concise, leave the bigger explanations for
+> the commit messages, if required.
 
-If by followup you mean 04fe9aeb4f3c ("io_uring/eventfd: reset deferred signal
-state") then yes, I don't think it's security relevant, and it never had a CVE
-assigned.
+Acked, thanks for the advice !
 
-cd305ee3633a ("io_uring: defer eventfd signaling when queued from a wakeup
-handler") is what had the CVE assigned to it, and what Greg rejected earlier.
-Should the rejection be reverted then?
+Cl=C3=A9ment
 
--- 
-Thanks,
-Sasha
