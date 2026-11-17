@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794905443;
-	b=4UPih0IT6frB0hfETfzUaamVwW5uUyws7QMldC2ukcKMdSQG48YDJmgs0pEueFncES5S
-	 3YiFCTyfEgPnvU+jK+BbfHi5hZ1NGFo6gqt2OeQ2500q9usgPaJqWpN03qPg6b1nmvKNO
-	 LI1guJiX97TdGi8oy9qRfdDHJDojs20/JJB4h888udekUASGAuPbWAEjd/ZgpgbEQg/SZ
-	 WERBIPj+CHXribEHtR7CQRsbNMC70Q8KNs4lkXEiOpoiYigA2+UrwfEMCqssl3we7MAp8
-	 XZ8eL5VSA+HUTMOPlzKXaeh1kz5uIwBv8ITNYHD+VLFOY80Cy+gsP/fyHzKext30/Ug==
+	t=1794905449;
+	b=uEB1Ll7RewIvY+KAf6cbCKrgHGlbe50/u79Ka0wtNnrdsxi5ByCEyBDQIn4m+r1w1z0P
+	 fQgjOHK9+gtjSWlkXXb/VUhagZWUzv1vsRBjF+oc9QP5zgUil7A3rMPDpoJC32ljc5Ux/
+	 TOuOthmCFiY54sLYcXomQWfBPsJRcQzbsyQF03L/fTkf8hwGkkYSYYL9WL7Ml54bvFuV8
+	 SorIo6J7/qsYC7si+0Gtay8S6AReRnw1DDqHrezRijXP3JhGYzq4g1jQdacf+RIBO5Y9Z
+	 LagJeSn4km+cM4bl9h5TLNVeYvuv5Z+zv+1pF5xfsbbAmIOCF8uzWa+6ZsQ8NMghnbQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794905443;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794905449;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=S8jiyJWvi6Hu7n3hQU2n9ckXcuveFbIRyC3veX49U9c=;
-	b=NwieMzTRL5aNjZj57RTrgkLW2MOb5u8mC2+kuT8dfHByxscnn2trvGWfvWP2Uf4Q4FwJ
-	 GUz2UrfI/jxPOnRboEHp4gy4j43LVbNsOyqSX7gSQVQLMT+dxjcr+Ep4RKKc5hgPCcWRA
-	 jcFWz7uoHTmdjrHagkOCgfjmLcvDJH/g+nq86ttvIArtRiTStFstBxW+AmHVkf681zbB2
-	 c17LC4AHiqYSybFmNeKvecbDol38mHTTXYIUpw3zIHUYS4z7rONpZuHqSqXrholrpWgQW
-	 ytcRijYcjRhoAGQAoLHWdHYH8jXzCW07gpTajPkBdteB8f1aD5CRdDZXXJt7z4tKiAA==
+	bh=0fkXrfPy3BaNhY2tRM825lAtXdeRpZqfswiAUDy5uKc=;
+	b=P1HTHjdF1QCgx2ox3SBg/Pk0nm86VEcds25gnvc6sDHTIjuTFwO7zHZZlZC4Ulr8m+l7
+	 B7Y8T8eHyNbYHWdxu+L2Zk6Kr32h3yxzGPF/YgrjoR3cNPSZqJ4qvG2Ord6c0pLaPDRQa
+	 F9Ut+k782YUKrekqmNqag8487di4xwNnFSW/FyaGaUVGdBBY1B3lGjfpFO008vGQEGI6P
+	 QqTh63mDg1qqNTgW/GfClmxvnz+itTZ++yGZmoxSAvCB3u+6TINRKWrzbCU5+zSckv4IT
+	 Cwl/wX2IcWJPX2N8J8FSgO4CvHlxSFf+7GTMx+yB1SvgTQ95bYY3J7PUIn6YyYJsOPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gO5O9DeC;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CtVHR++P;
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC24C606A888
-	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 08:50:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC24C606A888
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0E5606A338
+	for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 08:50:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE0E5606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gO5O9DeC
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so2023108a12.0
-        for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 00:50:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CtVHR++P
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cdddc79a4afso1430454a12.1
+        for <io-uring@vger.kernel.org>; Tue, 17 Nov 2026 00:50:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794905442; x=1795510242; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794905447; x=1795510247; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=S8jiyJWvi6Hu7n3hQU2n9ckXcuveFbIRyC3veX49U9c=;
-        b=gO5O9DeCgd3HRuujgGdklYqnNTZWm54iRYZFen9tHeY8fw6CKfSGi96zr4Tyfyim1G
-         ie9PLHQsc8JysuACVG+ot57kHX5W4W5PLnB3H73cV2YGjPCGPE5KZIvexKQSnR/DeLMo
-         92bo7MzEW+bxsSiUzd7MP/C9GczoQv+Xf7LyVWWys7Qdc3RXgheM3WVJXQkivsAVALoz
-         hBa9f7XoHOwr5ygSARcqN5YOVXmLZbOBs6ieJTIx2+8mohasemGWy5zMEODFLAYbzebO
-         tEM6Rx+zXyhHzUBjr1i7iLvYNUP+8AagCzQUxGlwcLUrTemVe7qUnIRg/fj6f+V9r1rp
-         fVUg==
+        bh=0fkXrfPy3BaNhY2tRM825lAtXdeRpZqfswiAUDy5uKc=;
+        b=CtVHR++PiF/zKaqArhbp8D7yfYXz4VNoBlKeIx/chEyYFfhFm4Fk6J+YjXLURHhDx6
+         qMq1kNKCNk36QA+JnUde9AfnHUAmh+hIFf7wxeCCPb/x41aXYKNkvOSrpj15y0kegMhG
+         UL3fzxhlWsPNmcYSRZmdiOrqqdwqdLYx9QjptcIfgivFDktJwaA/bfQQ9WXUs4PNWovl
+         Ek2ELjFHpYZEdvb0lMjLQce71NwmRVAIx7BFd39/DQ2+mHRe9VJ9aaWHjxvYACU+/TFG
+         RFPKvk+tj07JbXAC3FLUHwJkeoV8ruqq//B8DSv2JNcoWFPizZww7jKc1kIjGOkXhasm
+         oa5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794905442; x=1795510242;
+        d=1e100.net; s=20260707; t=1794905447; x=1795510247;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S8jiyJWvi6Hu7n3hQU2n9ckXcuveFbIRyC3veX49U9c=;
-        b=wZkGe79I9+rIDLGIspJu+o9FugSxyhp6lenbUxTo+EwFtGM9jZCHuc/w2u0XvgKbEC
-         RRxEmHlyU9EVlmyYdRfOyGNqrHtTn1ZPGh7dTwwXeod+C6CwRyx9CyqYSDcSKrJFFCYR
-         J7nA4DXP0kikY11nzRwxABSIV5ZKL2mY3am9uehQBjev/beLlbxG+YXN3g/z8THKMqm6
-         FV6g/6UYJWd2G5PF+ALVvvx2YcBNzAJLE6uUbryTakJRCCqd90vHObT/j/oJD/H0EBr3
-         RTyKT4BiYkG/eDbK4QnV5uYYx/eRAozGYOeBrR1t7HhhtH8/rK9FLdkR9wyln1XAFCRx
-         a4dQ==
-X-Forwarded-Encrypted: i=1; AL+hErG7h2TVrLQk0UVP5J6qZc8zL/af973BZkqHAqsPsxkHIBhI8X+d5td/jtGoLzvgU7/5vq2j41EOAA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z8tUkSLQ/7TVjkkBGH3p6fwBSlRQqWRsfqE9u8H7czxn/tKKzhU
-	7iIUddBsjr6bLc1b70+YPPdwpj/Zp04wG45R6aUt/SvxzQ9XoxRjXdfM
-X-Gm-Gg: AZFdTZd7bN1SIS4pjTCp06vsI4EzCSph1rxvl8qXD+u7ieTnENhCwtb4nM6Ex/UGYAZ
-	qhWwAv7tdsti8SV5N1U8islt8dAWbRrKAEUVJuM3Ja8d0byrQDXllXCZo6cUhvDP/Zan5Hd3O03
-	atQDORifCcmI4zcpS1HHVP0cFxEQ9xw+jFaYIANXprP59oLxcTWBmiln/eu2OCQYDIsyWRayWT3
-	LXLDzhkiVf7QiBjCKB5X7kEXry8yDKXWK7Il55+3ad6zQdkOvsKxEbCjcq6bvHfdWXIt/8BHI0T
-	ogPhkICetbVM7A/ny/SGQ1pIBiyF+xzAl6IbN/i5MICbKdpiMCKQwv1XsMod2c6RIG2jVbMq4yw
-	tDWD989oKrGGpY6Gh5T3yS8xuicsZriz31DMsgKGJB3HjdWV5oQmvLOo0eTGSQotXPbesnBrJNN
-	+PIY7FMJQYXo0klxBAdM7kW0oEi1i6USVLmk0p7E7tq7EbS85kG5pCw0rAqTO7RNyfjNwqOS+kc
-	7ibSx1CokAWTULHtma8TI2fK2ks2P/cixkH6/4NGXQsuDnEKCsz4IFO3c3XCKKdSHsHqFUnRMpt
-	kwm6qCZ8YcN/q02IBLShxc+5tW7Mkf2DjjkLInStefcOaMrio+WfQmuFYgPOSDXY4h5DomcnFuG
-	+
-X-Received: by 2002:a17:90b:2e8d:b0:3b3:c00e:56a7 with SMTP id 98e67ed59e1d1-3b3c00e56d4mr241802a91.42.1794905442058;
-        Tue, 17 Nov 2026 00:50:42 -0800 (PST)
+        bh=0fkXrfPy3BaNhY2tRM825lAtXdeRpZqfswiAUDy5uKc=;
+        b=lrLtFjuNMvPU5/pE9X/NTQv6C2Pq3fYroODhT+zWGnBESy+zomgWIxoHHIXTCy3rBO
+         Mm+zwwjiwmEajDL/XlKFG/ulxGQx+H6DHCayiSok3ecHYrYzL3y6kOF+5k8V3hZ4LPUY
+         0pRePoo9z+dVKt2i7HweFIgFWsoralmhLgEK0wb9YU13z9GYUApK4/dsQ0BUSxSeLWXM
+         rLvUbKfkoxxIP2BepajtTMi3a4+TGE/roGLSZW4Rt4FTex32l5sEAQis1mAHmL+BfXN7
+         V0sp5kG7L4Rjw29d4JE3YgiyosEAWHOdlYl2HiaavbDuLwZg9CP/DboLxsfpWSJ5JXF8
+         bh7w==
+X-Forwarded-Encrypted: i=1; AL+hErF3l5FOpf+qUjqiMEji9SXlvnjNgIjaSL1f/DP6yabUSVh0ZNwB6ShU9eNhYHYNhS8yyJAIu+0Umw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/kvMgw0LJ5RgwQTURdP0MAPxuAOzO+AZcZoPY89MCyLlp+bRMt
+	tSfM1BxzT1WMoP5NNOVabKQ8qrrI9uENSUfbJyNnpBMa4gu/JO47++aw
+X-Gm-Gg: AZFdTZfl3YRV7LH+Qu6Vbxp60BSM0xiFV5qWTZjDWWuUdB8O5WbxFj+PWGGnTLYdsgc
+	zv3kWIaQDryWrIbQrf0o9uhREmwJSYXw6XH9XPRYebEA6FUVNZP/knQJGsJEQehcN16alh8uWVz
+	3bvQcGIRstvAlPLqHWVi6Buy0LLaUSMsSAKxxtcYlBWeQC8cjIXACPEB9f+I+Aq4k2bHJFfrA/e
+	H0puqCC76TpG39FQygwChBEmk3BIDhbSddSt4l2Jjf/g77d3jApOpg+QcDthLMLzNNIFDMGMWly
+	sDoosUcMFLDf5PXu+4Yw/kbXUrXBQLFh9xfNP2fE6ydZ2sHDfob350gHBBAR/lkcgK0S5Sz1jGx
+	fheFX5IPy8oo+9ROAAlZaQdUT4Vz5xsBExi2fvLPkXKbJOvvZPwd800JQPSehLpBrfINC7L9Ysp
+	nCsnmdtlT1xoH2JfSdoVyb11WkOvZZ7YmWzQmNzpMI0Tr5/b/iDfpDkEKe8ykWRUoFa7V6O5aW6
+	dP0F21YofLd1JNpy4BS/Cv+zefGQV4bMjmy5fcx5jiq/wA9fsZp0OYWll2pxS0tvwPKvZy7fs8j
+	3sfDBkCM+zw/uzhYI3rqzMH4qgRhC61+CTW2x0oVsreTCx/JJcrTfMGWYRatf2dJLItNG3tifv/
+	l
+X-Received: by 2002:a17:90b:2b4b:b0:3b3:c18f:d8e3 with SMTP id 98e67ed59e1d1-3b3c18fd9f7mr117575a91.20.1794905446882;
+        Tue, 17 Nov 2026 00:50:46 -0800 (PST)
 Received: from LDYT9Q2G2M ([2a09:bac1:7680:450::1c:35f])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac255634sm3006240a91.5.2026.11.17.00.50.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac255634sm3006240a91.5.2026.11.17.00.50.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 17 Nov 2026 00:50:40 -0800 (PST)
+        Tue, 17 Nov 2026 00:50:46 -0800 (PST)
 From: Zhiqi Zhang <zhiqizhangg@gmail.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org
 Cc: Pavel Begunkov <asml.silence@gmail.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] io_uring: avoid activating drain for failed requests or links
-Date: Tue, 17 Nov 2026 16:50:32 +0800
-Message-ID: <20261117085033.98363-2-zhiqizhangg@gmail.com>
+Subject: [PATCH 2/2] io_uring: clear IO_RING_F_DRAIN_ACTIVE when all drains have finished
+Date: Tue, 17 Nov 2026 16:50:33 +0800
+Message-ID: <20261117085033.98363-3-zhiqizhangg@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261117085033.98363-1-zhiqizhangg@gmail.com>
 References: <20261117085033.98363-1-zhiqizhangg@gmail.com>
@@ -101,213 +101,95 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_init_req() currently calls io_init_drain() and consumes
-IO_RING_F_DRAIN_NEXT before request initialization and BPF filter
-checks have completed. If io_init_req(), io_uring_run_bpf_filters(),
-or a later request in the same link fails, io_submit_fail_init()
-completes the request or link via io_req_defer_failed(), bypassing
+io_queue_deferred() only sets ctx->drain_req for standalone drain
+requests, leaving ctx->drain_req NULL when a linked drain request is
+dispatched. If a non-drain request is waiting in ->defer_list behind
+the linked drain:
+
+  1. P0 in flight
+  2. Linked drain [D0 (IOSQE_IO_DRAIN | IOSQE_IO_LINK), D1] queued
+  3. Non-drain P1 (e.g. POLL_ADD) queued to ->defer_list
+  4. P0 completes, [D0, D1] is dispatched with ctx->drain_req == NULL
+  5. [D0, D1] completes and frees; drain_done stays false
+  6. io_queue_deferred() pops P1 (non-drain) and empties ->defer_list
+
+Because drain_done is false, __io_submit_flush_completions() leaves
+IO_RING_F_DRAIN_ACTIVE set permanently after all drain requests have
+finished. Any subsequent non-drain submission (e.g. a WRITE or cancel
+targeting P1) is forced through io_drain_req() and deadlocks behind P1.
+The same happens for a standalone io-wq drain request if its CQE is
+flushed while P1 stays deferred awaiting the worker's final reference
+drop, because ctx->drain_req is already cleared before the later flush
+that frees the request and starts P1.
+
+When io_queue_deferred() observes ctx->nr_req_allocated ==
+ctx->nr_drained before dequeuing (nothing outside ->defer_list is
+alive), all prior drains have completed and been freed. If the loop
+drains ->defer_list without starting another REQ_F_IO_DRAIN request,
+clear IO_RING_F_DRAIN_ACTIVE. That also subsumes the !drain clearing in
 io_drain_req().
 
-This can leave IO_RING_F_DRAIN_ACTIVE or IO_RING_F_DRAIN_NEXT set on
-the ring with no deferred drain request and ctx->drain_req == NULL:
-
-  1. P0 (e.g. POLL_ADD) is in flight
-  2. Invalid IOSQE_IO_DRAIN SQE sets IO_RING_F_DRAIN_ACTIVE, then fails
-     with -EINVAL and frees immediately
-  3. Subsequent non-drain SQE sees IO_RING_F_DRAIN_ACTIVE, is forced
-     through io_drain_req(), and blocks in ->defer_list behind P0
-
-Similarly, a failed link containing an IOSQE_IO_DRAIN SQE leaks
-IO_RING_F_DRAIN_ACTIVE and IO_RING_F_DRAIN_NEXT onto the next
-unrelated request, or an -ENOMEM failure allocating io_defer_entry in
-io_drain_req() fails the request with IO_RING_F_DRAIN_ACTIVE still set.
-
-Do not touch IO_RING_F_DRAIN_ACTIVE or IO_RING_F_DRAIN_NEXT in
-io_init_req(). During link assembly, only propagate REQ_F_IO_DRAIN to
-a non-failing link head, and move drain flag activation into
-io_drain_req() after struct io_defer_entry allocation succeeds. Also
-clear state->link.head before flushing an unterminated link in
-io_submit_state_end().
-
-Fixes: 8fb7aee05591 ("io_uring: drain based on allocates reqs")
+Fixes: ecb6817b769f ("io_uring: end the drain when the drain request completes")
 Cc: stable@vger.kernel.org
 Signed-off-by: Zhiqi Zhang <zhiqizhangg@gmail.com>
 ---
- io_uring/io_uring.c | 100 +++++++++++++++++++++++++-------------------
- 1 file changed, 57 insertions(+), 43 deletions(-)
+ io_uring/io_uring.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5db57bf675f0..4e8b93a584b4 100644
+index 4e8b93a584b4..1fb2b9bb601f 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1471,8 +1471,9 @@ static __cold void io_drain_req(struct io_kiocb *req)
- 	__must_hold(&ctx->uring_lock)
+@@ -498,11 +498,13 @@ unsigned io_linked_nr(struct io_kiocb *req)
+ static __cold noinline bool io_queue_deferred(struct io_ring_ctx *ctx)
  {
+ 	bool drain_seen = false, first = true, drain_queued = false;
++	bool nothing_alive;
+ 
+ 	lockdep_assert_held(&ctx->uring_lock);
+ 	__io_req_caches_free(ctx);
+ 	/* nothing outside of ->defer_list is alive */
+-	if (ctx->nr_req_allocated == ctx->nr_drained)
++	nothing_alive = ctx->nr_req_allocated == ctx->nr_drained;
++	if (nothing_alive)
+ 		ctx->drain_req = NULL;
+ 
+ 	while (!list_empty(&ctx->defer_list)) {
+@@ -525,6 +527,9 @@ static __cold noinline bool io_queue_deferred(struct io_ring_ctx *ctx)
+ 		kfree(de);
+ 		first = false;
+ 	}
++
++	if (nothing_alive && !drain_queued)
++		ctx->int_flags &= ~IO_RING_F_DRAIN_ACTIVE;
+ 	return drain_queued;
+ }
+ 
+@@ -1473,7 +1478,6 @@ static __cold void io_drain_req(struct io_kiocb *req)
  	struct io_ring_ctx *ctx = req->ctx;
--	bool drain = req->flags & IOSQE_IO_DRAIN;
  	struct io_defer_entry *de;
-+	bool drain_next = false;
-+	bool drain;
+ 	bool drain_next = false;
+-	bool drain;
  
  	de = kmalloc_obj(*de, GFP_KERNEL_ACCOUNT);
  	if (!de) {
-@@ -1480,6 +1481,33 @@ static __cold void io_drain_req(struct io_kiocb *req)
- 		return;
- 	}
+@@ -1506,7 +1510,6 @@ static __cold void io_drain_req(struct io_kiocb *req)
+ 	if (unlikely(drain_next))
+ 		ctx->int_flags |= IO_RING_F_DRAIN_NEXT;
+ 	req->flags |= REQ_F_FORCE_ASYNC;
+-	drain = req->flags & REQ_F_IO_DRAIN;
  
-+	/*
-+	 * If a request in the middle or end of a link needs draining, drain
-+	 * the link head (propagated at link assembly) and the next request/link
-+	 * after the current link.
-+	 */
-+	if (unlikely(req->link)) {
-+		struct io_kiocb *cur;
-+
-+		io_for_each_link(cur, req->link) {
-+			if (cur->flags & REQ_F_IO_DRAIN) {
-+				drain_next = true;
-+				break;
-+			}
-+		}
-+	}
-+	if (unlikely(ctx->int_flags & IO_RING_F_DRAIN_NEXT)) {
-+		ctx->int_flags &= ~IO_RING_F_DRAIN_NEXT;
-+		ctx->int_flags |= IO_RING_F_DRAIN_ACTIVE;
-+		req->flags |= REQ_F_IO_DRAIN;
-+	}
-+	if (unlikely(req->flags & REQ_F_IO_DRAIN))
-+		ctx->int_flags |= IO_RING_F_DRAIN_ACTIVE;
-+	if (unlikely(drain_next))
-+		ctx->int_flags |= IO_RING_F_DRAIN_NEXT;
-+	req->flags |= REQ_F_FORCE_ASYNC;
-+	drain = req->flags & REQ_F_IO_DRAIN;
-+
  	io_prep_async_link(req);
  	trace_io_uring_defer(req);
- 	de->req = req;
-@@ -1801,6 +1829,13 @@ static inline void io_queue_sqe(struct io_kiocb *req, unsigned int extra_flags)
- 		io_queue_async(req, issue_flags, ret);
+@@ -1515,8 +1518,6 @@ static __cold void io_drain_req(struct io_kiocb *req)
+ 	ctx->nr_drained += io_linked_nr(req);
+ 	list_add_tail(&de->list, &ctx->defer_list);
+ 	io_queue_deferred(ctx);
+-	if (!drain && list_empty(&ctx->defer_list))
+-		ctx->int_flags &= ~IO_RING_F_DRAIN_ACTIVE;
  }
  
-+static inline bool io_drain_needed(const struct io_ring_ctx *ctx,
-+				   const struct io_kiocb *req)
-+{
-+	return (ctx->int_flags & (IO_RING_F_DRAIN_ACTIVE | IO_RING_F_DRAIN_NEXT)) ||
-+	       (req->flags & REQ_F_IO_DRAIN);
-+}
-+
- static void io_queue_sqe_fallback(struct io_kiocb *req)
- 	__must_hold(&req->ctx->uring_lock)
- {
-@@ -1815,7 +1850,7 @@ static void io_queue_sqe_fallback(struct io_kiocb *req)
- 	} else {
- 		/* can't fail with IO_URING_F_INLINE */
- 		io_req_sqe_copy(req, IO_URING_F_INLINE);
--		if (unlikely(req->ctx->int_flags & IO_RING_F_DRAIN_ACTIVE))
-+		if (unlikely(io_drain_needed(req->ctx, req)))
- 			io_drain_req(req);
- 		else
- 			io_queue_iowq(req);
-@@ -1847,24 +1882,6 @@ static inline bool io_check_restriction(struct io_ring_ctx *ctx,
- 	return true;
- }
- 
--static void io_init_drain(struct io_ring_ctx *ctx)
--{
--	struct io_kiocb *head = ctx->submit_state.link.head;
--
--	ctx->int_flags |= IO_RING_F_DRAIN_ACTIVE;
--	if (head) {
--		/*
--		 * If we need to drain a request in the middle of a link, drain
--		 * the head request and the next request/link after the current
--		 * link. Considering sequential execution of links,
--		 * REQ_F_IO_DRAIN will be maintained for every request of our
--		 * link.
--		 */
--		head->flags |= REQ_F_IO_DRAIN | REQ_F_FORCE_ASYNC;
--		ctx->int_flags |= IO_RING_F_DRAIN_NEXT;
--	}
--}
--
- static __cold int io_init_fail_req(struct io_kiocb *req, int err)
- {
- 	/* ensure per-opcode data is cleared if we fail before prep */
-@@ -1937,25 +1954,13 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 		}
- 		if (sqe_flags & IOSQE_CQE_SKIP_SUCCESS)
- 			ctx->int_flags |= IO_RING_F_DRAIN_DISABLED;
--		if (sqe_flags & IOSQE_IO_DRAIN) {
--			if (ctx->int_flags & IO_RING_F_DRAIN_DISABLED)
--				return io_init_fail_req(req, -EOPNOTSUPP);
--			io_init_drain(ctx);
--		}
--	}
--	if (unlikely(ctx->int_flags & (IO_RING_F_OP_RESTRICTED | IO_RING_F_DRAIN_ACTIVE | IO_RING_F_DRAIN_NEXT))) {
--		if (!io_check_restriction(ctx, req, sqe_flags))
--			return io_init_fail_req(req, -EACCES);
--		/* knock it to the slow queue path, will be drained there */
--		if (ctx->int_flags & IO_RING_F_DRAIN_ACTIVE)
--			req->flags |= REQ_F_FORCE_ASYNC;
--		/* if there is no link, we're at "next" request and need to drain */
--		if (unlikely(ctx->int_flags & IO_RING_F_DRAIN_NEXT) && !ctx->submit_state.link.head) {
--			ctx->int_flags &= ~IO_RING_F_DRAIN_NEXT;
--			ctx->int_flags |= IO_RING_F_DRAIN_ACTIVE;
--			req->flags |= REQ_F_IO_DRAIN | REQ_F_FORCE_ASYNC;
--		}
-+		if ((sqe_flags & IOSQE_IO_DRAIN) &&
-+		    (ctx->int_flags & IO_RING_F_DRAIN_DISABLED))
-+			return io_init_fail_req(req, -EOPNOTSUPP);
- 	}
-+	if (unlikely(ctx->int_flags & IO_RING_F_OP_RESTRICTED) &&
-+	    !io_check_restriction(ctx, req, sqe_flags))
-+		return io_init_fail_req(req, -EACCES);
- 
- 	if (!def->ioprio && sqe->ioprio)
- 		return io_init_fail_req(req, -EINVAL);
-@@ -2065,17 +2070,22 @@ static inline int io_submit_sqe(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 		io_req_sqe_copy(req, IO_URING_F_INLINE);
- 		link->last->link = req;
- 		link->last = req;
-+		if (unlikely((req->flags & REQ_F_IO_DRAIN) &&
-+			     !(link->head->flags & REQ_F_FAIL)))
-+			link->head->flags |= REQ_F_IO_DRAIN;
- 
- 		if (req->flags & IO_REQ_LINK_FLAGS)
- 			return 0;
- 		/* last request of the link, flush it */
- 		req = link->head;
- 		link->head = NULL;
--		if (req->flags & (REQ_F_FORCE_ASYNC | REQ_F_FAIL))
-+		if ((req->flags & (REQ_F_FORCE_ASYNC | REQ_F_FAIL)) ||
-+		    io_drain_needed(ctx, req))
- 			goto fallback;
- 
--	} else if (unlikely(req->flags & (IO_REQ_LINK_FLAGS |
--					  REQ_F_FORCE_ASYNC | REQ_F_FAIL))) {
-+	} else if (unlikely((req->flags & (IO_REQ_LINK_FLAGS | REQ_F_FORCE_ASYNC |
-+					   REQ_F_FAIL)) ||
-+			    io_drain_needed(ctx, req))) {
- 		if (req->flags & IO_REQ_LINK_FLAGS) {
- 			link->head = req;
- 			link->last = req;
-@@ -2097,8 +2107,12 @@ static void io_submit_state_end(struct io_ring_ctx *ctx)
- {
- 	struct io_submit_state *state = &ctx->submit_state;
- 
--	if (unlikely(state->link.head))
--		io_queue_sqe_fallback(state->link.head);
-+	if (unlikely(state->link.head)) {
-+		struct io_kiocb *head = state->link.head;
-+
-+		state->link.head = NULL;
-+		io_queue_sqe_fallback(head);
-+	}
- 	/* flush only after queuing links as they can generate completions */
- 	io_submit_flush_completions(ctx);
- 	if (state->plug_started)
-
-base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
+ #define REQ_ISSUE_SLOW_FLAGS	(REQ_F_CREDS | REQ_F_ARM_LTIMEOUT)
 -- 
 2.43.0
 
