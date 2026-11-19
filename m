@@ -1,58 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795120764;
-	b=uvb6wzg3mnp1CVAQgSbxHP0ifQDQMvV6gvlEqr4OG9H3o7XsB0kumT6n8q4M3vFdaG33
-	 qMSPBAnTaZ+d7zLFd1iOUNBYldBuMq66i71YRutFNnI/OdsfVUGc7xhI+vRVy3dHDKm3L
-	 lR0Ebts8pZoYZ7gE4ns7KHGjKiKTjv0HgUTlLP0YsAyORjjKmIq/UhFcLab2rcPsBZAPp
-	 S+xTYIfkVx6G6iYXdCXmxUdhL2dXmH6Ora6eSxAWUcHGlkDqjmr91MGROL/ycRnDwyS5N
-	 iMvBaxcm4nODNZsyai3ULYq1J+HBZklUprwE4a/+JBQLRfdzCefvUZeTHeXHv7sQuiQ==
+	t=1795130580;
+	b=bjmr4xuR0iOk6Lk2/89WnkJct24JTtB58pPXB1HNWlvBZbEWeT0VYm5XQqknpZsUPMeg
+	 4hvUqq2SA/S5GKAZkpXO+KvHp+r2w2cwLy6xWbH9FTAdA9Bp3nrr11v3gJK10OEBunnEB
+	 +jOVGljS8pxuwdx1VGmaEmccubR5S+6bOYUpQkTlrwmz6SSDdHr9R5yDESGpaeFW485gY
+	 RhGbuuM9aXhL68iS1dCILLUF/A/sxX3nMoBx/Z/ns0K+exnO3hyyHc8B3YCXM7v+kqVR6
+	 BFVcAddBggokJ6oxv8BCh5rzswc0uhBlE0RlSVIKRVWWNBtOkwBVRdtEVDeZVowsYdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795120764;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=NiJG49YIGt6cGj3vHRjvqFXGLnaGbrbtoOVYPf7BcqI=;
-	b=pqaUykibfb+CHZZWJYBxoyFUWiCA4e2LmwddmXLydJOlgw82ZErcy9BIRvGp6tZqcJHd
-	 IByM/wn8jpvw2LsNb3Gfh/btw2RWQrpa10kNIfXPi5cP86El87rLfUlo26PThwdbmLawR
-	 I6/wUOQladLZbuPfozleQJX6dzgG/QA1xAR+BRssqlybNESi9lCW7/1UfPPx0EFSXGA2i
-	 HotFJO3v9A7T/WhSJ3Y5aA7nCFkGo4L0O4hYWSTcKhXO9XRMwQWPD53GuI02H5AHnWXTm
-	 VrfZorUKtOKFnjypNMCUrSTFpMHst4L7BrmvY12g6mycXbTGPbtIovNAkiSZ72D1e2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795130580;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=1OWXSRbdtdzLicFzuUAaijNOxktkEI2AOEgHXTBtgjw=;
+	b=wmO7J7Q937lRHQqEtCm3lMxn7Ww4yZGy2d60l1Db31TIibqm/LXwfAwV/Yt73iBBWaVI
+	 7N53Tynz8lDNzx7d2p744MAuVvHK4ZDNr1PlxzKliBffzpsGILeu1uG6udib/Q2+ZP7WE
+	 Lo8QtLs8gsckMGeFpdrPNd74XE+dcpvx7hHiFG7NfBPlNJtPczD+++K2na5gdNEP3EG+Y
+	 Pjznn0L74fuFTiZkN4hbhkWlkOtxHNMD4hpeO3i0udA/B0gW05nQnMt1naTP4u+vLe0S8
+	 lxjbL6f8MlptfSeLpjeuhpq/HMseTKsHqLakShmWJS1kBGH9LHsL43JV0THmxaVfF4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aE2vjouc;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=WRMaTf7g;
+	arc=none smtp.remote-ip=74.125.82.175
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33849606A93B;
-	Thu, 19 Nov 2026 20:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD70C606A320
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 23:22:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD70C606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aE2vjouc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237021F000C0;
-	Thu, 19 Nov 2026 20:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795120763;
-	bh=NiJG49YIGt6cGj3vHRjvqFXGLnaGbrbtoOVYPf7BcqI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=aE2vjoucHVMu99mqIHXkQMpgcCdBKjdSn1nEJf+7ZQv7NKNUnC1I3vzp0YXgewM8n
-	 ibPydMHLMBCvLApdiaN5OGORQszcuUtfhEsi20qdH26K1Z2knbrtM8j+FfbXb7aKQG
-	 Two08rO5aFGERZ/ISMTXfRdFbURAFFSlXhskC96Z68Xj4zH7hEgGDT6xdNg5vzp68V
-	 ThUpdEvk01ZTO374LwIyTg77b8wazmMpskGilnnZmbShiXyE4pxahd3LbYQJNwW2Kx
-	 ONkqkAsKQ5O9fbHQ1vhHPUvvHQz6mzRPClOGsYg+62IGbURuUdc6PnJozHJMqCnD19
-	 qJFwvGm2/vdbQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-	Yufan Chen <yufan.chen@linux.dev>,
-	dev@rebasedinc.com
-Subject: Re: io_uring/eventfd: registered eventfd signals only once after the cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
-Date: Thu, 19 Nov 2026 15:39:21 -0500
-Message-ID: <20261119203921.972086-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <8e8bd832-ead2-4d77-9ca8-48274637d26e@kernel.dk>
-References: <oMhla8VwCWoihfrmgn8znIy60W1QXI8g_v2OyB9i6sWESIDlVJlwoGGOLylJgIHRARNoieXUVRGqzeB__KvHMdXgnCfPPovs8vLMOzaMPEw=@rebasedinc.com> <draft-agent5-0001-re-eventfd-signal@kernel.org> <5d92861f-9a4d-4810-8700-b9e457ed9c86@kernel.dk> <2026111605-deskbound-clobber-a4a1@gregkh> <07947062-2974-4630-90db-1556e25b50bb@kernel.dk> <avxLtZ2YLHdbeZxC@laps> <8e6c1d69-9910-4c89-832a-34ecd65a0ca7@kernel.dk> <avxPlrd77WiXagvs@laps> <8e8bd832-ead2-4d77-9ca8-48274637d26e@kernel.dk>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=WRMaTf7g
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-382f4710a17so419098eec.0
+        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 15:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1795130577; x=1795735377; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1OWXSRbdtdzLicFzuUAaijNOxktkEI2AOEgHXTBtgjw=;
+        b=WRMaTf7g7EgkAKTe1y2ylKPPW37zfrZ8ZRO7fKJNx4nq/xCPhQ3BiCtpluq4hh296P
+         9VNtlRUjwsojOcZcMmkIQUiY4bYydPTzA0at3KrJJyeiUrCe1Jn8NfKRI0AI6zXGW/iz
+         VG3h/T1cRVzTG/8/+0eNF3Z+jV+FeZlXyBDWhoK1xYNcNy1zkyUmKaPQQTw69zygH3Dw
+         yYvhSuDDTQQ96HuF3OQuFUWFe/YkQrrwGCj7PmSmMuHQB8EjIxy+WR6X583hG1EmEFm1
+         SMJweXZrvcxmbh9aC5sL5lhDwrOAwcMnR1/IDr1XIoCZ0VqiG7n5d5khZ42Q7vniOopd
+         6few==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795130577; x=1795735377;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1OWXSRbdtdzLicFzuUAaijNOxktkEI2AOEgHXTBtgjw=;
+        b=0Z6iycG12Z3J+AeP8HiIKSHW26emTfnynj0nrnkagKtgqtTByuReGf13fLgSpiEa/d
+         MIXK9IlZx34sN7LDsJfTZfEUraL1F3OTqImv8ieHE5gjnCYiHfqlwj8hzA2rzD8TiNt3
+         UDj+j0njA8nt8mqSKCp1867fyIDH8xDVHABWiak1l3pUyLFTGPQsstl5ieWOgCyS5rTD
+         NRs1xyPogtfHwV56U8Fr2LS3CwJTZO6d9aEGjWL3hDpw3I683kLCFemU09sz/gshzVUA
+         8wyNEBmGew0r6Bb0vMnGhkqpYVxGe+sOO9xyviKnK/bXXnmmBVqZE/OeUbwhFY8gICZm
+         YknQ==
+X-Gm-Message-State: APuU4Z8aqYkVO9xAyeiFOlIaPS1swoFgxR18mHHeNdNHmHIWWDJmxqan
+	zuHT/1smDCP3SgO0uWL2OmfW0ktBxjeatwDO/73bJ9pJ8TAky/DBDuWzSL+zqA0K/WY=
+X-Gm-Gg: AZFdTZdEaU/qbplQuAKbKHm9zthrIo/IcYPKIhhcRkLl+A3n2wcxhaozKl+d+2Yz3Yi
+	HTFhA3C3eLRSHPXiPKMsVzKo9c/GYDXvsAsbMv/qORcN1OERJ7KaPYgubD72hWkyoxwqHDbvhI5
+	kG065gxv+7TkRSIr5w/NG2WkADQhxlHDUB6js8ubteQ//6gXqBfH2nyfdeHy4+L0njXNWACo2MV
+	x+qmCm/tCTLeVti+Tw+egOM872tLrH9CJ3PUTmoWgvDauXHA35zGnP2ECx1ID9aXsvV4yo9zuQF
+	QrPJtaKFJ91GdbJWNUZfnpE3Rr7B6AUKE1+elAuD46gIzQBVdsZBenXhMGmQsjX9YvuWymOKpK3
+	9xBYudSYmyOVE1tWNU92oTeayqjWRL+WyE2DB3PwpsvIIAbG1BeAp1ksK5kOAQ05Y72UtWRsO//
+	2mSqmPYRnFr57An1JngewYJHpH3fLiQ38H8XiLRvco4PE/djfx0mFL59k78p150h6KFnemZfthT
+	Jw/kHX0apbyHbnMHjaxZGPUkcZ9KNtFbp/ziNjD4PWkh3b2DT+Fp1d/yHtiaN5sTn9sdW2+Sdwb
+	3dZcrQyO/5iqalojKed4Vk8V/fueqbJNCoT9NXDHIAHMwLDp6nSELcOhIEjj3mXGkbFdR7ggW58
+	AJKTQ6KMpMzpQrZsKqZR4gJnRvaNRnNO7a8GavE/ZMWkRrbm9PghVThvrm66ueRAaL8MbEw==
+X-Received: by 2002:a05:693c:600c:b0:36a:1bac:6bf4 with SMTP id 5a478bee46e88-38570451dbemr1132476eec.18.1795130577164;
+        Thu, 19 Nov 2026 15:22:57 -0800 (PST)
+Received: from [192.168.1.142] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385679b4d6asm1949272eec.24.2026.11.19.15.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Nov 2026 15:22:56 -0800 (PST)
+Message-ID: <44e32552-98e2-4a4b-85fc-3aaa79033bd1@kernel.dk>
+Date: Thu, 19 Nov 2026 16:22:55 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -62,51 +91,47 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/epoll: reject IOSQE_FIXED_FILE in
+ io_epoll_ctl_prep()
+To: Dominik Maier <dmnk@google.com>
+Cc: io-uring@vger.kernel.org, dmnk+artist@google.com
+References: <20261119192223.2659961-1-dmnk@google.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261119192223.2659961-1-dmnk@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 19, 2026 at 11:10:03AM -0700, Jens Axboe wrote:
->But apparently nobody looks at aio?!
+On 11/19/26 12:22 PM, Dominik Maier wrote:
+> IORING_OP_EPOLL_CTL does not set .needs_file in io_issue_defs[] and
+> resolves both epfd and fd directly from the process file descriptor
+> table via CLASS(fd, ...) in io_epoll_ctl().
+> 
+> Unlike the other .needs_file = 0 operations (such as openat, statx,
+> xattr, and fs helpers), io_epoll_ctl_prep() does not reject
+> REQ_F_FIXED_FILE. On a ring configured with IORING_REGISTER_RESTRICTIONS
+> requiring IOSQE_FIXED_FILE, submitting IORING_OP_EPOLL_CTL with
+> IOSQE_FIXED_FILE set passes io_check_restriction() while operating on
+> unregistered regular file descriptors.
+> 
+> Reject REQ_F_FIXED_FILE with -EBADF in io_epoll_ctl_prep().
 
-We do :) Here's what happened with each of them:
+Seems like a case of too much LLM and too little actual thinking. The
+better solution here would be to allow a fixed file, there are numerous
+instances of exactly like that in io_uring. That would certainly be
+worth doing, for the sake of consistency.
 
->Commit: c03ce4173c7b
->Date: Apr 13
->Fix: Ring mapping inherited over fork
+> This issue was discovered with an AI-assisted code review tool (ARTIST)
+> and reproduced in QEMU/KVM on an unmodified v7.4-rc3 kernel without
+> kernel modifications or error injection; a standalone reproducer is
+> available upon maintainers' request. The fix was compile-tested with
+> -Werror and checked with checkpatch.pl --strict; an equivalent fix was
+> verified against the reproducer in QEMU/KVM.
 
->Commit: 3adf7ae18bf4
->Date: Apr 18
->Fix: Partial mremap of the ring
+Can we stop these silly disclaimers? If you insist on putting
+advertisement in your emails, at least put them below the '---' so we
+don't get them in the git log at least.
 
-Neither has a Fixes: or a stable tag, so they're not even in a stable tree.
-
->Commit: 398e3fa789aa
->Date: Aug 13
->Fix: eventfd/epoll recursion on poll
-
->Commit: d53b5aa5cfae
->Date: Oct 29
->Fix: Fault races ring truncation
-
-Both shipped last week in 7.3.4, 6.18.63 and 6.12.117. My LLM review
-flagged both as CVE worthy. The 7.3.4 batch hasn't been assigned yet.
-
->Commit: b44341e39d85
->Date: Oct 22
->Fix: Request count overflow in ioctx_alloc()
->CVE-worthy? Not in my opinion.
-
-Agreed. No Fixes: or stable tag on this one either, and there hasn't been an
-AUTOSEL batch since it was merged, so it isn't in any stable tree.
-
->Date: Oct 30
->Fix: exit_aio() returns before complete()
-
-I'm assuming this is ac4b449b39e6 ("aio: don't let exit_aio() return before
-complete() is done")? It has a stable tag but only went into v7.4-rc3, and it
-isn't in a stable release yet, so it hasn't come up for review.
-
---
-Thanks,
-Sasha
+-- 
+Jens Axboe
