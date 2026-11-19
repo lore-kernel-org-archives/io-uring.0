@@ -1,78 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.33
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795088967;
-	b=RbG8rNPDiVfSxcIXyOSsslaEktvWQnvQLfrC7OVy1Kmz8MWwmblE3pmtlHNrwH+JoyU8
-	 2TB4Ug0OT4RNISFRiHP6XTcrcq11ybZO1MByBJvZS6D7SrsKx+uQ5YNh+14NbODS7mYDw
-	 70aMhuAa0KN5mCZwlQz3Vy5tG7KbsEVmwrN6OwsadPmqlYLaK6NjIViK5YERIJQQZk/aN
-	 e9MFaIsjU4DEywWIH9sn8Jky5HQbk/JWRGtLdSxQfbGY/iqTnfDgwpaIOWg927uK1+NKe
-	 0dFehnQnBpFdu8idBexSxuHPdZF4HaZ+Y3+K9/4hOm9RmMNMuaD3vHc/yO6ZS0vSBfg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795088967;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
-	 Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-	 In-Reply-To:MIME-Version:Content-Transfer-Encoding:X-CMS-MailID:
-	 X-Msg-Generator:Content-Type:X-Sendblock-Type:CMS-TYPE:cpgsPolicy:
-	 X-CFilter-Loop:X-CMS-RootMailID:References;
-	bh=s3gTUBSKHbEfKVIWdTL7aoQee4hjar3Z0u47LY7+snY=;
-	b=Yi+cisNSE0pMiVdg/jku7xlmUp9B6A5j73QI8nHku6lgEHwguy+gFWAWZJMWbfVtD0xh
-	 p6UQGPJCeAqSqJAP0JjqktbmCKKqu4vKsz7cPZxykZOhV7twnXqeBw//woPhbMLvz1sjg
-	 Rs7CDgesG2rKHRpzL5CIBfuxxgIEaYFoxPCbj7yTo7/tyAOcPQ0o1PC0O09jBELwe093s
-	 R9imsK7tuRTu1iUuL91U4RkkRjF2gluIEJux/aeYshrLP+eflYrUvwUtzuUsssC8bz/To
-	 wmjM6tErVSkwlsAmCFji+LRrNREbi145pvL87sCG/700ENsszi+lPdv17srBUTsMGaA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=samsung.com;
-	spf=pass smtp.mailfrom=samsung.com;
-	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=dqQxzuxe;
-	arc=none smtp.remote-ip=203.254.224.33
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795089430;
+	b=AcSuDirJ2KDB7GOLH/e0ruotvNSj4wb7qizJAYAcUCCvMouWm48157TV1cgSYqlY9QA+
+	 rMpGJyYKGDQPvUnmGHAqVj2EAojpoflZ36IO2txal2TbxX4iKpl9/6NtxQDkvDvPVbwkp
+	 UKnGTKaqxsP7PtLV4hSi3BMB6vgg7EAPQPN7ZIL6RoqE0MGQCpIBzqQo8oJg6f8EPvxdl
+	 aQFwlv8Fy+pBJUe/Rh1WI9t7xQoEYQvwl4t731ZVTIfLFWDMebWXu+siZDpE2Ig2kFsCG
+	 BIfERIKviwnrYL5JbcM/XUYfUh69IkTwN0JXXymVP4GO8mdoNXq42i69EnBAi0eGRCA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795089430;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
+	b=JX7lsqpYybIMXrdaUF3IdyRgzIbDbNAffqAiioIqHTSoWcWbb/VBGAlFZ7ziGwPqBDJi
+	 SAcNbBd5YPVBY52jC08OvCxTSO2r7V8oOmIW8hTnNTY8RUPzDzwZcwk0WM+Ql3ZDpD9/B
+	 ioMkQQMcASXcHMrKgMiK51hUaGJfJtJQxyoNzgYXS2h2Ip8Q3ZSr4glzjiAM+HHpH4B6q
+	 k0Qrv29e34o3asJyzfrB0/a7zOA33A5K8EB0jbwtIXRDDhW6arGthtILomH9IGCGlwjV9
+	 VdWO7nEzbxZmXv8OF1ZuxgRRo/AIm9AK5EkIgdOtbwc4+TcMFWZRL7WHCicyJubMrwQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3dI6WCM;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3C0606A326
-	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C3C0606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54619606A32A
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:57:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54619606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=dqQxzuxe
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20261119114919epoutp03baa5e874a33cdc597c6d3eb283e37a62~pb_Xwmxhw2166221662epoutp03F
-	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20261119114919epoutp03baa5e874a33cdc597c6d3eb283e37a62~pb_Xwmxhw2166221662epoutp03F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1795088959;
-	bh=s3gTUBSKHbEfKVIWdTL7aoQee4hjar3Z0u47LY7+snY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dqQxzuxeRRmh1EFAmYTtlnDzHNy7szmV2NX64ahPOy54B26M25Xz30VI04bYOSF9u
-	 Rc5GSlJ1M6YFK2iHf6Sp9rnXXbgVSPbljvzbwmT2AqKQChT6mEQdWCkZnWLwf42PXm
-	 48NpZ632c3Yi5bLhjokddHWbtTriJA9f1DimvsLI=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20261119114919epcas5p35d531a748785348673944fddcd54006d~pb_XN5G2m1102911029epcas5p3C;
-	Thu, 19 Nov 2026 11:49:19 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.91]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4jVcFV1xFDz2SSKb; Thu, 19 Nov
-	2026 11:49:18 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20261119095725epcas5p3a8e14a90891afe16faded4fb78484b49~pacqyFUJp0437304373epcas5p33;
-	Thu, 19 Nov 2026 09:57:25 +0000 (GMT)
-Received: from localhost.localdomain (unknown [107.99.41.245]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20261119095723epsmtip17c51681d284e723f2550c9ff004cea68~pacotAQBp2192721927epsmtip1a;
-	Thu, 19 Nov 2026 09:57:23 +0000 (GMT)
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de,
-	sagi@grimberg.me, James.Bottomley@HansenPartnership.com, mkp@kernel.org,
-	bernd@bsbernd.com, joannelkoong@gmail.com, miklos@szeredi.hu
-Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-	fuse-devel@lists.linux.dev, joshi.k@samsung.com, anuj20.g@samsung.com
-Subject: [PATCH v4 4/5] block: map dma-buf iterators in
- blk_rq_map_user_iov()
-Date: Thu, 19 Nov 2026 15:26:14 +0530
-Message-Id: <20261119095615.1840522-5-anuj20.g@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20261119095615.1840522-1-anuj20.g@samsung.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3dI6WCM
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b6f42095bcso3306272a12.3
+        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 03:57:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795089429; cv=none;
+        d=google.com; s=arc-20260327;
+        b=pWk+9LDEGTaLW1knSUJPEC44ZM/EYt1L/g5yEoaUFJR4pdW0ZYc2RUjUqX3eaFZabB
+         d6ly+ABJPWPXKLKBUljN8WhNmmE+mBkrE6AdrcHrySqwvVMvMB/6QbtLCehbYxX8FF1H
+         +psYKaKwUbg8ZKzLqdyy327ckLXFYLyD3oqYGR8bdc+TgsCskpRBNFtOYjcbzuFxov8K
+         53tQNbDINa6AV8u32+vFoIHBFGOm++4TOSOvRrranDdFFv4nne7ewLYyzaZ1+Iw2Z6BK
+         LIYCDGTV+VlhfQ+AR4CNRfr69Z6ifMaWFnn5UN93TJqqHVw9uZvI9YMwKGJ9FUgLNnwp
+         +hfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
+        fh=SmggdOTmmC+BoeHOikBXVY5kT7yZqJv2g6igeHoxpvA=;
+        b=BtB2pif2ekIujzd3GttOJTIz9m5HP3O1ctgx+ZdoEl/rMZkr+JGWKiu6ecRGcS69QL
+         Wgwz6EM6nDAc6vxLzO85aoVNXqgxI5qEgBr595IXfQ2w5QU7HxlPt5nfFmlk2xhphMnk
+         WtnNnModVCGGB82u4Jfc/ue59/O3XRRmYdMZ1DrmUmTQ7k1AstaOtSRLsSXwJ9PTSsjc
+         ZyzeYGZWBKPlNCnoweyRrDTTYse3FcnEN4617Jnu6rbCt2muBLSs5X0Oc8tL9Kk94wiM
+         +q81GJys0WJ6XIjMrmKcHA+iBOzME/ciOXjqH0n+ZODdvXkDIjZ4WAum0vimAUJgDPH1
+         V6Ag==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795089429; x=1795694229; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
+        b=K3dI6WCMFECyf1dQvj6+tjaYhjJfKrNWoVtixGzRQjg9hBHKLgJUV9jS2ejMt8mV70
+         FUaP+VD0fcCJw8DuPW228fHRIs6UC5YTRaFCorGpUjggIzvfceeT9VDXSeeAsIM4K/Y0
+         dI4yB8/W/9IAkbZvuNywYM1ulat3Tvp3Njr+CBFpEqydko3cMlGXfm79vX29MEwCUULD
+         4PXKV0848aTIpdf/FMtlUEqvpn85CPFioJ+cx/TIbaDofkrnexNAEQtyqz4Z5zhLOoRK
+         MPjWIUb1cuC0LQ8yBW88FLiqjvp3WQoK8vkiqGXnwluJMY8FROgTztlluOynaxTORKBO
+         XNGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795089429; x=1795694229;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
+        b=hjh94F63NRDrHOt5wMMZTSMwnXokmp7hJOssZWuHSNnWihaNOO8qR4rzT7eZ9Np8Om
+         FO4RMb3vlCSeykmnHRoq1qW1nyUV+G2aLtQzAhcCf8GFC7ybZZf66BdWoLq5EZgnytVB
+         N0gdEvkO3QA0M2/7mbAZeueSVi2UY4eKRhuZOEJi6HhH8cGnxBdR1Ojj3HJjCDcIZ6X5
+         WB1NhS7WYusNnbTQidByDmTmWLuAbIeL9YxHgjQTsGH+HrHkcLkTjcpiWHdLEDdo9pMW
+         vkd8UlECPl7W8IdIymlG1W1MvPPOEhAsI39u+TMBQXs3MPF0bqpn9i0/GIP96pUfIYMJ
+         QuRQ==
+X-Gm-Message-State: APuU4Z8VPobzPe0y0vOpDY0gHKLHutVavwFDmF6uM9ntHBIiHBS/sg1j
+	Gpgq2xEUwSETgGkUAu/QSkqQqSd3yw3Qf9a6mwf3sDs5uCny/qayfes2k+7MBcdVUfEXEkQNgBN
+	pb8esTn/NeIth1Kz7iHr2ewRQSyJMEg==
+X-Gm-Gg: AYBFou1sUV+s/lZWlW1vBuoRpTyrxjc0B44nPAgHPn7C+IMAIX+A2ooLXgO0dElL/Jk
+	iruUis1QBa2ZYe0DuXkmuKjVEkQIWxGuSB9mpn6NyminG50kkSkfEo6xwgcNYx0gPdhdLm/NUb/
+	p9lOUPc6ch30QP+pr1+6i57ihDQEzosxYXE07Fx+xejCk1zNVlppGlVmzcNRrIXPCAo+3KYEKjA
+	u3olBI2OStFGjE5YqcsDa9qV4QXw9eWq6pEg0dIC9OApkMbp29RxfzURVHAcp4YvKjn7SYznQUM
+	bjZKuse6Mg0K04fzrExzIrP7tJ4OfUCIfN4HNRdL5Qjaorrp4TVMqg2xv50Un45wCPrj24+an0c
+	vNCpIBniCxHBN4qT95q1hb/oy6vjPYgBTGwuI9t6hPuZk4ccEyCbNVyRFuovByMEBYyQHMbHjlV
+	7xrEUDD5y73t8F0iw23sFbYET7BUdpnAqn6N3G4JTVpkTNDpXSo6nnjKXnZQpNojGaorc=
+X-Received: by 2002:a05:6402:2341:b0:6b8:50e:3bb0 with SMTP id
+ 4fb4d7f45d1cf-6b887f051b5mr5100854a12.43.1795089428496; Thu, 19 Nov 2026
+ 03:57:08 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -82,62 +103,24 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20261119095725epcas5p3a8e14a90891afe16faded4fb78484b49
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20261119095725epcas5p3a8e14a90891afe16faded4fb78484b49
-References: <20261119095615.1840522-1-anuj20.g@samsung.com>
-	<CGME20261119095725epcas5p3a8e14a90891afe16faded4fb78484b49@epcas5p3.samsung.com>
+References: <20261030014540.3065403-1-anuj1072538@gmail.com>
+In-Reply-To: <20261030014540.3065403-1-anuj1072538@gmail.com>
+From: Anuj gupta <anuj1072538@gmail.com>
+Date: Thu, 19 Nov 2026 17:26:31 +0530
+X-Gm-Features: AclHuK_SZqZJTPjuQjOc7cIWYhN7F4D2sFh9VtkHTF5WSy6wsq_qeWgrWRBsOwc
+Message-ID: <CACzX3At2GfpQB7eE1S2njJONChr8DmDC5poBw4pX+pAg21cscg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] dma-buf backed NVMe passthrough I/O
+To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de, 
+	sagi@grimberg.me, James.Bottomley@hansenpartnership.com, mkp@kernel.org, 
+	bernd@bsbernd.com, joannelkoong@gmail.com, miklos@szeredi.hu
+Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	fuse-devel@lists.linux.dev, joshi.k@samsung.com, anuj20.g@samsung.com
+Content-Type: text/plain; charset="UTF-8"
 
-A dma-buf iterator can't fall back to a bounce copy, so map it directly
-with blk_rq_map_user_bvec(), which already handles it through
-bio_iov_iter_set(). Fail with -EINVAL where a copy would otherwise be
-needed, and update the blk_rq_map_user_bvec() comment to match.
-
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- block/blk-map.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 7369aba74771..a65b255b229c 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -459,7 +459,7 @@ int blk_rq_append_bio(struct request *rq, struct bio *bio)
- }
- EXPORT_SYMBOL(blk_rq_append_bio);
- 
--/* Prepare bio for passthrough IO given ITER_BVEC iter */
-+/* Prepare a bio for passthrough I/O from a directly mapped iterator. */
- static int blk_rq_map_user_bvec(struct request *rq, const struct iov_iter *iter)
- {
- 	unsigned int max_bytes = rq->q->limits.max_hw_sectors << SECTOR_SHIFT;
-@@ -506,6 +506,19 @@ int blk_rq_map_user_iov(struct request_queue *q, struct request *rq,
- 	struct iov_iter i;
- 	int ret = -EINVAL;
- 
-+	if (iov_iter_is_dmabuf_map(iter)) {
-+		if (map_data || (iov_iter_alignment(iter) & align))
-+			return -EINVAL;
-+		ret = blk_rq_map_user_bvec(rq, iter);
-+		/*
-+		 * -EREMOTEIO asks the caller to fall back to a bounce copy,
-+		 * which a dma-buf can't do.
-+		 */
-+		if (ret == -EREMOTEIO)
-+			ret = -EINVAL;
-+		return ret;
-+	}
-+
- 	if (map_data)
- 		copy = true;
- 	else if (iov_iter_alignment(iter) & align)
--- 
-2.25.1
-
+Hi Jens,
+All patches in this series carry Reviewed-by tags from Pavel or
+Christoph. The series no longer cleanly applies to current for-next, so
+I have rebased it and posted a v4:
+https://lore.kernel.org/linux-block/20261119095615.1840522-1-anuj20.g@samsung.com/
+Please LMK if you have any other comments?
