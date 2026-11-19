@@ -1,99 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795089430;
-	b=AcSuDirJ2KDB7GOLH/e0ruotvNSj4wb7qizJAYAcUCCvMouWm48157TV1cgSYqlY9QA+
-	 rMpGJyYKGDQPvUnmGHAqVj2EAojpoflZ36IO2txal2TbxX4iKpl9/6NtxQDkvDvPVbwkp
-	 UKnGTKaqxsP7PtLV4hSi3BMB6vgg7EAPQPN7ZIL6RoqE0MGQCpIBzqQo8oJg6f8EPvxdl
-	 aQFwlv8Fy+pBJUe/Rh1WI9t7xQoEYQvwl4t731ZVTIfLFWDMebWXu+siZDpE2Ig2kFsCG
-	 BIfERIKviwnrYL5JbcM/XUYfUh69IkTwN0JXXymVP4GO8mdoNXq42i69EnBAi0eGRCA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795089430;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795089619;
+	b=RMjHeCUOVsx3u1skwLTdP/An7MasNJ9b8FiU+U4wmsIVYkwSFO6hrC/RopIlgvfUolU2
+	 zJ0XIybcdPIQOKqXOw9ivMJnSJAx13FYpsh+BL8IFwhWUaugSFdV8RQhnth7kLc9rSddd
+	 LJbhhTVK4KYTiVzIKuDRQhpTn4/pzBVPmVPrqPx2sTDJlx6KUtl10fPy+9wzVJza1Xlt8
+	 9QvuRd34ZC0eh5xEVIJcRY9UVErEvv26j5+Sq1EqPBT+GIaRzCDxPuK4ByDpGPBToE9kY
+	 ZwK2oDtpO8WG75gxiM4XO1IH5B7zK5agb1557DTDw11YO02PAQuvB5RfAlJTYie1FVQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795089619;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
-	b=JX7lsqpYybIMXrdaUF3IdyRgzIbDbNAffqAiioIqHTSoWcWbb/VBGAlFZ7ziGwPqBDJi
-	 SAcNbBd5YPVBY52jC08OvCxTSO2r7V8oOmIW8hTnNTY8RUPzDzwZcwk0WM+Ql3ZDpD9/B
-	 ioMkQQMcASXcHMrKgMiK51hUaGJfJtJQxyoNzgYXS2h2Ip8Q3ZSr4glzjiAM+HHpH4B6q
-	 k0Qrv29e34o3asJyzfrB0/a7zOA33A5K8EB0jbwtIXRDDhW6arGthtILomH9IGCGlwjV9
-	 VdWO7nEzbxZmXv8OF1ZuxgRRo/AIm9AK5EkIgdOtbwc4+TcMFWZRL7WHCicyJubMrwQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+	b=B9d5A4l/glI0indjMwouRvha+95VXPUoe++BC84ndmugSUQvW4TGQbTqLPzc8roZbkMI
+	 fjbw3vwxBVu718EEpP4aikVQUeDnW4s+fftZXjofKZpdC9yY65u/IOsHE/lyi6u1SvFqE
+	 GwOOzy4uikqK/lzWpy2YUTM7l3JaBniZelTFQ3fiTWLj/ZnEyGYEElLQXsfT7VZmGlZGC
+	 RY6/meFpOjoJhSL+Q0fh8/SibQCZayINLzu+3dakBbIvCEz/Hc9J18H0lXhfD0cNlbxgU
+	 4tECOoJy6+SuUnI+QhlFLNPtQxM4kgFl3LTMLtCiu1X4dAqPVlEZZJYh9N37NAX+9Mw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3dI6WCM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="MTPwBz/J";
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54619606A32A
-	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:57:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54619606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5A6606A324
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 12:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D5A6606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K3dI6WCM
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b6f42095bcso3306272a12.3
-        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 03:57:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795089429; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pWk+9LDEGTaLW1knSUJPEC44ZM/EYt1L/g5yEoaUFJR4pdW0ZYc2RUjUqX3eaFZabB
-         d6ly+ABJPWPXKLKBUljN8WhNmmE+mBkrE6AdrcHrySqwvVMvMB/6QbtLCehbYxX8FF1H
-         +psYKaKwUbg8ZKzLqdyy327ckLXFYLyD3oqYGR8bdc+TgsCskpRBNFtOYjcbzuFxov8K
-         53tQNbDINa6AV8u32+vFoIHBFGOm++4TOSOvRrranDdFFv4nne7ewLYyzaZ1+Iw2Z6BK
-         LIYCDGTV+VlhfQ+AR4CNRfr69Z6ifMaWFnn5UN93TJqqHVw9uZvI9YMwKGJ9FUgLNnwp
-         +hfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
-        fh=SmggdOTmmC+BoeHOikBXVY5kT7yZqJv2g6igeHoxpvA=;
-        b=BtB2pif2ekIujzd3GttOJTIz9m5HP3O1ctgx+ZdoEl/rMZkr+JGWKiu6ecRGcS69QL
-         Wgwz6EM6nDAc6vxLzO85aoVNXqgxI5qEgBr595IXfQ2w5QU7HxlPt5nfFmlk2xhphMnk
-         WtnNnModVCGGB82u4Jfc/ue59/O3XRRmYdMZ1DrmUmTQ7k1AstaOtSRLsSXwJ9PTSsjc
-         ZyzeYGZWBKPlNCnoweyRrDTTYse3FcnEN4617Jnu6rbCt2muBLSs5X0Oc8tL9Kk94wiM
-         +q81GJys0WJ6XIjMrmKcHA+iBOzME/ciOXjqH0n+ZODdvXkDIjZ4WAum0vimAUJgDPH1
-         V6Ag==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MTPwBz/J
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b5e5e64494so1350290b3a.1
+        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 04:00:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795089429; x=1795694229; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
-        b=K3dI6WCMFECyf1dQvj6+tjaYhjJfKrNWoVtixGzRQjg9hBHKLgJUV9jS2ejMt8mV70
-         FUaP+VD0fcCJw8DuPW228fHRIs6UC5YTRaFCorGpUjggIzvfceeT9VDXSeeAsIM4K/Y0
-         dI4yB8/W/9IAkbZvuNywYM1ulat3Tvp3Njr+CBFpEqydko3cMlGXfm79vX29MEwCUULD
-         4PXKV0848aTIpdf/FMtlUEqvpn85CPFioJ+cx/TIbaDofkrnexNAEQtyqz4Z5zhLOoRK
-         MPjWIUb1cuC0LQ8yBW88FLiqjvp3WQoK8vkiqGXnwluJMY8FROgTztlluOynaxTORKBO
-         XNGw==
+        d=gmail.com; s=20260707; t=1795089618; x=1795694418; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+        b=MTPwBz/JY27HN3sgRWUZI0tlkBcWXxf7M7RAXN68cgdg1Am8p7kKnqmSmbk9i3paIX
+         nxuGPCiyFzKnbLXHTcpkZL9Jl05xOmooAxQ4ClctRHIr5+ntBgvY4iRhOPPxeMYmnypY
+         1SPlY1JPWNh72h0Le+gSG7pxiVUY6/xphqQkwjAhgBiRQ9xfq4MSEwQT4mtoTarBFDIM
+         pA2OfASffwaYexAEuos0xfq9yHeB+zfhsnIZivL5ud55stPCuYqdAMDCI4dK5GuB2BAI
+         rsecijok4RzXP6n9QVIouU2C2dsMFACTuLaYblKxFjsHNOIT7edbPt+7lOVID009Ys9C
+         aFiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795089429; x=1795694229;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=zlJH4+t0mXQ/RY9w29YgUuQUml1Z0NJ3e214jG9j+bE=;
-        b=hjh94F63NRDrHOt5wMMZTSMwnXokmp7hJOssZWuHSNnWihaNOO8qR4rzT7eZ9Np8Om
-         FO4RMb3vlCSeykmnHRoq1qW1nyUV+G2aLtQzAhcCf8GFC7ybZZf66BdWoLq5EZgnytVB
-         N0gdEvkO3QA0M2/7mbAZeueSVi2UY4eKRhuZOEJi6HhH8cGnxBdR1Ojj3HJjCDcIZ6X5
-         WB1NhS7WYusNnbTQidByDmTmWLuAbIeL9YxHgjQTsGH+HrHkcLkTjcpiWHdLEDdo9pMW
-         vkd8UlECPl7W8IdIymlG1W1MvPPOEhAsI39u+TMBQXs3MPF0bqpn9i0/GIP96pUfIYMJ
-         QuRQ==
-X-Gm-Message-State: APuU4Z8VPobzPe0y0vOpDY0gHKLHutVavwFDmF6uM9ntHBIiHBS/sg1j
-	Gpgq2xEUwSETgGkUAu/QSkqQqSd3yw3Qf9a6mwf3sDs5uCny/qayfes2k+7MBcdVUfEXEkQNgBN
-	pb8esTn/NeIth1Kz7iHr2ewRQSyJMEg==
-X-Gm-Gg: AYBFou1sUV+s/lZWlW1vBuoRpTyrxjc0B44nPAgHPn7C+IMAIX+A2ooLXgO0dElL/Jk
-	iruUis1QBa2ZYe0DuXkmuKjVEkQIWxGuSB9mpn6NyminG50kkSkfEo6xwgcNYx0gPdhdLm/NUb/
-	p9lOUPc6ch30QP+pr1+6i57ihDQEzosxYXE07Fx+xejCk1zNVlppGlVmzcNRrIXPCAo+3KYEKjA
-	u3olBI2OStFGjE5YqcsDa9qV4QXw9eWq6pEg0dIC9OApkMbp29RxfzURVHAcp4YvKjn7SYznQUM
-	bjZKuse6Mg0K04fzrExzIrP7tJ4OfUCIfN4HNRdL5Qjaorrp4TVMqg2xv50Un45wCPrj24+an0c
-	vNCpIBniCxHBN4qT95q1hb/oy6vjPYgBTGwuI9t6hPuZk4ccEyCbNVyRFuovByMEBYyQHMbHjlV
-	7xrEUDD5y73t8F0iw23sFbYET7BUdpnAqn6N3G4JTVpkTNDpXSo6nnjKXnZQpNojGaorc=
-X-Received: by 2002:a05:6402:2341:b0:6b8:50e:3bb0 with SMTP id
- 4fb4d7f45d1cf-6b887f051b5mr5100854a12.43.1795089428496; Thu, 19 Nov 2026
- 03:57:08 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795089618; x=1795694418;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9gIVlXgPEmkZGmA453gdpvq+MACAnZz6AjvCWRUAbDQ=;
+        b=XZoPOUxI1tb9k4Vf4s0grgcCQZN/qk/IV/kgVP5rrr+UkZF+EjE1VxGQQeHHx7c3Aj
+         6i4L3jOw1sv+A0Z4+QzOVN3YEGq36hVrG1l0fCyLa6MuWlqWKD9VHkpbNhkRDfsFpoti
+         46WMiHM2YI0Xz6n2vi1f6MWt5BzokMh+DUOFlfW7MjBO2cCyJyKQg9ZcU3t1acopWsO7
+         gkHZQ7ThHFhLtWKfxff63hVNg4jkPB0NEGK9EOnRe9MYQcDAvELGvhoDJjOPaPv4thvy
+         41sBwpTlv3KZPeza86VmwVy8wtUHPdCZ/WtOMlLoPrgBVutye/WG7GBti3aaP9MZncCc
+         DSQg==
+X-Gm-Message-State: APuU4Z9G0MP88uy3cFM7o5IuFg+HB42XlcYoQZgk6kvSEd4vZN/LcsDJ
+	WfALg70yljo2qnkDupuDz+J33C2Lcs3osV6UcJFDSoXui44sYcYfZtIi
+X-Gm-Gg: AYBFou3Poa4suuEh5Zt06KKDxshHjOWAPncOGjXTTPJIYWu0I4PhsqCQGKVaaTwSPbr
+	L7hEFtP688ZmcTxyEWYDo+4xOr5cpkwVChP75UnF3J+MBhN/f2OXmi8ii+DbViJi/ZEIElqejiH
+	1hAwHOcG7btSOIW0CIlwsBhT7JK1mbflvL8O1Zx46g7Evk4G4OUEvMg6iuDczB7q6N129FMLHTt
+	emVLBCfxDzHRfjXPsZCRkEucYFvcwN8FHHdBZsWvyk6vrQjLYNxBXzhw7j38+7p5u5M8LQjmyNF
+	DvrGb7CnTVpVRpdUSBziFzYr6/LFrL9tTf+Ap3ZYS6k8aul8PLDV58cqNqkxFTTD4tap16boDdI
+	x4BuMOZfaJhWeBw/p3UGHx0CIL3ibF3mB3OTvzE93g0OT1y/75zgFAcfZ+HX1z4ztOVNiQWLB97
+	grN0XIUENFDBnu9Osu7ZeghEkyyVSo2ljdiMzo6nj1pi15tEc7zzpm+ZkDGsQhLyR3Iryo5eitf
+	a/FSjd7rV5ZJdBGoN4Usk2SQxSsYwI+7G9tlbYrIwVymvj3DiAFZgFfCyrn7rC3p+sxRrTMbdmU
+	K3yOhMy0iaZYmIg/eEdJQLihnOi7yXXd33XgyNA7nN6KHNQWuJEqw4KlzGWdhedO
+X-Received: by 2002:a05:6a00:2d86:b0:878:3538:8f7a with SMTP id d2e1a72fcca58-8c5d51a37ccmr4621024b3a.40.1795089617602;
+        Thu, 19 Nov 2026 04:00:17 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cb93d04bsm2665088b3a.49.2026.11.19.04.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 04:00:17 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: asml.silence@gmail.com,
+	axboe@kernel.dk
+Cc: io-uring@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring/bpf-ops: validate loop_step before registration
+Date: Thu, 19 Nov 2026 11:59:29 +0000
+Message-ID: <20261119115942.3613868-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -103,24 +94,51 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030014540.3065403-1-anuj1072538@gmail.com>
-In-Reply-To: <20261030014540.3065403-1-anuj1072538@gmail.com>
-From: Anuj gupta <anuj1072538@gmail.com>
-Date: Thu, 19 Nov 2026 17:26:31 +0530
-X-Gm-Features: AclHuK_SZqZJTPjuQjOc7cIWYhN7F4D2sFh9VtkHTF5WSy6wsq_qeWgrWRBsOwc
-Message-ID: <CACzX3At2GfpQB7eE1S2njJONChr8DmDC5poBw4pX+pAg21cscg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] dma-buf backed NVMe passthrough I/O
-To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de, 
-	sagi@grimberg.me, James.Bottomley@hansenpartnership.com, mkp@kernel.org, 
-	bernd@bsbernd.com, joannelkoong@gmail.com, miklos@szeredi.hu
-Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, joshi.k@samsung.com, anuj20.g@samsung.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Jens,
-All patches in this series carry Reviewed-by tags from Pavel or
-Christoph. The series no longer cleanly applies to current for-next, so
-I have rebased it and posted a v4:
-https://lore.kernel.org/linux-block/20261119095615.1840522-1-anuj20.g@samsung.com/
-Please LMK if you have any other comments?
+A struct_ops map with only ring_fd set leaves loop_step NULL. The
+struct_ops update path skips a zero program fd, and bpf_ring_ops does
+not validate the completed value. Without BPF_F_LINK, the update then
+calls bpf_io_reg(), where io_install_bpf() triggers a kernel warning
+before returning -EINVAL. With BPF_F_LINK, the warning occurs when the
+link is created.
+
+Validate loop_step before either registration path. Reject an incomplete
+value with -EINVAL so malformed userspace input cannot trigger the
+warning.
+
+Fixes: 98f37634b12b ("io_uring/bpf-ops: implement bpf ops registration")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ io_uring/bpf-ops.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+index 6c2a587fb1bf..dfa93144b090 100644
+--- a/io_uring/bpf-ops.c
++++ b/io_uring/bpf-ops.c
+@@ -157,6 +157,13 @@ static int bpf_io_check_member(const struct btf_type *t,
+ 	return 0;
+ }
+ 
++static int bpf_io_validate(void *kdata)
++{
++	const struct io_uring_bpf_ops *ops = kdata;
++
++	return ops->loop_step ? 0 : -EINVAL;
++}
++
+ static int bpf_io_init_member(const struct btf_type *t,
+ 			       const struct btf_member *member,
+ 			       void *kdata, const void *udata)
+@@ -269,6 +276,7 @@ static struct bpf_struct_ops bpf_ring_ops = {
+ 	.check_member = bpf_io_check_member,
+ 	.init_member = bpf_io_init_member,
+ 	.init = bpf_io_init,
++	.validate = bpf_io_validate,
+ 	.cfi_stubs = &io_bpf_ops_stubs,
+ 	.name = "io_uring_bpf_ops",
+ 	.owner = THIS_MODULE,
+-- 
+2.43.0
+
