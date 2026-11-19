@@ -1,100 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795027156;
-	b=IS38p+yn+x7IE9S//XS5wDzyAvMPIERq/qqiZRoLaKCRXFNlhlzg0ghZH338V6RxTph3
-	 zo0PywfHIcAG9ceY6+mMyfU7OzVYzKRmCO6j0IEeOl12G8vEXXpnYB88iEv6cd2/d8V75
-	 ccvu72X/twaUX51dCYZbiAAiW8C4epjYANlTW8zzBhCeWD1brGjmtMcI5bcFHQY5v8aON
-	 wUA0SwBIZP/gH3MmikbARTSyg2yjWpUMBaNSGtlxZNnnD7T/OPyyw+dXl0LVlYP4k6D1X
-	 ojLxAIcIQ8QGKplIv69PbkxgZnNoQ7dHXt7r9ex/XJ8isZO1zmWtzyur2/1BYd539hg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795027156;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rOk5XMLKV41q7GLzoLXIV7TkndqjJrVZPK5114ekmS8=;
-	b=xUgZcpvj54bpiMEoojLijB/NeCyQ8P4b9KqCVO65M+hKi7s86wCsFIgHAfayMnQtxXMO
-	 jSqNFZcWkaLRxZz9/EVqATDuzQTG/Dd39LUkIAtf5+1PUz+NERmO+R4YYS1di+UpnPywO
-	 3yaetAZYxxo7u6wKSeKZ1Lr6cbySZabWjFOtK1p7TjafnygTavFrci2LR/ZexkkzhgKlk
-	 Vewjypy6zcusBNycBU0DP8IFc+m7tXCrRobbvxgiX68OTlZKZ8Kg2fhWkKODL5EN5ZhuY
-	 ZdIpAZI9d1rD7fm004oyYFJ5HstaLC/nF3oxhPsKnrFdg0Q421+pvkJPWVSYB4QCa8Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZAaEvO25;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.43
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.240
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795050165;
+	b=bOT3mvRJWq1BGJnhAnw33J+m9jCULy72HpQBm42aUX+oj3FUBIztCPiXtKUM4ty4L2aW
+	 rWulkWHXDiuU6ZiiopdDhpewreg8tZTeg5VY1+C493JXJJPBu1s8A/MNK8xZee5LO3ES4
+	 9DOKKc03nf3wnTymee7xOLZOim2VMyrlO27OyuYvgw9seTLqG5qn/jTQpYLgPzYcQtXy1
+	 eXG43RsfGSuT6b4aHpdxl9q2KOZvj+Pa+EzVnGWnR3pHZ/oA8jD6LCR3FYsahCtSWRlB4
+	 ugjIIEpFkuQ7Ku9SXIFANmoRkccDdgoggEVMrGqb89nZJO7IGiMPbSeZ6D6qD+Z9HKA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795050165;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=BlL4W75h1MApHqdiv3CTVmX4B2zbrj1hbYs9giA+q5g=;
+	b=DmXNw/VodpaVSZ8/yPh9Vzfcdw7wbSmoCComifdXoWoiwPYNeg5Snq9TmdKnaroXxkUL
+	 a4BnIKD14kDKCGiDjeImiG0pHvfRoF4DS5DeFYcTiNQW90ueKYjn2gQcNInihUGM4M7t6
+	 sf7+guip7iWNWcCwv7ITiZ2lY1yhBSpuXe86XOpF2P5R41F4CQA7dSnGUrU8SBQkACQ1f
+	 u0PRcuqTSoEdejYG0G4QHwJWxBfmSJktK++k0iO5G53GtBpy6b9fs6x3rO4D0S0pwHi5i
+	 4HdEACGAzEi3D1v2yqmE2nxAdnLHBB1Isnq44l2MKmwVSVQVUavyB8OP9K1DV31ALVg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fpFl4L4R;
+	arc=none smtp.remote-ip=91.218.175.240
+Received: from mta0.migadu.com (out-240.mta0.migadu.com [91.218.175.240])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779EF606A32C
-	for <io-uring@vger.kernel.org>; Wed, 18 Nov 2026 18:39:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 779EF606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5652606A325
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 01:02:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5652606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ZAaEvO25
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1ae7fc5681dso523c88.1
-        for <io-uring@vger.kernel.org>; Wed, 18 Nov 2026 10:39:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795027155; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EC/1Van5tdKizWtW7DYcW2yOComIAp0i5ClBTRwtatrTSI/Cu63B1em6aRhPy3sdC8
-         MnxTqbVHiyqL2qdhScDadame8InvtnCIL9rgmh2UWB3Mnp7vDexvqg5S4+A/AVPUzPxH
-         bw0UHAGvsWUgTmrbS3wXA16knNU3PLcXoiZseWtS+3BJSlBTllC/a/Y4e+TSleCMxRRI
-         K64QxlSuaBZkXGAnNkTbmf6QG+VEBp6tKDbfryd7Is7MrHJ9LY3KreRI/EFTuJG6m/rk
-         Xh1ww111KwNq1WXg99f2ccazMls34egvjFqLgszAb1C+5No4YF6gR0VPH29SyqPBvZS/
-         Gm/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rOk5XMLKV41q7GLzoLXIV7TkndqjJrVZPK5114ekmS8=;
-        fh=7xfTPEADScVfDRJ4IophMH/PBpaiphEmuwPP5w0OdCg=;
-        b=c/cwPzqolxFUF0vxX76YjiymwOyF/Enblns+UTc/1TyTlktw6rKdFJC+zYaFhwgdfP
-         2iqDTIVVO7tIiaIY8YAkDmN5sgkNz7H8G8mkfNj2BQZ//hHWJ5Ne8CBq2UJ5AAghh/+8
-         Mt0Qq36kfOgJvlyrC8h9oho5Ro3t/ilWOe56xKGEYdsZx/uxgeQBE8JDryBT047Cwy5O
-         D/xFkOdMdxnYarcvUOiqvKYkhOpUuBHbOhDGujWPCe7RxjDa7WC5GQ/62p5ujbW2z1yZ
-         APh3OG2li+2rMp59TkCtK9YV53bAvTK10L8v4v5N+r46Q6czQaZDsaRCl83IMcsCp6GD
-         PX6Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795027155; x=1795631955; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rOk5XMLKV41q7GLzoLXIV7TkndqjJrVZPK5114ekmS8=;
-        b=ZAaEvO25CR3taVZcmnXF68wjTJix97rTrAGQ68xEM0GZSJjDB9dTmNdrvjcsjM5DAx
-         MrRb8zbkzIWx50PjRSz6yorIDv8ibAviTnCQVVMSFzRQKVfZDiU6XyQs5w4HPAs5tqzD
-         BsgtAY1SsuWj6nr/2cFRjkySkht8K0EsTj4DWsoLRj1zxwUM6IWMeKjUq982hpNC3ZCr
-         n50I+m3FYF/WfSGc04kSTIoD5lGEfobfZQ7rtJZe77/acKLaeQOrTfCWkvAi/480aW/m
-         P5BBg38eh0luesS4uP/AuaPUW5Iqh2v7QaTFsq7xfoAid8Nn8HgUQTCNX+xUS9WiQBDn
-         UYVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795027155; x=1795631955;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rOk5XMLKV41q7GLzoLXIV7TkndqjJrVZPK5114ekmS8=;
-        b=Vh6Ls/3OuDdIGWauTweyLSXvfGxzijL8XDUzdqRI3UQLSRZ/fQjHlh2Xi79vgXR6UL
-         FrT8Idi9RGzqIHCh90DHB9UVFm8+IDAaWwArklcGcTcoj70qvKoQU/vyWuQAnp/Aoodn
-         NVX0OHV8+Z6lW4onQWvrtN8ROhEriEbTONW8a6jr6LTKLWUHasdqv+MHOnf+ZQLo4mDB
-         YjP+2jcWO9l+EAv7G0C+VyFppkocRDLfNauIoOUaxlUHzlnYnEt3AhiRaarhr7VHBi1R
-         AoQUUwZjCF7a4SfH3wxwcjOe0BJIKub0VWQS9PvpcLFPQNcYYaNKV43889CQbMUU8KFj
-         irdg==
-X-Forwarded-Encrypted: i=1; AL+hErHc8k25lqaa1+bPEa1Na1UPNfsM7OXa2ZNBOnkBu5PTvVR+Gs3BKc1gi0J73LVB8Kn6hfHbJ1Qbwg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+yt7PUibH4fPOBNV/+mdz0moSbe1d97Hh3Qd5PIScWzMGsTmQM
-	2yQtni3HUxjBhT4I+WqBcugQY/GAIMdjexkEeFm5pRT3hBQ7vFveDpBZYzX0X6ESDepB1+AfQHY
-	8JhWt//OWUHrbbVp0LtzADrbcdrgb4H22sXSMIDcl
-X-Gm-Gg: AYBFou1sCFZSVHTscFCoKrlODvjvgQAXdNc92QV0E3MG0i5ZK9dujnph4o4YbO+5xul
-	eOSPgd0HFflRJppivuWuL8hLg8oCTctg/gfI5LUaJmQAhLXqrlQKuUvbjtzCi0DAYdc40WTociL
-	vSjRyP2Cbx33qYYz0cOSbQwNguoUdZSsnmrvnz8+7IXdRcHhb/tD0FXuy7FMPj80aqBqSU6unUm
-	4rL+dToU4GuHF7W1X6XmLJsAyydq0SUu721Gr6b2JvEU9o0yUy4ekxD3KREoRYiozOLv7r334tX
-	GzCRt4Ucf53x4PQ3ZwARXvfV2yowcUIgdL88ag6bBxKdqECRz7Xj9QmrsdOOVnbTdTTMIntLqar
-	kzKECijcLbCQrD+ZdGoHR6rK2vuKG9CdEB+3B4Q==
-X-Received: by 2002:a05:701b:2903:b0:133:12e0:aab7 with SMTP id
- a92af1059eb24-1b54d350911mr22039c88.11.1795027154537; Wed, 18 Nov 2026
- 10:39:14 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fpFl4L4R
+X-Envelope-To: io-uring@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ux0kfY5j7nM7oh8a7BfUtbSzQISJcSgoiHsY5y3C7fo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795050162; v=1; x=1795654962;
+ b=fpFl4L4RdOYRvsiHM+GOdTXfY0EaUgQcWvxjZu5E3Iv9+BQZa/n8b9XA4f9Z5qDlBLG+tUXI
+ lzbf8E45R6pbwSlF/bLPvWn8nZdmKdusdtPneU0j6QT68TFJKw7pUq/iGap/n11nC8WuHFZhFq1
+ iOkoa/h2KlJBvxgUm+WIY/0U=
+X-Envelope-To: io-uring@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5966f3fd4a58c3d7;
+	Thu, 19 Nov 2026 01:02:42 +0000
+X-Mizu-Trace-ID: 5966f3fd4a58c3d7
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+To: Ming Lei <tom.leiming@gmail.com>
+Cc: Qiliang Yuan <qiliang.yuan@linux.dev>,
+	"Martin K. Petersen" <mkp@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org,
+	Mike Christie <michael.christie@oracle.com>,
+	Bodo Stroesser <bostroesser@gmail.com>
+Subject: Re: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an io_uring based user backstore
+Date: Wed, 18 Nov 2026 20:02:33 -0500
+Message-ID: <20261119010233.2917434-1-qiliang.yuan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <av0CAptnbIZP-53U@fedora-laptop>
+References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev> <avprIhtn1TuYLX1b@fedora-laptop> <20261117024640.3184554-1-qiliang.yuan@linux.dev> <av0CAptnbIZP-53U@fedora-laptop>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -104,68 +79,100 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110102039.1002605-1-bjorn@kernel.org> <20261110102039.1002605-2-bjorn@kernel.org>
- <20261115131314.2d3ab96f@kernel.org> <87wlqcg85c.fsf@all.your.base.are.belong.to.us>
- <20261117163258.446a0c45@kernel.org>
-In-Reply-To: <20261117163258.446a0c45@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 18 Nov 2026 10:39:00 -0800
-X-Gm-Features: AclHuK8UJH3E_Epp2jjC1wv6_uDQD4oZqE2pXj-5wMybSCyzlV0cK1dXGLNdYt8
-Message-ID: <CAHS8izNe7w5gcTrVW_gMue0-2HBbRkTpiqtUUcRGHZnPwiLp4g@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 01/11] net: Get skb fragment addresses through netmem
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, io-uring@vger.kernel.org, 
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stuart Clark <stuclar@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 4:33=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Tue, Nov 17, 2026 at 07:40:18PM -0600, Ming Lei wrote:
+> Can you share your setup? It is supposed that you run fio from VM,
+> otherwise you can just compare ublk with scsi backed with tcmu.
 >
-> On Mon, 16 Nov 2026 15:31:27 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> > > IIRC netmem is supposed to be used for frags and memory CPU never nee=
-ds
-> > > to access.
-> >
-> > netmem covers pages too, and netmem.rst already allows readable net_iov=
-s
-> > ("Decouple net_iov from unreadability"); the in-tree ones just happen t=
-o
-> > be unreadable.
+> But if you run fio from VM, I believe you can setup virtio-scsi backed by
+> ublk block device directly, which should cover your requirement, or maybe
+> I miss something?
+
+Everything runs in one 32 CPU guest. For tcm_loop and iSCSI (16
+sessions over 127.0.0.1), fio runs in that guest on the initiator
+disks. For vhost-scsi, fio runs in a nested 16 vCPU KVM guest on the
+vhost-scsi disk, with the target and the backstore server in the outer
+guest. In the ublk runs, kublk serves the file as /dev/ublkbN and
+target_core_iblock exports that through the same fabric.
+
+You are not missing anything. This backstore has block semantics: the
+kernel emulates the SCSI commands, PR and ALUA included, exactly as for
+iblock, so ublk behind target_core_iblock offers the same function on
+every fabric, and for a VM a virtio-scsi or vhost-scsi disk on top of
+the ublk device covers it as well. What the series adds over that is
+only performance, and outside tcm_loop the numbers I sent do not show a
+consistent gain.
+
+[...]
+
+> My question is actually why there is regression wrt. 4k randread:
 >
-> Ugh, slop got in :/ I really don't think "the in-tree ones just happen
-> to be unreadable." I seem to recall being involved in that design.
+>  workload               TCM/USER (MB/s)   uring (MB/s)          change
+>   4k randread, 1 job      426 (409-463)      369 (366-384)         -13%
+>
+> Maybe you can focus on single job perf only, which is easy to compare and
+> investigate.
 
-Oh, that was an intentional, I didn't think there was any reason
-readable net_iovs couldn't exist in the future. Actually even dmabuf
-net_iovs can be made readable sometimes, as some dmabufs support
-dma_buf_vmap, and in theory the net_iov could hold a virtual address
-derived from the return value of dma_buf_vmap that the kernel can
-access.
+It comes from the scheduler moving fio between CPUs. The pwrite() I
+pointed to in my last mail is not it: doing that copy inside
+io_uring_enter() instead makes no difference.
 
-Do you think there is a reason net_iovs can never be extended to
-readable memory?
+tcm_loop queues the LIO submission and completion work on the CPU that
+submitted the command, so with one job, fio's CPU always has bound
+kworkers and ksoftirqd runnable next to fio. The load balancer cannot
+move those and moves fio instead. This backstore gives it more chances:
+the completion work on fio's CPU handles 14 commands per run here
+against 24 with TCM/USER, so per 1000 I/Os the completion kworker and
+ksoftirqd run about 57 times against 35, fio is preempted as often, and
+it is moved two to three times as often. With balancing on, fio's own
+CPU time per I/O doubles here, from 3.1 to 6.3 us, against 3.4 to 4.9 us
+with TCM/USER, spread over the whole submission path rather than in one
+function.
 
-Do you want that point from netmem.rst reverted?
+Turning load balancing off for fio's CPUs and nothing else reverses the
+result. Single job, 4k randread at iodepth 32 over tcm_loop, 6 s per run,
+five alternating runs, median (min-max). fio runs in a cpuset of CPUs
+4-31 and the server threads are pinned to CPUs 0-3; the cpuset is either
+a normal member (balanced) or an isolated partition (not balanced):
 
---=20
+  fio CPUs 4-31, backstore      bandwidth (MB/s)   change
+  balanced, TCM/USER               439 (398-462)
+  balanced, uring                  379 (371-388)   -13.7%
+  not balanced, TCM/USER           662 (544-710)
+  not balanced, uring              760 (575-798)   +14.8%
+
+Booting the guest with idle=poll removes the gap as well: with fio free
+to move, five runs give a median of 612 MB/s with TCM/USER and 627 MB/s
+here.
+
+That points at what each switch costs in a guest. An idle vCPU executes
+HLT, which exits to the host and puts the vCPU thread to sleep; waking
+it for a kworker, ksoftirqd or a migrated fio takes an IPI, a host
+wakeup and a VM entry, and the host may run the thread on another
+physical CPU, so the guest code then runs with cold caches. With
+idle=poll the vCPUs spin instead, stay on their physical CPUs and take
+the IPI without an exit. This backstore makes more of those switches
+per I/O, so it pays more of that cost, and fio's slowdown spread over
+the whole submission path looks like cold caches.
+
+What is measured is that idle=poll removes the gap and that the gap
+follows the switches and migrations. Which part of the cost is the exit
+and wakeup latency and which part is the vCPU thread landing on another
+physical CPU is inferred: I cannot trace the host side here. Waking an
+idle CPU is much cheaper on bare metal, so I expect the gap to be
+smaller there, but I have not measured it. idle=poll is only a
+diagnostic, it burns a host CPU per idle vCPU.
+
+[...]
+
+> When userspace target becomes more efficient, I'd suggest you to think
+> about why these applications can't be improved or refactored for the
+> potential (bigger)perf requirement.
+
+Agreed. Since this backstore only takes block commands, an application
+that can move to it can just as well move to ublk, and one that needs
+SCSI semantics in userspace is not served by it either.
+
 Thanks,
-Mina
+Qiliang
