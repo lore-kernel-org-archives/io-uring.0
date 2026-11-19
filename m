@@ -1,65 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795074309;
-	b=RCvO8EQSonNaVBV11PdeBrlZfan+v/wcRFlp5X/5ueYLUEOUeD3rrn5I8r6bvSQO5zwA
-	 RrIHzhs6HuZq//lSNpbvIuzLMb/OcOUlfxISlY7Gtb+WUhmDQ2XUUI42OHWx/Otna/wnD
-	 SpHfZ+ZhIEGBX0+bjDnca9griak13aU6MMoL+zPsA8/8w2Qf5GbYc4yhS0R7mifB3KUHG
-	 ejqe7xtaRanbThlwGUYKsgpgGSh7Zg4can8GptdX3sYzSkY4xXG5q/fV4JRqR/Q/NaRu/
-	 zJ33/pD5CQB2NgT9w3TgTV8XqTOgRvXS6N4/BA8v1dFxXmsnt4RlcoxA3EJ17aAwWgg==
+	t=1795088955;
+	b=PhNwFyi89h83mvmSjZzo9GPTkIs60dsyn0rqnJMhEIkjhsUoe0IPdee3yDtWVXyI3oD0
+	 wyZF/Q9Xu+RPpYx0WcJwTXLi8F116Dc/SobrgVC6Fm6WlQ7/BJNZw84B457JE3S+C4eJB
+	 R/qXER1hmCAletaHPxaVAXzAdqptLGFPfBendFiRFvWMXZt4MQt/xZjt0sBhKr4deyu5Q
+	 WWHqT/iQmpf2FtvRcHC/bGpwn446R5jHnPO8Y88q4mFLoO0aVWocFA9g1Ko+aYqRucrLV
+	 kVuIVX10gfJ88FTZhte+pGFuSQOwogmxD/KAT3waPgIynHn/3fGy08CIBHaznDzWROA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795074309;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
-	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:EX-QQ-RecipientCnt:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
-	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=ytxnJvmC2ixuAaHjo6JSf1SNEWCrUwZlXY5sRNv+bIU=;
-	b=VGFlU2fjd4apdVph8yG+e+bjOYBdGnBfD/i5fChTZzr4hyHVH8kFAZl1DSa6JBxMZuXN
-	 8evQxKdCGBQC4DKUDgsOydfVjjR5o16lcWeLEETdWdcWYdUaz3kVdo6X/LSAe/cHSvGlv
-	 7PUOyh3HiYkS7EBR5jZn2bBaIAjJeqJuyUGJCb6gdmYToXwWbULnu+Mkkke+dmHTasBH9
-	 Pz9Uyn1t5sqVAhJh1fbP3PvTbtV/tw/ot08+peFOsRtB2PpuDrytY7CCeQA+zG6fpkysC
-	 38u+jMPJhtDq6A1/ScQI0Y1ycEG2MIUfHZwqcXYvdYQP//iTmd4SroxYdzTDtixPOLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795088955;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+	 In-Reply-To:MIME-Version:Content-Transfer-Encoding:X-CMS-MailID:
+	 X-Msg-Generator:Content-Type:X-Sendblock-Type:CMS-TYPE:cpgsPolicy:
+	 X-CFilter-Loop:X-CMS-RootMailID:References;
+	bh=2KASlNDOD297J1FGaZ1820/PbchwyRaN1Gk68UxQpzw=;
+	b=EM+YqH+Ei5/hmRRLW7jmPOM/o2g2aFblN3IeiNYAl/nrHgyocgZpICFkWKwg0GRjy7w7
+	 y9ktOLoAMn7uDQIgYE/DG7wp0pMG49Ebfhco7nNsxPklb2cqz3VNljjDyPvp6WW/tG8eV
+	 bo9CLK8pIxkZLv3R7RfimNOTR8HzwMZ1dtSrijuizXY+T+tBi14BHfS17T7Jv1j2r/TVL
+	 e+xHIMzypPnWQY6PRxkaMkl9WhmHOFpkhu55YVf3Ku1qN09evJX8QLXlEAGA37mnePHfi
+	 5D09YoHjWXHD/PhwuSkq3sPCBorCMWr8qSWYYXaayakuYM9aMFTvyax1NiA+HRvgU7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniontech.com;
-	spf=pass smtp.mailfrom=uniontech.com;
-	dkim=pass header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=gbvblQH3;
-	arc=none smtp.remote-ip=54.206.34.216
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=lDhRrRXr;
+	arc=none smtp.remote-ip=203.254.224.34
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE29606A33A;
-	Thu, 19 Nov 2026 07:45:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FE29606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F29606A32A
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3F29606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=gbvblQH3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1795074284;
-	bh=ytxnJvmC2ixuAaHjo6JSf1SNEWCrUwZlXY5sRNv+bIU=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=gbvblQH3lAbpe/M7UONZs2eeFdiPdPstD7dyZiBxrA+BT5xzHX8XWGWq0jnvP2qA9
-	 SzqredqhZJieEV2hWK/4FrSJSBkvuel0rNJ8dGpjA/rk63CpNFyi94H7ZaghOIY244
-	 265LXdB4V7znylrjQ2aOT+TrwAl4ATW6CKTkxJeM=
-X-QQ-mid: esmtpgz10t1795074279t20300963
-X-QQ-Originating-IP: RQhCkk0w1sVVXidgdMvAtf8ODVAnCBRHWFEN1XmiVAc=
-Received: from uniontech.com ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 19 Nov 2026 15:44:37 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8105951678597454203
-EX-QQ-RecipientCnt: 5
-From: Yichong Chen <chenyichong@uniontech.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Yichong Chen <chenyichong@uniontech.com>
-Subject: [PATCH] io_uring/poll: don't lose the error of a failed poll update
-Date: Thu, 19 Nov 2026 15:44:36 +0800
-Message-Id: <20261119074436.1137704-1-chenyichong@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=lDhRrRXr
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20261119114913epoutp042a9891a5fe444a391432a7c49c9a7b39~pb_RwjMlo2601226012epoutp04p
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20261119114913epoutp042a9891a5fe444a391432a7c49c9a7b39~pb_RwjMlo2601226012epoutp04p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1795088953;
+	bh=2KASlNDOD297J1FGaZ1820/PbchwyRaN1Gk68UxQpzw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lDhRrRXrtdDOgXZZnxUErYxoIB2RnlWRkSyJWECmJeXdcZmd48wAnOoIXp5g2b9sC
+	 ogh1PDLClv6cHjOfAaQlFUdprOZ6VlAvNAzoQIY0oOdhT4Hy97fmm9peBTn1Y+Upz9
+	 PJ7NY0dfndu1FQdxHJTxqqEHNqOHU7XryrKDZWrE=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20261119114912epcas5p432ca14a229003ea3a2fd803259cc5623~pb_RJyumm1084610846epcas5p4H;
+	Thu, 19 Nov 2026 11:49:12 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.93]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4jVcFN0Rffz6B9m5; Thu, 19 Nov
+	2026 11:49:12 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20261119095720epcas5p3c2696a232ea5843fb933c312f748cf56~pacl5LEs30437304373epcas5p3t;
+	Thu, 19 Nov 2026 09:57:20 +0000 (GMT)
+Received: from localhost.localdomain (unknown [107.99.41.245]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261119095718epsmtip1b03572a25f7ff21ac1e2d9c13a47f387~pacjyZ9yn2197221972epsmtip1I;
+	Thu, 19 Nov 2026 09:57:18 +0000 (GMT)
+From: Anuj Gupta <anuj20.g@samsung.com>
+To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de,
+	sagi@grimberg.me, James.Bottomley@HansenPartnership.com, mkp@kernel.org,
+	bernd@bsbernd.com, joannelkoong@gmail.com, miklos@szeredi.hu
+Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+	fuse-devel@lists.linux.dev, joshi.k@samsung.com, anuj20.g@samsung.com
+Subject: [PATCH v4 2/5] io_uring/uring_cmd: add import flags to
+ io_uring_cmd_import_fixed()
+Date: Thu, 19 Nov 2026 15:26:12 +0530
+Message-Id: <20261119095615.1840522-3-anuj20.g@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20261119095615.1840522-1-anuj20.g@samsung.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -70,55 +83,117 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MVocNrGTvdghz05os13oUpO0WWMF2TWPqZx/qF//ElqpEc2lohimwmRV
-	nMgpYZIGmyInFQhfqq/Hqu/xOrcGqSB51G65V15kbEkCJUu/WuGWB0U4SflUXZuoRTvGI93
-	50oEq3g1Z2d/mss9ILsTwMGYhcYIWkknHt8kogx2UmtoFOG2xKk1/2tAPrSaUPsQfLWkH51
-	vPg+F1x+N25hKX+ltci2LMx9vQ4xqWrgC1nPc9hGr7ARPz9Bzbnem6zqDuzIWBSP9cwe4M5
-	rEzarPbXenkIOUxK6V0bpNrP7ZOheNnZPTS5tz+slORSUte7ABxYR1tXI7tqzl3/GgIj22M
-	DSuy5ox2qkT924xNnV7Rup+WW1uwE5Kc/0FJ/cYtnWAVs5JKrgAlgdt3SLGmktzIhmtTcpz
-	IamRXqAb/dGRhcaFXKkE8FPBAyUFguOWhcr0fhGtc9u6ns0KTKbaqaXadmYXN4Ki2sUkkUg
-	PQN1exRn9au7K9Q318z+JoQeAaCJibQOEGqTulTLPrV7kQ9MPCMHKyxgXpBZMTy3h8BRwXv
-	2qLcujTm3pSYW4HcT10VF4C24qpOhGgJuqQa6P9vWj5O012j84OEPEjNmfLKzEPn0Y4Qiik
-	43qkuz4nqAuv7tcTXg7Z6q/KHgVV8mBLdvfpzgWGSEd36QuFrrAlapkgOEynoppxLBJl2rb
-	TAfAnIceLfher1YqtET+t3pxLEyfzlop+LilpH8C+KBciYUfqpHZbhvGDJNAPCmliLZ7JAs
-	quPP1XotJS1Iw7LbLZEe7udZTIEQXpZLcUbsvbIY3TsNTT+LCLpkHTW5zw7w3NbQ2NeIXd2
-	HTg2EzII33Ku7Ojivs1ujsbOdmkNvmejhQGKNvagzeeKdL1XIuxmkQJT1WiiWiYueXfGtcp
-	VTC/L2CBGmGzB8vXlADqzDP/R999vp7b6SrSCUwKlAtXKc/xGb4ll9A9UkPcbsTJb5IgHt8
-	5zSN3f315CAjoyEVZ+n+B5dz6Yng9CTOXo438WF2OjFIO0n+PEjmTQ1AKDrQ2JvB9Kr8cih
-	JQ6qFYtlmdBWBxCPCXehmtv9kCXWtmVaR/Kd7T0j+SenOGYEc66qJXPaZunLJFifvCPXzsI
-	A==
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-X-QQ-RECHKSPAM: 0
+X-CMS-MailID: 20261119095720epcas5p3c2696a232ea5843fb933c312f748cf56
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20261119095720epcas5p3c2696a232ea5843fb933c312f748cf56
+References: <20261119095615.1840522-1-anuj20.g@samsung.com>
+	<CGME20261119095720epcas5p3c2696a232ea5843fb933c312f748cf56@epcas5p3.samsung.com>
 
-A poll update rearms the poll request it is updating, and io_poll_add()
-can fail with a negative error when the file registers a third wait
-queue or when the second poll entry cannot be allocated. That case falls
-through to the -ECANCELED completion that is meant for a plain
-POLL_REMOVE, so the poll request completes with the wrong error and the
-update reports success. Complete both with that error instead.
+Add an import flags argument to io_uring_cmd_import_fixed(), so callers
+can opt in to buffer types they support. No flags are defined yet, and
+all callers pass 0.
 
-Fixes: 97b388d70b53 ("io_uring: handle completions in the core")
-Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+No functional change.
+
+Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/poll.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/nvme/host/ioctl.c    | 2 +-
+ drivers/scsi/scsi_bsg.c      | 2 +-
+ fs/fuse/dev_uring.c          | 2 +-
+ include/linux/io_uring/cmd.h | 5 +++--
+ io_uring/uring_cmd.c         | 5 ++++-
+ 5 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index fc1800c..c2955c1 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -1031,6 +1031,9 @@ int io_poll_remove(struct io_kiocb *req, unsigned int issue_flags)
- 		/* request completed as part of the update, complete it */
- 		else if (ret2 == IOU_COMPLETE)
- 			goto complete;
-+		ret = ret2;
-+		io_req_set_res(preq, ret2, 0);
-+		goto complete;
- 	}
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index a87c9ca9d06c..d342ccad067a 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -533,7 +533,7 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 					ddir, &iter, issue_flags);
+ 		else
+ 			ret = io_uring_cmd_import_fixed(d.addr, d.data_len,
+-					ddir, &iter, ioucmd, issue_flags);
++					ddir, &iter, ioucmd, issue_flags, 0);
+ 		if (ret < 0)
+ 			return ret;
  
- 	io_req_set_res(preq, -ECANCELED, 0);
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index e4a65d7a2374..a93d6f5ac937 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -87,7 +87,7 @@ static int scsi_bsg_map_user_buffer(struct request *req,
+ 	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
+ 		ret = io_uring_cmd_import_fixed(buf_addr, buf_len,
+ 						is_write ? WRITE : READ,
+-						&iter, ioucmd, issue_flags);
++						&iter, ioucmd, issue_flags, 0);
+ 		if (ret < 0)
+ 			return ret;
+ 		ret = blk_rq_map_user_iov(req->q, req, NULL, &iter, gfp_mask);
+diff --git a/fs/fuse/dev_uring.c b/fs/fuse/dev_uring.c
+index 460776cd69cd..a989b33ef229 100644
+--- a/fs/fuse/dev_uring.c
++++ b/fs/fuse/dev_uring.c
+@@ -727,7 +727,7 @@ static int fuse_uring_import_payload(struct fuse_ring_ent *ent, int dir,
+ 
+ 	if (bufpool_registered(ent->queue))
+ 		err = io_uring_cmd_import_fixed((u64)(uintptr_t)base, len, dir,
+-						iter, ent->cmd, issue_flags);
++						iter, ent->cmd, issue_flags, 0);
+ 	else
+ 		err = import_ubuf(dir, base, len, iter);
+ 
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index e18d4af62e1a..23fb66a1e2c1 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -64,7 +64,8 @@ static inline void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret, u64
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter,
+ 			      struct io_uring_cmd *ioucmd,
+-			      unsigned int issue_flags);
++			      unsigned int issue_flags,
++			      unsigned int import_flags);
+ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 				  const struct iovec __user *uvec,
+ 				  size_t uvec_segs,
+@@ -124,7 +125,7 @@ int io_buffer_unregister(struct io_uring_cmd *cmd, unsigned int index,
+ static inline int
+ io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			  struct iov_iter *iter, struct io_uring_cmd *ioucmd,
+-			  unsigned int issue_flags)
++			  unsigned int issue_flags, unsigned int import_flags)
+ {
+ 	return -EOPNOTSUPP;
+ }
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index cdf499f2c343..7198647f542d 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -270,12 +270,15 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter,
+ 			      struct io_uring_cmd *ioucmd,
+-			      unsigned int issue_flags)
++			      unsigned int issue_flags,
++			      unsigned int import_flags)
+ {
+ 	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
+ 
+ 	if (WARN_ON_ONCE(!(ioucmd->flags & IORING_URING_CMD_FIXED)))
+ 		return -EINVAL;
++	if (WARN_ON_ONCE(import_flags))
++		return -EINVAL;
+ 
+ 	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags, 0);
+ }
 -- 
-2.51.0
+2.25.1
 
