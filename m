@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.25
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795088960;
-	b=szpnw9rEYKJZ8UU3GSSGlWuvd8vWS9NxI9s4S88E+jdosajANb0F8vHiGgGEgDPsBqBV
-	 9EAthV1ly6eEWOuxJwQ/zgBDv5dxZZ7Yo+joa5hKJN13/gRti2V4lWVlQ2AhcD7UtTIay
-	 /jg9t37kCjFLHcJSn2zdFfKE4PNP0Ram+uZvaF/jp7X1x2wUHTCDPbZEmUDYgzrvUhOpV
-	 VBoS0/UZv36kGHu17bLhRuDafDZ10QYAxHPF+nR3dQSEfy0Aqeh/0PjwwwOtXAPpJeyka
-	 Nq2/Xfii/tw1Ibc/rzRiBy35HJoXk7JLElgPX+Bs/EC0SA0AnYfgNNticDTf4jUd8wQ==
+	t=1795088965;
+	b=Lahx3HzSQpXpm5/q6Qz8Suu9b7zCsGT/fujqb3Dtn8xOzvyO5/Jw8lX3CEA0pB+tPWH8
+	 g679YKpUbbzsIBcZXDxShtgpGaoHvmsfVRiK8p0f9EgHeg/9RaLDmp0dqPY5P+hDcFtrn
+	 NFE5rOX8sG36ImlemHAbt/AAYrcg9SmpiprxBufH0pZtOfu8XIrWibZYZwR3j3edweN6L
+	 GprMStnTvQXLGQe6IL3hxCvn5p5aCaDvQzj8dInYYOOOHXzDpUjR6gIGFoh8My3sXMpGe
+	 dEkSwyoFgjEGh8mzB+eNbnS2KnNA/LlPuc/UGEprpUR0bS1v8P1PIc15VL6dVY4e99g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795088960;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795088965;
 	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
 	 Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:MIME-Version:Content-Transfer-Encoding:X-CMS-MailID:
 	 X-Msg-Generator:Content-Type:X-Sendblock-Type:CMS-TYPE:cpgsPolicy:
 	 X-CFilter-Loop:X-CMS-RootMailID:References;
-	bh=V8cFoJc9O1FyvpgAM1QXs9eTUtN4GtxZlx3q/AytIcU=;
-	b=tiHWSCtE9ItiXvz9J8a3VjOkArQSBMxp+7S7a+NeEPjQLMN/YxORqEJ6GZSmPi1rswvQ
-	 ADhnj5cZ3Y8wkj0VFzbvpqZ0RAvM7IxqEQhrZRdr00KSiVUoO0p5ng0UqZOrtIMXhlemz
-	 zHZfdu9dRV3qaxR+ECranydWa08kgrsqKi4jGlGKtoarZHdWdcyknD45ww7w5sL4hsYvz
-	 I1L/OZbcq9/HqMkt5JVjbFg0D5x5lVDownn8ok6BThr+1iO17g/Bybyw7B/x/oKPAXE3R
-	 9FLICEJxc8cOOWG5BOKjg88qV8EDFIs+j1MykrOz3kbbMHbEtnWhLD8Vk1mUN/4u31A==
+	bh=WOjvdHFZJhxTSRqOV4KMRhV4WehW3lyrqK+mm7lp7Vw=;
+	b=5OT2hnzXM0kMPvwW9k+d69TUzBsiQsNHSXUim5EWuVzb1ADbnvhvl9PFjkeP3FRsTrnz
+	 nFZ26IUYhd5rsDyXgXDShyDovUQb3ARHItBRPmN06gCYnIwgZnoxmwJqB0+5Kc6ijcaxh
+	 IuzUaeHxBaQaao0gNH06nehplhl8bibBzJJSRQm0ZT6Q8JnCapJJvkTmPqy1s90pUvlKF
+	 AISdJanrg9+7VemLobIJSbKT8lV3bsEtmRwrr2B08FbmkVXAKiG8fzCdkM8e0WiNJknDT
+	 WDonXu/FKnmkT+sHMz7sUfvHeCs5HmmFMCNIk+nSb8jJ0aXhXwgT+vKYMc+j71QCUdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=samsung.com;
 	spf=pass smtp.mailfrom=samsung.com;
-	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=sOuJoHSQ;
-	arc=none smtp.remote-ip=203.254.224.24
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=pG0ZEesL;
+	arc=none smtp.remote-ip=203.254.224.25
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F71606A330
-	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28F71606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7563C606A33D
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7563C606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=sOuJoHSQ
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20261119114912epoutp01792dbc86d06d57cd3d33f8c65eb55a40~pb_QduYCW2675826758epoutp01H
-	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20261119114912epoutp01792dbc86d06d57cd3d33f8c65eb55a40~pb_QduYCW2675826758epoutp01H
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=pG0ZEesL
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20261119114922epoutp02aa7d6b74762755f04e99e55ac63b8aac~pb_amHFm-2967229672epoutp02d
+	for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 11:49:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20261119114922epoutp02aa7d6b74762755f04e99e55ac63b8aac~pb_amHFm-2967229672epoutp02d
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1795088952;
-	bh=V8cFoJc9O1FyvpgAM1QXs9eTUtN4GtxZlx3q/AytIcU=;
+	s=mail20170921; t=1795088962;
+	bh=WOjvdHFZJhxTSRqOV4KMRhV4WehW3lyrqK+mm7lp7Vw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sOuJoHSQy/FsaBi+xAWsd54QFG26GgZTY+9c5oBs8MAlkJC0t81NteH1mx7h/9Lkh
-	 +WNjTixwdHn4CtxwELVCGiLb2VZotNyjmKDq9FI8X7Yj79ujgRs2bWpIyeH1eeOwvF
-	 pfchCEPJv/ZdB0JfU+eaIR62sIBHSVdpl/BEFW9Q=
+	b=pG0ZEesLUNkNplzEHupiN6k+tNvatEzlngA1+n/uRDQKYq7RiTRdZ4zxRSd/tDrP7
+	 JB3H/+pfyIrU6NX5C4xuD05+s/cYvkBlfr6/OUXZxBBTtxtXYBAlhgUaDjrPCxqGqe
+	 fGvjF4ZB6kgrsAr3xCVKYN5xwqGHwCcwJ7Tbrc9Y=
 Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
 	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20261119114911epcas5p42ed076ec2a5f3e7644a7527de73e9c76~pb_P3UFun1070610706epcas5p4K;
-	Thu, 19 Nov 2026 11:49:11 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.95]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4jVcFL4hd8z6B9m5; Thu, 19 Nov
-	2026 11:49:10 +0000 (GMT)
+	20261119114922epcas5p449340df7af188640373a832441a450ed~pb_aLYUpl1084610846epcas5p4M;
+	Thu, 19 Nov 2026 11:49:22 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.87]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4jVcFX040Zz6B9m4; Thu, 19 Nov
+	2026 11:49:20 +0000 (GMT)
 Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20261119095718epcas5p3d519849e454c3d68cf1b148356946fee~pacjjUVkQ0907609076epcas5p3F;
-	Thu, 19 Nov 2026 09:57:18 +0000 (GMT)
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20261119095728epcas5p4b40c41eae2b6c6eb852f472762a25d3b~pactI_2J10192401924epcas5p4c;
+	Thu, 19 Nov 2026 09:57:28 +0000 (GMT)
 Received: from localhost.localdomain (unknown [107.99.41.245]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20261119095715epsmtip12d8d40021c1e7d3c3a70db6b85d7b1c6~pacha4GTB2192721927epsmtip1S;
-	Thu, 19 Nov 2026 09:57:15 +0000 (GMT)
+	20261119095726epsmtip1eb24622127108000e4cec885d45b5915~pacrBQNkM2192721927epsmtip1b;
+	Thu, 19 Nov 2026 09:57:25 +0000 (GMT)
 From: Anuj Gupta <anuj20.g@samsung.com>
 To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de,
 	sagi@grimberg.me, James.Bottomley@HansenPartnership.com, mkp@kernel.org,
@@ -67,10 +67,10 @@ To: axboe@kernel.dk, asml.silence@gmail.com, kbusch@kernel.org, hch@lst.de,
 Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
 	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
 	fuse-devel@lists.linux.dev, joshi.k@samsung.com, anuj20.g@samsung.com
-Subject: [PATCH v4 1/5] io_uring/rsrc: pass import flags to
- io_import_reg_buf()
-Date: Thu, 19 Nov 2026 15:26:11 +0530
-Message-Id: <20261119095615.1840522-2-anuj20.g@samsung.com>
+Subject: [PATCH v4 5/5] nvme: support dma-buf registered buffers for
+ passthrough
+Date: Thu, 19 Nov 2026 15:26:15 +0530
+Message-Id: <20261119095615.1840522-6-anuj20.g@samsung.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20261119095615.1840522-1-anuj20.g@samsung.com>
 X-Mailing-List: io-uring@vger.kernel.org
@@ -83,138 +83,93 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20261119095718epcas5p3d519849e454c3d68cf1b148356946fee
+X-CMS-MailID: 20261119095728epcas5p4b40c41eae2b6c6eb852f472762a25d3b
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 cpgsPolicy: CPGSC10-542,Y
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20261119095718epcas5p3d519849e454c3d68cf1b148356946fee
+X-CMS-RootMailID: 20261119095728epcas5p4b40c41eae2b6c6eb852f472762a25d3b
 References: <20261119095615.1840522-1-anuj20.g@samsung.com>
-	<CGME20261119095718epcas5p3d519849e454c3d68cf1b148356946fee@epcas5p3.samsung.com>
+	<CGME20261119095728epcas5p4b40c41eae2b6c6eb852f472762a25d3b@epcas5p4.samsung.com>
 
-Give io_import_reg_buf() the import flags argument and drop the
-__io_import_reg_buf() variant, which only existed to pass them.
+Allow registering a dma-buf against an NVMe namespace character device
+and using it as the data buffer of fixed uring_cmd passthrough I/O.
+Complete through io_uring_cmd_hw_done(), so the dma-buf map is released
+at hardware completion.
 
-No functional change.
-
-Suggested-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c       |  6 +++---
- io_uring/rsrc.c      |  6 +++---
- io_uring/rsrc.h      | 13 +++----------
- io_uring/rw.c        |  5 +++--
- io_uring/uring_cmd.c |  2 +-
- 5 files changed, 13 insertions(+), 19 deletions(-)
+ drivers/nvme/host/core.c  | 16 ++++++++++++++++
+ drivers/nvme/host/ioctl.c |  5 +++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 16b6bccf01f9..4382dcc98c06 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -663,7 +663,7 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
- 	if (req->flags & REQ_F_IMPORT_BUFFER) {
- 		ret = io_import_reg_buf(req, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_SOURCE, issue_flags);
-+					ITER_SOURCE, issue_flags, 0);
- 		if (unlikely(ret))
- 			return ret;
- 		io_req_clear_flags(req, REQ_F_IMPORT_BUFFER);
-@@ -1242,7 +1242,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 	if (req->flags & REQ_F_IMPORT_BUFFER) {
- 		ret = io_import_reg_buf(req, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_DEST, issue_flags);
-+					ITER_DEST, issue_flags, 0);
- 		if (unlikely(ret)) {
- 			kmsg->msg.msg_inq = -1;
- 			sel.buf_list = NULL;
-@@ -1536,7 +1536,7 @@ static int io_send_zc_import(struct io_kiocb *req,
- 	if (!(sr->flags & IORING_SEND_VECTORIZED)) {
- 		ret = io_import_reg_buf(notif, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_SOURCE, issue_flags);
-+					ITER_SOURCE, issue_flags, 0);
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index f43582e5f6c4..f12cea7cbc8a 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -8,6 +8,7 @@
+ #include <linux/blkdev.h>
+ #include <linux/blk-mq.h>
+ #include <linux/blk-integrity.h>
++#include <linux/dma-buf-io.h>
+ #include <linux/compat.h>
+ #include <linux/delay.h>
+ #include <linux/errno.h>
+@@ -4028,6 +4029,20 @@ static int nvme_ns_chr_release(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
++static int nvme_ns_chr_init_dma_buf_io_ctx(struct file *file,
++					   struct dma_buf_io_ctx *ctx)
++{
++	struct nvme_ns *ns =
++		container_of(file_inode(file)->i_cdev, struct nvme_ns, cdev);
++	struct nvme_ctrl *ctrl = ns->ctrl;
++
++	if (ctx->dmabuf->size > UINT_MAX)
++		return -EINVAL;
++	if (!ctrl->ops->init_dma_buf_io_ctx)
++		return -EOPNOTSUPP;
++	return ctrl->ops->init_dma_buf_io_ctx(ctrl, ctx);
++}
++
+ static const struct file_operations nvme_ns_chr_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= nvme_ns_chr_open,
+@@ -4036,6 +4051,7 @@ static const struct file_operations nvme_ns_chr_fops = {
+ 	.compat_ioctl	= compat_ptr_ioctl,
+ 	.uring_cmd	= nvme_ns_chr_uring_cmd,
+ 	.uring_cmd_iopoll = nvme_ns_chr_uring_cmd_iopoll,
++	.init_dma_buf_io_ctx = nvme_ns_chr_init_dma_buf_io_ctx,
+ };
+ 
+ static void nvme_add_ns_cdev(struct nvme_ns *ns)
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index d342ccad067a..3f240c9a537f 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -472,7 +472,7 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
+ 			blk_rq_unmap_user(pdu->bio);
+ 		__io_uring_cmd_done(ioucmd, 0);
  	} else {
- 		unsigned uvec_segs = kmsg->msg.msg_iter.nr_segs;
- 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index b51cdf8178fc..4875facd4a12 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -1374,9 +1374,9 @@ inline struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
- 	return NULL;
+-		io_uring_cmd_do_in_task_lazy(ioucmd, nvme_uring_task_cb);
++		io_uring_cmd_hw_done(ioucmd, nvme_uring_task_cb);
+ 	}
+ 	return RQ_END_IO_FREE;
  }
- 
--int __io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--			u64 buf_addr, size_t len, int ddir,
--			unsigned issue_flags, unsigned import_flags)
-+int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
-+		      u64 buf_addr, size_t len, int ddir,
-+		      unsigned issue_flags, unsigned import_flags)
- {
- 	struct io_rsrc_node *node;
- 
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index edbfe8174f6c..4120873d6ed4 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -67,21 +67,14 @@ int io_rsrc_data_alloc(struct io_rsrc_data *data, unsigned nr);
- 
- struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
- 				      unsigned issue_flags);
--int __io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--			u64 buf_addr, size_t len, int ddir,
--			unsigned issue_flags, unsigned import_flags);
-+int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
-+		      u64 buf_addr, size_t len, int ddir,
-+		      unsigned issue_flags, unsigned import_flags);
- int __io_import_reg_vec(int ddir, struct iov_iter *iter,
- 			struct io_kiocb *req, struct iou_vec *vec,
- 			unsigned nr_iovs, unsigned issue_flags,
- 			unsigned import_flags);
- 
--static inline int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--				    u64 buf_addr, size_t len, int ddir,
--				    unsigned issue_flags)
--{
--	return __io_import_reg_buf(req, iter, buf_addr, len, ddir, issue_flags, 0);
--}
--
- static inline int io_import_reg_vec(int ddir, struct iov_iter *iter,
- 				    struct io_kiocb *req, struct iou_vec *vec,
- 				    unsigned nr_iovs, unsigned issue_flags)
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 3ecb842147a4..22b0a763febd 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -360,8 +360,9 @@ static int io_init_rw_fixed(struct io_kiocb *req, unsigned int issue_flags,
- 	int ret;
- 
- 	if (!io->bytes_done) {
--		ret = __io_import_reg_buf(req, &io->iter, rw->addr, rw->len, ddir,
--					  issue_flags, IO_REGBUF_IMPORT_ALLOW_DMABUF);
-+		ret = io_import_reg_buf(req, &io->iter, rw->addr, rw->len, ddir,
-+					issue_flags,
-+					IO_REGBUF_IMPORT_ALLOW_DMABUF);
- 		if (ret)
+@@ -533,7 +533,8 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 					ddir, &iter, issue_flags);
+ 		else
+ 			ret = io_uring_cmd_import_fixed(d.addr, d.data_len,
+-					ddir, &iter, ioucmd, issue_flags, 0);
++					ddir, &iter, ioucmd, issue_flags,
++					IO_URING_CMD_IMPORT_DMABUF);
+ 		if (ret < 0)
  			return ret;
- 		iov_iter_save_state(&io->iter, &io->iter_state);
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 1972d52bce9d..cdf499f2c343 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -277,7 +277,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- 	if (WARN_ON_ONCE(!(ioucmd->flags & IORING_URING_CMD_FIXED)))
- 		return -EINVAL;
- 
--	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags);
-+	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags, 0);
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
  
 -- 
 2.25.1
