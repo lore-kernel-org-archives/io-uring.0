@@ -1,103 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795203452;
-	b=b9X8wsB6iDQum4ONpaJUJwbHupyqGMonlLxTgmzTA7F0yH7jIppvo22pZYzTmukdoT+z
-	 5A/KjIJaC7WE0V7ai9gBIaQQZbr6K+QEdWUqUeNDECrIGPANwdUWtXgzT0qwWLWaktj2g
-	 eV+msvm7CqKmALhLB1zpffHtCqeH54r3kUGxuJTsDVDpXJPMyK/ceGvpHeEvdvjRen0tO
-	 5BX10U4Tu18zJi8BD4CAxb0x6K4jdP3zX35lHCRSoOXg9SRRLu4zzEjd42HuinEzIb7e5
-	 Tjr5eBQpCH7z9O/mvSM/IQKo2IZYwEK1uLv1cyltrdV0Je36tFKhwUA8GCadK7C1Q8g==
+	t=1795207195;
+	b=XQp5OmjrxWomNUMjouYsj+WmMjbebPDMjzIQ2TpUPngqULjrHAtfLeOrpkXZqTGynEH9
+	 ACuHaa3QdVNA9WHecTymIhRV4sd3o+F3wcdTSP2x+WtVe29/qCsNhjfcaM5DMZzNJTfbk
+	 /AKULYAlU9JqizUAQUA0F8Z2rsgV/PIke4twRLYwj9tYDK/GMbQ5sarg4H98vbJVHgozg
+	 OXltkxrL9BWh+rucT42QZBc19z05v7X3Q35zvGtrTWDBAfcJlZwIV3+5k3eKMTyNGjEne
+	 0s7LyEI+DCmhCjCIG8gdHops6rRI6OP+WgkeQ+unq5mUZ4kAsPI7rOAYbcnyWdbsIEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795203452;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=HLU92PpOXK+Ktbjntwj6K/wKzrqD7ZTq4i89OR79Z88=;
-	b=NrBVEdTFbBI45pTupb2BpxTteezoZlgcd4AoT/7BXNnbp6howR2h9g69wT1nDeumYPmj
-	 cczzN/ISY8QRnmEJAIt4r9vVbbrcacbU7EBgfd1qFDg02nL3ynSSKLJv2MNOCngil27YY
-	 awOTK3ADbiYV2dB2z+QfNoB9pf9o3zog01txLMKJoYoYlOWP/6I5UmyVxeE/wExIliX35
-	 1HCA1VYEu3a6cI4vRUgZU18KP12ixbtVdZQ4fn91hcDsvkhmcQ9R708We2vWwmDI+GVqA
-	 QJ6rgjg2iMUvJYcAQzKNK/JE5jmPbRcrL6BmZDQY1syb5pZIpx6t6cPPH4rojHa6zaA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207195;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=tGrhs9x4eGI2rilzfhPa4/lDsJZ8nr4YIP38FNjmM+s=;
+	b=Cknl8jnqfbQA659VdVcIsqdTp8EHnZVA3eMqK3dZ7OI+74JCoUtpaX6pSBPfF2npjy7F
+	 KK/Yteqm2PdPHi99gE+U4r1FtreS2yeZO/+fj4v/PA0zTiQjHf1xlx/8OJIJ97usmFGaq
+	 AhCeHGKF6hdstvHpZ3EDXsNnH5+H+dB/vat1GOEzo/KOoktUQLryjly9k7+dwbYTAUjfb
+	 1+vcZtFBQh6gxCfuQ6w5iPqZb+aII7T/w+UYVYE2YiziBEVSzA8X+VwvuUdrFviig/xz5
+	 McLbTHAeIVdHfmnV+fRQwge5SUXKxqH237Yda88fDailJNnCFNm4JvMQOXDZQu0vs3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ejUUxyfM;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AC2s+qjw;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91A0606A6DA
-	for <io-uring@vger.kernel.org>; Fri, 20 Nov 2026 19:37:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B91A0606A6DA
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2CD606A6FC;
+	Fri, 20 Nov 2026 20:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ejUUxyfM
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b421e8d111so801030a91.3
-        for <io-uring@vger.kernel.org>; Fri, 20 Nov 2026 11:37:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795203451; x=1795808251; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HLU92PpOXK+Ktbjntwj6K/wKzrqD7ZTq4i89OR79Z88=;
-        b=ejUUxyfMijObmR/uk71uc7wEiWG63666i4kANiVWLKS7e/TPrrDFRbh/lojYHlKQwM
-         HNgjBk6ieOzaG6ss2SQE4W8DWwsk3WblsgjSaxY7Qp7+nfp9DTkAonaPZOp8sbG+q54y
-         c5TDKfV+9GA/zeJBnGq8yYq5jZ33RdGlI/AJtHE9SD+ABUzjhinTq5mb8CvP767E2jOz
-         LfvKnL2r3Xm3oE23U5QMjMHdqNNcpz5TOnNcNbSBqx9IS1ZJjS16NX8ZCGX6PC640YBt
-         wH/V9z4epp7jQSKsNe+VwJpqiItaoWSEEIkjebRHiGz9eoJ65r7GO5uf9y1CWJ2PBXvZ
-         L12w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795203451; x=1795808251;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HLU92PpOXK+Ktbjntwj6K/wKzrqD7ZTq4i89OR79Z88=;
-        b=zTXFW5DMdLaPGsgqZ2fAxulfMfrwIxCRDbNuK1XBtJTGuFs5W5/dvrI022ZGWmpSlz
-         HLiEzbdbs20K6JoZGW4r+rMbC/9SnulW7u3eAWsn+2fg7LokvE6hv0zknLactMLcj3rC
-         O7R18STqke+uG3lFHgNBV1Ld9eBFnTjZefAiTRns3VJuvawVZFhZYKect4IWMWNuQCfn
-         54bC9mNk6VxlkfZSY/sbXmwiz+EutMJRnW4dPqCmKF2UfEiATFEoAdITx7SgsDQW541d
-         IaLYpkQz/6oZ2wSwaxRYR2idR2m/6DKlkkOQful4akys7ez9siTncADiiF7/b8hDmt+6
-         liHQ==
-X-Forwarded-Encrypted: i=1; AL+hErEfPXgwObhJe3anEEgl5tzEFscqmKCbU0DH8d8OKzRnJSKPwXgazcoxJWajnGCgNAo8yMYyNg4OMQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9SiID8rwgiLK3lMW2ibiK6ez7UMfWyRbppNEH5aaZBjeGyBz0l
-	gHoLpNgqCL1gtM3HpYrL9oUU6azAs1nBNoC+iq60kH1s7/BY6Fok69E1
-X-Gm-Gg: AZFdTZeJrjmOznBr26ebWrn2Qz9Ims3GY1CakkEb57Im5Zd7wHgx3WXhcMYH6cccUlf
-	lYCUHqUU1HQvxQg7J6+vNivysE6qhH4rOOWl4oVB/CweFAe+rvRxdTER9qQ3xW2KGB9hN7w63XO
-	gLCL28iRAHItpv+WpowExpUuBRnD+zThKoGJVLEGVFUG4yVEWzc/i58CY03kK3NSZYU7vzP9+lw
-	PGde7/BdCa/ENeCiqx2EhnCXVXBUUPPeBF5nxPRhevfILcaztX9JBTKnBH7tq6YaHM5csS/QwsR
-	D7Yby5PJGsg4bfUPeb/ilrASU2XYvOdwCufXcJXVlOJuw2bnii/S/nEFsIsnu0ZP9bgL9m80oSj
-	y0ZeeSJbnNmlu7OoMfrRZbQDqvR+DDPUdOBk/T9+WbbvEmxofwlLDxBazgc4G/k5qgs+yNQal6G
-	DEYwQSSpsRLlOjM6M6mNKNqui3YZE2fxjmrO3La8IHSR/HEWHB8N8hJruhfsOPo3MoHv6NdAI8M
-	T5/+LHaCZ+jj3XlEqd7OADiTtVhOeThuNRjaDA3/FNoXKDJCO8FQ/tlA+K5cxJ2sZS6MHGBAq3q
-	dVKP2yPyzQTvbPkZqii3GdUa+O2T3Lx5WqFgsFmnpS+HXn3yFoP1XBJGhXJKY57Ve8baMPc4HYT
-	VQi+B+5dxFooSX94tal1FaRg4oVtLVdjwcw==
-X-Received: by 2002:a17:90b:4d10:b0:3ac:9669:846b with SMTP id 98e67ed59e1d1-3b41c852826mr3992020a91.9.1795203450819;
-        Fri, 20 Nov 2026 11:37:30 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecb486sm8290165a91.16.2026.11.20.11.37.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2026 11:37:30 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Nov 2026 19:37:29 +0000
-Message-Id: <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <io-uring@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Cc: "Kees Cook" <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>,
- "Will Drewry" <wad@chromium.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "David S . Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Jens
- Axboe" <axboe@kernel.dk>
-Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for
- seccomp
-In-Reply-To: <cover.1795139109.git.xukuohai@huaweicloud.com>
-References: <cover.1795139109.git.xukuohai@huaweicloud.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AC2s+qjw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C97B1F000D2;
+	Fri, 20 Nov 2026 20:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795207195;
+	bh=tGrhs9x4eGI2rilzfhPa4/lDsJZ8nr4YIP38FNjmM+s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=AC2s+qjwbwhhHhED4Yu7rfQ3q1Xp1OhzZO4S+uNWdq+9fbTnErfQU50MlS1WTsNKJ
+	 HKIs/Oh33owFyOXEdMPgQbabsF1EHYbExfuRYS2Pa1PTs/JNKK5dgu8LLWiRtt5EB6
+	 C+TpscAu3ACr1CAc/P++rRkRaiTlciHkvGrfhvb9SM8SVH4Txq7u0i5BSSKHZirkpN
+	 gE0a3jqqqrp41GZjxsbX/+ZNWEy7oYFNHAqVTCV/RczoJRaRHXfF4/dbKJkUKEDLwt
+	 U5jUl8NeWo2RbNgeRSQal3zkk4Gher2nuBFZG5WTCAEmWfcUaWIFfUhRYjPm6A3Ild
+	 LxUyU9i6TKP4g==
+From: Sasha Levin <sashal@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Sasha Levin <sashal@kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+	Yufan Chen <yufan.chen@linux.dev>,
+	dev@rebasedinc.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: io_uring/eventfd: registered eventfd signals only once after the cd305ee3633a backport (6.18.y, 6.12.y, Ubuntu 26.04)
+Date: Fri, 20 Nov 2026 15:39:10 -0500
+Message-ID: <2026-11-20-1-daily-reply-0021@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2026112048-paper-radiance-199e@gregkh>
+References: <2026112048-paper-radiance-199e@gregkh>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -107,27 +62,24 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 19, 2026 at 10:48 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
-> The kernel repeatedly translates and JIT-compiles these same cBPF
-> programs, wasting CPU cycles and slowing down bulk startup of
-> identically sandboxed workloads. cBPF lacks dynamic instruction patching
+> > >> Commit: 3adf7ae18bf4
+> > >> Date: Apr 18
+> > >> Fix: Partial mremap of the ring
+[...]
+> Great, then someone should have tagged these for stable inclusion, or
+> let us know after the fact :(
 
-There is no VM startup number in the series
-which makes me question the whole thing.
+Queued 3adf7ae18bf4 ("fs: aio: reject partial mremap to avoid
+Null-pointer-dereference error") for 6.18, 6.12, 6.6, 6.1, 5.15 and 5.10.
 
-> features like tail calls or tracing. Its JITed instructions remain
-> immutable at runtime. This makes it possible to share the same cBPF
-> filter between different processes.
+c03ce4173c7b ("fs: aio: set VMA_DONTCOPY_BIT in mmap to fix
+NULL-pointer-dereference error") isn't needed for the crash there: d53b5aa5cfae
+("aio: fix NULL deref when a fault races ring truncation") is already queued on
+all of those trees, and its ->read_folio returning -EIO closes the fork route
+too, so c03ce4173c7b would only change fork() behaviour.
 
-Immutable is not enough. The image depends on the caps of the task
-that loads the filter.
-Also any task can time seccomp() and learn that somebody has this filter.
-seccomp_get_filter() needs CAP_SYS_ADMIN for that today.
-
-fork() shares the filter already, see copy_seccomp().
-A launcher can install the common filter once and fork the VMs.
-
-I don't think we need this.
-
-pw-bot: cr
+-- 
+Thanks,
+Sasha
