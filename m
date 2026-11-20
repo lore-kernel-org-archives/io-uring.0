@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795133477;
-	b=ij0Yx6kT0T2Jx70CKdMJazw0ADVNOrezuDAV2+DQksVVW+lfKulkkMh1Kt1X+ncov0Sa
-	 WpQj2pBywVlSVJaNfwEyVxp/rgR3rElNd1eBXQ5z5xGVKddoQ3tj9wSBfjfUU87sUGjAW
-	 Uq8pjEXjAnjLbcREoSbFTe0Lbcsw7ZISDQivYuTVfofm0r9G5LhV4hx5osvFECIQQFX5W
-	 8wwdspEbQ4Ik8tFYGYMgyZ+WHAoq1mBJTHp9baazeTfrOuyWYX3lb9N3n/oNNl8R/A8xX
-	 GpsLcmdAzTP8lIQ1zjd6uPZOYbkgCHZCacpyUHfvii5D5rq7Bzjkwyd7vL4LjZ9Vpfw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795133477;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795134421;
+	b=tXrNv1FeZO3K5VqQFS8uP1caFXyTe6ogcSgLehxd2SP+d+wfxVmZeQ21N08mmt+niCKf
+	 vEmFlWP/uLz2SLsyNHvXTQfvu3gUzG2x3q8Ofnr3lCNuaakaDT33gMjG6lPs5rh1Y68Cx
+	 Z0V7KP/mwtfRfPGI3IXQBTAfs2x2kE09di2I5E/Qr4YIopPauZD09qdAO8Pk205b3liTN
+	 ckzMgRJiSk8HTerKFCa1ldwuvRQoUrBCz6aV8JagEgGrxvh5tBfCVLex/T3ulNIZzZd+w
+	 JCLrlD27Vdt0LVkO8wq5DjHyPfe8eSLRs2tGQlXAq8yfZ/EJ1FI9ZewZlXjfjjjwU4Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795134421;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=dX2sdwg6msO+2Hy2n1fUrye627ZQcDy+aS+NuM+NVo0=;
-	b=2YloHjscy/nPasz5HSOecBDSp62yWgKvA0TNfMcocll6gZjpy/ItCbXzV7tITBKoLJ/4
-	 JRapMWMD2QMX8ecxZM3X06/fI3z65+2a+JEDoxAqYW5TiKPaRf3wXwdUdpKaM9es6/Vib
-	 wKvW5QeA9eKygRa0jnFtSMX+l+HcVVzOafQCFItdwLslDs8saYrQgmSWJJJoI5XhnIRM+
-	 oIplkvZijJfx9F7fT/pRR6KxZ0QKhSHnjEdZTV6plw4VmskDJdQwdcoPeZMYIXMzgYKHP
-	 VMlM/DbkuolDRdUFmfCR0HujoWemfW4Q+/3NoB2pdLoYcPuWjmEL29yv3VRKOneX/Iw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=b9j9vXtfY+EbgPv2tG2SsfgvXGNMtTujxB5ZcN9bBcQ=;
+	b=JYWyAjvzK2WUh60XG5BrQefgfYNeYNIJbbYWEqzc2UPD95L0gopwtSK4G/3VFMq5BD2f
+	 0RCvAMoPrkpIlWkrv27hWlMIQUBnYriE58o0DePIse1+dmIQ9je0VSZ+3a6HW7KebokL8
+	 bJuvFGU7GbUKAlaevDmDEPFBXiAdem2qDqpp2bhJxtjN0WYV3A5MjlBYnL6FcKcxzXBYv
+	 qSin8Gqso1QCY8dgOizvyVTcX34Y1INsdJtB14QciKpPHfSRIpLDmSFslJvI2h/JDB+Iu
+	 hXUHIZ8X0nmW+9UKxQM0F44lh2hfF4x3tlxv4O8c43SUmsMuFaXSq2qGNnvxyywXOgA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TJqzfke9;
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlHlNBRL;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C6A606A32A
-	for <io-uring@vger.kernel.org>; Fri, 20 Nov 2026 00:11:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7C6A606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20DF606A325
+	for <io-uring@vger.kernel.org>; Fri, 20 Nov 2026 00:27:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C20DF606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TJqzfke9
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8b2f59de176so327508b3a.2
-        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 16:11:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlHlNBRL
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-677d35fd1d2so447731d50.1
+        for <io-uring@vger.kernel.org>; Thu, 19 Nov 2026 16:27:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795134420; cv=none;
+        d=google.com; s=arc-20260327;
+        b=k97RXCiY50Aoz94G1XZmarx7BZ939GDjLRzDOAJfENG7CuHgQQGCDwUffX9lbEcxk7
+         ZgewR2LIO5weWYikOcMak0AkWYKJVYSjR63NGZ0U/nymgb1eXAkeQTkmrd4Xu8aEK3t+
+         Jrm0m1YubARtKNAlX6ZX4gxrPmrEYsVuurVU2KCFMaJP9pKyLPT6NCjnm9yAlxGxtwUo
+         j27wa5YC4UDBiImTm0e8eSedQNRphXBaxgltVlkZcZ79kDZiztVraulZDLkJFAa6O2I9
+         2Zufs1C6S+5b1RslKHy1tmPUMUwXqeVobGAhhi2P116NM69vR1ZFFr9G1xJJEH1qiTtD
+         TPtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=b9j9vXtfY+EbgPv2tG2SsfgvXGNMtTujxB5ZcN9bBcQ=;
+        fh=Dj76NreNeZpqKsJp74ck1sa0xSrOtmHo0eZhah2ZYsA=;
+        b=HDS/i1G4fccdKmsKHuSrDixuLZtdpdvE5b6KdtYY5qi6VjsMnBQy4JS8M/6CCO+R6B
+         Xql7nHyZJhM5h2OoOCk0JbjOERQyvJifRfzvCTa4YYlSUrPCr1XbKxNEXY2XNRHryPvf
+         OG/kZ8P0/t+mV5zLqO3DN3UW3h/YSNVn8n42Z1LwxEmtgPgREGX5NgLr1OAVsLk4r3MX
+         LUwUdbVT51KS1lCNBT3KULMvuzCI03ubD8rC/yoEx4ABo8POGK4TxNBigU1qWfO1MH98
+         Nm6DcgxZDZwE7U1DrbuM/isZAGWtgY6XaZZ5oTpdIv4lGdW5cLKXIDU+dsho0NcyDax0
+         8rxA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795133476; x=1795738276; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dX2sdwg6msO+2Hy2n1fUrye627ZQcDy+aS+NuM+NVo0=;
-        b=TJqzfke9jFntflzsu6R0AwzaFu1KNFLU8Cv8ipBv2rtoWTIDoqfa4z2rJQpQwPW6rL
-         AOSMR4Zx4c+j3qhAuY2j2geHE3njxRCSbUTTqPTTLQRFiIXxYIb7kEq3zvUQyzkTStja
-         MFoMDiR5ZFpGXlfotungxVz1P1pTJ/Asymf+IhJ305ug/IcsdkeVlby2kS5ydS4XKgJm
-         BAbxyKX1DTsbgaXIzQ1LX6ptXki2d0PIJbttKfykgChhYgt3/HT7/x1NPMfAxoaMS7Hd
-         b2XQLzaGXSmk0asB5G7Rb1Z6PUqAJJaAcW3UCTJBwwfmC/iarfy/LdqLB9LUROync6bN
-         US9Q==
+        d=gmail.com; s=20260707; t=1795134420; x=1795739220; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=b9j9vXtfY+EbgPv2tG2SsfgvXGNMtTujxB5ZcN9bBcQ=;
+        b=KlHlNBRLnkbFIkyiQ4dmD5l2RFLqJtNmjLeuxHpj1TOb2ee2RnbntdxgZUOS7qRia2
+         Z1Du+D9vzUBMPZJERe5mbTyxNkcJ3/9wS6aBfdwtP2Uk7LBdC3YCCct8fO/YWGwc3oMJ
+         qaRGbJbwNmIl8HOICnk1tzWdc0ucVXEg4oInUi+qS79oBguSq0lU6dBtYaoM0ytC7m7K
+         zIV6+IyVgbMxnr8QBP4xST2fozCfU8ujzWrnRvhm2HoEvbuPNk2lexVqSRugvuH4lVdx
+         dYOMvIhUMbSRDqxoiLaAI7pvPureGzSOIjFhNw2LXDqxuxctKdTNMP14bClGPSBPDGl4
+         67Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795133476; x=1795738276;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dX2sdwg6msO+2Hy2n1fUrye627ZQcDy+aS+NuM+NVo0=;
-        b=fVSAfq90hVRd9xi3INeAtXa+ozYnLgkUNhmMl1R+ByNAeOCKRgLYhxUdPWNjSfCx+x
-         v/46ztPzlDXwefBM0ANLgXpqUSll4iaFko7hUyMvp9dnL9J0A1olJ+MykUKO7ZrJV2EH
-         XYLgHLopPn87SykZCNeqCPBRyR3fllv3V4PqGavR7aJjZ3mVuPehX5ry0qBsUEj/eA/U
-         rAe90gLsZfn/yWfm59WHLVF69CK3GODnjhPqYZO5zj7dkKJtWM8xaMLnoeaGnRNsL8hm
-         jj5JjVsiNkYlqGLC2cwR+OItpfLVDr4Iox3bSEMYob1Bsb/M2VO0ooCpfMu8VO9qk/xB
-         dqzA==
-X-Gm-Message-State: APuU4Z9azdCrSychs9EqKpdBXV7UoJgjducQN8e0+3JB2DxObhlV7Stq
-	IBf6s1jBq7wgRdXK7OiPwnPY6BjeYlqCbenwarMqWoMQT33oHZHrHp+i
-X-Gm-Gg: AYBFou22Kef1U5ON+phqU7H4uQ1SwNrQjTWzW8bjL8ZgAJDC+F71yEX8OTifZRzuNUo
-	5o7TFoCE+K7JP2G50io8HGCDx+G5Lq4Csy7l76rJ1xpwrxQ5v9weW4Jj/0x5q3kZqFl3fLYjn3q
-	X+lkUsWZsqlwD6RpIZbx5ZnqfCx1ogBPF7imucjDJ3AcMYYb8eZ0xkszw2H0jd9QRbivimfv1Hs
-	Ef/+dzWlEKSImxI78cvtOCDoXXLoUkhTaOcGp5TtRzqfXSncHRgn7xAYSV/MSu6ZSRBLWEw1DJn
-	/3VhjDEX5lzF0cXxjt2cx0w8v4Q54vG7c2rxdopQbU6a+aKZ7pQxB+zhR6rfiAsrdolmXGeHCuE
-	iRp2P0AwLatnDsVKLvZQURDeBEROcqG4eO0/vWMbNKkyMvidyNWEBLs2ofIpNR2HsZxu3ineRZL
-	CojaGhoXlrXjv4EOBasYukyZiqYkcy/PdeRlFOn1NqVgQTU29AXTiOyQRKg/bK36HIyQLYoii08
-	h/ZqVn8epScGZ+j734gYtu736A+ZuGsHuwd2aPHStWjHqZzcQgTWnbEUngWko9VIczJ6zmU6yJI
-	W6hKWNrAqKtzDsUspV7XChaD0uFVdqvUZBnwgDqGEScny10p2p25XiTpJdGbY/vlFvZRdx5XmpM
-	Wipf4
-X-Received: by 2002:a05:6a20:914a:b0:3f8:c7b1:688e with SMTP id adf61e73a8af0-4014d4557ffmr1304618637.30.1795133476084;
-        Thu, 19 Nov 2026 16:11:16 -0800 (PST)
-Received: from macbook.localdomain ([50.35.8.165])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285c05fsm604400b3a.17.2026.11.19.16.11.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 19 Nov 2026 16:11:15 -0800 (PST)
-From: Brian Martin <brayniac@gmail.com>
-To: Louis Thiery <thiery.louis@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] io_uring/net: don't charge the folio offset to truesize for managed frags
-Date: Thu, 19 Nov 2026 16:11:14 -0800
-Message-ID: <20261120001114.61077-1-brayniac@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261119232935.1708458-1-thiery.louis@gmail.com>
-References: <20261119232935.1708458-1-thiery.louis@gmail.com>
+        d=1e100.net; s=20260707; t=1795134420; x=1795739220;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b9j9vXtfY+EbgPv2tG2SsfgvXGNMtTujxB5ZcN9bBcQ=;
+        b=PGszgdSYJ9TtjK3XfqnLyGlxG53BQhAijKuOtvhrbSVZ0SR1LcMszdMd3rW+S0O8L2
+         V4ZW3c+xZKoIlSQnM/qUxsfAbvUpwO0vREmagresvsgJupoLQjP639EiMjngs6f1m7Pm
+         IwxKCtw5Bn6628pfSBolTu/URuUU8DPlzuGrcn721HF9XvN4w3HpvAi9vVRmEH7kmGXH
+         wKJtTvhzrQIgQKx0Vi0CNIhftlyamqA7pSENIbhpwiY/Bb466SMuAvKTtV+TnnrVYcmm
+         b26zjT5q62jlkNKKvrp2+9pX7A7UFGsS56q0saGyg05NqedBkBwb8zFI4bLp7aDvdSSu
+         By6w==
+X-Forwarded-Encrypted: i=1; AL+hErGhj7YswP5wxyDI60sP8AjL6cCBv/VDU0Q7iWCSGnXe+RtEOUFyL3s3Gh6YZ7vj8zxJUDg0Vmg/kg==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/EQeaKVK5WSJm7x/UXYHepDx0AjTYqm4DlxHpNWNT7ipqZBd7i
+	/1ec0GfELIUe4dbo2ohfs+BAWIj5artgoG1z5K+BDvRXraqdCmlFpLKqavxmvRlYIr4V9nxhoOh
+	NHlX7pmIG+H9dFmlLsyhu/o2Php49dIg=
+X-Gm-Gg: AZFdTZdqiD52glS8vvW9RYWf+NAHLxNiODlFXG+bq6naaqmx5nAdcbzAK4FHrHnQxeW
+	OMFokkJDkFIBK74jAjFvIuI57XbZ9jngHtPIh+Eu7Wm1AaRBUiIFALjMcxMNQ4S22Z5/mR5/7M0
+	WnY99cjbt8xWOQyB/Xz+UzCgBfNTQA+1v5kjnq+B2hGnwA4Sj1QDI6EzMOgdfvw7+nC4mRNlXDt
+	0okHQk9EWc/n/8pi1hPOkGVDuyHM4dUf6fNfwfzjosCJmrf2TVoSTGAQeTMU9BZeLuDJI4G+pNb
+	vNQUV4nvQrOKOPdxMDj2XnXtur4G7C2EletPCYVGQ5/kh9ngLctprAAD9SO8v8BXYNaL1PbXbwf
+	WEExLEXQys8HWeXfnyBDGU5HkF6DYtllqGQqfd521cW29kF7kRLSlItvOEkRA1qeoBM0DZQ==
+X-Received: by 2002:a05:690e:11c6:b0:67c:4b5:d5ea with SMTP id
+ 956f58d0204a3-67df40d1b21mr504880d50.0.1795134419928; Thu, 19 Nov 2026
+ 16:26:59 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -100,25 +104,50 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261119232935.1708458-1-thiery.louis@gmail.com> <20261120001114.61077-1-brayniac@gmail.com>
+In-Reply-To: <20261120001114.61077-1-brayniac@gmail.com>
+From: Louis Thiery <thiery.louis@gmail.com>
+Date: Thu, 19 Nov 2026 16:26:47 -0800
+X-Gm-Features: AclHuK8HpDb3YGyRkewngiL9iq-G_WUfJKYzbVW6WD48cpmbOt2XettliD_eIU8
+Message-ID: <CANox1RhDMiP2nQodMyf5KndjymFKCqgXLWRPf4kdwko2ifkCWA@mail.gmail.com>
+Subject: Re: [PATCH] io_uring/net: don't charge the folio offset to truesize
+ for managed frags
+To: Brian Martin <brayniac@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
+	Pavel Begunkov <asml.silence@gmail.com>, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 19 Nov 2026 23:29:35 +0000, Louis Thiery wrote:
-> Only the in-page part of the offset matters for how much memory a
-> fragment ties up, so use offset_in_page().
+Thanks for the corroboration, Brian. Been playing around with this for
+a few months and missed your report from this morning. Happy to have
+the Reported-by, Closes and Tested-by
+added.
+--Louis
 
-This is the change suggested in my report earlier today:
 
-  https://lore.kernel.org/io-uring/CAC+fX10wVVSqGnfCg+aazorsCxB34sUDV-XJiBPd6R3Kuqc-7Q@mail.gmail.com/
-
-I applied this patch to io_uring-7.4 (0659e44ce739) and ran the
-reproducer from that report. With it, SEND_ZC from a registered huge-page
-buffer is charged the same as SEND_ZC without one on every row, for
-hugetlb and THP, including 8192 for a send that crosses a page boundary.
-On the stock kernel the same run shows the overcharge.
-
-Jens, if you apply this, could you add:
-
-Reported-by: Brian Martin <brayniac@gmail.com>
-Closes: https://lore.kernel.org/io-uring/CAC+fX10wVVSqGnfCg+aazorsCxB34sUDV-XJiBPd6R3Kuqc-7Q@mail.gmail.com/
-
-Tested-by: Brian Martin <brayniac@gmail.com>
+On Thu, Nov 19, 2026 at 4:11=E2=80=AFPM Brian Martin <brayniac@gmail.com> w=
+rote:
+>
+> On Thu, 19 Nov 2026 23:29:35 +0000, Louis Thiery wrote:
+> > Only the in-page part of the offset matters for how much memory a
+> > fragment ties up, so use offset_in_page().
+>
+> This is the change suggested in my report earlier today:
+>
+>   https://lore.kernel.org/io-uring/CAC+fX10wVVSqGnfCg+aazorsCxB34sUDV-XJi=
+BPd6R3Kuqc-7Q@mail.gmail.com/
+>
+> I applied this patch to io_uring-7.4 (0659e44ce739) and ran the
+> reproducer from that report. With it, SEND_ZC from a registered huge-page
+> buffer is charged the same as SEND_ZC without one on every row, for
+> hugetlb and THP, including 8192 for a send that crosses a page boundary.
+> On the stock kernel the same run shows the overcharge.
+>
+> Jens, if you apply this, could you add:
+>
+> Reported-by: Brian Martin <brayniac@gmail.com>
+> Closes: https://lore.kernel.org/io-uring/CAC+fX10wVVSqGnfCg+aazorsCxB34sU=
+DV-XJiBPd6R3Kuqc-7Q@mail.gmail.com/
+>
+> Tested-by: Brian Martin <brayniac@gmail.com>
