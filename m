@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795378001;
-	b=WXkgGGXwBWYtmSU4BXe98bMErn/87HIXWpBHXHvZdEH5ERv/HQSwfOLigbRJRZXd2jb2
-	 c5sQrmbMbwuKdn2yCMHLVt9aYz5rQOb9dGe3ZjbdI284G87zBcfsiTx71UlbEZRE7j6YH
-	 hFCliY7em3FPbx9BGDfi4C0l13DidsLXeipZYQ6Zm8OSQT/U5iBtgjtQ55mT95zPNGaWn
-	 EUBG0n2fxV5s0deLNKRQQ+B9lxC2BL30Vhcbu90Pf91/RF8Dvpyj2ou6CEj9AfaxBIChZ
-	 TRfo1bNcwzpR7oUgDfQ5/fqCEdHoURjBHnEtM4V8BbxAQVEtu+WKFAhJo1FjD0yxegQ==
+	t=1795378422;
+	b=d7iNXX5rNCGbgsBYwukUYWjFwTnR1A0KCUyiIwlCeNvyJHMwiSkMULjNDBnASaOz46US
+	 aAGsx1k6l9MVFKNi1NveCtB/MDSVzbAD2sFxj7jMSU6WGCvmzxcDM7gWpL0biOdJB1h4T
+	 0Sk+F1bJt+P9WQ23sRTKY1eBNRwJfC2ZISZU2Fcg477PFZmGx74neDwhMPNjq6Wpel8xz
+	 SpOC5XEgM8QYND5sNL1r9iqdAJc/69LChbd58AzLGqmvcNoTmrR/wu93MO9ycvFBGK0Ir
+	 cztXiFCiiNPbsVjTjHYIcaHTVCuuILr/CEX8ehLwAx2kD8R0Ko8YtiCp5TAwMjHmKcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795378001;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795378422;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
-	b=Xwk/RrAEQ2ubdiD6C8uVzOkr1v8I46QS6IKVKPOrGxCMUmn6/62Rech7chAH468z8fDp
-	 WBwyILss0LEE6L/LwKyHWgxJQ3K7S4Z4HYvOjhghLP+3cHPFQJReudoqPJjyt+mXC9igX
-	 PIf8qzpFre+OcVA5Huq0aenABaroWD3qHpIk8JDbJuIuzNEDLhELaurj1JOLls66tBH9z
-	 SxaJADKUmqyty+N7z0c6KSoKWxDAXBcaaQKlel6BmzXBBCntOIGfNbD/DAvjNQjLDKESO
-	 CS7z9PL3xO4S5IdXv1S2+sF9OwHn9BMdY1nupE1qg+qaNCjNYNgNtbrRxfdMOZuSEKA==
+	bh=51UHX4Srt09ec1lomLkwc4wOrxJotF+1iVMx5Ln4R3o=;
+	b=0V+NzHYlzbrrUtUHXKxIRFY5xeDM9l5YlFxvBIxPhwEFsWQG+98UdC+cZpdLR+ENM7RE
+	 RxNVmKT3PY/qEyGWpT4C365iTYqGB0hVqxFRRLzfAUuWNgnBEOd8tSk2LC0Go3vaCfkMq
+	 0KQNcodq8YbW8pvCXHVZscYFS48zJWT5j43V1yW+EwDmi6vz/royZ91EGJ2NIjakXkXfE
+	 3llTRKAEoI/9nXCmsqkaTDcuJvGt7WgDSB01DTZnaUFUuLUG9iMSbYFKjvLWp5OdvGcCS
+	 QalWFudcyCSAq3Pqo3vcMofVVPT7NFHNlPfeouhHQLV4nHTP0YzRV4BhgcoolU6NKEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZleViSN8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB1C606A31A;
-	Sun, 22 Nov 2026 20:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD28606A31D;
+	Sun, 22 Nov 2026 20:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360911F000CF;
-	Sun, 22 Nov 2026 20:06:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZleViSN8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238D81F000C6;
+	Sun, 22 Nov 2026 20:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795378001;
-	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
+	s=k20260515; t=1795378421;
+	bh=51UHX4Srt09ec1lomLkwc4wOrxJotF+1iVMx5Ln4R3o=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=kpJzzCRYkLXVPm+/+a1xii8POsvyUm6bHBOkcPkJoOOF0FQWpmGqNNb53QxFHMzre
-	 xVdgY9fbS2afsmFm15TstV+GmIbjG7xvGdYlYrivJhrOgmqQHABi4C9p5o+42AefBc
-	 wBbT1PUcaX6hM9is8vuebEz4tQzDlZElrgT+yird32s8uPqsejXNj33r7A5Hb0v5IX
-	 pfBXGkz6kCcKCf8amkKitieeMD2jpSeW/CdbtmBl7AnzQ8xDNO+jb7d/bb/DIFcEy1
-	 i0XGYRS1nfffSW4+b1KiKimnQoj5gjcOXwU7BAIfsKJBmmUsBUOf1WSs185L/CGh39
-	 QljeTkIVxTOlA==
+	b=ZleViSN88BjY16Q2M+ZekAjLmnNSmmvQd8GG0EQA+eaDeU60Ht6xzWZjMGtYl8tWM
+	 rcjBHvA5ATc1dDgo18CWMB8xMVNa+gnQS3NJedaUcadHiJxSaHNuUAnJHuh9dwugn8
+	 rpDcjAcqIh3tuwrmJRpfMZnCbVioqbgAGezZ/wnx+H0h/QNuAToy0q5vHZ1wUhCg+A
+	 QFwXNz/7ogA5tOeI5tLRBgfjBxIe0J0GBPsm4ig2wshqfaMsD3VpuHB717dEkogmbx
+	 zm0wvsu4vygWPYpKl3sOYAq29l28SqW/mohimbgsKn3sVlWTff/zwi9xY9OHxlvClT
+	 rYDoHy/UMSN+Q==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Stanislav Fomichev <sdf.kernel@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
@@ -62,13 +62,13 @@ Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
  Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH net-next 3/7] net: Admit native XDP on provider queues
-In-Reply-To: <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next 7/7] selftests: net: Test XDP on io_uring RX
+In-Reply-To: <av-Udp0GfOjxH9vq@devvm16445.scu0.facebook.com>
 References: <20261117164700.2157816-1-bjorn@kernel.org>
- <20261117164700.2157816-4-bjorn@kernel.org>
- <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
-Date: Sun, 22 Nov 2026 21:06:38 +0100
-Message-ID: <87qzgc1vht.fsf@all.your.base.are.belong.to.us>
+ <20261117164700.2157816-8-bjorn@kernel.org>
+ <av-Udp0GfOjxH9vq@devvm16445.scu0.facebook.com>
+Date: Sun, 22 Nov 2026 21:13:38 +0100
+Message-ID: <87mrr01v65.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -84,21 +84,42 @@ Content-Transfer-Encoding: quoted-printable
 Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
 > On 11/17, Bj=C3=B6rn T=C3=B6pel wrote:
->> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
->> index c5335e935b7d..4f6702b284b4 100644
->> --- a/include/net/netdev_queues.h
->> +++ b/include/net/netdev_queues.h
-
->> @@ -229,6 +234,7 @@ struct netdev_queue_mgmt_ops {
->>  				    struct netlink_ext_ack *extack);
+>> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/t=
+esting/selftests/drivers/net/hw/iou-zcrx.c
+>> index 91b025a8771e..f7e909fd6840 100644
+>> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+>> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+>> @@ -258,6 +404,34 @@ static void add_recvzc_oneshot(struct thread_ctx *c=
+tx, int conn_idx, size_t len)
+>>  	sqe->user_data =3D conn_idx;
+>>  }
 >>=20=20
->>  	unsigned int supported_params;
->> +	bool xdp_unreadable;
 >
-> Any reason this is not a new QCFG_ in supported_params ?
+> [..]
+>
+>> +static void verify_data(struct thread_ctx *ctx, int conn_idx,
+>> +			const char *data, size_t len)
+>> +{
+>> +	size_t offset =3D ctx->received[conn_idx];
+>> +	size_t i;
+>> +
+>> +	for (i =3D 0; i < len; i++) {
+>> +		if (data[i] !=3D payload[offset + i])
+>> +			error(1, 0, "payload mismatch at %zu", i);
+>> +	}
+>> +	ctx->received[conn_idx] +=3D len;
+>> +}
+>
+> Move some of the refactoring/fixes out into a separate patch?
 
-It is a driver capability rather than a per-queue setting, but I guess
-that doesn't mandate a separate field. I'll use a flag bit.
+Ya, makes sense! Will do!
+
+> But in general feels like a wrong test to extend.. Why not call
+> ncdevmem somewhere in python wrapper (and attach xdp prog that you
+> have in this patch)? To decouple xdp testing from the entity that
+> generates/receives unreadable frags.
+
+Good idea, I'll try that!
 
 
 Bj=C3=B6rn
