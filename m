@@ -1,74 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795378422;
-	b=d7iNXX5rNCGbgsBYwukUYWjFwTnR1A0KCUyiIwlCeNvyJHMwiSkMULjNDBnASaOz46US
-	 aAGsx1k6l9MVFKNi1NveCtB/MDSVzbAD2sFxj7jMSU6WGCvmzxcDM7gWpL0biOdJB1h4T
-	 0Sk+F1bJt+P9WQ23sRTKY1eBNRwJfC2ZISZU2Fcg477PFZmGx74neDwhMPNjq6Wpel8xz
-	 SpOC5XEgM8QYND5sNL1r9iqdAJc/69LChbd58AzLGqmvcNoTmrR/wu93MO9ycvFBGK0Ir
-	 cztXiFCiiNPbsVjTjHYIcaHTVCuuILr/CEX8ehLwAx2kD8R0Ko8YtiCp5TAwMjHmKcA==
+	t=1795402083;
+	b=WleBY9LIpDjr9eXIlP/wfNPjhNdD7th8NJGClh7AvIKgcu4475BmTVPGqKy/bwuxKu6C
+	 Fa2QgvBKXraijByJfKWxptZhQ57Od9hKX3nkT2kbGI67Kk5z6RUTSO/A7Xdg1pg9Uw6LW
+	 VrwzjAwWkO64csyHVbzn7V8ZJbvreINXg854irfyy5qaMEd+KOnD7gH6gQTo7VF/NJWKU
+	 4t4MEmdk9R/bmWz+4BG+MiuG6lNzT6lHpc/XUNW3W5kj0vWxESnRqCpxJLGm1d0pO9YEv
+	 MZ0niamVgQbmrNu9kQR4NdkdLOrOKM7Z+4ezoJXkhp+ClQe2ed/u5SajjBAAwVtt5DQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795378422;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=51UHX4Srt09ec1lomLkwc4wOrxJotF+1iVMx5Ln4R3o=;
-	b=0V+NzHYlzbrrUtUHXKxIRFY5xeDM9l5YlFxvBIxPhwEFsWQG+98UdC+cZpdLR+ENM7RE
-	 RxNVmKT3PY/qEyGWpT4C365iTYqGB0hVqxFRRLzfAUuWNgnBEOd8tSk2LC0Go3vaCfkMq
-	 0KQNcodq8YbW8pvCXHVZscYFS48zJWT5j43V1yW+EwDmi6vz/royZ91EGJ2NIjakXkXfE
-	 3llTRKAEoI/9nXCmsqkaTDcuJvGt7WgDSB01DTZnaUFUuLUG9iMSbYFKjvLWp5OdvGcCS
-	 QalWFudcyCSAq3Pqo3vcMofVVPT7NFHNlPfeouhHQLV4nHTP0YzRV4BhgcoolU6NKEA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795402083;
+	h=Received:DKIM-Signature:Date:From:To:CC:Subject:User-Agent:
+	 In-Reply-To:References:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=yrk9+Mje2C0J1qnXfhBPjrjMZR0Y6jR+rEChJda2HwE=;
+	b=d2PZNk3Yik9CbqhBgFY0pP3qkw9am3yTXFRjY2EyORR4xuzzGkeH42ZeGPMOvmrc/gyq
+	 AYbMLh7n4yBBN/HfGyciSVcia3l+xqijimkH1F2QOp5L/4l4KucvuX4AQxZIJ9dKjqHb1
+	 21AjzJCB5MN8WHPtIfpqJirqbnBozfc6UFDCO06kK7UpESMs7CvyXp0DyToupmAvfmJ7q
+	 2HSLg7JxptRJV7VoNwqWgi5W31mVhL4mBhCcv4gGCPHuBu5hiWGnbPbwuVpkDLvH2eq2L
+	 Ac8CUDPRcfGSzxRzN0Fozy6KYk/30ffRATKQGC9v4hjepLRi3mBXMsWJ1xZN9rLdFOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZleViSN8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CyI3qMqW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD28606A31D;
-	Sun, 22 Nov 2026 20:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153FA606A335;
+	Mon, 23 Nov 2026 02:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZleViSN8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 238D81F000C6;
-	Sun, 22 Nov 2026 20:13:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CyI3qMqW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 743561F000D0;
+	Mon, 23 Nov 2026 02:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795378421;
-	bh=51UHX4Srt09ec1lomLkwc4wOrxJotF+1iVMx5Ln4R3o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=ZleViSN88BjY16Q2M+ZekAjLmnNSmmvQd8GG0EQA+eaDeU60Ht6xzWZjMGtYl8tWM
-	 rcjBHvA5ATc1dDgo18CWMB8xMVNa+gnQS3NJedaUcadHiJxSaHNuUAnJHuh9dwugn8
-	 rpDcjAcqIh3tuwrmJRpfMZnCbVioqbgAGezZ/wnx+H0h/QNuAToy0q5vHZ1wUhCg+A
-	 QFwXNz/7ogA5tOeI5tLRBgfjBxIe0J0GBPsm4ig2wshqfaMsD3VpuHB717dEkogmbx
-	 zm0wvsu4vygWPYpKl3sOYAq29l28SqW/mohimbgsKn3sVlWTff/zwi9xY9OHxlvClT
-	 rYDoHy/UMSN+Q==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Alexander Duyck
- <alexanderduyck@fb.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Pavel Begunkov <asml.silence@gmail.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, Simon Horman
- <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, kernel-team@meta.com, John Fastabend
- <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Bobby
- Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH net-next 7/7] selftests: net: Test XDP on io_uring RX
-In-Reply-To: <av-Udp0GfOjxH9vq@devvm16445.scu0.facebook.com>
-References: <20261117164700.2157816-1-bjorn@kernel.org>
- <20261117164700.2157816-8-bjorn@kernel.org>
- <av-Udp0GfOjxH9vq@devvm16445.scu0.facebook.com>
-Date: Sun, 22 Nov 2026 21:13:38 +0100
-Message-ID: <87mrr01v65.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1795402082;
+	bh=yrk9+Mje2C0J1qnXfhBPjrjMZR0Y6jR+rEChJda2HwE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References;
+	b=CyI3qMqWU+bbm41Pvu5eArEyhtjiTt0S0MgixsjmMnIX8XzpTtcXkx19YoV/xmS9l
+	 HMpqGRoxOGOA1NhKJ3H2UtIeX3UTIJW+8eDTdQfbSrm9RXF7gJTXIYZnWa0oEyuel/
+	 k0fJ/dWSKO/w4sFbvhQTmoVdrA+siN9We+OGlyygTU0SADHC3DlcG4iMgdpZlF42tk
+	 yzlUeRBp4mvjlzXvg65kGKGeekb4OApYFk0FISD0yeZ5xSXG8+HLG4N+iY7Jf138SK
+	 S+JMqNDwUcRvas5sBIC9/IUOI0GGEVtjdkuHqW7Kdddmq/3ie0D2BWFMo6kTy5UnO3
+	 0THvIYbT0tEbA==
+Date: Mon, 23 Nov 2026 12:47:53 +1000
+From: Kees Cook <kees@kernel.org>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+ netdev@vger.kernel.org
+CC: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jens Axboe <axboe@kernel.dk>
+Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for seccomp
+User-Agent: K-9 Mail for Android
+In-Reply-To: <cover.1795139109.git.xukuohai@huaweicloud.com>
+References: <cover.1795139109.git.xukuohai@huaweicloud.com>
+Message-ID: <EF2067C8-7F71-4D92-ABC9-25BC3234036E@kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -78,48 +65,61 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
-> On 11/17, Bj=C3=B6rn T=C3=B6pel wrote:
->> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/t=
-esting/selftests/drivers/net/hw/iou-zcrx.c
->> index 91b025a8771e..f7e909fd6840 100644
->> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
->> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
->> @@ -258,6 +404,34 @@ static void add_recvzc_oneshot(struct thread_ctx *c=
-tx, int conn_idx, size_t len)
->>  	sqe->user_data =3D conn_idx;
->>  }
->>=20=20
+
+On November 20, 2026 4:48:49 PM GMT+10:00, Xu Kuohai <xukuohai@huaweicloud=
+=2Ecom> wrote:
+>Sandboxes like Firecracker use seccomp filters to restrict allowed
+>syscalls=2E Hundreds to thousands of Firecracker VM instances can run
+>from a single template=2E Each instance loads identical seccomp filters=
+=2E
+>The kernel repeatedly translates and JIT-compiles these same cBPF
+>programs, wasting CPU cycles and slowing down bulk startup of
+>identically sandboxed workloads=2E cBPF lacks dynamic instruction patchin=
+g
+>features like tail calls or tracing=2E Its JITed instructions remain
+>immutable at runtime=2E This makes it possible to share the same cBPF
+>filter between different processes=2E
 >
-> [..]
+>This series introduces a classic BPF filter cache=2E It is implemented as
+>a hash table that maps user-space filter instructions to the prepared
+>bpf prog=2E
 >
->> +static void verify_data(struct thread_ctx *ctx, int conn_idx,
->> +			const char *data, size_t len)
->> +{
->> +	size_t offset =3D ctx->received[conn_idx];
->> +	size_t i;
->> +
->> +	for (i =3D 0; i < len; i++) {
->> +		if (data[i] !=3D payload[offset + i])
->> +			error(1, 0, "payload mismatch at %zu", i);
->> +	}
->> +	ctx->received[conn_idx] +=3D len;
->> +}
+>The cache lookup occurs before filter preparation:
+>- cache hit: Returns the shared bpf prog directly=2E
+>- cache miss: Reserves an entry=2E Concurrent tasks loading the same filt=
+er
+>  wait on a wait queue until preparation completes=2E
 >
-> Move some of the refactoring/fixes out into a separate patch?
+>The cache is instantiated per subsystem=2E Currently, seccomp is the only
+>user=2E
+>
+>This series ends with a benchmark test=2E Every producer spawns one worke=
+r
+>thread at a time, the worker installs a batch of filters and exits, the
+>benchmark reports the number of filters installed per second=2E The table
+>below benchmarks the batch size and the instruction length in one round,
+>running the command below with different option values=2E The base column
+>runs the same command on a kernel without this series=2E All data was
+>measured on a local test setup with 32 producers=2E
 
-Ya, makes sense! Will do!
+I would expect either memory usage or launch benchmarks, not just filter i=
+nstall timings=2E
 
-> But in general feels like a wrong test to extend.. Why not call
-> ncdevmem somewhere in python wrapper (and attach xdp prog that you
-> have in this patch)? To decouple xdp testing from the entity that
-> generates/receives unreadable frags.
+Is there a workload where there is a problem? It is hinted at in the openi=
+ng paragraph, but I'd want to better understand the actual constraints befo=
+re jumping to a solution=2E E=2Eg=2E it's already possible to share filters=
+ by way of process hierarchy, so perhaps the issue is lack of hierarchy?
 
-Good idea, I'll try that!
+I've seen proposals in the past about having handles to pre-constructed fi=
+lters, which could be applied (i=2Ee=2E much of the existing caching and li=
+fetime management remained unchanged)=2E
 
+-Kees
 
-Bj=C3=B6rn
+--=20
+Kees Cook
