@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795410438;
-	b=YAKY2aXNSHMKEv9pUwacOIyaAG1J04x8o+Oo+21lnhVEQR86RxToJPwOv/l09ipIPKhd
-	 w/LX5x2xgujEYI/F7K55KmQrIGlcbiUnhVjTX+ZI1un7bVa5X4HRj5A0v70AiE/teoOeU
-	 m63l8sthAnb4QPSN0ZkV8lNvHM9qvhsS684Ub3e89Dse/TO/EeYj31x5henKav+QSqwCU
-	 A8pj7833+tDuGLkdd6YbClh12dVhA3XKZfNIOI+8Wshaxus1JFL5ZByi85GyNLUeJ1Uxv
-	 s4osVAgf05cdDRsJdBAZTky52EzmHE94iK3giJUHg4vHiRIgVbrElctWPLcs2BluSxg==
+	t=1795410926;
+	b=WpAN6QMWBACVn7dPMSClV2rsIU3MX9v1THA7A9yy/0WLRcTG3UvMhDEOq/2UXzFh7c8W
+	 WKfMR6/IVwidc/cuR1Xwvye8Y7qPtaCJBmoAMc55lLUFd/qtQas8FU5Lb+rKmuA8vQ2Y2
+	 HkbWII0Wfc/wwNsafHe3IJP+YGsFx8vNDHP9jF5doqow/gxS5Cne2CbVl2YswIKKfqeT6
+	 fC2cxEzuLVs3tO5VWL74s3XCbrVedPsmxWpoJDDRb40qwqPr+P/tv5pHztT61Et2C93qF
+	 x+kH0QiQhd8qWsP4JPIrnRXgBkA259+xnzIFL1pzQPsa2jnoMNOxSPga29iw/Z9KqOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795410438;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795410926;
 	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
 	 Mime-Version:Subject:Reply-To:Sender:From:To:CC:X-Priority:
 	 X-Content-Kind-Code:X-CPGS-Detection:X-Drm-Type:X-Msg-Generator:
@@ -15,45 +15,45 @@ ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	 Content-Transfer-Encoding:Content-Type:X-Sendblock-Type:CMS-TYPE:
 	 X-CPGSPASS:X-CPGSPASS:cpgsPolicy:X-CFilter-Loop:X-CMS-RootMailID:
 	 References;
-	bh=Cd6iHPL7zgNWtBUtUa4Lg14WBOVuuUn85F3LluQ9xdQ=;
-	b=HhO99eIBTl2iploH4+B25CwDKiQzNW6ZhfOdc7sH9EiQzc0mqAn6RzC9J5fApwT/eqK/
-	 phkLiQaqFsb0YcrU8P/n3TLmDkGaqRr/o+MMxJaelrc/PuHmaOCTc1ZAdeHJHlGt7eADJ
-	 WyYCc50HDjxYJeVOdIEPT7PBg8GAh+HX6CiIikUfBpqnJsDeqeFqNiEk9tnvFg6uoDbgA
-	 Hb8j1Ka0LdAcWubDI18DyVL/FXI5+frpBu2s2xw2anmMIBM3M5A+Bd5tgPpt4L8eoVpn6
-	 uJNM/OfUCQH9V7lsZzwgBd/xkOjZ2CyzaShFLIu4MFej8KhiIbHG1t5KLYvi6xXg3Bw==
+	bh=WSL0PpZL8lyfGMXRe4lS1H2Z/npyzNFI+yLAETxkfdc=;
+	b=iDhOCHnCuqqH6EQ14HD+2fhddAVzzmaE9Gh6MKj1RViHnGGfJDb74kgj61VQ97517i9P
+	 xIINeIDNVSQZSDj2I1lPin4eRXqwyFD4YhMU+mHA+fbWB+YEWva3+iQd3xP+fb8kJIFPK
+	 oQc2RYOTBvkyZGrSvCeS3iukksKdumyQ6rgMh+dIgdkE6AutrK6GBhD+uAYudC0wpsocr
+	 mY/KehaWE8Sa/cUk2A0Q+86cEtVaB00x14XHSVB++EdImfdtnk4nx2PoZqyCtsKEvxhiv
+	 qlWz+CiZur6urCQXmgZC/kH0mL4aPB0OfO7vg/ROtKGfxy8A4dZ/TQLn5hatxu+luXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=samsung.com;
 	spf=pass smtp.mailfrom=samsung.com;
-	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b="JK/CA5RF";
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=r7oURB1C;
 	arc=none smtp.remote-ip=203.254.224.34
 Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB65606A334
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:07:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BB65606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259A2606A31A
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:15:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 259A2606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=JK/CA5RF
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20261123050709epoutp0426d9e706bfff8e28979d22360692f0c4~qlEXy6vBN1074710747epoutp04i
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:07:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20261123050709epoutp0426d9e706bfff8e28979d22360692f0c4~qlEXy6vBN1074710747epoutp04i
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=r7oURB1C
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20261123051523epoutp0416298549a5d6f731fee4a2d5fee7c8ec~qlLjdJGY01701417014epoutp04a
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:15:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20261123051523epoutp0416298549a5d6f731fee4a2d5fee7c8ec~qlLjdJGY01701417014epoutp04a
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1795410429;
-	bh=Cd6iHPL7zgNWtBUtUa4Lg14WBOVuuUn85F3LluQ9xdQ=;
+	s=mail20170921; t=1795410923;
+	bh=WSL0PpZL8lyfGMXRe4lS1H2Z/npyzNFI+yLAETxkfdc=;
 	h=Subject:Reply-To:From:To:CC:Date:References:From;
-	b=JK/CA5RFIUxMigklVPEChG6FnqttLpYm5TtU9IPXMWnFnQN4QQpznr4djUWqX+Bmo
-	 1V/Lkokh4g9i245kgAXJW7Avz8m+2EAcl1K8HqBbP+9Bnv0h4XXch/oX2IAw96wGhN
-	 lfhujWJdEyvpO35jEaXNQY0/HK9OtoG9Amx0P+EY=
+	b=r7oURB1C2V+r6jMr4yC2MblTgHGpr1zjpAIf3QzRNOG93I/GxVvHGmXuEW2JyrieL
+	 YH9oMAkZ3kAroF2hPOiOgvW4SDgfh7zLuWlr9B/tmLSc15goHva0Eh9y+1db/7SwGH
+	 mD5EemUIJu5n4bIs7/kQGayNJ2rHeyKWqe57GWNg=
 Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
-	20261123050709epcas2p2757ff5f18749871f30c2f80973c0c6ca~qlEXPgCa92179421794epcas2p2C;
-	Mon, 23 Nov 2026 05:07:09 +0000 (GMT)
-Received: from epcas2p3.samsung.com (unknown [182.195.38.206]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4jXv7c4wcRz6B9mF; Mon, 23 Nov
-	2026 05:07:08 +0000 (GMT)
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
+	20261123051522epcas2p32103811faa2a1f97ae61ecd4bee71c7e~qlLi-s1GR2060120601epcas2p3E;
+	Mon, 23 Nov 2026 05:15:22 +0000 (GMT)
+Received: from epcas2p1.samsung.com (unknown [182.195.38.206]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4jXvK62QJKz6B9mK; Mon, 23 Nov
+	2026 05:15:22 +0000 (GMT)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -63,8 +63,8 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-Subject: [RFC PATCH 0/3] block: cgroup-based and explicit write stream
- placement for NVMe FDP
+Subject: [RFC PATCH RESEND 0/3] block: cgroup-based and explicit write
+ stream placement for NVMe FDP
 Reply-To: suho.son@samsung.com
 Sender: Suho Son <suho.son@samsung.com>
 From: Suho Son <suho.son@samsung.com>
@@ -81,7 +81,9 @@ CC: "tj@kernel.org" <tj@kernel.org>, "hannes@cmpxchg.org"
 	<cgroups@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
 	<linux-fsdevel@vger.kernel.org>, "linux-doc@vger.kernel.org"
 	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
+	<linux-kernel@vger.kernel.org>, "ngeol564@gmail.com" <ngeol564@gmail.com>,
+	KiYoung Lee <kiyoung77.lee@samsung.com>, JinHeon Kim
+	<jinheon09.kim@samsung.com>, Suho Son <suho.son@samsung.com>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
 X-CPGS-Detection: blocking_info_exchange
@@ -89,9 +91,9 @@ X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d@epcms2p2>
-Date: Mon, 23 Nov 2026 14:07:08 +0900
-X-CMS-MailID: 20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d
+Message-ID: <20261123051521epcms2p2445107f926f3acaa2d51c5e12abea90e@epcms2p2>
+Date: Mon, 23 Nov 2026 14:15:21 +0900
+X-CMS-MailID: 20261123051521epcms2p2445107f926f3acaa2d51c5e12abea90e
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
@@ -100,10 +102,13 @@ X-CPGSPASS: Y
 X-CPGSPASS: Y
 cpgsPolicy: CPGSC10-223,Y
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d
-References: <CGME20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d@epcms2p2>
+X-CMS-RootMailID: 20261123051521epcms2p2445107f926f3acaa2d51c5e12abea90e
+References: <CGME20261123051521epcms2p2445107f926f3acaa2d51c5e12abea90e@epcms2p2>
 
 Hello,
+
+Resending: my earlier posting of this cover letter went out without
+the patches threaded to it.  Sorry for the noise.
 
 This RFC proposes an operator- and application-controlled write stream
 interface on top of the existing write stream plumbing
