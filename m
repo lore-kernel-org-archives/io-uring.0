@@ -1,90 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795441395;
-	b=bDNmV5OlUhUTizpp6qiPVZKkYgD2GVHXNHoaNZYxDrShUncSVL30WTrJFyXT+jxZK0Vd
-	 wNbP0Pu9LuYLuFiur+KJ81ipshaowUzENsxBfU+hYNrtkotOhKD9XYoSC/W1d3qGjjLfl
-	 q+b3drvQ92Zf+ol/KD3xhar3J3B/aP/ERPMT/s3/mR67cddrk3xTCuuO02RxtsAjlZp0l
-	 S+EiyOpUpCCDZgBGGwZ+tGmRhtPp7OYGiMyVG8mlxu8TRWxk33BSxoYihHTyTkwhprf9v
-	 /9IE72xOVWyM9vk9RaZgTd1aI3qcNVZmYmpb7qiWZvHK0GeK3IX0u5v9R1Qkh+T+Qtg==
+	t=1795441835;
+	b=LE4IcmzGnzqeQjz0GYDwe+8EbjssjdaE7sNyqVT/ZyZDx7K7A/WN0Xiz8/pLABOGYCgK
+	 2Pdj04/2WKB2byA4CtJcoAnFKSR6biXgC8ZKAoqbQakyhq1VPf2aqtUMwjAVmjC09WGh0
+	 LvJ+lYrYU6NqiAVkwCaUnFVO1K73ll39tfk4tsyc5Eoq9+M06t8Llh0y1qt6hfS0Lbv5m
+	 SgSSNNuO32dSBM+Tr9o1GbT4KTVouz620g3jIWQ0H2xfsRzX6GqFPVQvQlatb6S4RcoRa
+	 Ic3w2hOvr3btPsO57WQcjohqeglkfk4gvs2IEycHBKLs7JkiLOSFlr2jsA6rU7ZWLPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795441395;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795441835;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
-	b=QsNm4J/3ewLKaFCt9OIt4lnH7hDB0/ZkuODWuorHlr7knz1C2V/WkcHZN7iCwHMgokXh
-	 tQz4YOOJijHrNdpD96IL3Ykfvoo/yyMBZIck5ZqKIxQKfEkfdb7R9UEA5c0UG1ShSvSQa
-	 mdTGkWq5LyW48e0MfHlrjMbxkqI4vq6DbP1tPn0yLG05s22GE8h1Zh8vkNq2M3ySjc3HY
-	 8zkWMBcWzQOZyf13Us2amHR/Rp08GnYgJC+YmBnrcHtqi6GiCZrvUWr4HJDvApN/ZEyWJ
-	 vxnkkELHZutB9YNvjMRAYIToef37Yf95l04F3U+XCp402JQIm7NUyNBENAAV+bbTZWA==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=Bane91NP8+Gml15ubrXTKh3benjzD/ALRcScJf35bXw=;
+	b=GlgPqVBYPFXp+EP/XIqX0PVW7CMo2j0fqFtTWgf5rNNrwMgAuorckqXmC3Ww+tf+w+Ki
+	 PxB0fYvJQDMzlj2pQYnFYOQW7ZRuWkbwc30GQh2G4+0lmL9xqoGp0gydp6/ZPFyjDe8aE
+	 L6oLJ/9bJijc1r3Z3v6qHKJGzFCriEaT30r0RDo70xT91n149DJZS5MTrKYHdGdAst2Hz
+	 seVwrPljeOicYyWOczFznRv+vrrH3gCBcQV5jNaoMxXmnrfG5Qz4merGbS3iLu/Aawnup
+	 qIIMBV0drSpbRKL3ImYUsC0cwReWaS3cJlGxZs4huGRnGIBhYYZzPRCLNeZi8kuFuHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="tSQq84S/";
-	arc=none smtp.remote-ip=209.85.218.52
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xPTrwrK6;
+	arc=none smtp.remote-ip=209.85.218.41
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EE6606A31F
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 13:43:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07EE6606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11E2606A33F
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 13:50:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F11E2606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tSQq84S/
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c516a194350so149446166b.3
-        for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:43:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xPTrwrK6
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c511cdd5a82so370156766b.3
+        for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:50:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795441393; x=1796046193; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795441833; x=1796046633; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
-        b=tSQq84S/1UMt0IuanHyasApDHPmNpDwhzVwotDPkeVq/SQyYZhFtggn3Cq/Gk/1tCk
-         h2cA1OEReS/CYPQpS40RC7oB08MVqUd7hmoO2j5ugvGQeh1InNKeFitZ+YOOi7s7VDVk
-         kyDC14iqfVs+yv1uzySejV0P+NH+PFQwPOU+3jS3mTPfmL6qomnI8+BCpKJhq3+wnmK0
-         /3c4tviGXnzIz6iHoW1QhfVYLYZTEEUWmKBd+iYSEEDhv2iVJJ3HF5eOOzXLPrYX1BfL
-         bAi0dp13I8lbGwD8qBUh4z2IGeZE250GZYAMy2MdxG0g/K6rOzOXfmCJZ62/M2fgsumP
-         2CPA==
+        bh=Bane91NP8+Gml15ubrXTKh3benjzD/ALRcScJf35bXw=;
+        b=xPTrwrK6fyazwXD6N9sRU8vdj+qov9rx8UD6+1pucPMFc5mHpXv8lKESKi6C1mJzb4
+         ycZ0zXWRChTZshQJ1cbaXYqZxsUo+LicJygjVF6eM2kbd016s8ZjUmU5LhPu8ZHJq1/r
+         mZITZKW8W8oqzTlBdGfiEdd879Oz7h7WFSwj6IJ3nDSMGug2qNM0tCumlY6DjLCn3x0k
+         aL/YIk/W45HiPuAAufNWVdjLBv+ZIx7MEX/X2T9iJMK8YgdjYrMAcqTUeGjBu0gFBUL6
+         R2kjwhNz6ET0I2cUVomvCJJ4zc8TukAuit9/P75HyzSPZr9nNU+WZQWamUxseIdC6wvd
+         sx9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795441393; x=1796046193;
+        d=1e100.net; s=20260707; t=1795441833; x=1796046633;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
-        b=D5JX4Yd87C63ZU4+zqeqCEmp9rvO3kWo7XKizO6rk/7u1zIQIS4KMbmbGu+EVVEWCn
-         GbLPdgXPZXh6mmk1hivCVbrKLdb8zPDJ8hPnf4HoCNm+3x4h5mPbKYprTmfGPBhkxY1a
-         XxtCVXEclLqOu3lcU9hWDaG5PA4Hb+RWXqvPSDEvifnIIr+FPNiSFJq2gRjMVeqcma8Z
-         8lOWYU6OaBmSeNfycr4Y1RTBDKhXAVI6fQ9ajPVNkYbnPcTLeNKo2Sp1wIpSS9ORfAk4
-         pgD39i8p4Q0wUQFnqzIqN3TXmnRyf8JpIgTTVsKl6XC8hDeaEnM58RaLmCTEeCYr0ZKg
-         bGIA==
-X-Forwarded-Encrypted: i=1; AL+hErHJznFRiGenS+65pOJrQ3WZl4q/nMf4hInE2k4CzS3QPL7baAcS/gi3FdwhP4DRZD7uDVRZq6kshw==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+lQHwHMIKZLmapAqPRLdIhbfwiT+mOxEsMavBLm3/ipQ+RuAYK
-	+bgU3hLt+4QfX9jTlz4q1oU1jRaiWEMYU19/rSYm2a5muBX3r8mVNwIP
-X-Gm-Gg: AZFdTZcx+otzw51GdhjRJwux8/2HoBZbgFdd/v9rs2O8JHR8H8nK+zGsL5/sMaNsoqH
-	IAlc5lP9kNjHrDT8N4EIRihSZ6wYk5/Ao3LS+fw6IRLXz4Y+oRpP8WAbRiJw7kWzKIxQ6JLoRu/
-	fHmMve1keeL5wsinsOLndrF8CZVEplI5ZlEORbo6We8Uw2MttNlHjw/1xbtSvrWgEk+2ngr7X4Q
-	gTh+/AOzUgZ/y77KLwAVXNDYcWo0fSYnnFWQCUT0QoxTKiLz3HjeXlykkWdHkyOLXiiD7MlFPwJ
-	Lur7eKM1z4bgM4uJJyNXW/F5yHyqZokBIpwkA/qDmXJmVMs5yUyHp6Wp3MVr/QA1x+Mjg1CmJjl
-	7vQijziNzWL7zQ+HlPUk2ZLDHHPEPS/Ez1g50KYkyVnzQR3680ZIpXmnUyGXKHytBpVsdnvzPqr
-	TaDVpbajS8PxcvrnUfQLZQ+E+lhItObLtb3pFT8x334sPuspUztjEYi1ASFr/G8pO3G8sJpGags
-	8hCP4j0XAAzdCeY4ayKkxSCXHs1ltBJMrm/CYrwkJebztZkOgeDs2WUSzK2+xBtccM1H6FxKWRl
-	tyIqA9W+xOklkjM24p8lq5OraBORT2AZskR4OpOsvLsG1XSvlyContVxlz2nrtuzGNaroGjJCfD
-	tojUvyRNOZt9WbMWGR0ANRXZtOns2W44A3cBFNTcW1HZvkJiOouCUq7Ect4kr2ss9mEiKF/l20v
-	88XYg=
-X-Received: by 2002:a17:907:2d13:b0:c50:ca93:19a0 with SMTP id a640c23a62f3a-c513aab9bcemr968102666b.40.1795441393323;
-        Mon, 23 Nov 2026 05:43:13 -0800 (PST)
+        bh=Bane91NP8+Gml15ubrXTKh3benjzD/ALRcScJf35bXw=;
+        b=jVNh4nlKAPtSpd2fgi8w53GafbUSflh/8NkofXpwZSKHI1LhTKENjt3qj4rtnoiNoj
+         kHoMh3SNwaf0FZJF/oQ9XTyNuhAt/WZLHMatS1wxCtthdb88r04uOFHkvtVe5TB1fecS
+         0XwCI2qYuHbFpRefhQFcr45fHENF7p9yxmRvtFqNd3Do90lmW2YllBoaqkNEYFndrYk9
+         OK2GzrCsgJBmtJ5PfTwT6CF/yUuudIG8FiBSQcvvziJtxhh89jf7zkWX/3IcWFLyM5vp
+         XGfWGyMZYPlLpB+GPwcPlMEDC/huN61FLnNIKgYe0OIxQCYvxy7PWvvMnBngOGJd1RxM
+         uJJg==
+X-Gm-Message-State: APuU4Z+06Lx0DTBoZmJgzXahHiaGCwHi5YufZs83+GRn0Z9rLLos6xcr
+	/akDnMDEiepeC6BS3A8gVJfXFZb5J3ljGeYB9LVeeqeiQ3OY8sEkVJ5v
+X-Gm-Gg: AZFdTZdOu7mXS1Lz1V26M0M9AgwHK1LaIQOPFRVKpowLeXBLd0tlqopgAByfYHzbKZA
+	EVBuuE/UtEJdFuNvu2F9CtvP7uRFinMTYIIim5RHTwVAcBIc3OjkL6x+2ZzG1ayKWBMjXxUWCWh
+	+K4EjWpMUYb51K5hS3y3PglKJSoe1c1cvxcKmr66vtFTR3iXE6MAdGqEe3C03IIaddpS2ZYUBUU
+	PhpsB+HIzQJXpt3uR5OwU4PACwW3pOsNU8UnxntpH/z/yJ0tXmeuB5+vT6NB2tNvuK8C+SuZPAA
+	0dt7hkLg40hJPhScr+uufmavuINMnc1O2aNG00jh3vqs35zYF9ZQTyonI7hU/ugeZQ+t4sZnSjn
+	YqaHb6TY49Yz9Dizs6h13OMhkx/FlNXy8d0EzYmGzyUMKxw6tJWMZDLP6NITzerzdeOUFe0kwlu
+	bH0nr3OCk5NoJHWRwZxnLiJMYiHZFiDevfIG89WRrGuGrqiiy5MkBodlwRYHK2wXmz9ZegDBEIN
+	HStivSBZZxyttTlldMsxThZzA+lxS17Ge5iB0VzBJg+7AOR6QSrL3Lf9THJRpjOTm+mTEIBgyzN
+	LSJRJGjDhunTfsVLsrborsv7T0oxlEn+xpScKkJkD5b5fuwII6Wo/PebfYoeyy81dHYGkFmyUOe
+	5xVz17lkemG4q1n43OtM+wBTtrMvU/1kX+X5JPRv+L2iByKkeOfwZUSe79lzACnKHT9cjkhS4R/
+	DAzfc=
+X-Received: by 2002:a17:906:1553:b0:c50:576f:b39e with SMTP id a640c23a62f3a-c513ab0cf13mr612886766b.26.1795441833283;
+        Mon, 23 Nov 2026 05:50:33 -0800 (PST)
 Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513aeca720sm409336466b.53.2026.11.23.05.43.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513acfe3b0sm410984766b.8.2026.11.23.05.50.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 05:43:12 -0800 (PST)
-Message-ID: <664a18cc-24d8-4140-9c3a-d522945cd2cb@gmail.com>
-Date: Mon, 23 Nov 2026 13:42:49 +0000
+        Mon, 23 Nov 2026 05:50:32 -0800 (PST)
+Message-ID: <c60f3a12-4a54-43ec-b1e4-45bf43deff57@gmail.com>
+Date: Mon, 23 Nov 2026 13:50:08 +0000
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -95,42 +93,52 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dma-buf: fix leak of ctx and dmabuf reference in
- dma_buf_io_ctx_create() WARN path
-To: Falconet3 <Falconet3@proton.me>,
- "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
- "christian.koenig@amd.com" <christian.koenig@amd.com>
-Cc: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
- "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "axboe@kernel.dk" <axboe@kernel.dk>,
- "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <htm5h9oaY-vk0g9JVYJmz5XCaKe_nPoWkUJYJqDulyNvv_sAWfzSMp0T6GWt5okc8R4SyvXXpJQ3VGhetKnjEa2KGem5uCYdxpmdzUFf6XA=@proton.me>
- <tRqxbL7txMRAzNLKylzBLQURNLpU-D0Xx5CrngGwLoYrK7V7kREharagUfgQLGIfiYFyTALR0BwL93AL_PWmFXq_MoZPhvPfUojBsyCnilI=@proton.me>
+Subject: Re: io_uring/zcrx: copy statistics lose updates when one ifq is
+ shared by multiple rings (Data race)
+To: =?UTF-8?B?5b6Q5pmX57+U?= <xuhx@hust.edu.cn>
+Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+References: <4c7f9772.192e1.1a17d5c2ed5.Coremail.xuhx@hust.edu.cn>
+ <2026102727-data-sequel-ce41@gregkh>
+ <375d4b.2ad09.1a202324f3e.Coremail.xuhx@hust.edu.cn>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <tRqxbL7txMRAzNLKylzBLQURNLpU-D0Xx5CrngGwLoYrK7V7kREharagUfgQLGIfiYFyTALR0BwL93AL_PWmFXq_MoZPhvPfUojBsyCnilI=@proton.me>
+In-Reply-To: <375d4b.2ad09.1a202324f3e.Coremail.xuhx@hust.edu.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/22/26 10:49, Falconet3 wrote:
-> Withdrawing this patch. Apologies for the noise.
+On 11/22/26 07:39, 徐晗翔 wrote:
+> An io_uring zero-copy RX ifq can be exported by one ring and imported by
+> another.  Both rings then perform receive-zc on their own TCP sockets,
+> but they share the same struct io_zcrx_ifq and therefore the same
+> ifq->notif_stats.  The statistics update is not atomic:
 > 
-> The WARN_ON_ONCE() path in dma_buf_io_ctx_create() is not reachable with
-> in-tree code: the only in-tree implementation, nvme_init_io_ctx_locked(),
-> installs all of dev_ops (map/unmap/release) before it returns 0.
+>      static void zcrx_stat_add(__u64 *p, s64 v)
+>      {
+>          WRITE_ONCE(*p, READ_ONCE(*p) + v);
+>      }
+> 
+> io_uring/zcrx.c:1337-1340.  It is called for copy_count and copy_bytes
+> from io_zcrx_copy_frag() at zcrx.c:1770-1771.  There is no ifq-level
+> lock in this path.  lock_sock() in io_zcrx_tcp_recvmsg() is per TCP
+> socket, the ring's uring_lock is per ring, alloc_lock only protects
+> fallback niov allocation and is released before the copy, and
+> ctx_lock/notification is taken after the statistics update and is not
+> involved when event_desc.type_mask == 0.  Two CPUs can therefore read
+> the same old value, add their own increments, and write back the same
+> new value: one update is lost.
+> 
+> The effect is limited to the UAPI cumulative copy statistics
+> (struct zcrx_stats at include/uapi/linux/io_uring/zcrx.h:83-86).  The
+> values are user-mappable diagnostic data; the race does not control
+> buffer lifetime, DMA, reference counts, or packet contents.
+It is racy, and IIRC Clement dropped atomicity at some point, perhaps
+for performance reasons. I don't think it really matters though, the
+main purposes of the stat is to be a flag saying "something is wrong,
+setup steering rules". What's your use case? For precise statistics
+I'd rather prefer to add a trace point, which would be able to do it
+the right way (e.g. per-cpu counters).
 
-Right, it's a warning for the same exact reason, and cleanup considerations
-for it are different as well.
-
-> And on the only path where it could ever fire — an importer violating the
-> contract — freeing ctx directly is not safe: init_dma_buf_io_ctx() has
-> already attached ctx to the dmabuf and linked it into the importer's
-> tracking, so kfree() + dma_buf_put() leaves dangling pointers and turns an
-> unreachable leak into a potential use-after-free. Since dev_ops->release
-> may itself be one of the missing callbacks, the core has no safe generic
-> cleanup on that path.
 -- 
 Pavel Begunkov
 
