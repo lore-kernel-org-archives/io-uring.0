@@ -1,114 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795457233;
-	b=062vN8drA9Y7rtnEAAQ3JFe+uwkGIbgZehB/ShEBI3rSszBK0QUsPT9FWp2U2VO7Y0eT
-	 GzJrNXuRvVhgIXYbDeU0TBWIiMoOjzy/Td2aLrLBbQYUla7x5UFvtPf5lA1oHY48ikBpj
-	 oDHcU1kpgqvid0v2u/+5GvIMPhYYQhBGbNBPA7pOH9KTvHcL5evQ9RCmYRdKgSlGcP/AK
-	 1zTya9OHfd0zUr6JDU6ayzhOeTcsSs47EofY84OPqxyOz1Ty1WJq/6ypeq1YUF4kgtcmP
-	 JRfsMRqvowxnx/G1PBEv5CtY4c3DBjbNvOLzCmsbK8fWuZoI8ubeeUxM+3Gc7R3c3YA==
+	t=1795470007;
+	b=j5XfARKCOOffdufnrSYlJf+myU2DlGFmWCDseOvir2DNI2LmyFZYz3pMBdP/f1WZiA4p
+	 lqHzBIJMRq7NIUgqasn00GRTA2xm9/tKx9+8J5ZFLxDjVozaTNvvPCVcpu33G1cEE+K87
+	 eKeSJBKSHssKhj5vrKjcyLjY6D6OGjnb9cGtHktS2twtvMD+EkX9a4YPf+eenkHBMTWy2
+	 h3kE1xPGBjK2W0lGU6zvAIGhLNLfKLzEG7YlnTMozS7E1LApLqfOwSlkJARWRElr8Bkw+
+	 e6ft+iMf4rFvP4q6b0C6c9uDS6PtCsVoGTcOY4p5KHgqgy3Wgmc0IVCeiuJawOx/eqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795457233;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:To:Cc:X-Mailer;
-	bh=AHY2CyTjetiwXuBqBJRqvDGqniqWKKNoLB5jad2781s=;
-	b=0iF3tQ6laBS9w+LhNUAbLw+hZ+04xD0olkd4xM+AF/NHNnn7Gx2A+eTvVOG3ioO3IuNz
-	 TacZJwq6TeBPReVyGaq5VpIT6gXGXpkXNSl8RXqri+HJ+yBlNkenJ7//Z+QLV+gM3Qf/X
-	 oHOjcandMUMr2YqH4fu+HXoOGPRE+HdmHzE/GyzLEsYKpEqLukmSSLLO2NFAu4dlDqzIP
-	 XBEJVY/NqCPlzndEav/ldvM7bpnEoodhDdAGUbGazxmRE588eZlt95W9jxSQPGOZMYuW5
-	 fqfE0WnC4Zyza369SZfD3cu0slF0WYTzKSlwBPdMybcW3rypb+QMYLm0bIKLHDD0C3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795470007;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-Proofpoint-Spam-Info:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version;
+	bh=ex1ULMVAEV+ZIfxEUvMfTKsmYI3rmVPICZINUc/pU2g=;
+	b=QohOLdAhITkTtFuWtKr9cx248JnL5KJ+8ZKnGKo0Viff0V4Ilv/hMR774xCtWFadxD6b
+	 ymYTCA+d4rvr/Z9Q3oIMcIRCJFz63gXsvJOiFUuZ805/LuEAvXV8rQ4PoGG076nGo671Z
+	 Iuggd9RagCyIFfj+qMueQ9U6wnkJszwlje/4lJShCkLOKoA4Yyivhi82qjgc04EcuiK0A
+	 wTDwEcdPUyHDoxpulAgewFEjj9aTm5EEaDTDr1TyIxsWy0df3CUZIsPtcLJM37tyWdwoA
+	 EGH2rtSx4fZLp+ySrTZ1IftQQOtYyjswZXH7fK4N/NdPidbc+AwGULbZaKkneRDpl4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fastmail.com;
-	spf=pass smtp.mailfrom=fastmail.com;
-	dkim=pass header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=kJR+HTxg;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="A/TQESft";
-	arc=none smtp.remote-ip=103.168.172.157
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=bflkjytA;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC144606A31A
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 18:07:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC144606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A4D606A32A;
+	Mon, 23 Nov 2026 21:40:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2A4D606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=kJR+HTxg;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=A/TQESft
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id EB80414003A6
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 13:07:11 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Mon, 23 Nov 2026 13:07:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm3; t=1795457231; x=1795543631; bh=AH
-	Y2CyTjetiwXuBqBJRqvDGqniqWKKNoLB5jad2781s=; b=kJR+HTxgyz8gt8q0Zi
-	JRnha0ApeWRE1kVuzXfwZgI8qRc5r2YyUyGHtJXZkIsh9PyL4j95MQCE+M2D+5Yj
-	xxMvm+sKQLJAvG7gDi/MqIXu96yA1PS3Jj3i+n0K2bGAdCkcf7h5+z3xVmPewZOI
-	A/ZCIs81bawRRWGUjX80yUjh+Pr2GpeMTKklugQ3nTzmHqiXdWkq1xkBS5axWG+V
-	uTdM2QvycW2mzX4usVFp70VY8DLii6dOwF3XTdTXIq8WIsE8JtA24C1jOqWGMY7C
-	XTqiGbHQhV4QlR4zzTkJd4Xfu/xPIlPGguadoTAHonaKsXvtTYdAPSLUA02W1n0v
-	QSng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1795457231; x=1795543631; bh=AHY2CyTjetiwXuBqBJRqvDGqniqW
-	KKNoLB5jad2781s=; b=A/TQESft7QVicSQGzCZsqi44RKSvzsrYVhgZDsVbeE8i
-	9ivgaixYAOEHi+7Iv1rzUtOnfMHne0IcqGbeqemhlermq1x4R68uyV2OPms8JJGN
-	X2rU9oZm2nWrjtKFThkc/Va8UNWyw16xBnU1pjhgxq1vTFCfYaFlB0LxapqudKUZ
-	IgwWnCcCGImzzC8eVCURkvMd5PSmnXuf9l295Q5uPxhSfQCCseLOq3SmeaPsS6NP
-	egkCa2oV4bEM6zeuMZWnj9VmOYlY9p6B6iQS+5M0L0jr/oXnljXLrQSbR3PFKG0j
-	VP9GLbnEf1PaZ+fRwv+yQaSv8jq3qxatoQe0EbFqXQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=fastmail.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795457231; d=fastmail.com;
-	mf=PGp1YW5sdUBmYXN0bWFpbC5jb20+;
-	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm3:rsa-sha256:exRxFdXx9tnsaKrc8HbVdEnWWW8PMIZ3hJ/IDcJKFp93o18
-	Wme7KCp0maQaExor6IGyhsvaMZTv0Hp60qUJmQoR0abp8uFiMSdNt71SDUCZBXIp
-	5yhHzLudmPkA7qThlbJuQCDVl8TpeG1x38ra0upL7gldWM8yFCcWMepTPMdZTYM5
-	62EyQ6e8+yoaO4Msh51hdQ61S7N0p9P0JPU2NhlMbLa0lxJSwZMNxHhIGAoQGXu7
-	/06rFZStRTRyCPxhInW4mrsU13tn89ujuhOCfbDouJHgsm9tyCeQvVwzPurJrcOX
-	dohkAJ824sXsiMR23CJ0G2pM3r9zN2AeEDQOzsQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=10;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,message-id,mime-version,subject,to;
-Message-Instance: m=1; h=sha256:+C0Mtdbintxe3lZ6HWQv1XqYb0wddfadChqENpcqW2A=:qD5yWnn0xRm8TAS3IVG8/X5c0X434qdiHrYyPK37fJ0=;
-X-ME-Sender: <xms:z4AEa1OwmNiYzs5FtOXOg6Q-_G-RH4W3vqoUOqgGXtzQOX6HDQZHtw>
-    <xme:z4AEa6iFpSDmatE8-jr-3ly1S0iQ4prtFTnKQVyiCrUnOijqocs_xd1Bx8Kjy4Rrh
-    mI90cMWOjLwSaWekXc18IziM_PxyBNGqUWckpuMJHJ-zzoZ4J5BrvU3>
-X-ME-Received: <xmr:z4AEa36tjAo81jLM85yeD5zBjgdwr3NWIA6BzuRuFZ96-4GCsgvWBaBlcA76D7obH7kAbJxOv3o716UaLKk>
-X-ME-Proxy-Cause: dmFkZTF7VGQKM0+qSjc8kIewacMH9fMEl7EB9jTNzVhZqEsbjakCK/N+s6KJNLiJibXSY+
-    wr7v0Jg0tVv6ZQIesDyQPRLOCQQbk19fMgLCWSXTlZexPsV3HuaicMaA2w/lwlEeGsZWZs
-    2SA8adnltI+KObFIK6hSwtyTyhCSQUhZZ2GetPUMzS0eonrc6QXbYlLAoxDG3xk8Z4N7+b
-    sW1oqo4msvcKHFEiB9UR5a8hXsl86v4LjjiYj9C2D6ksWfn72M8QfrHDq1jecn6OZtMeHD
-    LmdzGNxeU8JOG3kBoMifCwfqH6GqaCAlsxdQoJL5DVp2ThP3b5c+a+7C9WioSCWAUi9Tlf
-    BqyPWysC4uiQMU5jILCJmXD9qS1gDT9bkO46qQjm4Y0ed3m17NQBWmS/J2cSfrbhDm+IOd
-    UuPUfsfLT/ZsrVRSZFlyZPjdUDglBdO3pYu6b7w3m+lFVff6KpOE00lNk1bJAE2nbvYCGX
-    SQlEONWYWi/Qc+8a7RgwlAoQlVnFQxCIgfUBd1+RHBhp/fjlqydvtITlITUXIpqx/b/V6+
-    cz2LJNkWwrxPIDCOOOA2NA3NXzf0c/xMAtQsudLZhvR29PPCudVhyCyxhK2a1BPUb297Cs
-    /rSGXTSrCj/8DZqWGf2tgB36z/z/AJuwFYdQl3LsA3heTxqkjO4n7JtEmmfQ
-X-ME-Proxy: <xmx:z4AEax3IeSMdkx8Nnf4wwD1XBiGEL6_hy_qmUxvuvHfiQYC5aTCiOw>
-    <xmx:z4AEayty4KYcEW0PN9A_ckuc24mIi-O7i3JPGOwziNwosLaCDefyQw>
-    <xmx:z4AEa370aE_uRXY8rM5Q4OlaxBQcxI2aTHQsbeyreQHDJZSM7xfgIA>
-    <xmx:z4AEa-dJiIwzMe1DNiyLnGD2QbNdhz8DaE88esfLFu-Zj-aDOWVtFQ>
-    <xmx:z4AEa2xxi2dJlKgrrY5VUkdvMGFLN_icdNIe4nRcRC8U9pAvfUWEjrI6>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Nov 2026 13:07:11 -0500 (EST)
-From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Mon, 23 Nov 2026 10:07:04 -0800
-Subject: [PATCH] io_uring/zcrx: reclaim returned fallback buffers before
- ENOMEM
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=bflkjytA
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANJwC092388937;
+	Mon, 23 Nov 2026 13:40:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=ex1ULMVAE
+	V+ZIfxEUvMfTKsmYI3rmVPICZINUc/pU2g=; b=bflkjytA7OiJ6QdHWIjXDDZ4a
+	MBXaTWj5zwKOi62hLLdcgbzML+/viBmrCYtFO7nsnDUdLG0vLNYiVOdDpt95DiXe
+	MixbKOG67xbX0caJepKNzRZo9hIT1/rIgVGMgFonbK8I5rsBzAGJwJ6G2roZFxh6
+	iJyfTkMrL55I0vTG2e+YkrOtFU28+NE/lWr8f9xilBw8FdEjnrXU8rx0G9L0MIFM
+	xwPZ45/rzDZOzo6hZ5e5RejPMp3FL+aePe9l38irXmFyb0GA/A/AawGAnBCqjj35
+	Kgo0Gf9bYFUghY4i9gPDECNwliHIjWb9oVTwgSnh4SiJiWlUdUHZjk60tyGAQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j39wgmhhd-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 23 Nov 2026 13:40:04 -0800 (PST)
+Received: from localhost (2620:10d:c0a8:1b::8e35) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Mon, 23 Nov
+ 2026 21:40:03 +0000
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
+To: Jens Axboe <axboe@kernel.dk>
+CC: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>,
+        <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Juanlu Herrero
+	<jlhe0197@meta.com>
+Subject: [PATCH v2 0/3] io_uring/net: Add bundle support for recvmsg
+Date: Mon, 23 Nov 2026 13:39:17 -0800
+Message-ID: <20261123213952.824008-1-cleger@meta.com>
+X-Mailer: git-send-email 2.53.1
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -118,127 +74,57 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261123-b4-zcrx-fallback-reclaim-v1-1-17e9202cbc77@fastmail.com>
-X-B4-Tracking: v=1; b=H4sIAMeABGsC/x3MQQqEMAxA0atI1hOwVZTOVYZZxDbVYHWGFEQU7
- 25x+Rb/n5BZhTO8qxOUN8nyWwvMqwI/0ToySigGW9vOGFvj0OLhdcdIKQ3kZ1T2iWTBxoWenIu
- 9CQFK/leOsj/rz/e6blzFLzZqAAAA
-To: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org, 
- stable@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Yedidya Feldblum <yfeldblum@meta.com>, Juanlu Herrero <juanlu@fastmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIzMDA4NiBTYWx0ZWRfXwitOnUx6Jqf0
+ /lPcf3YkKmlcc+h8eLeRk3Wcsrl3TaVTRtEYMXIqtMX7DodXL95KXD4ZRTTj7YeDyyfBO9/vmIJ
+ 1d6ROx1l16qs3U565JYjuK1/IBU2m+E=
+X-Authority-Analysis: v=2.4 cv=Cbudd7rl c=1 sm=1 tr=0 ts=6b04b2b4 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22
+ a=1E7JvQEFULOfdho71cQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: 3Ppv8dnOiI60y93NtdxicyF0hulJb48m
+X-Proofpoint-GUID: 3Ppv8dnOiI60y93NtdxicyF0hulJb48m
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIzMDA4NiBTYWx0ZWRfX/XnSChNy0031
+ s6rTpHS9Qz78+g6qqjKc29fC26YY4buXgt5qbpSC8zyMk7cyhR2b32P7PwF197pKh4Ygoq/IqXj
+ jkfcdotVqkCucDYMEabHQua/aWeg44uwh7urDzYtM0W2+uYMVUBw9gbt4D7iu791Xd/eBlNONF8
+ eCUPBRSCTLeYpzM36tfNzjSjmiWwRLeSdadvWaqGfRRvxzNxouE0/xKECqYg04GR62QSrQcqe7h
+ 3RlPLO443kia9Ibz1GFTyZqI6w7SVEWR4boFIjlVYpjEL+44b+UsYADxBIOKs0NP3KTRwdCIg0K
+ fAecYOXv+hPjbA0lvJPQvDUTKJY0OqvzOY0xft6Rbu8y0jk6Cx20k8nZaGAiAWjLcfjAYzD+89O
+ 8Du0iwX2CNzdpA71cn2IaS/uYzhTHNabKxRxFvdsYbGT/1dCneJNgZmpOHXTX79IxbuyuNrbGPR
+ V7uXD9zX5wdh8mpFPnw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-23_05,2026-11-23_01,2025-10-01_01
 
-Copy fallback can return `-ENOMEM` with an empty freelist even when
-reusable buffers are queued in the refill ring.
+IORING_RECVSEND_BUNDLE is currently supported for IORING_OP_RECV but
+rejected with -EINVAL for IORING_OP_RECVMSG, since the recvmsg output
+envelope (struct io_uring_recvmsg_out, name and control data) was never
+accounted for when bundling a receive across multiple provided buffers.
 
-Drain pending returns on an allocation miss and retry once. Drop
-`alloc_lock` before draining so buffer returns can acquire it.
-
-Link: https://github.com/jlhe97/liburing/commit/0509277390db1e25a340b7b5bf5dedb158c702f3
-Fixes: bc57c7d36c4c ("io_uring/zcrx: add copy fallback")
-Cc: stable@vger.kernel.org
-Suggested-by: Yedidya Feldblum <yfeldblum@meta.com>
-Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
----
-Drain queued returns when copy fallback runs out of free buffers.
-
-Testing: premature `-ENOMEM` after reusable returns, 20 liburing trials
-per arm:
-  7.4-rc1:         20 before, 0 after.
-  7.1.3 backport:  20 before, 0 after.
-The existing ZCRX suite and regression use loopback `ZCRX_REG_NODEV`.
-
-Regression test:
-https://github.com/jlhe97/liburing/commit/0509277390db1e25a340b7b5bf5dedb158c702f3
----
- io_uring/zcrx.c | 39 ++++++++++++++++++++++++++-------------
- 1 file changed, 26 insertions(+), 13 deletions(-)
-
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 6d7abb1636e7f..35ad924970064 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -1517,17 +1517,12 @@ static void zcrx_return_buffers(netmem_ref *netmems, unsigned nr)
- 	}
- }
- 
--static int zcrx_flush_rq(struct io_ring_ctx *ctx, struct io_zcrx_ifq *zcrx,
--			 struct zcrx_ctrl *ctrl)
-+static void io_zcrx_flush_rq(struct io_zcrx_ifq *zcrx)
- {
--	struct zcrx_ctrl_flush_rq *frq = &ctrl->zc_flush;
- 	netmem_ref netmems[ZCRX_FLUSH_BATCH];
- 	unsigned total = 0;
- 	unsigned nr;
- 
--	if (!mem_is_zero(&frq->__resv, sizeof(frq->__resv)))
--		return -EINVAL;
--
- 	do {
- 		struct zcrx_rq *rq = &zcrx->rq;
- 
-@@ -1542,7 +1537,17 @@ static int zcrx_flush_rq(struct io_ring_ctx *ctx, struct io_zcrx_ifq *zcrx,
- 			break;
- 		cond_resched();
- 	} while (nr == ZCRX_FLUSH_BATCH && total < zcrx->rq.nr_entries);
-+}
-+
-+static int zcrx_flush_rq(struct io_ring_ctx *ctx, struct io_zcrx_ifq *zcrx,
-+			 struct zcrx_ctrl *ctrl)
-+{
-+	struct zcrx_ctrl_flush_rq *frq = &ctrl->zc_flush;
-+
-+	if (!mem_is_zero(&frq->__resv, sizeof(frq->__resv)))
-+		return -EINVAL;
- 
-+	io_zcrx_flush_rq(zcrx);
- 	return 0;
- }
- 
-@@ -1656,20 +1661,28 @@ static struct net_iov *io_alloc_fallback_niov(struct io_zcrx_ifq *ifq)
- {
- 	struct net_iov *niov = NULL;
- 	unsigned area_idx;
-+	bool reclaimed = false;
- 
- 	if (!ifq->kern_readable)
- 		return NULL;
- 
--	guard(spinlock_bh)(&ifq->alloc_lock);
--
--	for (area_idx = 0; area_idx < ifq->nr_areas; area_idx++) {
--		niov = zcrx_get_free_niov(ifq->areas[area_idx]);
--		if (niov) {
--			page_pool_fragment_netmem(net_iov_to_netmem(niov), 1);
--			return niov;
-+retry:
-+	scoped_guard(spinlock_bh, &ifq->alloc_lock) {
-+		for (area_idx = 0; area_idx < ifq->nr_areas; area_idx++) {
-+			niov = zcrx_get_free_niov(ifq->areas[area_idx]);
-+			if (niov) {
-+				page_pool_fragment_netmem(net_iov_to_netmem(niov), 1);
-+				return niov;
-+			}
- 		}
- 	}
- 
-+	if (!reclaimed) {
-+		io_zcrx_flush_rq(ifq);
-+		reclaimed = true;
-+		goto retry;
-+	}
-+
- 	return NULL;
- }
- 
+This series enables bundles for recvmsg. Patch 1 is a preparatory
+refactor with no functional change. Patch 2 adds the bundle path for
+single shot recvmsg. Patch 3 extends it to multishot.
 
 ---
-base-commit: 0659e44ce739ecd856164c75a5325b7959a2921d
-change-id: 20261120-b4-zcrx-fallback-reclaim-39d7a99f71dd
 
-Best regards,
+Changes in v2
+ - Add bundle support for single shot recvmsg
+ - Added incremental support for recvmsg
+ - Remove superfluous comments
+
+Changes in v1 (previously RFC)
+ - Factorize header size computation
+ - Remove unreachable check for length
+
+Clément Léger (3):
+  io_uring/net: Factor out receive buffer selection
+  io_uring/net: Add bundle support for recvmsg
+  io_uring/net: Add bundle support for multishot recvmsg
+
+ io_uring/net.c | 228 ++++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 179 insertions(+), 49 deletions(-)
+
 -- 
-Juanlu Herrero
-
+Clément Léger
