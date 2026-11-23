@@ -1,61 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795402083;
-	b=WleBY9LIpDjr9eXIlP/wfNPjhNdD7th8NJGClh7AvIKgcu4475BmTVPGqKy/bwuxKu6C
-	 Fa2QgvBKXraijByJfKWxptZhQ57Od9hKX3nkT2kbGI67Kk5z6RUTSO/A7Xdg1pg9Uw6LW
-	 VrwzjAwWkO64csyHVbzn7V8ZJbvreINXg854irfyy5qaMEd+KOnD7gH6gQTo7VF/NJWKU
-	 4t4MEmdk9R/bmWz+4BG+MiuG6lNzT6lHpc/XUNW3W5kj0vWxESnRqCpxJLGm1d0pO9YEv
-	 MZ0niamVgQbmrNu9kQR4NdkdLOrOKM7Z+4ezoJXkhp+ClQe2ed/u5SajjBAAwVtt5DQ==
+	t=1795410438;
+	b=YAKY2aXNSHMKEv9pUwacOIyaAG1J04x8o+Oo+21lnhVEQR86RxToJPwOv/l09ipIPKhd
+	 w/LX5x2xgujEYI/F7K55KmQrIGlcbiUnhVjTX+ZI1un7bVa5X4HRj5A0v70AiE/teoOeU
+	 m63l8sthAnb4QPSN0ZkV8lNvHM9qvhsS684Ub3e89Dse/TO/EeYj31x5henKav+QSqwCU
+	 A8pj7833+tDuGLkdd6YbClh12dVhA3XKZfNIOI+8Wshaxus1JFL5ZByi85GyNLUeJ1Uxv
+	 s4osVAgf05cdDRsJdBAZTky52EzmHE94iK3giJUHg4vHiRIgVbrElctWPLcs2BluSxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795402083;
-	h=Received:DKIM-Signature:Date:From:To:CC:Subject:User-Agent:
-	 In-Reply-To:References:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=yrk9+Mje2C0J1qnXfhBPjrjMZR0Y6jR+rEChJda2HwE=;
-	b=d2PZNk3Yik9CbqhBgFY0pP3qkw9am3yTXFRjY2EyORR4xuzzGkeH42ZeGPMOvmrc/gyq
-	 AYbMLh7n4yBBN/HfGyciSVcia3l+xqijimkH1F2QOp5L/4l4KucvuX4AQxZIJ9dKjqHb1
-	 21AjzJCB5MN8WHPtIfpqJirqbnBozfc6UFDCO06kK7UpESMs7CvyXp0DyToupmAvfmJ7q
-	 2HSLg7JxptRJV7VoNwqWgi5W31mVhL4mBhCcv4gGCPHuBu5hiWGnbPbwuVpkDLvH2eq2L
-	 Ac8CUDPRcfGSzxRzN0Fozy6KYk/30ffRATKQGC9v4hjepLRi3mBXMsWJ1xZN9rLdFOQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795410438;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 Mime-Version:Subject:Reply-To:Sender:From:To:CC:X-Priority:
+	 X-Content-Kind-Code:X-CPGS-Detection:X-Drm-Type:X-Msg-Generator:
+	 X-Msg-Type:X-Reply-Demand:Message-ID:Date:X-CMS-MailID:
+	 Content-Transfer-Encoding:Content-Type:X-Sendblock-Type:CMS-TYPE:
+	 X-CPGSPASS:X-CPGSPASS:cpgsPolicy:X-CFilter-Loop:X-CMS-RootMailID:
+	 References;
+	bh=Cd6iHPL7zgNWtBUtUa4Lg14WBOVuuUn85F3LluQ9xdQ=;
+	b=HhO99eIBTl2iploH4+B25CwDKiQzNW6ZhfOdc7sH9EiQzc0mqAn6RzC9J5fApwT/eqK/
+	 phkLiQaqFsb0YcrU8P/n3TLmDkGaqRr/o+MMxJaelrc/PuHmaOCTc1ZAdeHJHlGt7eADJ
+	 WyYCc50HDjxYJeVOdIEPT7PBg8GAh+HX6CiIikUfBpqnJsDeqeFqNiEk9tnvFg6uoDbgA
+	 Hb8j1Ka0LdAcWubDI18DyVL/FXI5+frpBu2s2xw2anmMIBM3M5A+Bd5tgPpt4L8eoVpn6
+	 uJNM/OfUCQH9V7lsZzwgBd/xkOjZ2CyzaShFLIu4MFej8KhiIbHG1t5KLYvi6xXg3Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CyI3qMqW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b="JK/CA5RF";
+	arc=none smtp.remote-ip=203.254.224.34
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153FA606A335;
-	Mon, 23 Nov 2026 02:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB65606A334
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:07:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BB65606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CyI3qMqW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 743561F000D0;
-	Mon, 23 Nov 2026 02:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795402082;
-	bh=yrk9+Mje2C0J1qnXfhBPjrjMZR0Y6jR+rEChJda2HwE=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References;
-	b=CyI3qMqWU+bbm41Pvu5eArEyhtjiTt0S0MgixsjmMnIX8XzpTtcXkx19YoV/xmS9l
-	 HMpqGRoxOGOA1NhKJ3H2UtIeX3UTIJW+8eDTdQfbSrm9RXF7gJTXIYZnWa0oEyuel/
-	 k0fJ/dWSKO/w4sFbvhQTmoVdrA+siN9We+OGlyygTU0SADHC3DlcG4iMgdpZlF42tk
-	 yzlUeRBp4mvjlzXvg65kGKGeekb4OApYFk0FISD0yeZ5xSXG8+HLG4N+iY7Jf138SK
-	 S+JMqNDwUcRvas5sBIC9/IUOI0GGEVtjdkuHqW7Kdddmq/3ie0D2BWFMo6kTy5UnO3
-	 0THvIYbT0tEbA==
-Date: Mon, 23 Nov 2026 12:47:53 +1000
-From: Kees Cook <kees@kernel.org>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
- netdev@vger.kernel.org
-CC: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Stanislav Fomichev <sdf@fomichev.me>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jens Axboe <axboe@kernel.dk>
-Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for seccomp
-User-Agent: K-9 Mail for Android
-In-Reply-To: <cover.1795139109.git.xukuohai@huaweicloud.com>
-References: <cover.1795139109.git.xukuohai@huaweicloud.com>
-Message-ID: <EF2067C8-7F71-4D92-ABC9-25BC3234036E@kernel.org>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=JK/CA5RF
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20261123050709epoutp0426d9e706bfff8e28979d22360692f0c4~qlEXy6vBN1074710747epoutp04i
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:07:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20261123050709epoutp0426d9e706bfff8e28979d22360692f0c4~qlEXy6vBN1074710747epoutp04i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1795410429;
+	bh=Cd6iHPL7zgNWtBUtUa4Lg14WBOVuuUn85F3LluQ9xdQ=;
+	h=Subject:Reply-To:From:To:CC:Date:References:From;
+	b=JK/CA5RFIUxMigklVPEChG6FnqttLpYm5TtU9IPXMWnFnQN4QQpznr4djUWqX+Bmo
+	 1V/Lkokh4g9i245kgAXJW7Avz8m+2EAcl1K8HqBbP+9Bnv0h4XXch/oX2IAw96wGhN
+	 lfhujWJdEyvpO35jEaXNQY0/HK9OtoG9Amx0P+EY=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
+	20261123050709epcas2p2757ff5f18749871f30c2f80973c0c6ca~qlEXPgCa92179421794epcas2p2C;
+	Mon, 23 Nov 2026 05:07:09 +0000 (GMT)
+Received: from epcas2p3.samsung.com (unknown [182.195.38.206]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4jXv7c4wcRz6B9mF; Mon, 23 Nov
+	2026 05:07:08 +0000 (GMT)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -64,62 +62,192 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Subject: [RFC PATCH 0/3] block: cgroup-based and explicit write stream
+ placement for NVMe FDP
+Reply-To: suho.son@samsung.com
+Sender: Suho Son <suho.son@samsung.com>
+From: Suho Son <suho.son@samsung.com>
+To: "axboe@kernel.dk" <axboe@kernel.dk>, "linux-block@vger.kernel.org"
+	<linux-block@vger.kernel.org>
+CC: "tj@kernel.org" <tj@kernel.org>, "hannes@cmpxchg.org"
+	<hannes@cmpxchg.org>, "mkoutny@suse.com" <mkoutny@suse.com>,
+	"corbet@lwn.net" <corbet@lwn.net>, "skhan@linuxfoundation.org"
+	<skhan@linuxfoundation.org>, "rdunlap@infradead.org"
+	<rdunlap@infradead.org>, "viro@zeniv.linux.org.uk"
+	<viro@zeniv.linux.org.uk>, "brauner@kernel.org" <brauner@kernel.org>,
+	"jack@suse.cz" <jack@suse.cz>, "io-uring@vger.kernel.org"
+	<io-uring@vger.kernel.org>, "cgroups@vger.kernel.org"
+	<cgroups@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d@epcms2p2>
+Date: Mon, 23 Nov 2026 14:07:08 +0900
+X-CMS-MailID: 20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+cpgsPolicy: CPGSC10-223,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d
+References: <CGME20261123050708epcms2p2f9404899881a0554cc6417ef7b1d670d@epcms2p2>
+
+Hello,
+
+This RFC proposes an operator- and application-controlled write stream
+interface on top of the existing write stream plumbing
+(sqe->write_stream, bio->bi_write_stream, and the NVMe FDP placement
+translation, which are unchanged by this series):
+
+  1/3 block: distinguish unspecified and explicit device-default write streams
+  2/3 io_uring: add IORING_WRITE_STREAM_DEFAULT for explicit device-default placement
+  3/3 blk-cgroup: add cgroup-based write stream placement
+
+The series is based on the block tree's for-next branch (see the
+base-commit below).
+
+Motivation and background are described in our HotStorage '26 paper:
+
+  Link: https://doi.org/10.1145/3837053.3837343
+
+Motivation
+
+NVMe Flexible Data Placement reduces write amplification by grouping
+similarly-aged data into per-reclaim-unit placement handles, and the
+kernel already lets a single application tag writes through io_uring.
+Two gaps remain:
+
+  (a) an operator cannot place whole workloads per cgroup without
+      modifying applications, and
+  (b) an application cannot force the device-default placement and be
+      sure that no policy overrides that choice.
+
+The series addresses the root cause shared by both: write stream zero
+currently means both "unspecified" and "device default", so lower-
+precedence producers cannot tell whether a stream was requested.  The
+resulting precedence, most specific first, is:
+
+  explicit io_uring stream (including DEFAULT)
+    > inode write hint
+    > cgroup io.stream
+    > device default (0)
+
+Patch 1 introduces the WRITE_STREAM_NONE sentinel for unspecified
+streams, resolves it centrally before the bio reaches the driver, and
+carries ki_write_stream through kiocb_clone() used by forwarded direct
+I/O.  Patch 2 adds the explicit-default UAPI value, decided at prep
+time so it survives async re-issues.  Patch 3 adds the io.stream cgroup
+v2 interface: per-device upsert entries, "inherit" reset, explicit 0,
+validation against device queue limits, lazy policy activation, and a
+single-word policy state read locklessly under RCU, with writers
+serialized by the queue lock held across blkg_conf_prep().
+
+Runtime verification
+
+We exercised the series, as posted, on an NVMe 2.0 FDP device (8 RUHs)
+with bpftrace observers at blkcg_set_iostream() entry/return,
+__submit_bio() and the nvme_setup_cmd() dsmgmt export:
+
+  - explicit streams 2/5/8 -> placement IDs 1/4/7 (tracepoint-verified)
+  - IORING_WRITE_STREAM_DEFAULT -> concrete 0, no placement exported,
+    not overridable by an io.stream policy
+  - stream > max_write_streams -> -EINVAL, no bio issued
+  - io.stream explicit value observed end-to-end; nested cgroup
+    inherits the parent's entry; explicit io.stream 0 resolves the
+    sentinel to 0
+  - io.stream rejects streams above the device limit and the reserved
+    255 with -EINVAL, and devices without write streams with
+    -EOPNOTSUPP; the root cgroup has no io.stream file
+  - the inode write hint beats the io.stream value, as documented
+  - IOSQE_ASYNC: an explicit stream, IORING_WRITE_STREAM_DEFAULT and
+    the submitting task's cgroup association all survive io-wq
+    deferral
+  - a 512K direct write splits into multiple bios; all keep the stream
+  - 64 concurrent writers with a common stream: 64/64 tagged, stable,
+    no warnings
+  - buffered writeback on a mounted ext4: writeback bios adopt the
+    first-dirtying cgroup via wbc_init_bio() and carry the resulting
+    placement ID to the device; the nested cgroup inherits the
+    parent's entry, explicit 0 and the child's own entry override it,
+    and "inherit" restores the parent's value
+
+Each patch builds without warnings at W=1, with
+CONFIG_BLK_CGROUP_IOSTREAM both enabled and disabled.
+
+Not yet verified (please treat accordingly)
+
+  - WAF improvements on a production multi-tenant workload are not yet
+    measured; device-level fdp status counters moved consistently with
+    the placement IDs, but per-case deltas were below the background
+    noise of the test setup
+
+RFC aspects we would like feedback on
+
+  - the API shape of io.stream (per-device "MAJ:MIN <stream>" string,
+    upsert and inherit semantics, explicit 0 as a real entry)
+  - the WRITE_STREAM_NONE sentinel as a u8 reservation, which caps
+    addressable streams at 254 through the io_uring interface and
+    excludes 255 from io.stream
+  - whether io.stream belongs in io.* under cgroup v2, and its
+    interaction with the existing io controller file hierarchy
+  - buffered writeback semantics: attribution to the writeback owner is
+    arguably what an operator wants, but degenerate share cases deserve
+    a second opinion
+
+No MAINTAINERS update is needed: block/ is covered by the BLOCK LAYER
+entry, and the io_uring paths by the IO_URING entry.
+
+Tool use
+
+This series was developed with substantial help from LLM coding
+assistants, in an interactive session rather than from a single prompt.
+The assistant drafted a large part of the implementation (the
+WRITE_STREAM_NONE sentinel and its central resolution, the fops.c
+precedence rework, the kiocb_clone() propagation, and the io.stream
+single-word policy state and its RCU lifetime), the changelogs, the
+cgroup-v2.rst section and this cover letter.  It also wrote the
+io_uring and bpftrace test harnesses used for the runtime verification
+above, and rebased the series onto the current tree.  I made the design
+decisions, directed and reviewed the testing, and reviewed, revised and
+take responsibility for all of the code and text.
+
+Suho Son (3):
+  block: distinguish unspecified and explicit device-default write
+    streams
+  io_uring: add IORING_WRITE_STREAM_DEFAULT for explicit device-default
+    placement
+  blk-cgroup: add cgroup-based write stream placement
+
+ Documentation/admin-guide/cgroup-v2.rst |  58 ++++-
+ block/Kconfig                           |  16 ++
+ block/Makefile                          |   1 +
+ block/bio.c                             |   3 +-
+ block/blk-core.c                        |  14 ++
+ block/blk-iostream.c                    | 315 ++++++++++++++++++++++++
+ block/blk-iostream.h                    |  18 ++
+ block/fops.c                            |  25 +-
+ include/linux/blk_types.h               |  13 +
+ include/linux/fs.h                      |  11 +-
+ include/linux/io_uring_types.h          |   4 +
+ include/uapi/linux/io_uring.h           |  26 ++
+ io_uring/rw.c                           |  16 ++
+ 13 files changed, 510 insertions(+), 10 deletions(-)
+ create mode 100644 block/blk-iostream.c
+ create mode 100644 block/blk-iostream.h
 
 
+base-commit: d09b6d9d1fcce0770c1824c8b2b8ab153f2672d2
+-- 
+2.43.0
 
-On November 20, 2026 4:48:49 PM GMT+10:00, Xu Kuohai <xukuohai@huaweicloud=
-=2Ecom> wrote:
->Sandboxes like Firecracker use seccomp filters to restrict allowed
->syscalls=2E Hundreds to thousands of Firecracker VM instances can run
->from a single template=2E Each instance loads identical seccomp filters=
-=2E
->The kernel repeatedly translates and JIT-compiles these same cBPF
->programs, wasting CPU cycles and slowing down bulk startup of
->identically sandboxed workloads=2E cBPF lacks dynamic instruction patchin=
-g
->features like tail calls or tracing=2E Its JITed instructions remain
->immutable at runtime=2E This makes it possible to share the same cBPF
->filter between different processes=2E
->
->This series introduces a classic BPF filter cache=2E It is implemented as
->a hash table that maps user-space filter instructions to the prepared
->bpf prog=2E
->
->The cache lookup occurs before filter preparation:
->- cache hit: Returns the shared bpf prog directly=2E
->- cache miss: Reserves an entry=2E Concurrent tasks loading the same filt=
-er
->  wait on a wait queue until preparation completes=2E
->
->The cache is instantiated per subsystem=2E Currently, seccomp is the only
->user=2E
->
->This series ends with a benchmark test=2E Every producer spawns one worke=
-r
->thread at a time, the worker installs a batch of filters and exits, the
->benchmark reports the number of filters installed per second=2E The table
->below benchmarks the batch size and the instruction length in one round,
->running the command below with different option values=2E The base column
->runs the same command on a kernel without this series=2E All data was
->measured on a local test setup with 32 producers=2E
-
-I would expect either memory usage or launch benchmarks, not just filter i=
-nstall timings=2E
-
-Is there a workload where there is a problem? It is hinted at in the openi=
-ng paragraph, but I'd want to better understand the actual constraints befo=
-re jumping to a solution=2E E=2Eg=2E it's already possible to share filters=
- by way of process hierarchy, so perhaps the issue is lack of hierarchy?
-
-I've seen proposals in the past about having handles to pre-constructed fi=
-lters, which could be applied (i=2Ee=2E much of the existing caching and li=
-fetime management remained unchanged)=2E
-
--Kees
-
---=20
-Kees Cook
