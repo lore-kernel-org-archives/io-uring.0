@@ -1,88 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795440052;
-	b=YW/O0q2vp8Wc61qFNxRzI8Gy4+X0B5Rx8BnHqB+EX5IiSQqIvZSedqL7eTqtAx25XKyM
-	 E6AP+7d2r/5UtaGVq2oJ1URKBaX43S1H8Yqk77z6q1AJZuuCItPns8KWzMtQqn2tTRPip
-	 +YmbpUE/7lLGmwjijUREBlzBxDoU2nVrEr+CguVEcHZ42lOS31632mTP04XLqWGTt2JNE
-	 /K9rEZdZGEliE51sXZx2lY4wZ3LX8GJApihqUu2urwNAaNyAi7659oR200IpaDVXNp1P2
-	 0osvv9CgdjC7zcROE8g3IgznvRRL90T3s3fJghl6DtLjpIAI26Kqy7k35EQbeWnAJJQ==
+	t=1795441395;
+	b=bDNmV5OlUhUTizpp6qiPVZKkYgD2GVHXNHoaNZYxDrShUncSVL30WTrJFyXT+jxZK0Vd
+	 wNbP0Pu9LuYLuFiur+KJ81ipshaowUzENsxBfU+hYNrtkotOhKD9XYoSC/W1d3qGjjLfl
+	 q+b3drvQ92Zf+ol/KD3xhar3J3B/aP/ERPMT/s3/mR67cddrk3xTCuuO02RxtsAjlZp0l
+	 S+EiyOpUpCCDZgBGGwZ+tGmRhtPp7OYGiMyVG8mlxu8TRWxk33BSxoYihHTyTkwhprf9v
+	 /9IE72xOVWyM9vk9RaZgTd1aI3qcNVZmYmpb7qiWZvHK0GeK3IX0u5v9R1Qkh+T+Qtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795440052;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795441395;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=nQkJhOs7vzIhcJTG24G8BH/pwTyzsvnAwV9M0zA6cJk=;
-	b=tlOto7B3/L9uOuBpnBuCY3MuPjw2hB9dFg24X+nnp+7BU2mpGAUoBYSA70xUMXKL5qbQ
-	 BGtnOU991uajcQLFDUBIHpenhg1I8T8ARs5DQHxk6s435uYG7g0utvLyyBlb8NfqB4lEl
-	 V7vi8BZmVBzvqUgUIYAik4wG3UwN4QdYmMioZQuUefY612pw0E8EeNOpMAm0obH2pxuc9
-	 7tE6U8rJ738fXUQjLjTXNNkXveM4jsiOThWsHtU9rEJ0/8iVAKL+KJ7f8+rwOrQwe6cCs
-	 CSI1c0ZGoWIL9OhhmFeXQsNsRZBnTEFuK9umKgzalJZfVLDCi/HfcHAB2KjtvnmAlIw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
+	b=QsNm4J/3ewLKaFCt9OIt4lnH7hDB0/ZkuODWuorHlr7knz1C2V/WkcHZN7iCwHMgokXh
+	 tQz4YOOJijHrNdpD96IL3Ykfvoo/yyMBZIck5ZqKIxQKfEkfdb7R9UEA5c0UG1ShSvSQa
+	 mdTGkWq5LyW48e0MfHlrjMbxkqI4vq6DbP1tPn0yLG05s22GE8h1Zh8vkNq2M3ySjc3HY
+	 8zkWMBcWzQOZyf13Us2amHR/Rp08GnYgJC+YmBnrcHtqi6GiCZrvUWr4HJDvApN/ZEyWJ
+	 vxnkkELHZutB9YNvjMRAYIToef37Yf95l04F3U+XCp402JQIm7NUyNBENAAV+bbTZWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dirbU1uV;
-	arc=none smtp.remote-ip=209.85.218.51
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="tSQq84S/";
+	arc=none smtp.remote-ip=209.85.218.52
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC974606A32D
-	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 13:20:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC974606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EE6606A31F
+	for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 13:43:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07EE6606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dirbU1uV
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c4d581da0aaso435074066b.2
-        for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:20:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tSQq84S/
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c516a194350so149446166b.3
+        for <io-uring@vger.kernel.org>; Mon, 23 Nov 2026 05:43:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795440050; x=1796044850; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795441393; x=1796046193; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nQkJhOs7vzIhcJTG24G8BH/pwTyzsvnAwV9M0zA6cJk=;
-        b=dirbU1uVg5XYaOLNs53rZEhqmiBZ/CARf2od0etpll4SmO5f7QaZ0/3zG0qKgtTjnG
-         R6348TQ9464RhMhWmuw0QyPZooAwoBfor/MDsoFFQkPYtqp+g3fQVbSnScKFGSsT5ZWg
-         rik85kKKtu/yQdPGauleEjV2J50e9ubejPI5wtkcEPJpyi1K5UjJMPP4r7MzbF512huD
-         wKDL8/EZrESb1ECauFwmkW1ia5m8KZEu7vMWRbZZXOlBBbJN2zV5RrnqF2pll6nV/NxZ
-         zvjAGjz5Z/9qtriSKjDuOjzHmx8/tWB7GxwiZx4f65IGcP5p3dkyU5YA4TAAtlnYwskA
-         n+Hw==
+        bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
+        b=tSQq84S/1UMt0IuanHyasApDHPmNpDwhzVwotDPkeVq/SQyYZhFtggn3Cq/Gk/1tCk
+         h2cA1OEReS/CYPQpS40RC7oB08MVqUd7hmoO2j5ugvGQeh1InNKeFitZ+YOOi7s7VDVk
+         kyDC14iqfVs+yv1uzySejV0P+NH+PFQwPOU+3jS3mTPfmL6qomnI8+BCpKJhq3+wnmK0
+         /3c4tviGXnzIz6iHoW1QhfVYLYZTEEUWmKBd+iYSEEDhv2iVJJ3HF5eOOzXLPrYX1BfL
+         bAi0dp13I8lbGwD8qBUh4z2IGeZE250GZYAMy2MdxG0g/K6rOzOXfmCJZ62/M2fgsumP
+         2CPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795440050; x=1796044850;
+        d=1e100.net; s=20260707; t=1795441393; x=1796046193;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nQkJhOs7vzIhcJTG24G8BH/pwTyzsvnAwV9M0zA6cJk=;
-        b=IUKpctR1WEE6JrFrx5dT5Kgj99Q7uPujgN+DuHnXtb+ooriVM3s3yPRWHitnlkzaLm
-         mydifQM47GsjLRSMxsgG0WcglOiTsOfZRb8Smaz74ANmNaDOu4IC8a9A3EYVBXFM74WU
-         0Mv8OMtd/hXiJHtZNEgwAPhEYrTPWwKeDhn91WoNU6EA+tkY+873Zz0k4+sQbPlvm65H
-         +bDWaXR1mnNxtMPOoLy0cAPELN592/z8yS+bK4cw2A+mwb0PRR44+vhaSQqxlxXGnsbs
-         /V8y9H/f78ohGmhqz5BoApW64jI6lJUDunFpNXR9MGmMcugjXqN7ZAfhYE0wqj9clNgs
-         /w6g==
-X-Gm-Message-State: APuU4Z+yyILkZYk5xE0IH3IzB1O5uyQT3xh/qbwDpNL+ckht+ZZC7skg
-	yhb+eLkpSClxGFdQWm8UST1Hvt3LLF02qWEmMlLb0EW63Urchaa7o7T0ByTzeQ==
-X-Gm-Gg: AZFdTZdprQVIJYZqfLq8rl1HIrD2e8rA58bjrLmiTlOspBF2rkdOGLUDypj568xN9AG
-	2fjBf7YVGun/dH46U/M+0uQr/C2EZjTjI1Ze1rumKK/+wZCsVwNGQr2X/+5bLJqrt0bZDqQvfKy
-	zZGhT1wNA+8py67GG5O7kthSZFZiprYuOX4bwY0lpvxFWuMb+OfcJuFUKRx6BCwukhKoSJIGDNm
-	apuLMJ9nJoDkNfB6NMm9gdkc2oCi8GmI0L88Yr4gBu0KSmmKVL0s+4zHsEjKWiCa30eamAK7JeE
-	UpZNQm2DOjom7HrvoB1m8XYEQ4rqapesO8UghKxUfN5tKzEkdRM2m+C5aM8nMFMvZIEhk8BtmNK
-	RcLn+6+gamZvVzSq3CrEmOvZ3dBznb3D5iLclKuHlFp2+0XCt3ca9RDLz6ZlU9EtJfGaTJ3NB+J
-	8rV2irVA6xdhbIgCO/PQSBbbr35H49G/OTAN9RF9/0t5k1Yzcg0bNU7Q6Dz4RaJMLQ80/7+qgyg
-	CilaRVCy82lZAitWJ7796iZaH0nASFbyA3wKavxAJJgfnVPxf99SjOVcA+aWIpB4mQANzDrz7IL
-	TYOh9GBY/VEjSrsXOpBJn73I6GSLthbYKENaXFcVUya6U2n4GT/b2odfRe+UTXAMtY2Ujg0rCdZ
-	AcYvFVsRH1e4HQRgyIFPzUZLDbwqNIGXx1cwphkMKgDQK5WmqK+Ui3Qssp5YaJzKf/7unWha0j3
-	I/i/SNYPmmsXJXTiiBB8gfNjdKlQ==
-X-Received: by 2002:a17:906:7d42:b0:c4c:d6a3:f4bb with SMTP id a640c23a62f3a-c513a999e3dmr691793066b.10.1795440050008;
-        Mon, 23 Nov 2026 05:20:50 -0800 (PST)
+        bh=kqCL8yR438jqEfqX8sdAOmG8GdM6o1iX2qDOd73H3eE=;
+        b=D5JX4Yd87C63ZU4+zqeqCEmp9rvO3kWo7XKizO6rk/7u1zIQIS4KMbmbGu+EVVEWCn
+         GbLPdgXPZXh6mmk1hivCVbrKLdb8zPDJ8hPnf4HoCNm+3x4h5mPbKYprTmfGPBhkxY1a
+         XxtCVXEclLqOu3lcU9hWDaG5PA4Hb+RWXqvPSDEvifnIIr+FPNiSFJq2gRjMVeqcma8Z
+         8lOWYU6OaBmSeNfycr4Y1RTBDKhXAVI6fQ9ajPVNkYbnPcTLeNKo2Sp1wIpSS9ORfAk4
+         pgD39i8p4Q0wUQFnqzIqN3TXmnRyf8JpIgTTVsKl6XC8hDeaEnM58RaLmCTEeCYr0ZKg
+         bGIA==
+X-Forwarded-Encrypted: i=1; AL+hErHJznFRiGenS+65pOJrQ3WZl4q/nMf4hInE2k4CzS3QPL7baAcS/gi3FdwhP4DRZD7uDVRZq6kshw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z+lQHwHMIKZLmapAqPRLdIhbfwiT+mOxEsMavBLm3/ipQ+RuAYK
+	+bgU3hLt+4QfX9jTlz4q1oU1jRaiWEMYU19/rSYm2a5muBX3r8mVNwIP
+X-Gm-Gg: AZFdTZcx+otzw51GdhjRJwux8/2HoBZbgFdd/v9rs2O8JHR8H8nK+zGsL5/sMaNsoqH
+	IAlc5lP9kNjHrDT8N4EIRihSZ6wYk5/Ao3LS+fw6IRLXz4Y+oRpP8WAbRiJw7kWzKIxQ6JLoRu/
+	fHmMve1keeL5wsinsOLndrF8CZVEplI5ZlEORbo6We8Uw2MttNlHjw/1xbtSvrWgEk+2ngr7X4Q
+	gTh+/AOzUgZ/y77KLwAVXNDYcWo0fSYnnFWQCUT0QoxTKiLz3HjeXlykkWdHkyOLXiiD7MlFPwJ
+	Lur7eKM1z4bgM4uJJyNXW/F5yHyqZokBIpwkA/qDmXJmVMs5yUyHp6Wp3MVr/QA1x+Mjg1CmJjl
+	7vQijziNzWL7zQ+HlPUk2ZLDHHPEPS/Ez1g50KYkyVnzQR3680ZIpXmnUyGXKHytBpVsdnvzPqr
+	TaDVpbajS8PxcvrnUfQLZQ+E+lhItObLtb3pFT8x334sPuspUztjEYi1ASFr/G8pO3G8sJpGags
+	8hCP4j0XAAzdCeY4ayKkxSCXHs1ltBJMrm/CYrwkJebztZkOgeDs2WUSzK2+xBtccM1H6FxKWRl
+	tyIqA9W+xOklkjM24p8lq5OraBORT2AZskR4OpOsvLsG1XSvlyContVxlz2nrtuzGNaroGjJCfD
+	tojUvyRNOZt9WbMWGR0ANRXZtOns2W44A3cBFNTcW1HZvkJiOouCUq7Ect4kr2ss9mEiKF/l20v
+	88XYg=
+X-Received: by 2002:a17:907:2d13:b0:c50:ca93:19a0 with SMTP id a640c23a62f3a-c513aab9bcemr968102666b.40.1795441393323;
+        Mon, 23 Nov 2026 05:43:13 -0800 (PST)
 Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513b022e84sm411477066b.84.2026.11.23.05.20.48
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513aeca720sm409336466b.53.2026.11.23.05.43.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 05:20:48 -0800 (PST)
-Message-ID: <2784354f-34f1-412b-aa95-70603f2f8cf8@gmail.com>
-Date: Mon, 23 Nov 2026 13:20:25 +0000
+        Mon, 23 Nov 2026 05:43:12 -0800 (PST)
+Message-ID: <664a18cc-24d8-4140-9c3a-d522945cd2cb@gmail.com>
+Date: Mon, 23 Nov 2026 13:42:49 +0000
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -93,68 +95,42 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/net: don't charge the folio offset to truesize
- for managed frags
-To: Louis Thiery <thiery.louis@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20261119232935.1708458-1-thiery.louis@gmail.com>
+Subject: Re: [PATCH] dma-buf: fix leak of ctx and dmabuf reference in
+ dma_buf_io_ctx_create() WARN path
+To: Falconet3 <Falconet3@proton.me>,
+ "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+ "christian.koenig@amd.com" <christian.koenig@amd.com>
+Cc: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+ "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "axboe@kernel.dk" <axboe@kernel.dk>,
+ "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <htm5h9oaY-vk0g9JVYJmz5XCaKe_nPoWkUJYJqDulyNvv_sAWfzSMp0T6GWt5okc8R4SyvXXpJQ3VGhetKnjEa2KGem5uCYdxpmdzUFf6XA=@proton.me>
+ <tRqxbL7txMRAzNLKylzBLQURNLpU-D0Xx5CrngGwLoYrK7V7kREharagUfgQLGIfiYFyTALR0BwL93AL_PWmFXq_MoZPhvPfUojBsyCnilI=@proton.me>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20261119232935.1708458-1-thiery.louis@gmail.com>
+In-Reply-To: <tRqxbL7txMRAzNLKylzBLQURNLpU-D0Xx5CrngGwLoYrK7V7kREharagUfgQLGIfiYFyTALR0BwL93AL_PWmFXq_MoZPhvPfUojBsyCnilI=@proton.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/19/26 23:29, Louis Thiery wrote:
-> Registered buffers backed by huge pages are coalesced into one bvec per
-> folio, so bv_offset is relative to the folio, not to a 4K page.
-> io_sg_from_iter() adds PAGE_ALIGN(bv_len + bv_offset) to the skb
-> truesize, which charges the socket for the whole run-up inside the
-> folio. A 64K send from 1.5MB into a 2MB THP folio adds about 1.6MB of
-> truesize, and sk_wmem_queued fills long before any real memory is used.
+On 11/22/26 10:49, Falconet3 wrote:
+> Withdrawing this patch. Apologies for the noise.
 > 
-> The visible effect is a socket that looks full: with a 2MB send buffer
-> only 4 of 128 queued 64K sends complete before the sender blocks,
-> versus 30 of 128 with the same buffer registered as 4K pages, and most
-> pipelined send_zc requests come back short.
-> 
-> Only the in-page part of the offset matters for how much memory a
-> fragment ties up, so use offset_in_page(). This matches what
-> zerocopy_fill_skb_from_iter() charges for the same data.
+> The WARN_ON_ONCE() path in dma_buf_io_ctx_create() is not reachable with
+> in-tree code: the only in-tree implementation, nvme_init_io_ctx_locked(),
+> installs all of dev_ops (map/unmap/release) before it returns 0.
 
-Looks good, thanks for the patch.
+Right, it's a warning for the same exact reason, and cleanup considerations
+for it are different as well.
 
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-
-> 
-> Fixes: 57bebf807e2a ("io_uring/rsrc: optimise registered huge pages")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Louis Thiery <thiery.louis@gmail.com>
-> ---
->   io_uring/net.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/io_uring/net.c b/io_uring/net.c
-> index 533afd335..8afad1b2d 100644
-> --- a/io_uring/net.c
-> +++ b/io_uring/net.c
-> @@ -1501,7 +1501,12 @@ static int io_sg_from_iter(struct sk_buff *skb,
->   		struct bio_vec v = mp_bvec_iter_bvec(from->bvec, bi);
->   
->   		copied += v.bv_len;
-> -		truesize += PAGE_ALIGN(v.bv_len + v.bv_offset);
-> +		/*
-> +		 * bv_offset is relative to the folio for coalesced huge page
-> +		 * registrations, so only the in-page part of it matters for
-> +		 * how much memory this fragment ties up.
-> +		 */
-> +		truesize += PAGE_ALIGN(v.bv_len + offset_in_page(v.bv_offset));
->   		__skb_fill_page_desc_noacc(shinfo, frag++, v.bv_page,
->   					   v.bv_offset, v.bv_len);
->   		bvec_iter_advance_single(from->bvec, &bi, v.bv_len);
-> 
-> base-commit: 0659e44ce739ecd856164c75a5325b7959a2921d
-
+> And on the only path where it could ever fire — an importer violating the
+> contract — freeing ctx directly is not safe: init_dma_buf_io_ctx() has
+> already attached ctx to the dmabuf and linked it into the importer's
+> tracking, so kfree() + dma_buf_put() leaves dangling pointers and turns an
+> unreachable leak into a potential use-after-free. Since dev_ops->release
+> may itself be one of the missing callbacks, the core has no safe generic
+> cleanup on that path.
 -- 
 Pavel Begunkov
 
