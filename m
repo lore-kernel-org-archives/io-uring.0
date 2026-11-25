@@ -1,91 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795632293;
-	b=c7NJYXR61UecIeWrrvFKr5s9non/uohmUPgj4T5631PGt/Y8HvXmG75v6AptIVOjWQjN
-	 KMXiJV6rJlBW8rq460o2ZcvnctTO90AYFntE1AteXV7Px4qcQ1/5XYg7yzmZ+saaL2lTk
-	 z4zhnfjBzP3onKS2XRUxzUlMCHfxLtyhvYaF9rmIJpmbOyUU4nHgP66EthQ85si3dRvZS
-	 5lcfhQn/vMX37cgKsq2pO8adQii40u0+e6frJdsdDeL+8vTl6iVP5I+8OncVDIx7ooxk9
-	 Ipwlz1pTDHX2zb8FgprRKsua1Di4yDg+TJGlU0U0kssX7aJ5q2k4tLLxb78j0m9tOQw==
+	t=1795632294;
+	b=nQfa9jOAW0YsD4xNucthCXMixX0tPRefTuynqv3G9rLQc30Qi9CyIlFtDnsHJB2kyRGo
+	 RhgPtL4x8vXHQ2t2Eoh1o+ymAxf9OChtvD7Z6z0F+MbqcC/RZPs6C7AhJ2tvP+fot/iY8
+	 sV8rTx+afbPtb1LxybGatUaFb9vNrJCZNg8iPXDqMBtKpGbLBL4VDBkpDYzIdtuoQC5OH
+	 SMFWOG4cLlzU+CMZ6Ys+WqLu7ePjTzWKJlj2yZoZyD6AJG9ZRu0vZIcrpauCOC3GHDXT9
+	 xWBSkNOOmzapHB4PIj34j8yt/uG5zGIG9TYFF7ZcDjh8FDd5VDbnXLPhI9OoSk9y2FA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795632293;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795632294;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
-	b=tizZeKYHLE612W1BTKA8jJLaTl2XYkhR+h5kdKjt+QEbLv1nLNIn6FDIDQGi/8g0hNiN
-	 Rmsp89D/VkkSPKT09legca1l9WrxP4fg0xBvrO3DXNIG5OYoId3AsbHwy+sFuwGLonO8G
-	 Z7DrNFibtR3GIgEdjSJlqnIgRFNCXtFRhNODj40gQWzS+RhBz711MAEevpUETQfAGF96z
-	 v1kPE4gbUl/Q6FUkIzqnDbyY0PBobjVSVAKHAZn37Y0LkdvD0hQOcjjpUDYWUxw/4Fhky
-	 EkozymXux34vCp9vKUgr2Yjg/e9udvCDU34Qg3GHE6h+CcmgVm7hXyvM1Y9KQthjz9A==
+	bh=cJiNJikQwI27LN/lC2tpnr3/9F1IwtB57i1aFHq5oLY=;
+	b=FGxMN5Qgq8NDGcQqp6j2ZEJEYwJm5/rjB8bbPkn8Myh7i/6lsicyT1+on0yJJQqqibkr
+	 9AxfGDbQ1PvUd9zpSAYBVxFiecpUKvcERLU12ARWvXDzJGzx/mXcb1/YpYswQvkFUzSVY
+	 krh2fD2Gh5RZiqWRa4coMm2LM12Msi/wxQd8i/xq/BXOChcPBSBXcV+H/XmmIW+DbGjc+
+	 neva19UhtJFGsCWYnc321oft3ocS1uRj1zVlwKaSxB06rDCDdgOUCQVUZH0MRNBeNSyzL
+	 JhUYil2dcDXsYDhl0H++xHjuIIyKYpJL9mzBUmmraU+YBZ3i8WvCKOupKXK+Sbx+DTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=vfl47fVd;
-	arc=none smtp.remote-ip=209.85.161.43
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=YUsqPl6w;
+	arc=none smtp.remote-ip=209.85.161.42
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B08606A685
-	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0B08606A685
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D236606A333
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D236606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=vfl47fVd
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6df5e315bd1so4966302eaf.2
-        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=YUsqPl6w
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-71ae5389c00so3804996eaf.2
+        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel.dk; s=google; t=1795632292; x=1796237092; darn=vger.kernel.org;
+        d=kernel.dk; s=google; t=1795632293; x=1796237093; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
-        b=vfl47fVd1ZtpNjyoJDx/TMgJxMDuXzm0mBNpozy/XePYYS+Y3TdV0c4pBjdZ+Q8WWc
-         IPKX//sb8TeknPJRlH7qEGai0rljJmoO8AJ9cdbW9CTNHbPdSFD4p5kzkoknWYlaHDk1
-         cfXyE4hFl+W8GtDE0Kg7pc+mm7X8boUv1oBlWJg+ePoo0Arun5RWj9ZB0TL9UgTVhFeK
-         fxzMTad/pHZyK2oCAbhNOxN+QBtXfwW9HZdDvcAX9lqz/sihZcCVnEw8Qwkv5kRyDPRW
-         L9Nrud0EHDroSBfZhgzMKqg5RG32XdSpJIX+bgaLEQ9Yg7MKxfyqyZV0fbRKuXTKlW14
-         DFJw==
+        bh=cJiNJikQwI27LN/lC2tpnr3/9F1IwtB57i1aFHq5oLY=;
+        b=YUsqPl6w7CiWzb1rS6ysEQrx1P2We3bn7cz/UML1LpAcuVF6iPmE6B/lMBz9zYNguF
+         dlPlIF8lbOg9+jkl+/2CSmnjJIBerSC79AKvyIMKugEpGGiYa98UVHWmZeDKlysFB2gz
+         HpSCX1gL7Ab+u8x38OZMvXbP1PiXYxdxEpSdzw3yBKM+93ogNOVIuROjATcoXDtPZ/As
+         EtFCv/sjO71jircM6qDBchuZMJ+i+zu9zzQ/sqwnv7N6kC3eAokAHkTCL8tgDBNxMLQe
+         Z7dDvo2ARemg+h82Yb9bPzzBZhcnzEcbGrAJBWtcVSvdPfmfKolylpTTXzNUdJ6CdQdo
+         S5FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795632292; x=1796237092;
+        d=1e100.net; s=20260707; t=1795632293; x=1796237093;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
-        b=oYmu9vWoiMkNrh7qclnPoxdr8IGclWWN4m1ch4l5M84UwMRk+44OuESDsdiCLzq3rX
-         6Ab6xSuGi/kEvlCqmHtj6iN/BIQ5fSilG5wJjHXuO43InwaE8EiCzJk6UHWbL+4ngiS6
-         XWjYPBJZ9MKfjc71QOabQeGQGveLrARhQhdhAbeZc6fdLAZbk+dHHJbXrtJrprJJZRWE
-         6rXZ1LRaOzy3W9N6iu17JMVzwwMOl3H2sQpWGfj1R8VTDkV6VXFWAUread4UqDfa7Agt
-         dsAcnxTwyKA/iMX+grjWUFkLt8Q4iGEWXV82b/uC6kWTCYxCfQXDGThrw2SLDBkdkspb
-         Tv7w==
-X-Gm-Message-State: APuU4Z/InbHYkMCZIYNR07KsHdGWHDL/0NUBIqsCrwFaMZElKIaFOOkQ
-	/0jlnGjKR2yImvc12Cod+qKvG+LFuTbF3s4rGq62QsnqnrCLQsOgW6S5I076Yjb1XP58vvRA30I
-	RY29waqM=
-X-Gm-Gg: AZFdTZcX7FY859McbzZXwuJc/Z5hMQ/1TwPtA6DdOZpZE9rbouM78NunUSq2D7fz/rT
-	AcEQefHcClza0ZBDksZ2suHu9YW+KYRgpdihjqcr/QkkIW8WSxlJmLmhm8Fglr9s63lCqv2WAYH
-	vroedw1Qwxs3wOt29/fh4Kser72nj+kGUQt+9WgxYrzyfpA+Ea3G5wx5dsSySFFnDBTnRqGcKgu
-	0B63S5RJ03ln+rmqmwDdC90xUWe8/+61J3mjjHUkayQQnhOOnmRAvuuaFyEhUoDYTfZIBrevSHA
-	gpNSspAr0jppCeFgeLgF69eA6NKoWh4nc3qSYzfYdylHVHtiV5pTYqNUrcp3TuwcUG4rY4IL+4S
-	UW4/cRX4SZRgIlwr426n9gejlduQXeIoLXigifmiOINGb7ri9Wavp/KJV+Yt/FyQTsCcV+WhBjq
-	KvP3rU9sU9rMCweyhjyuFak/0Y2UQ0v6evQuBEVynkxh0eFxQ7QZUx+HbciW0ijP3kKXXza+V73
-	bK8H7Wfp0B2Bc+1vlIF5hieozjhKm38r2WYp3ZvhqQ8d05Jgljc/hC7fl9FqbjPzlb4SreywskP
-	2PeN+br4BPcYW3bjq8wnE6enaOSmMwfgkcpoPf3qdXQqbftISALl9BG1olRyUGUoLOdVF+owIc9
-	tn8R5DQ/kGt6r2RUO2/BO/LBX3pESeVok/w==
-X-Received: by 2002:a05:6820:7618:b0:71b:1715:7ce2 with SMTP id 006d021491bc7-71b3952f14bmr12987689eaf.32.1795632291778;
-        Wed, 25 Nov 2026 10:44:51 -0800 (PST)
+        bh=cJiNJikQwI27LN/lC2tpnr3/9F1IwtB57i1aFHq5oLY=;
+        b=VA1+T1S4wrzr9NauAldu75Z9SOLIeS3xjDtHNzPkQ70saInM8zfNGExPeBpx1YHb0u
+         JkzVF8qxEWv34yx6G9yvF7NRrcL2lqdjfoz9rxb3EZ4o7+7oomPm9WMvcdAIqMDmHmsD
+         iqdwhiZM1Lh3XYaCIMseuFFCaSTUAx0fZOhslXyGsnRSEv1KMcsr7nwetGQZF9MgWbpz
+         Fs7VCJutBBxzj156Ofo0tv4Q/vTGgtl8kx9rIwld0C7RQ6glWREhabwN0yUwrvYpZrPF
+         jsCl+yhIShyO+0qlzae8CP4+BUljKXcSiOaxHJR7lHEyhp0Sx9WS6hEem7bVA+rnd/fz
+         +dmg==
+X-Gm-Message-State: APuU4Z/HVEntbEtGJkboeEZNU8oqf0KdOIDIfZCQFW7Z5874elMdo4z6
+	3rPQhJVV60Bq+criQvL4F4JleHu6C+XKd00eLQYBug+dGGPSqgRPaI0G7wejkY/fOJhAHcAWwc6
+	iRwpxYDE=
+X-Gm-Gg: AZFdTZda55oC7mXTn4boznO2v648oZGpDDX9Xc5mcTIAsD/cdetgLWpIfL/T8UXn81p
+	UMjAxgd11b23jwNnQrNgJQ8bIwu8yyGcR3OI98xwZX98ppdsf4rihst8hvYaV4QMqrkWDCtsNSd
+	EukxXDHakaJcZXzcV0zF0jdNCi5/K8/YtUIRPb63A/vit2ANev3lsJ4OJ/I7OX8bIH0QTG3XRU9
+	I6FuURlkgPxlC3+GWFRiBGbDDuT/+ZvEneHchRz8i0TbtcDB0Xz7nKxRZDZrj47Gq/VrjkChY+9
+	RqB98hpEEyXDO8bvqS4D+Oh0zYCtJ5VKLHBcK5djgCk3q+6uQ68WVtMqIsa5oZGpfKelAsF4peP
+	jbTgGfk5zfgGHPEDZxqe6wNy9z34mR9+ZTIxgE2XTFwONcj/KuHJV0sYk/PsbMy7WovwdTmS5pl
+	efi2o1jYv81kEUWl4l3cjvCZe4ohC25xuUlC0AIzAohGEluWJ4J47YZRAkPpJNxt9i5h/+NZSM5
+	apxADOJ9U7lE8ks1sN/+z+KfJBGXoIAdo+K2dDPZv/9gMqTlCZapnDYDt+glA3SKgrGF2C1R+1N
+	m0AP6nCWK3mXULYj15Ueav0Nt/yiu9di1NuvHfZbPkBJ+bZNckizps3KZppRBShWdPNin734A30
+	dVWAll0zyfUp65FlZACrd9BnGs7wxTZFx7g==
+X-Received: by 2002:a05:6820:1342:b0:71b:3fec:3915 with SMTP id 006d021491bc7-71b3fec4aa6mr14163181eaf.64.1795632293149;
+        Wed, 25 Nov 2026 10:44:53 -0800 (PST)
 Received: from m5pro ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.50
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 10:44:50 -0800 (PST)
+        Wed, 25 Nov 2026 10:44:52 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 07/10] io_uring/cancel: always walk links under timeout_lock
-Date: Wed, 25 Nov 2026 11:43:16 -0700
-Message-ID: <20261125184439.58077-8-axboe@kernel.dk>
+Subject: [PATCH 08/10] io_uring/net: don't count the buffers of a send bundle
+Date: Wed, 25 Nov 2026 11:43:17 -0700
+Message-ID: <20261125184439.58077-9-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125184439.58077-1-axboe@kernel.dk>
 References: <20261125184439.58077-1-axboe@kernel.dk>
@@ -102,76 +102,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-The exit of a single thread that races with the close of its
-IORING_SETUP_DEFER_TASKRUN ring can cause a use-after-free of a linked
-timeout, if io-wq is the first to issue the request that the timeout is
-linked to.
+A bundle send on a packet socket with a TX ring can cause a
+slab-out-of-bounds read, if the frames in the ring hold more bytes than
+the iovecs of the send.
 
-When io-wq calls io_match_task_safe(), ->timeout_lock alone protects the
-walk of the link chain against the removal of a linked timeout. The
-function takes the lock only if the head has REQ_F_LINK_TIMEOUT. But the
-first issue sets that flag. If that happens in an io-wq worker,
-cancellation can find the request as the current work of the worker
-before the flag is set:
+io_send_finish() hands the result of the send to io_bundle_nbufs(),
+which walks the iovec array and subtracts each iov_len from the result.
+The walk only stops at zero, so the iovecs have to cover the result. But
+io_send() only tests if the result is below the count of the iter, and
+tpacket_snd() ignores msg_iter and returns the length of the frames that
+it took from the TX ring:
 
-    io_match_task_safe()          io-wq worker, timer, task_work
-    ====================          ==============================
-    REQ_F_LINK_TIMEOUT is clear
-    io_match_linked()
-      req = head->link
-                                  __io_issue_sqe()
-                                    __io_prep_linked_timeout()
-                                    io_queue_linked_timeout()
-                                  io_link_timeout_fn()
-                                  io_req_task_link_timeout()
-                                  __io_req_caches_free()
-      req = req->link
+    iovecs                 = 2, of 1 byte each
+    frames in the TX ring  = 1, of 64 bytes
+    sock_sendmsg()         = 64
+    64 - iov[0].iov_len    = 63
+    63 - iov[1].iov_len    = 62
+    62 - iov[2].iov_len      is out of bounds
 
-The fix used here is to take ->timeout_lock for every walk, whatever the
-flags of the head say.
+The send side doesn't use the number of buffers: io_buffers_select()
+commits them at selection, so at completion io_kbuf_commit() returns
+before it reads the number.
 
+The fix used here is to put the buffers of a send bundle without
+counting them, so that nothing walks the iovecs with the result of the
+send.
+
+Fixes: a05d1f625c7a ("io_uring/net: support bundles for send")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/cancel.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ io_uring/net.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/cancel.c b/io_uring/cancel.c
-index e3d9fe8fc982..5b57d27225ac 100644
---- a/io_uring/cancel.c
-+++ b/io_uring/cancel.c
-@@ -438,6 +438,7 @@ static bool io_match_linked(struct io_kiocb *head)
- bool io_match_task_safe(struct io_kiocb *head, struct io_uring_task *tctx,
- 			bool cancel_all)
- {
-+	struct io_ring_ctx *ctx = head->ctx;
- 	bool matched;
+diff --git a/io_uring/net.c b/io_uring/net.c
+index f8d547c5e7d6..9c69f37cb8aa 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -515,12 +515,10 @@ static inline bool io_send_finish(struct io_kiocb *req,
+ 	bool bundle_finished = sel->val <= 0;
+ 	unsigned int cflags;
  
- 	if (tctx && head->tctx != tctx)
-@@ -445,16 +446,13 @@ bool io_match_task_safe(struct io_kiocb *head, struct io_uring_task *tctx,
- 	if (cancel_all)
- 		return true;
- 
--	if (head->flags & REQ_F_LINK_TIMEOUT) {
--		struct io_ring_ctx *ctx = head->ctx;
--
--		/* protect against races with linked timeouts */
--		raw_spin_lock_irq(&ctx->timeout_lock);
--		matched = io_match_linked(head);
--		raw_spin_unlock_irq(&ctx->timeout_lock);
--	} else {
--		matched = io_match_linked(head);
+-	if (!(sr->flags & IORING_RECVSEND_BUNDLE)) {
+-		cflags = io_put_kbuf(req, sel->val, sel->buf_list);
++	/* Committed at selection time, so a bundle needs no buffer count */
++	cflags = io_put_kbuf(req, sel->val, sel->buf_list);
++	if (!(sr->flags & IORING_RECVSEND_BUNDLE))
+ 		goto finish;
 -	}
-+	/*
-+	 * Protect against races with linked timeouts. REQ_F_LINK_TIMEOUT can't
-+	 * tell if there is one: an io-wq worker may set it during the walk.
-+	 */
-+	raw_spin_lock_irq(&ctx->timeout_lock);
-+	matched = io_match_linked(head);
-+	raw_spin_unlock_irq(&ctx->timeout_lock);
- 	return matched;
- }
+-
+-	cflags = io_put_kbufs(req, sel->val, sel->buf_list, io_bundle_nbufs(kmsg, sel->val));
  
+ 	/*
+ 	 * Don't start new bundles if the buffer list is empty, or if the
 -- 
 2.55.0
 
