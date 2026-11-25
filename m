@@ -1,66 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.25
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795585423;
-	b=Upkspg/IVoUIgPRzc1VqwvYfEI8UJSVSBFKJdTgZ2KGJXfiM+KfnXdnW2ZPGMwE1Fscu
-	 lTAhqjWC+6R4cNnfpAJlmHzGAQAOUnRGK54nrlsiWWbVe9peqlJOjEL9p+VQCGSTBpSc1
-	 uiAacUETbq4vlpgqVt9EUQVFu+kfID+xxE0e0Vpv8lj24J4GzysbLKjgOzZI1OHq7Tq7C
-	 kG4zJUMetzePUGg+rMJZQFv1i4j9uX8poowoLtn1eTui2EG0KW5pdioGYT3IcLz+3Rcxh
-	 Pi0+wVPeq7fdT6bRKdRlfl23YQuN5fxMJqg3QWmDISJkOfyQ95n1d9CTGNBVDjMttMg==
+	t=1795605556;
+	b=GoKwaBtAtIHfFIqMCsJPJBFLcJafxYWNp7e8OqE8rPmfaKC8baF5ORiHgrIir4u/wf7B
+	 FjKtTkNZU2nANS8GvdCuVjLM/2enBz5I7BVou9r2zmMxLye0g77+HhO00lF0+eaFDvwWA
+	 VQWeyAG2jjFoCOhJwjyPo/xkEkiXGPs4wMb0DBwRZo8LnOuP8v6rqQW8A1zhzA+t23VJO
+	 b6f7lmHaNcH4u5GVqG4NCVBhR6snjb8QOM/nIvsmo9N700tL8R/FK3+Ec+/vJsh70Das/
+	 hSKyWGgP82Sf5oJjwbStANn8YGOKm/4SHSqjfj73Ojw37TVMdGns30bvE2uPJanGwVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795585423;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
-	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:EX-QQ-RecipientCnt:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-QQ-SENDSIZE:Feedback-ID:X-QQ-XMAILINFO:
-	 X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=WDOXAL+cvbcfD52BQP5cFrapIxAqONminn4qwPqLLQk=;
-	b=HqQEZZM/Wzr7qcMskyECvPMk2hkkuEjBu5FT6+dWknDO0nQ8gdtxv9jbBnEufJ0do3jW
-	 uYDGGoxmIu6sPYuPJySezG0rCiVagJ7dDijvwv7VlLvBqjuc+3iXdbucY/Wc4OaQhYTcE
-	 yvqXL6h+odvnarm6Expnv3Cz0vkhqauvjxkXUekjTl/fwemYF2OsmGa4mn/d6cOdPSAf8
-	 NOmht2EuOo0KQYl7HQWRETWcgDs0R8AicFD/QEf7ma2iGSUeFJCNw7ktWmiARM+myWaA9
-	 mNTPEPx6dtRLa5HzgYGH2aj65pZj97lqGiVrlNJ5zj1lNa5Zpa3EiF10SR35JwoAO7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795605556;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:X-CMS-MailID:X-Msg-Generator:
+	 Content-Type:X-Sendblock-Type:CMS-TYPE:cpgsPolicy:X-CFilter-Loop:
+	 X-CMS-RootMailID:References;
+	bh=aol/YqFRk4VDFuOdOrJ3/H+/AAewZsmUni4kor0IGao=;
+	b=EhfdgUjEfN1vy3LajLEBUt9jWR71tE9rLcxpYqOfPFhCj0wCuxdG2jnNLJ1BjyoJEmI7
+	 2Gb5nKyQBYWm/F3Jm6XXtnLWfV49NThz5Ijc+Y0o3BtrCKFbpLSUkEEq0OE/wwx8coTPf
+	 UOLKC3o8QK2PFxKxVha2JQBtQdXfTMXFMp3eFNdYTZjfBpM72T2b4lYuQgzxvZ72yPlSs
+	 STF23JM6znV949KHMdnZbmSlMHH0bYUX9Ilglqg4YXNaqpcbZqVjfCfAdQyEb0Xt5Nrk2
+	 dI0JDwJ0kLIMXCMi9aTb0ed/D5NMcH3R67QsUcMcVp+W2XPI6mTFXrqFWmP+vFDNikw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniontech.com;
-	spf=pass smtp.mailfrom=uniontech.com;
-	dkim=pass header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=IBslKWuM;
-	arc=none smtp.remote-ip=54.204.34.129
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=mi7xmyv8;
+	arc=none smtp.remote-ip=203.254.224.25
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AB4606A31E;
-	Wed, 25 Nov 2026 05:43:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44AB4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00CC606A33F
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 11:19:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D00CC606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=uniontech.com header.i=@uniontech.com header.a=rsa-sha256 header.s=onoh2408 header.b=IBslKWuM
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1795585394;
-	bh=WDOXAL+cvbcfD52BQP5cFrapIxAqONminn4qwPqLLQk=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=IBslKWuM5MmEtgAwlYgMwMB9ScnRRbHrxkG/kIb0ZSVAn6UKHWaDDrYNukipKXcU0
-	 bR2ljHPne69dIFgejbwyc/HTy+NOOuUh2EsaMnB8Hj4CUxVsmVhOhwbp1LoM8tr9q+
-	 Q2LqQpSWXPNwQq7aUnUbPvNdrCasXYuFZ6OYiD90=
-X-QQ-mid: zesmtpgz8t1795585379t1e161868
-X-QQ-Originating-IP: hTZFnaTlgwU/U+CDgNMMVSx9F/rb4U1t6MlkUK8+UZU=
-Received: from uniontech.com ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 25 Nov 2026 13:42:57 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 11937156528048075108
-EX-QQ-RecipientCnt: 6
-From: Yichong Chen <chenyichong@uniontech.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Yichong Chen <chenyichong@uniontech.com>
-Subject: [PATCH] io_uring/timeout: account for timeouts whose CQE is not posted yet
-Date: Wed, 25 Nov 2026 13:42:56 +0800
-Message-Id: <20261125054256.1749370-1-chenyichong@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=mi7xmyv8
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20261125111907epoutp0204127910913f9553e0b1ccffb91b6b10~rRbtjPVhM0913609136epoutp02i
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 11:19:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20261125111907epoutp0204127910913f9553e0b1ccffb91b6b10~rRbtjPVhM0913609136epoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1795605547;
+	bh=aol/YqFRk4VDFuOdOrJ3/H+/AAewZsmUni4kor0IGao=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=mi7xmyv8qCtkuiWVFS1WmHypp1B+5LuE/Onl2ebD59v8iDInV6Id5ZoH609GzZGWI
+	 F+lqmxW/EE3mo6VYy1LjHcms5nMt9q6M66ehdngemO/F3tsVCwt3rRkDoK1u2ePUd5
+	 Ha+SV2YHemHMj+pNDH0NMrhl3JhgMspyl0E4rtR0=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20261125111906epcas5p3ad070fe44b9392c0c2bc262258b274bb~rRbsMuv6b2807028070epcas5p3Q;
+	Wed, 25 Nov 2026 11:19:06 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.38.95]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4jZHHs0qfmz6B9m7; Wed, 25 Nov
+	2026 11:19:05 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20261125105614epcas5p4386cb5bb9966904c9ac38382eb6c753c~rRHukvjxj2438724387epcas5p4f;
+	Wed, 25 Nov 2026 10:56:14 +0000 (GMT)
+Received: from localhost.localdomain (unknown [107.99.41.245]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261125105612epsmtip1d13c7f175a618d2175756dfce5229682~rRHsoqeWQ1560715607epsmtip1c;
+	Wed, 25 Nov 2026 10:56:12 +0000 (GMT)
+From: Anuj Gupta <anuj20.g@samsung.com>
+To: lsf-pc@lists.linux-foundation.org, linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-nvme@lists.infradead.org, io-uring@vger.kernel.org
+Cc: Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>, Kanchan
+	Joshi <joshi.k@samsung.com>, "Martin K. Petersen" <mkp@kernel.org>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexander
+	Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@infradead.org>,
+	Nitesh Shetty <nj.shetty@samsung.com>, Pavel Begunkov
+	<asml.silence@gmail.com>
+Subject: [LSF/MM/BPF TOPIC] io_uring dmabuf storage I/O: next steps
+Date: Wed, 25 Nov 2026 16:25:16 +0530
+Message-Id: <20261125105516.2160670-1-anuj20.g@samsung.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -71,185 +84,39 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: MMV15OJnzRKz3hTGRdvmW+9jf0AXQAXvW+0LTDYMICVVNQwL+9J4wvWy
-	rX5wY6Qn4RCeTLdCeAlBWkhpnj06CEaLjLdzb3hgCyNH2XCzcjdmoc3AQj0/cQ8thAqbz/p
-	PHcs28G8iHs27LRcshUrQfVTTyy3d7h7xDUCpX1sGJm7vNhxbK4m8IgkpTzF7BHzFS91Zxl
-	48fMw3yiRjxdSDFDM12VrrrHRtradXXwf1yHpyU3uZXtxDfRzv+zq0wi+pfBQJAAgbHbDrV
-	meO8biSLCGfEt51UndWNt1S3JOBM7T7iJHzOhVeU4IVRHZ7GLVrGX/aekA2wDO/q7wW8wET
-	cb9R3GdnWpHEn3+POUbPfMGHXi+WjHi2qvt2LTzdeO1+zBufmulh3XA8CPeMiZVORuychjZ
-	yH2AdkUH/wwshs+vCTsbDede7RI8oomU+qKCRpmeHDJo4/xYCS+AE/z3ZDGmp5L2egI3hgO
-	hWFoXLC5fA/KY0DTWzJEEsovZ3o+mJBFpDDogZEeqwgBmeIrJX+gozIU744Bm5WN+47DSpD
-	w8AgswbynupX3i84edR37vEKx95fAFZNvJoNRdYITnFhuZTSZYVEX7Kl28+Qx1ZNxwE+TYp
-	GwyT+YT2CHPeaiOjzTw1aKtL+ti/yEgcsSTv1DkIHAlulxkI9xhX3+JY59aqmZpCh8OWH6X
-	i+IlEJp84FsDdAQ08Oh0346CVEU1KRru1zvzUNQYLuZCZK54Wu0E2GmyErRoMK/ho8ljeq0
-	Fhxt/4KEmRR7iR1b+Gp7ZMAAp3BOiRYiWPQ9oTikkVgyyUb8BQCO/ifUvlQ6sRhnUUAKgs7
-	ziHL02XWGXZInRL5ZZAJTeongFrp3Th37qVgWxm0u/c016t4PzsndPnzzvAKzP67OEJ2ZH/
-	GEjCzuVEP5Kl5apm0P/cqZsjQrkDiNHJji6nwqjHT+OLHgpQ7xW5IFe8GrFNrfKVbLxjvEl
-	BQZ0GN8xBX+Y1qEh6NzzemlbtGPfV0PcWD9vtXQBKrRd4NoDQNv594ZsxWDRbxmxHfddP1+
-	y0GwUgWcrd1SV3iBFQjiIf1ebp/yE=
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-X-QQ-RECHKSPAM: 0
+X-CMS-MailID: 20261125105614epcas5p4386cb5bb9966904c9ac38382eb6c753c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20261125105614epcas5p4386cb5bb9966904c9ac38382eb6c753c
+References: <CGME20261125105614epcas5p4386cb5bb9966904c9ac38382eb6c753c@epcas5p4.samsung.com>
 
-The sequence of non-timeout CQEs is derived from ->cached_cq_tail minus
-->cq_timeouts, but a timeout bumps the latter when it fires, is killed or
-is cancelled, which is ahead of its CQE being posted. Reading the sequence
-in between comes out low, and a target counted from such a reading is
-reached that much early: a counted timeout completes with 0 while nothing
-but the already posted CQEs has happened, and it can also be satisfied by
-timeouts posted before it was armed. Keep track of the timeouts whose CQE
-is still in flight and add them back, so that the sequence is exact
-whenever it is read.
+Hi all,
 
-Fixes: c6c0b3eba88c ("io_uring/timeout: don't skip over reached sequences")
-Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+Nitesh and I would like to propose a joint Storage and Filesystem
+session to discuss the next steps for io_uring dmabuf storage I/O.
 
----
- include/linux/io_uring_types.h |  1 +
- io_uring/timeout.c             | 53 ++++++++++++++++++++++++++++++------------
- 2 files changed, 39 insertions(+), 15 deletions(-)
+Pavel's raw block device support landed in 7.4[1]. We would like to
+use the session to discuss the following:
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 1468bcb..b947c72 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -457,6 +457,7 @@ struct io_ring_ctx {
- 		unsigned long		check_cq;
- 		atomic_t		cq_wait_nr;
- 		atomic_t		cq_timeouts;
-+		atomic_t		cq_timeouts_pending;
- 		struct wait_queue_head	cq_wait;
- 	} ____cacheline_aligned_in_smp;
- 
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index db78059..f662c0c 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -114,6 +114,7 @@ static void io_timeout_complete(struct io_tw_req tw_req, io_tw_token_t tw)
- 	struct io_timeout_data *data = req->async_data;
- 	struct io_ring_ctx *ctx = req->ctx;
- 
-+	atomic_dec(&ctx->cq_timeouts_pending);
- 	if (!io_timeout_finish(timeout, data)) {
- 		if (!tw.cancel &&
- 		    io_req_post_cqe(req, -ETIME, IORING_CQE_F_MORE)) {
-@@ -129,6 +130,18 @@ static void io_timeout_complete(struct io_tw_req tw_req, io_tw_token_t tw)
- 	io_req_task_complete(tw_req, tw);
- }
- 
-+static void io_timeout_complete_killed(struct io_tw_req tw_req, io_tw_token_t tw)
-+{
-+	atomic_dec(&tw_req.req->ctx->cq_timeouts_pending);
-+	io_req_task_complete(tw_req, tw);
-+}
-+
-+static void io_timeout_complete_cancelled(struct io_tw_req tw_req, io_tw_token_t tw)
-+{
-+	atomic_dec(&tw_req.req->ctx->cq_timeouts_pending);
-+	io_req_task_queue_fail(tw_req.req, -ECANCELED);
-+}
-+
- static __cold bool io_flush_killed_timeouts(struct list_head *list, int err)
- {
- 	if (list_empty(list))
-@@ -143,7 +156,9 @@ static __cold bool io_flush_killed_timeouts(struct list_head *list, int err)
- 		req = cmd_to_io_kiocb(timeout);
- 		if (err)
- 			req_set_fail(req);
--		io_req_queue_tw_complete(req, err);
-+		io_req_set_res(req, err, 0);
-+		req->io_task_work.func = io_timeout_complete_killed;
-+		io_req_task_work_add(req);
- 	}
- 
- 	return true;
-@@ -159,10 +174,23 @@ static void io_kill_timeout(struct io_kiocb *req, struct list_head *list)
- 
- 		atomic_set(&req->ctx->cq_timeouts,
- 			atomic_read(&req->ctx->cq_timeouts) + 1);
-+		atomic_inc(&req->ctx->cq_timeouts_pending);
- 		list_move_tail(&timeout->list, list);
- 	}
- }
- 
-+/*
-+ * Number of CQEs posted that were not timeouts, i.e. the sequence counted
-+ * timeouts are ordered by. A timeout bumps ->cq_timeouts when it fires,
-+ * before its CQE is posted, so subtract the ones still in flight - a
-+ * reading taken then is otherwise low by that much.
-+ */
-+static u32 io_timeout_seq(struct io_ring_ctx *ctx)
-+{
-+	return READ_ONCE(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts) +
-+		atomic_read(&ctx->cq_timeouts_pending);
-+}
-+
- __cold void io_flush_timeouts(struct io_ring_ctx *ctx)
- {
- 	struct io_timeout *timeout, *tmp;
-@@ -170,13 +198,8 @@ __cold void io_flush_timeouts(struct io_ring_ctx *ctx)
- 	u32 seq;
- 
- 	raw_spin_lock_irq(&ctx->timeout_lock);
--	seq = READ_ONCE(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
-+	seq = io_timeout_seq(ctx);
- 
--	/*
--	 * A fired timeout bumps ->cq_timeouts before its CQE is posted, which
--	 * leaves the sequence behind the last flush until it is. No event has
--	 * happened then, see io_timeout().
--	 */
- 	if ((s32)(seq - ctx->cq_last_tm_flush) < 0)
- 		seq = ctx->cq_last_tm_flush;
- 
-@@ -319,6 +342,7 @@ static enum hrtimer_restart io_timeout_fn(struct hrtimer *timer)
- 	list_del_init(&timeout->list);
- 	atomic_set(&ctx->cq_timeouts,
- 		atomic_read(&ctx->cq_timeouts) + 1);
-+	atomic_inc(&ctx->cq_timeouts_pending);
- 	raw_spin_unlock_irqrestore(&ctx->timeout_lock, flags);
- 
- 	if (!(data->flags & IORING_TIMEOUT_ETIME_SUCCESS))
-@@ -371,14 +395,18 @@ int io_timeout_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
- 
- 	raw_spin_lock_irq(&ctx->timeout_lock);
- 	req = io_timeout_extract(ctx, cd);
--	if (!IS_ERR(req))
-+	if (!IS_ERR(req)) {
- 		atomic_set(&ctx->cq_timeouts,
- 			   atomic_read(&ctx->cq_timeouts) + 1);
-+		atomic_inc(&ctx->cq_timeouts_pending);
-+	}
- 	raw_spin_unlock_irq(&ctx->timeout_lock);
- 
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
--	io_req_task_queue_fail(req, -ECANCELED);
-+	io_req_set_res(req, -ECANCELED, 0);
-+	req->io_task_work.func = io_timeout_complete_cancelled;
-+	io_req_task_work_add(req);
- 	return 0;
- }
- 
-@@ -708,7 +736,7 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
- 		goto add;
- 	}
- 
--	tail = data_race(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
-+	tail = io_timeout_seq(ctx);
- 
- 	/*
- 	 * Update the last seq here in case io_flush_timeouts() hasn't, it only
-@@ -722,11 +750,6 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
- 		ctx->cq_last_tm_flush = tail;
- 	base = ctx->cq_last_tm_flush;
- 
--	/*
--	 * A fired timeout bumps ->cq_timeouts before its CQE is posted, which
--	 * leaves the sequence behind the last flush until it is. Nothing else
--	 * separates the two then, so count from the flush.
--	 */
- 	if ((s32)(tail - base) < 0)
- 		tail = base;
- 	timeout->target_seq = tail + off;
+1. Filesystem I/O: RFCs have been posted for XFS[2] and ext4[3], and we
+   are working on a combined series[4]. Open topics include files
+   spanning multiple devices and support for additional filesystems.
+2. NVMe/RDMA: we posted an RFC[5] for direct I/O between accelerator
+   memory and storage over NVMe/RDMA.
+3. Vectored I/O: support readv/writev with dmabuf registered buffers.
+4. Polled I/O: enable polling for workloads that need the lowest
+   latency and overhead.
+5. NVMe multipath support.
+
+[1] https://lore.kernel.org/linux-block/cover.1791975048.git.asml.silence@gmail.com/
+[2] https://lore.kernel.org/linux-block/20261016091919.971295-1-anuj1072538@gmail.com/
+[3] https://lore.kernel.org/linux-block/20261113070621.273953-1-mengmeng.zhao@linux.dev/
+[4] https://lore.kernel.org/linux-xfs/20261124084025.2101804-1-anuj20.g@samsung.com/
+[5] https://lore.kernel.org/linux-nvme/20261118103327.1788667-1-anuj20.g@samsung.com/
+
+Thanks,
+Anuj
