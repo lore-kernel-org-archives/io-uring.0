@@ -1,98 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.183
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795632403;
-	b=KF+7H8Zp/A9PAfVQsWZ01nyTNFQbv4y+QwZxIoJshy1LZdlPRyNe4r48hmtWqAXgujdr
-	 xEsKrx/uU2gv0aXtGTOlLXQudY7whxeQbbZ/FRN88ebBZETHapIwR9KQDoH2G84ktQaPh
-	 W6OAm/CnODsmsKvTClgeROpD1LDIQ2wxBLUpIe3Blbd+94d33WNHGBYiW/GzlWo+Xnf64
-	 cI7PcQNGzMnoleNZ6L+5Vkp7ik03GjRs8ardfohMe10HEf9DG7sZVQqY+z9SafaZpAWxQ
-	 M55lUyuv5mrorZeDDbOPtvQk77dGwzLzZzjrXZQGjk6hJd2TIpTyRnMvPKcoQOHM42g==
+	t=1795642047;
+	b=C3DRHpIaCWCrWb7aTbG5if9+VDn16Axr37kuvBJIswsWMrrTqmxYeQ1NuYfOf5XHSbqc
+	 FcKwgzEyWXSsA7odJT0wM9YVnHJv1OsyKTXnXuUlzImP1q86gStgaBReaWOSZxaw2Q5xp
+	 w/4Uxwrf7ItyqJE8Q0GDXGeFyajCdwX1u/Sfoi/HZQN2QkBtwVs4HfDcNQOF/pqXbllnD
+	 inySwR2cl/TCo/EiTHoFw/mUQ9MPFoqHhndig4S3y7W/ggep0SZ0ofJIuHUkhqxTLDJSB
+	 gPym6xmrf7YW5LmwXcTdc7tPPsIc8og+BFYaR8w8hWMo8KwdRHPsh8HJRAcXPcEnXaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795632403;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=mjng7Grfi+u3FVsnhecehgfZVWYTQAiCxYEYWdDHAjg=;
-	b=siRb893MaBuTFTESyVcAsuNe3Qb3dugsMqVjgB3XcUE4CGQf8Yl7GYxwAT81G8Bw6pOi
-	 TMFSjaKDI7GmP0k/juzFDL9tU1gj+UvE4vXveIONNzlBxM+F0GZcUjYuCcFUamCXGiQXV
-	 17dtFGzN4y+O7c0v5z+tNHde1RHl7Ej6qyF3dC2DSKmTP8x2Ev1haOC/KNdMeTi4+F+5Z
-	 J+K/hHXGbICh6TX9q0GJ1PztqyZqbceT0M2i4+LMUYpNZ/BHlmmVVeR35o2uLnA8648Xc
-	 8LhQlcUGCFvOdwEz8WnURGuQhjGLkuk7FoinXjbWKZlHHm8YM1sgAS12e5kKYNoZG6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795642047;
+	h=DMARC-Filter:X-KPN-MessageId:Received:Received:DKIM-Signature:
+	 X-KPN-MID:X-CMASSUN:X-KPN-VerifiedSender:Received:Date:From:To:Cc:
+	 Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Priority:Importance:X-Originating-IP;
+	bh=Wkz/I9/uycoNpfb2ILPsq2+UwaDmVC8MrE9vadsgTkk=;
+	b=repgfiwODqhrMqPLaphQTgPawPmDBBhBpc7IfHCtbpO7eer/pn2qr77/83LUOCKU5T1I
+	 TosQC6+7WIZfYI4n00JO4PzuHp2gp09XkcOd3EwJqoymfSTtY0UUjnRvPPD68Sc/leHDO
+	 6UZBsUJYiy375K4ToMTJBfTypnUjN64ZOQdQe9yIfYwwRRs6U54JxSPmAT9f1N3jEnfVE
+	 saJUR9c9uTbo4N1qRR5vms2ldr1Nh8rJfv2eixbEnt2/FNyalr72STpoCtL5fdVt0pHSy
+	 kSKKMxXrfMglGrZnXZZ8gXvxyNRPJoc34gTlLImLKKnNB1YBuUexMULUxu73llCQ1DQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=FCVWvL3A;
-	arc=none smtp.remote-ip=209.85.160.53
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=xs4all.nl;
+	spf=pass smtp.mailfrom=xs4all.nl;
+	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=mNy0v0Zu;
+	arc=none smtp.remote-ip=195.121.94.183
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE2B606A323
-	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:46:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5AE2B606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF20606A334
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 21:27:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDF20606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=FCVWvL3A
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-483c607ccb4so3188179fac.0
-        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:46:43 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=mNy0v0Zu
+X-KPN-MessageId: fcca9c92-e916-11f1-8e5e-005056992ed3
+Received: from mta.kpnmail.nl (unknown [10.31.161.188])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id fcca9c92-e916-11f1-8e5e-005056992ed3;
+	Wed, 25 Nov 2026 22:27:16 +0100 (CET)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id fcc98153-e916-11f1-be6a-00505699693e;
+	Wed, 25 Nov 2026 22:27:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel.dk; s=google; t=1795632402; x=1796237202; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mjng7Grfi+u3FVsnhecehgfZVWYTQAiCxYEYWdDHAjg=;
-        b=FCVWvL3A9pPajRsorw5xKgFeZtg8bNqB9d5z48BRmkv/RN0ksV7mW8feJ1FdHXkX7D
-         M5MhCMa6fP8Jo/YZIxdt3QdFhae3xdx70I2xdYN3OcrY7j8Vex1PQlRxc5WuFNxckaRY
-         sgJQGpIJ6gc3jCCPLiRW70LNGrZW2+wfGQb4P+Gh0kXnCng4AP9SSLgQlCk5CdpJ+6Mg
-         9ZeyYGwMPMtfJy7L3vA7kf2Lh/3D+XQXq5YvwgfaCXThcgJSor1qc8v4bVjNJq/CugrF
-         1gIA5oqKYDMc3d2PPtJvFVXJPWM9FFpPZEHjxawHbALUzFf4qVIWEEWsI1OLfhH8kg+s
-         lzLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795632402; x=1796237202;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mjng7Grfi+u3FVsnhecehgfZVWYTQAiCxYEYWdDHAjg=;
-        b=AEsDg0jCmcBnoLEEg2hxFRr2WZagzQlDdWn34HQouop39kovKVw1z9t/5AoB2mIGe7
-         anbHiMSRjB9JOtnW5Rd3p+8y98a76zm/OK5NaZBfLuxBvalnoEgaUTSa6JdB3fg8mPES
-         sZo3VegG/SMcRis+xDvRuBLr466b9J1UXTfzRY2rf64jqzv4MViCbnzb5zOIplJuP+TO
-         17FKOSLKS8SU6YSazaa8kLGbosGLSEskj9J8Ff3Xa9QThSCCkZKVQOHj6KGdTF/8hb8j
-         Sn3+y+t0b0DmvE8Xnke9c6qaAkHa8b7MZFh7XZV3IuO1zv/wyDf259hI7s8tDs1sTxfp
-         hdkA==
-X-Forwarded-Encrypted: i=1; AL+hErFSzu2UFcECQDEKNhXYkHZpRyCgKEI38g3qPQyWkJTIN6/tVGD9oP0seZ/v9aQvYmQARjOGZEFRoQ==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9VcS/hVllxttSopvPeNms+V3v8M+9UKryoW+c90Ml5ES5ygTa+
-	mG14g8KzDP3dP9hh5D8Dx5yOB/GblU6SypRMQhS/8Cw8OrnOP1D5+tpsE/TqzmRI8cLroCZOXwq
-	xYsxrlBc=
-X-Gm-Gg: AZFdTZcA8m8BJyClR3+h5YCz+EcwRK+XJmdEJ2aj0VLDBWxqa3De8WNPibOzaz1rhHG
-	LSXce3XFwKK2RsicMNDvY/1E/exjQYQaMKH9mNBL4DI3PCIDX+zvlOFuGRkEhtAFH/+F3Y7VAzN
-	9eXcVyrbYh4c9qtfY66Ipxd2UADrt1Jks1F1h4fqCANYWKjZccpJoJyMld70yQ3TW7A+t6OJNdS
-	GzxzzUZm8bkSg5YriehuAjrgYkG0vy5iEQvYMzmqKXDucFdHcg9q23BoYwjQ2058il55j+76uR3
-	Xyk5Rse78VlooL5NTwTsMOm27TGZOFYFphKtr17ovoph22/0AvpT8A4OhHu8upXHDL5QOiDc8ef
-	Z94V2iatpm26zVlZi/wx9/hjiv5jtXcRVBgUUGxWZ06GefZvClNDUooSFMxi0nGcU4ioqJHpSeG
-	XeDj5h04W8ColWQZ1KoVsO/MxuMYcyjWURviUVF0jiTvxhc3wZBdqWjTWXysYJ2b/L1hWF3Kvjz
-	wng0pk6KSmYHWj36slNqNArODhgjEQr7Eb0f3sFm/+PYoYRlS1RtdK+9vA4bxuwoL87Qk3v4pcb
-	l2ogQgu/V8kXUIA9kilBw+ai66KBG5JWbqVchHqJhkiPZlFr1JT+CebYfbVQAy/fGW66gmpu6Dr
-	wc++Rx0khEk8xXm+YX7xeVQM5ybs6d2C/jKS+xW3Lx/RhmsM=
-X-Received: by 2002:a05:6870:9f06:b0:447:a816:9328 with SMTP id 586e51a60fabf-4bc7d27004dmr15233245fac.6.1795632402212;
-        Wed, 25 Nov 2026 10:46:42 -0800 (PST)
-Received: from [192.168.0.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc5ebdbb4fsm16100211fac.5.2026.11.25.10.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 10:46:41 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: Hengyu Liang <hengyul@cs.unc.edu>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>, 
- Christian Brauner <brauner@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
- io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kernel@vger.kernel.org
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=Wkz/I9/uycoNpfb2ILPsq2+UwaDmVC8MrE9vadsgTkk=;
+	b=mNy0v0ZuaAX/i5Gh6Wud0W/kVa5l1yBLQM+mdeiUH0J/r8rzv7RgKkXq8BHWglsJUq1nYjr5Pfgot
+	 aUkLZyo7FMLanK6hISDNmwoh9eGwhvU8xJCLjsuhz/msGi5r+UzOgbS2zDQs82h6uPIAHbwsm6CjQL
+	 9dwKf6Z9hTDqWtCghwAZqsoRPrkF9Do/dFJ2F1KoZJF5jZmK0INlvWMiaz1knQw8Ym2AYVgg5fUY5Y
+	 KtUckGLwF5O7XKqje5ymw5xn4RnOgDuHjLXqBToZQBsF2UAUHVSBkArvfNUXG6fzubd45oYfYYZY/i
+	 Ux8y21JiZHDgGS9XghsZITgp3O5HmtA==
+X-KPN-MID: 33|YyG/3koVDQrbm+KMSsajlXfp57Gs1QqJxUYCnezE0qtAa+YT66UPutjebbpOqB4
+ mQJ/GD++ObdnysO6QWvEhnOHosK/0lXjYUK7Cg4fRAGM=
+X-CMASSUN: 33|GapsSioku5fVb9d+9lY8Dg9MIm4SfPm+R+aKKWQG1/5oRn/ta4T5HFx4qek3+ip
+ s5p7WWHFTX8kwRIxjByA1MQ==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh05 (cpxoxapps-mh05.personalcloud.so.kpn.org [10.128.135.211])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id fcbf625d-e916-11f1-acfd-00505699eff2;
+	Wed, 25 Nov 2026 22:27:16 +0100 (CET)
+Date: Wed, 25 Nov 2026 22:27:16 +0100 (CET)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Hengyu Liang <hengyul@cs.unc.edu>, Jens Axboe <axboe@kernel.dk>
+Cc: Christian Brauner <brauner@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
+	io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Message-ID: <170898867.2781789.1795642036410@kpc.webmail.kpnmail.nl>
 In-Reply-To: <20261125180817.3682397-1-hengyul@cs.unc.edu>
 References: <20261125180817.3682397-1-hengyul@cs.unc.edu>
 Subject: Re: [PATCH] io_uring/openclose: allow an empty path with
  O_EMPTYPATH
-Message-Id: <179563239982.59738.3885070855102608736.b4-ty@b4>
-Date: Wed, 25 Nov 2026 11:46:39 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -102,12 +81,15 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+X-Priority: 3
+Importance: Normal
 
 
-On Wed, 25 Nov 2026 13:08:17 -0500, Hengyu Liang wrote:
+> Op 25-11-2026 19:08 CET schreef Hengyu Liang <hengyul@cs.unc.edu>:
+> 
+>  
 > Commit 31cf44efa6df ("vfs: add O_EMPTYPATH to openat(2)/openat2(2)")
 > made build_open_flags() accept O_EMPTYPATH and turn it into
 > LOOKUP_EMPTY, so that openat(fd, "", O_EMPTYPATH) reopens the file
@@ -118,16 +100,101 @@ On Wed, 25 Nov 2026 13:08:17 -0500, Hengyu Liang wrote:
 > name with -ENOENT. As of now, IORING_OP_OPENAT and IORING_OP_OPENAT2
 > accept O_EMPTYPATH, but fail on the empty path this flag is meant for.
 > 
-> [...]
 
-Applied, thanks!
+I think you should leave the reproducer from the commit message.
 
-[1/1] io_uring/openclose: allow an empty path with O_EMPTYPATH
-      commit: 15ca993634424898cc0c055ef84dfbe29ae0370c
+> The issue can be reproduced with this program:
+> 
+>     #define _GNU_SOURCE
+>     #include <fcntl.h>
+>     #include <liburing.h>
+>     #include <stdio.h>
+> 
+>     #ifndef O_EMPTYPATH
+>     #define O_EMPTYPATH (1 << 26)
+>     #endif
+> 
+>     int main(void)
+>     {
+>             struct io_uring ring;
+>             struct io_uring_sqe *sqe;
+>             struct io_uring_cqe *cqe;
+>             int fd = open("/etc/passwd", O_PATH);
+> 
+>             printf("openat: %d\n", openat(fd, "", O_RDONLY | O_EMPTYPATH));
+> 
+>             io_uring_queue_init(1, &ring, 0);
+>             sqe = io_uring_get_sqe(&ring);
+>             io_uring_prep_openat(sqe, fd, "", O_RDONLY | O_EMPTYPATH, 0);
+>             io_uring_submit_and_wait(&ring, 1);
+>             io_uring_peek_cqe(&ring, &cqe);
+>             printf("IORING_OP_OPENAT: %d\n", cqe->res);
+>             return 0;
+>     }
+> 
+> Before that commit (v7.1), both calls fail: it prints "openat: -1" and
+> "IORING_OP_OPENAT: -2". After that commit (v7.2), the result is:
+> 
+>     openat: 4
+>     IORING_OP_OPENAT: -2
+> 
+> This patch will copy the name with delayed_getname_uflags() and
+> AT_EMPTY_PATH when O_EMPTYPATH is set, as io_uring's statx already does
+> for AT_EMPTY_PATH.
 
-Best regards,
--- 
-Jens Axboe
+It ain't a sin, but try to avoid "this patch" references.
 
+> 
+> Fixes: 31cf44efa6df ("vfs: add O_EMPTYPATH to openat(2)/openat2(2)")
+> Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
+> ---
+> I found this while comparing the behavior of different kernel versions.
+> I used an LLM to analyze the problem and to draft the patch and this
+> message, and I analyzed the result myself.
+> 
+> Tested on io_uring-7.4 (0659e44ce739) with KASAN and lockdep. A test
+> that runs 24 cases through IORING_OP_OPENAT/OPENAT2 and through
+> openat(2)/openat2(2) now gets the same result from both (32 of 42
+> results differed before). The cases include O_PATH and regular fds,
+> AT_FDCWD, forced async opens, RESOLVE_CACHED, a direct descriptor slot,
+> a bad pointer and an unprivileged reopen of a 0600 file (EACCES). The
+> liburing open tests and the openat2 selftests pass on both kernels.
+> 
+>  io_uring/openclose.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+> index 24cf3ce2e2bc..29fe31f16a2b 100644
+> --- a/io_uring/openclose.c
+> +++ b/io_uring/openclose.c
+> @@ -54,6 +54,7 @@ static int __io_openat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+>  {
+>  	struct io_open *open = io_kiocb_to_cmd(req, struct io_open);
+>  	const char __user *fname;
+> +	int uflags = 0;
+>  	int ret;
+>  
+>  	if (unlikely(sqe->buf_index))
+> @@ -67,7 +68,9 @@ static int __io_openat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+>  
+>  	open->dfd = READ_ONCE(sqe->fd);
+>  	fname = u64_to_user_ptr(READ_ONCE(sqe->addr));
+> -	ret = delayed_getname(&open->filename, fname);
+> +	if (open->how.flags & O_EMPTYPATH)
+> +		uflags = AT_EMPTY_PATH;
+> +	ret = delayed_getname_uflags(&open->filename, fname, uflags);
+>  	if (unlikely(ret))
+>  		return ret;
+>  	req->flags |= REQ_F_NEED_CLEANUP;
+> 
+> base-commit: 0659e44ce739ecd856164c75a5325b7959a2921d
+> -- 
+> 2.53.0
 
+Reviewed-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
 
+@Jens - You've pulled this already, I don't know if io_uring appreciates reviews
+after pull. Let me know if not.
+
+Thanks,
+Jori.
