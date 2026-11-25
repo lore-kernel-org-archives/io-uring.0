@@ -1,91 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795632291;
-	b=p+mxwF+p+Pyiv13rWxomOv2PtPDtX1hp365MriVLAgTzKBhcc7WgB4D7wVnITPVktcsX
-	 Oa3FA59h7HsApHTgVrfkqXoQT2fWyepUNhzSMT8c0gvIIjzkTD522pyGAKb7RCxb+Bfta
-	 Da2v2ddfUsM9if6IX4VElE3mW9nxSZn9kUYk6wCXIDLKnkhnuIPjU9A1dZhtRTE0cZ37+
-	 AIlJeQ+u1DqIZKVj0zDSGm5mw4xH6/o5UAmDp9tzC/evs4lsbiIEZ+2yDMlip1y1+F7hq
-	 HhjJYnkhYMewXjCvfVyEq7JwtxCDfVpq4rSkVgF0m3O4Z059ZJKQ57B7ik3BRLjAX6g==
+	t=1795632293;
+	b=c7NJYXR61UecIeWrrvFKr5s9non/uohmUPgj4T5631PGt/Y8HvXmG75v6AptIVOjWQjN
+	 KMXiJV6rJlBW8rq460o2ZcvnctTO90AYFntE1AteXV7Px4qcQ1/5XYg7yzmZ+saaL2lTk
+	 z4zhnfjBzP3onKS2XRUxzUlMCHfxLtyhvYaF9rmIJpmbOyUU4nHgP66EthQ85si3dRvZS
+	 5lcfhQn/vMX37cgKsq2pO8adQii40u0+e6frJdsdDeL+8vTl6iVP5I+8OncVDIx7ooxk9
+	 Ipwlz1pTDHX2zb8FgprRKsua1Di4yDg+TJGlU0U0kssX7aJ5q2k4tLLxb78j0m9tOQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795632291;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795632293;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GX9y930NHvUDN1ePSMyDcGp/kD/aMqco3V/PK3u2L/E=;
-	b=A2TEoPuJXsnwL6AaENg8IgVgqK5j49cbgOSFr2kPwHzlVS48/7zzXON3fq6/tJDesBVi
-	 vrntEvTZoK8Wdr1VAZk79twPkKuLiUVmwpPTQnPz0MaKsahgroKNV6pEQOmi28cXvdWX/
-	 zwJMbMbeHWeGKoiR4rE4jPRDpGWh5yRbkkW0u/KZ81lZqTg9/wNeNdZsCBFThzbyKfjBK
-	 WE/4FfkW5lNo8N9XefSULk7prXmH8LVHFr5R0vU9FBKyvwzjxRGBYkK7U3xU9uXJlUHVY
-	 gIoL20rDvcC2ZnDSCQTOLlpBc30tkFDDCfUG02dkBDrm86/2hL1GIG1JsJGab5WRqgA==
+	bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
+	b=tizZeKYHLE612W1BTKA8jJLaTl2XYkhR+h5kdKjt+QEbLv1nLNIn6FDIDQGi/8g0hNiN
+	 Rmsp89D/VkkSPKT09legca1l9WrxP4fg0xBvrO3DXNIG5OYoId3AsbHwy+sFuwGLonO8G
+	 Z7DrNFibtR3GIgEdjSJlqnIgRFNCXtFRhNODj40gQWzS+RhBz711MAEevpUETQfAGF96z
+	 v1kPE4gbUl/Q6FUkIzqnDbyY0PBobjVSVAKHAZn37Y0LkdvD0hQOcjjpUDYWUxw/4Fhky
+	 EkozymXux34vCp9vKUgr2Yjg/e9udvCDU34Qg3GHE6h+CcmgVm7hXyvM1Y9KQthjz9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=C5kIi4sW;
-	arc=none smtp.remote-ip=209.85.161.47
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=vfl47fVd;
+	arc=none smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF66606A329
-	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CF66606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B08606A685
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0B08606A685
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=C5kIi4sW
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-71ad5f20016so3998697eaf.1
-        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=vfl47fVd
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6df5e315bd1so4966302eaf.2
+        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel.dk; s=google; t=1795632290; x=1796237090; darn=vger.kernel.org;
+        d=kernel.dk; s=google; t=1795632292; x=1796237092; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GX9y930NHvUDN1ePSMyDcGp/kD/aMqco3V/PK3u2L/E=;
-        b=C5kIi4sW97NGxMFOiVun4qouXOFhSQfHKOYrrJabdNEyNf2kL7KTPnpuzzLEKcd+qT
-         in4ZjLTE6hWvNLLk+LEq7+A7ubQ/0223XXl0zL0JAlB8toeoqP6XeaCBd1JHrCS4MIE1
-         +r7BW7HJH78jRx5lcVER6tsxaWTs1PI/apgXgDf0Kx9/viZ2UCZGxTQl5onKd+0iCnTx
-         nHOS6zva0ST/KfBFsDIw3/psYG4BryQqGGN2SrrNOWuDNgfWX2/CaLVWtALlKgkWVZuM
-         M0RrKJFYG/JOj8rfRGbOop8WFUVmxVYADxNSkNWPQdXCfJ0QVC01wFjxqllF7Xw7QpHw
-         aDPg==
+        bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
+        b=vfl47fVd1ZtpNjyoJDx/TMgJxMDuXzm0mBNpozy/XePYYS+Y3TdV0c4pBjdZ+Q8WWc
+         IPKX//sb8TeknPJRlH7qEGai0rljJmoO8AJ9cdbW9CTNHbPdSFD4p5kzkoknWYlaHDk1
+         cfXyE4hFl+W8GtDE0Kg7pc+mm7X8boUv1oBlWJg+ePoo0Arun5RWj9ZB0TL9UgTVhFeK
+         fxzMTad/pHZyK2oCAbhNOxN+QBtXfwW9HZdDvcAX9lqz/sihZcCVnEw8Qwkv5kRyDPRW
+         L9Nrud0EHDroSBfZhgzMKqg5RG32XdSpJIX+bgaLEQ9Yg7MKxfyqyZV0fbRKuXTKlW14
+         DFJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795632290; x=1796237090;
+        d=1e100.net; s=20260707; t=1795632292; x=1796237092;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GX9y930NHvUDN1ePSMyDcGp/kD/aMqco3V/PK3u2L/E=;
-        b=aiFdIgyxsRfTDVUCgn458egyKsawzzfX/9Jr0qLeqmpcImvAZOkb7Prli5U83ovIqf
-         VdBQbua0HSjH7w80J8KKgKfNri76VQxl8LBMDG01snH+NS/evlIsjjtULGZr04BQgJoY
-         Va92NqzBUM/No/WIB5DA9PweP0zQ1sxYDQQFbrPY5liq7GqJ3ixvTLFkjrgWvEbEgyhi
-         wIe5BmewfnzOp/T4eKJo3trWU9QclizKwUtcwtFVNSCgxJqVM8bbz0qLiKMw2ZOWiQXl
-         hQF1483XiQvS2WM/5j3c3WUJegMOURew2jwuiqDN4AzzmWke0HsqBTRzEPk+sRZqgtRw
-         cgxA==
-X-Gm-Message-State: APuU4Z/fQblvi1ocCz/LT8AgyLYxQbAx7HB8SK96dUO1M/nWGHNjfX6f
-	CA9JHwqPSTy/pwuWGzQcymiGe3ZwjSXSQoyXrUiMRUT55Au4+4RuIa2CbmjJUZKip9v7QN3FFIb
-	c7OYBkfg=
-X-Gm-Gg: AZFdTZe6JGX0cHrpmcTvuIDEbu1v1q3dDiPiP7DcOG2optuKT/FVynxzq1lrp/BAwg8
-	5H3Tncy7NA86AYk6Ple8fIZnIeqgZS3bRFk2tHe77Oe4RmkZHVEoW+8Z1xcCGHUroB/AAlhhcXC
-	Ys2rNMLIfntsN6Zq87rQvc+zq1QtmRTkxBFlf/yueJNVDetOxi1d940MaQF8EHu3NnbA5er/gZF
-	38NfF7FgMsXU86XpoCrMlyfkBrG5SvWHi11XHR1DTgyUkgd5OB+CcudyXZdOj5oL2ySstSxR7Cd
-	6Oo6V033pYxZQeuCP/ezHlbyetVwyboHjFTb59jAd5OnDhNtyuuMxv8szgdyNYpZ4PFYDUno4gg
-	vgOFWWeAllqxZQpxn7zySUIEVEGmgSsA1ffgkeu5XfWwGxVgT3ca6DzP5kmihREv7m9G/EC8LZ0
-	eAIfZnyh+yK6X/cp1dSjBLgHAlUuD2RSJrXsGaHktR3kSW//xDy/zW/Mi+c5CY1YWI2OW4sOM75
-	I7ONUV/ghKeqwSZR4ZX4QvyHszTiFPCYLDa7zaVBdqsV+0TafzmLOszP5id2T8cfLQhiGTiSRKm
-	cRejONHl92JR9LgHV758T3g+ECmQPfRojSjPo5V8jK8/S2W3xHbeuzdiJTTC3HESjnSmBN9mCrS
-	/KogyrY4rch7zS9DgJn5kmH3VybHcUcodkg==
-X-Received: by 2002:a05:6820:4403:b0:71a:f64a:2fe2 with SMTP id 006d021491bc7-71b394df59cmr13155171eaf.48.1795632290356;
-        Wed, 25 Nov 2026 10:44:50 -0800 (PST)
+        bh=7z86s+sxZZ0rs9BHmjYLkufGbblNmiYUz0g8Vi1fYrM=;
+        b=oYmu9vWoiMkNrh7qclnPoxdr8IGclWWN4m1ch4l5M84UwMRk+44OuESDsdiCLzq3rX
+         6Ab6xSuGi/kEvlCqmHtj6iN/BIQ5fSilG5wJjHXuO43InwaE8EiCzJk6UHWbL+4ngiS6
+         XWjYPBJZ9MKfjc71QOabQeGQGveLrARhQhdhAbeZc6fdLAZbk+dHHJbXrtJrprJJZRWE
+         6rXZ1LRaOzy3W9N6iu17JMVzwwMOl3H2sQpWGfj1R8VTDkV6VXFWAUread4UqDfa7Agt
+         dsAcnxTwyKA/iMX+grjWUFkLt8Q4iGEWXV82b/uC6kWTCYxCfQXDGThrw2SLDBkdkspb
+         Tv7w==
+X-Gm-Message-State: APuU4Z/InbHYkMCZIYNR07KsHdGWHDL/0NUBIqsCrwFaMZElKIaFOOkQ
+	/0jlnGjKR2yImvc12Cod+qKvG+LFuTbF3s4rGq62QsnqnrCLQsOgW6S5I076Yjb1XP58vvRA30I
+	RY29waqM=
+X-Gm-Gg: AZFdTZcX7FY859McbzZXwuJc/Z5hMQ/1TwPtA6DdOZpZE9rbouM78NunUSq2D7fz/rT
+	AcEQefHcClza0ZBDksZ2suHu9YW+KYRgpdihjqcr/QkkIW8WSxlJmLmhm8Fglr9s63lCqv2WAYH
+	vroedw1Qwxs3wOt29/fh4Kser72nj+kGUQt+9WgxYrzyfpA+Ea3G5wx5dsSySFFnDBTnRqGcKgu
+	0B63S5RJ03ln+rmqmwDdC90xUWe8/+61J3mjjHUkayQQnhOOnmRAvuuaFyEhUoDYTfZIBrevSHA
+	gpNSspAr0jppCeFgeLgF69eA6NKoWh4nc3qSYzfYdylHVHtiV5pTYqNUrcp3TuwcUG4rY4IL+4S
+	UW4/cRX4SZRgIlwr426n9gejlduQXeIoLXigifmiOINGb7ri9Wavp/KJV+Yt/FyQTsCcV+WhBjq
+	KvP3rU9sU9rMCweyhjyuFak/0Y2UQ0v6evQuBEVynkxh0eFxQ7QZUx+HbciW0ijP3kKXXza+V73
+	bK8H7Wfp0B2Bc+1vlIF5hieozjhKm38r2WYp3ZvhqQ8d05Jgljc/hC7fl9FqbjPzlb4SreywskP
+	2PeN+br4BPcYW3bjq8wnE6enaOSmMwfgkcpoPf3qdXQqbftISALl9BG1olRyUGUoLOdVF+owIc9
+	tn8R5DQ/kGt6r2RUO2/BO/LBX3pESeVok/w==
+X-Received: by 2002:a05:6820:7618:b0:71b:1715:7ce2 with SMTP id 006d021491bc7-71b3952f14bmr12987689eaf.32.1795632291778;
+        Wed, 25 Nov 2026 10:44:51 -0800 (PST)
 Received: from m5pro ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.49
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 10:44:49 -0800 (PST)
+        Wed, 25 Nov 2026 10:44:50 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 06/10] io_uring/timeout: hold timeout_lock for the link splice
-Date: Wed, 25 Nov 2026 11:43:15 -0700
-Message-ID: <20261125184439.58077-7-axboe@kernel.dk>
+Subject: [PATCH 07/10] io_uring/cancel: always walk links under timeout_lock
+Date: Wed, 25 Nov 2026 11:43:16 -0700
+Message-ID: <20261125184439.58077-8-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125184439.58077-1-axboe@kernel.dk>
 References: <20261125184439.58077-1-axboe@kernel.dk>
@@ -104,60 +104,74 @@ From: Chris Mason <mason@kernel.org>
 
 The exit of a single thread that races with the close of its
 IORING_SETUP_DEFER_TASKRUN ring can cause a use-after-free of a linked
-timeout that has fired.
+timeout, if io-wq is the first to issue the request that the timeout is
+linked to.
 
-io-wq calls its match function under raw spinlocks, so there
-io_match_task_safe() walks the link chain without ->uring_lock. It holds
-->timeout_lock, which is enough only if a linked timeout leaves the
-chain under that lock. But io_req_task_link_timeout() does the splice
-under ->uring_lock alone. Once the ring is closed, the closing task runs
-that task_work, and with a drain active the flush frees the request:
+When io-wq calls io_match_task_safe(), ->timeout_lock alone protects the
+walk of the link chain against the removal of a linked timeout. The
+function takes the lock only if the head has REQ_F_LINK_TIMEOUT. But the
+first issue sets that flag. If that happens in an io-wq worker,
+cancellation can find the request as the current work of the worker
+before the flag is set:
 
-    io_match_task_safe()          io_cancel_local_task_work()
-    ====================          ===========================
-    lock ->timeout_lock
+    io_match_task_safe()          io-wq worker, timer, task_work
+    ====================          ==============================
+    REQ_F_LINK_TIMEOUT is clear
     io_match_linked()
       req = head->link
-                                  lock ->uring_lock
+                                  __io_issue_sqe()
+                                    __io_prep_linked_timeout()
+                                    io_queue_linked_timeout()
+                                  io_link_timeout_fn()
                                   io_req_task_link_timeout()
-                                    prev->link = req->link
-                                    io_req_task_complete()
-                                  io_submit_flush_completions()
-                                    io_free_batch_list()
-                                    io_queue_deferred()
-                                      __io_req_caches_free()
+                                  __io_req_caches_free()
       req = req->link
 
-The fix used here is to hold ->timeout_lock as well for the splice,
-which stays in task_work and under ->uring_lock.
+The fix used here is to take ->timeout_lock for every walk, whatever the
+flags of the head say.
 
-Fixes: 49ae66eb8c27 ("io_uring: defer linked-timeout chain splice out of hrtimer context")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/timeout.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ io_uring/cancel.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index db78059cfeab..46c01704b58f 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -392,11 +392,14 @@ static void io_req_task_link_timeout(struct io_tw_req tw_req, io_tw_token_t tw)
- 	if (prev) {
- 		/*
- 		 * splice the linked timeout out of prev's chain if the regular
--		 * completion path didn't already do it.
-+		 * completion path didn't already do it. io-wq cancellation
-+		 * walks the chain with only ->timeout_lock held.
- 		 */
-+		raw_spin_lock_irq(&req->ctx->timeout_lock);
- 		if (prev->link == req)
- 			prev->link = req->link;
- 		req->link = NULL;
-+		raw_spin_unlock_irq(&req->ctx->timeout_lock);
+diff --git a/io_uring/cancel.c b/io_uring/cancel.c
+index e3d9fe8fc982..5b57d27225ac 100644
+--- a/io_uring/cancel.c
++++ b/io_uring/cancel.c
+@@ -438,6 +438,7 @@ static bool io_match_linked(struct io_kiocb *head)
+ bool io_match_task_safe(struct io_kiocb *head, struct io_uring_task *tctx,
+ 			bool cancel_all)
+ {
++	struct io_ring_ctx *ctx = head->ctx;
+ 	bool matched;
  
- 		if (!tw.cancel) {
- 			struct io_cancel_data cd = {
+ 	if (tctx && head->tctx != tctx)
+@@ -445,16 +446,13 @@ bool io_match_task_safe(struct io_kiocb *head, struct io_uring_task *tctx,
+ 	if (cancel_all)
+ 		return true;
+ 
+-	if (head->flags & REQ_F_LINK_TIMEOUT) {
+-		struct io_ring_ctx *ctx = head->ctx;
+-
+-		/* protect against races with linked timeouts */
+-		raw_spin_lock_irq(&ctx->timeout_lock);
+-		matched = io_match_linked(head);
+-		raw_spin_unlock_irq(&ctx->timeout_lock);
+-	} else {
+-		matched = io_match_linked(head);
+-	}
++	/*
++	 * Protect against races with linked timeouts. REQ_F_LINK_TIMEOUT can't
++	 * tell if there is one: an io-wq worker may set it during the walk.
++	 */
++	raw_spin_lock_irq(&ctx->timeout_lock);
++	matched = io_match_linked(head);
++	raw_spin_unlock_irq(&ctx->timeout_lock);
+ 	return matched;
+ }
+ 
 -- 
 2.55.0
 
