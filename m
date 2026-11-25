@@ -1,91 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795632285;
-	b=JXH4u+0MFTMUCr4Q2Tfl0kUahyuTlic12U9xZe6GYSeh4XJiTMkK8qhnlWQuT/SoXeFn
-	 DdLU/6a+isZ/g0dlPNz1dbz6ZBpe8jdMZhkhmlZIHQiTnhDtAGTjR6dEDF1csGluTPHts
-	 AjyjACqe2SI1ktQLIoS6RClzTQY5vsUQ9D3OtWA3DNzYVYcTwaiap17dgSmTTgx/WkTma
-	 kZXTam96+avtGx2qIiG4a64ZNVUrPtdj/usbf0F3xIpf8mt+mMW7FJSciyKlrcUMqsMwP
-	 Y3yhH+XLNZpIWT1gmZ3O9nke8RTVTIOP0H+RvjEzL7+qRGvLV9+pVeBvI2SbxewAMHg==
+	t=1795632286;
+	b=bAXiwxdRhOYH1aMWinPQ8AtJFFBC6Aeqfk73nlgVYVsO6864fKK5Hzaf+9n09dRSq90b
+	 r8fwVlyjJyX0octen3tHH47yeJoXCXkEXCe2uLughhbZD8FVJZolHj8MjIW9Wxy2t6Aks
+	 HnI8RcheYJR2sDVGbk82FfL9Yc6teyBcl3vNtYJYG9sN1q8vekX3l2lMmA9uhrx/8UwK5
+	 3K0+s69K/C7iAv395CZ/VsGLz9kFfxnF36N6wlC3NJW0lipoNizNzAdssbyx22oAv4HXz
+	 /ty388xFmfAITWGl+AwcplOn1uP+yT8WyQUcscYOxAO0YzvF6X9Riw+EJLGjjiMi3Yw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795632285;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795632286;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=MmE4HuQlC3qSlD1pcd+MNXdyb5hSznFFM86jEb444vA=;
-	b=whppRIBZt+q4RSjViz3Cf4We/rfhzMAdjas+eJ1TDJDYP4JnnhaB3JeQ4BeEVkKXkZKp
-	 DePvYcOhjjPTa3tDAqxOPTbCKmxqHUpivrdZ/NcutgCrko4+u9TQBL2x1bOtNHXNGE3Uh
-	 CIj3YHET//T/3+nVAZTZ+AdtpzRKxV1RYJUkUaUSRIewUhwlGboEBEoRpXGAMMr6uXd0F
-	 H2WrX7I/RNCTzhTMH7MuWexpZYX/9eALJ9tuzcAHr4zlks0SKZIX4eCz8b5rILhRuendl
-	 7Zukj3f3LNJVn7P4UXV8TUrARPN+My55/CNROYKegIGHuwCB5O5MarjTLis1bhukXvg==
+	bh=7PCMIdRhoUBO1aBwtb3ejftG2W7OVTfFNwUhSkd3nUw=;
+	b=y8QUzYtjYQB8S9vZ/mcfMLCpiWiqibVr2at2aWMKrohoSsRrB6qGQcz+6rXZ3dazwlIN
+	 dHJfTb/0IZ8KutQ5bqWuO8tfadLH/4zM/VCWRcFzSVgX/IGmb3VT6ORfsYbQhm1XUoDl6
+	 WXmKliZViAbTyuuAYif1WoF6qoCdo/vWw0X4cSXp5Uw/AbDJr/NzwxFy2frvHUgUR5hUE
+	 2O5JhNeqptNWZkqPPk0Nb08BPOFk+u1UKIog6kzPh32kmk3rSp/7Lo9vsZlEOf/f7JWF+
+	 lHLlINHVfqeAro27BJGEuBSf6oMaH7shomlFuEk9/0iXnBPmaotMC7Bbvg2Rl/VtJdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=QR7iLCNK;
-	arc=none smtp.remote-ip=209.85.161.44
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=h7i1QNLP;
+	arc=none smtp.remote-ip=209.85.161.53
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAB1606A31E
-	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EAB1606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BF3606A31E
+	for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 18:44:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3BF3606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=QR7iLCNK
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-717080a2d50so5678207eaf.0
-        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=h7i1QNLP
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-717080a2d50so5678245eaf.0
+        for <io-uring@vger.kernel.org>; Wed, 25 Nov 2026 10:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel.dk; s=google; t=1795632283; x=1796237083; darn=vger.kernel.org;
+        d=kernel.dk; s=google; t=1795632285; x=1796237085; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MmE4HuQlC3qSlD1pcd+MNXdyb5hSznFFM86jEb444vA=;
-        b=QR7iLCNK5bxyDOn9wUN8PGgUYNRI2fD/u1u6AxLoKRjuAJAQGCeF9KkgwtTmdECrZt
-         fOZusM9BFr/ZWqtKUIotf/P2PpMgGtloycmHBfKufvsJs8L/6KJLgtegLG9U8WBbJzN/
-         Upo3+muVM6cpmvkp/ATsLSd1EWZhSD/5eEIRvEtmCrqT89rawaQkknCeh8x/eCziEkjJ
-         wfL1HhhQ6DNm7Mad0BzF3+zTY7CRcVMwkTxugiAJwvVxGVQ0DxPvFUddax7IOFSwL+ju
-         sGPBpeuSyeTWRffMmw1a2F8cAajllY+qeYsg71VDwhl4OP7M1ONo5ORHqgRFsaW4doXZ
-         6eAA==
+        bh=7PCMIdRhoUBO1aBwtb3ejftG2W7OVTfFNwUhSkd3nUw=;
+        b=h7i1QNLPnOxHhZjibpDUtg4dTYuZT/mvGVEmEjn4fNsh1q+IhPFW+7dji4KbyRsJ56
+         7zOGBKKJ4Gh1VGO+5oIZMEJwcbDTENCeEYAkteIuW4t4LMiD16xthWRzEW8lexRABunE
+         AKJbe5EWL5vc7Pz95euBU2+ja/qSva1+Q+2xceVYxIi2wganK93+D1rbFakS5/XnxCnr
+         G989sCR/jh53jQen3WWsSmm2nxhbZBk/zoIKY6GdTUfZOZcX4UOsBJWyZZz0s7YXrEFl
+         GTGW4DjVUptbJ87iHkzg6vC+ZIPpDAgRHo8KO+ldoqqXTxjgCanSFe/UcCI/lBmHWkEq
+         WOig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795632283; x=1796237083;
+        d=1e100.net; s=20260707; t=1795632285; x=1796237085;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MmE4HuQlC3qSlD1pcd+MNXdyb5hSznFFM86jEb444vA=;
-        b=VArBBi9Y/dS9Pi4McE7O7AVbEga4PgslBKW8u6dnodQdE0inZMGV58TXh4dPyVb1d4
-         JjFwXrdiXLxtNXYn+oz5nZFShPU6ZOJbNgSnxaU+Fd8WhDDz7swnNqXWea0im20Dg3os
-         jM2Z1iKZ32V/2Py7QPky5NaOeeoIx6VlP8EJZDq+lLr2LKQcUcVznTYOJF0e47Yxt2Db
-         p3Ao2aUQQyeLnnYt/6IrEOrUYCCg9aT9LQQa+WeR6u4gCiC0NjHEkIoYghJUBvvvRsxR
-         WxruYuCX8hXgqXqQ2GcywAYhm6gTVbyb3QFFPURo+qVTLEOeN1BBcJjZarIfPXb+rt3b
-         D9Hw==
-X-Gm-Message-State: APuU4Z9WRpsd08u3MTq41BWaJpcOLRV6uuR8eMuF6xoylLd2lGnT6xbh
-	Ch2VhvlWdJg0yDD3Po5jbFHBW4dH2V8oqiGMuQojb/3wHmkCnh7i2YZVfA4maUAeI+79PgYf/XO
-	cgwlZsT4=
-X-Gm-Gg: AZFdTZfgTLgifwfRvSJCJu5bsAuT/1x5lmOA/KeLK3GXaYSCBcIrQWNiK9nk3xu0iBP
-	sk+3n3kZpuaUSlh72ZsZHkOXAdKr3UScJVK1Q/d0/nXD+01pWu2tQ4VO/kn1liLZLkB4bnlNrT7
-	+qfLFU90hlwgiMqJdkeU3cm4exDS+NckDUjCZuPkjQ0wU/U3LniwhdjgvsU3fhwSWLZKjO9j8Ad
-	ZuB4wl3pJmZE3t/i720rsI15khqR/m8V5BKw0l9+Wvlqdbal+OXieRuH/YIYihyoo1RaNc90ii/
-	4z8GUfyju/QQekT8ViFxpBmpzLAXnUEiSGJ6yj/J2gVJwsMTLMM0Dmgru56K1D3CPJJrA4zUjHG
-	8DlW/jUKFJlCMtDhfV3nPZIO6rbg21nw1gHYtULOxJaJxwV29kg1ypG7ixDiYQimlGZxyVeYGMT
-	e+emIHdvLgiZBTRIF0yH/JCh6e/6QS6tpNeuidk4B0T9dl0efK2ob9Ci6rtVylTliXAumAgU+Gh
-	E4/fYSsfp5/JAn5Be86lsIidzgk9wjrQ3ZVgdYA54P2yw7357eDCatsvizcr26gZwBpYNPAsLun
-	kOGqcdEkgvGWggwsBpyT/t9sppR3oxh4FqGRZfELs44pinddQgRDUCOkGjZELM3mChDbV7iBoSQ
-	NR38OlM+Sg9BverJX2kSaJyyaVSFcIoMKqK87Fq/mDk3o9NABoT8hRgs=
-X-Received: by 2002:a05:6820:2228:b0:6f6:3762:5f9c with SMTP id 006d021491bc7-71b3929078dmr16500169eaf.11.1795632283356;
-        Wed, 25 Nov 2026 10:44:43 -0800 (PST)
+        bh=7PCMIdRhoUBO1aBwtb3ejftG2W7OVTfFNwUhSkd3nUw=;
+        b=EDlFKJEnGi8HeWwE1Girrb4vRi2xA7ulXz8CBgPe0l6Utlvki8bPBoKkH9h434+fNu
+         1BLhq1iinTXIhjiek6RWcM9WpiEGallrJOwLDXVCyZa2eE0NUEf2FGr4ZoE3UJUbYuDe
+         2mvWVgQO7nCnkKdM8pfP+E46LIIMlic6V+BbUEzGkFeeolL4dxoK1NUzpQtQ10Wt0TkU
+         /w0QQk386KayJ0+D6VWZM6Un6Yya8cKn3PwiW45shGkZ1lKvDMjlMOmmdVBhasmcd9HU
+         zfA3bxc4pM9tFHZTUaOsvmuKunD3y/KauG2MsOXIsVRoL3lE94kmO/Zbmj/LuBl3mwsz
+         0Hgg==
+X-Gm-Message-State: APuU4Z+H4zNxwuCU0rNoNNY/AjZLqNFS6tKTOZLygxG/1LYX3w0W7abR
+	/sFluuaiTn+3abcYoXFky5nST4d0t2eQjFPluaJpCypy6WzowwdQSRTdH5PRdg7BhB7jWwBM4hP
+	ANk0AdHg=
+X-Gm-Gg: AZFdTZfdy3A9iUFmyRk+FURA/IixByvvcJv90+WSZMkZhii9JIpNwxyp1VXZpEJxtAG
+	GzngxLdcYuKumzVj2rru8Ezos9oMMk3mu9ru6+hUiObTmvjpdRvFoClK6PVazXqGOSaDjM9mG4c
+	igbnjozyTTuc2GvHJdF0LMl103dmSX3ZrXix4sSwvT/wxi2qGuTiHIypCqZnxWW/1EgBnbJDejd
+	fYMsW1zW7zVmTq92KjdDCDgV7OWhBFaE/bIloisJVGBBTT5YisXXeQJP4x7Wgv+8w7w9Jj/TrGf
+	K81hMjNcD38S0ABMHNkOl08LPCI/mTmPECxFG9t8RYqIBUyncKAyeK7mMYFKOOfes54RizuOrdY
+	lkt77uykokqSrGZuZrO3M4EhqA5eMckYv51YMhD1kLES4pNHwhxJyKEfgxJ3L7SNv9JZ9tVribs
+	iHBMRm3qtPRB1Ij4a2fVQ4EjxMyZUvoP5CGTnMCz6hAfrX1Zm0GDOQiNBtwqfHvtyIOqVCGIhgM
+	Ovb+MmeEBdoVGenqAPtqnbt0jMB1Xmv856KOEJ7BMocJ/GU21lsdKewgimC7KcCi/KydLVccBnL
+	tEbq0FiQCzi6SG+0sHIkr+68WBRmCVc/JnVouzcJBN+GTZYhEsbdlJbgRGB9q6Dl6gdWxJtA4BT
+	+ziqHZ1l65fPadh8S3rjU3yvQ0Kwltda79w==
+X-Received: by 2002:a05:6820:839c:b0:6f8:fcce:a410 with SMTP id 006d021491bc7-71b395100fdmr12277632eaf.55.1795632284984;
+        Wed, 25 Nov 2026 10:44:44 -0800 (PST)
 Received: from m5pro ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.42
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b37c52ae6sm12332828eaf.0.2026.11.25.10.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 10:44:42 -0800 (PST)
+        Wed, 25 Nov 2026 10:44:44 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 01/10] io_uring/net: don't copy msg_name on a recvmsg retry
-Date: Wed, 25 Nov 2026 11:43:10 -0700
-Message-ID: <20261125184439.58077-2-axboe@kernel.dk>
+Subject: [PATCH 02/10] io_uring/kbuf: clear REQ_F_BL_NO_RECYCLE on buffer put
+Date: Wed, 25 Nov 2026 11:43:11 -0700
+Message-ID: <20261125184439.58077-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125184439.58077-1-axboe@kernel.dk>
 References: <20261125184439.58077-1-axboe@kernel.dk>
@@ -102,64 +102,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-IORING_OP_RECVMSG with MSG_WAITALL can write past the end of the user's
-msg_name buffer, if a partial receive is retried and the source address
-is longer than the buffer.
+A bundle receive with MSG_WAITALL can hit a NULL pointer dereference in
+io_net_kbuf_can_retry(), or share ring provided buffers with another
+request of the buffer group, if another reader of the socket takes the
+data that the receive is about to append.
 
-msg_namelen is an in/out field: move_addr_to_user() reads the size of
-the buffer from it, and then stores the untruncated length of the
-address there. So the size is valid for one call to ____sys_recvmsg()
-only. But io_recvmsg() passes the same umsg and uaddr again when it
-retries a partial receive, and nothing restores msg_namelen in between:
+The buffer list is only known within the issue that selected from it, so
+io_recv() has to commit or recycle ring provided buffers before it
+returns IOU_RETRY. On -EAGAIN it calls io_kbuf_recycle(), which does
+nothing if REQ_F_BL_NO_RECYCLE is set. A partial transfer sets that flag
+for the buffer that holds the data, and nothing ever clears it. That was
+fine while only a multishot receive selected more than once, as
+multishot excludes MSG_WAITALL. But since commit 7c71a0af81ba
+("io_uring/net: improve recv bundles") any bundle receive can put its
+buffers and select new ones, and the stale flag covers these too:
 
-    msg_namelen = 16, AF_UNIX source address of 110 bytes
+    io_recv()                    partial transfer
+      io_net_kbuf_recyle()       sets the flag, commits the buffer
+      return IOU_RETRY
+    io_recv()                    fills the buffer, msg_inq > 1
+      io_recv_finish()
+        io_put_kbufs()           leaves the flag set
+      io_buffers_peek()          sets REQ_F_BUFFERS_COMMIT
+      sock_recvmsg()             -EAGAIN, the data is gone
+      io_kbuf_recycle()          does nothing
+      return IOU_RETRY           buffers mapped, but not committed
+    io_recv()                    sel.buf_list is NULL, no selection
+      sock_recvmsg()             partial transfer
+      io_net_kbuf_can_retry()    reads bl->flags
 
-                 size read    bytes copied    msg_namelen stored
-    receive 1    16           16              110
-    receive 2    110          110             110
+The fix used here is to clear the flag when the request puts the buffers
+that the flag was set for.
 
-If the copy in the retry faults, the result of the request lacks the
-data that the retry took off the socket. A retry that hits EOF has no
-address, so it stores a msg_namelen of 0 while the buffer holds the
-address. And an address that is longer than the one before it is
-truncated to the length of the one before.
-
-The fix used here is to copy the address out with the first part of the
-data only, and to leave msg_name and msg_namelen alone in the retries.
-
-The address is now that of the first part of the data and no longer that
-of the last part. The two differ only if the source address changes
-within one request: on an unconnected SOCK_SEQPACKET socket that
-receives from several peers, or if an AF_UNIX peer binds between two
-parts. A program that passes a msg_namelen smaller than its buffer got
-the whole address from the second receive on, and now gets the truncated
-address, as from recvmsg(2).
-
-The retries also no longer reach audit_sockaddr(), so with an audit rule
-for IORING_OP_RECVMSG the event of the retry that completes the request
-can lack its SOCKADDR record. The event that keeps the record is that of
-the first partial receive, which audit logs as failed with -EAGAIN.
-
-Fixes: 7ba89d2af17a ("io_uring: ensure recv and recvmsg handle MSG_WAITALL correctly")
+Fixes: 7c71a0af81ba ("io_uring/net: improve recv bundles")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/net.c | 2 ++
- 1 file changed, 2 insertions(+)
+ io_uring/kbuf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 8afad1b2ddc0..f8d547c5e7d6 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1116,6 +1116,8 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 		if (ret > 0 && io_net_retry(sock, flags) &&
- 		    io_net_kbuf_can_retry(req, sel.buf_list, kmsg)) {
- 			sr->done_io += ret;
-+			/* msg_name and msg_namelen are filled in, leave them */
-+			kmsg->uaddr = NULL;
- 			return io_net_kbuf_recyle(req, sel.buf_list, kmsg, ret);
- 		}
- 		if (ret == -ERESTARTSYS)
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index 873d66a06b36..78d29008919a 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -428,6 +428,9 @@ unsigned int __io_put_kbufs(struct io_kiocb *req, struct io_buffer_list *bl,
+ 
+ 	ret = IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQE_BUFFER_SHIFT);
+ 
++	/* only covers the buffer(s) being put, not a later selection */
++	req->flags &= ~REQ_F_BL_NO_RECYCLE;
++
+ 	if (unlikely(!(req->flags & REQ_F_BUFFER_RING))) {
+ 		io_kbuf_drop_legacy(req);
+ 		return ret;
 -- 
 2.55.0
 
