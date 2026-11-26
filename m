@@ -1,47 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.71.94.104
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795705344;
-	b=N+hUYpSV2y9yAVP9V0j7vNjvuxQdcz1Hce2aHRJ6PAKL4mIz8bfSA/o/UqwX6NvOUPV6
-	 +BoqgUEaD6TtaghvmvSiZB3U8EZthjHBP3AYsl9MmW7CSK8WK4Sfz1sZWZ6npodfJtVZZ
-	 Caf1FX9zl/GB4rjtaAzhwEPibKmFcZj+rYjN1MxAR9q0KEGY4uMWgAynocsBJtN6drNrH
-	 H6F+4M+pgIpszMm0yB31SgskW2TrxPa7olDRI7lkx8aHg5sz1dxfUxckVfFtVYeCnBJz2
-	 WeVfK2J0HQxJ74BQYY/aBmcS5l7sYFXwNRI+S0TWKdjJ8dK8L9HKzWNc0IZljimqH4A==
+	t=1795709936;
+	b=gfrKTrIrNXqxebW33Ox9YonI4xhjDD+DnLuKApHOhFxGlmXynwev7p3b9z/FldVjaR1b
+	 7WhbfjOPFKiaRUUaz1pDyaPOWEw0n+5TYH/UXeeX66vPE9yUnDUahBIVPkRPIhKpbdhBY
+	 UrazzpynQ9LS/ON6Z9yF+FDEEuXHigIPZ9xUndB3ATm0ro4VjgIHKfTaW300+wpIHM65w
+	 gy++fx37OfXNrKRUj5RAQtV6+uYFBy1Xwc9C2KDOtyKCuAhXDHp0u+NrxH/K2wCUS8Pff
+	 M6/o3nRq6RYCFRBCLN6hCk63fp95y2moUEe4OUN8I8Kjk0cySXwdYxU8kTzkItamiyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795705344;
-	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=Qv+/RlZ3IZV9hggQM88PlxrjkV3JuGKZj3tmAt55rsU=;
-	b=DijO6sGy1JmdBDo3lHmmuuR125g9KBE2EacxqmDe0xjHxrXNicfj83qS+UpNWqoJVAiu
-	 Cklfn4C+I0hMyzuNXmAag5TzkWZX/FVn0gCi6LjmIyuE5lc8SrWHDhfuhVbO97fymZ+qL
-	 xAWEWPP+3qnC702kQSDcovAmb6kniqcDkpKBvnnO9v0oSsFc18ljPAxfPK7lRZuoSi3vD
-	 BbNkNkKcvR2kYiLEV2eLxIW3DQ1ozDrqyrlK96T717JnueJTH+7e36dxZ1jCvMTYVNJPC
-	 xuOgbZ2G/IRMz2LJut307ZmSHG2nXgKRAeCtgdL2DdcmoKgwwerQ1mnKhu1d8Xip0Ug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795709936;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
+	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Mailer;
+	bh=rtZBeAu55s7ZloA+uxO3vPTR6c/NwsIGOFMs0FGmw6Q=;
+	b=2igPLJtw+RuQm8ae8oZODhjDKPjBlb+MbMoQxPN5M41hvouH+wN/6wktXorUJVhgdo6P
+	 SNT91J7iH45GWaj/AUKI6ixGKTWJ7aVL2gF+SVw+gw9Qzr2meadwuPt8mDSwavYXe25GB
+	 u2LwL/mLoLvAkWD8aOAclwsMqcssml4NUCUtHIiBV/gHTmB3IffOAn8wlPFjrIjkflwBy
+	 GbqevBhCYRsWQTeJ0YzIIZ/O1Hf2oezpVvYcY3ioAFVBrYfbGvQ+qbN3C23jb3OGRPatU
+	 8Xt8Wp9B9/WeZ/vFMGYQHFY5w51W+4c29FKs620AERcQV+B3BgrkO9QnMX3YuCtrleQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=huaweicloud.com;
-	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=124.71.94.104
-Received: from dggmsgout13.his.huawei.com (dggmsgout13.his.huawei.com [124.71.94.104])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=qxuxe3Q0;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB45A606A331;
-	Thu, 26 Nov 2026 15:02:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB45A606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggmsgout13.his.huawei.com (SkyGuard) with ESMTP id 4jb0Bq0Fvnz1rr2v;
-	Thu, 26 Nov 2026 23:02:11 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 493BF4056D;
-	Thu, 26 Nov 2026 23:02:16 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDXW_H2SQhr6+xRFw--.58962S2;
-	Thu, 26 Nov 2026 23:02:16 +0800 (CST)
-Message-ID: <309b8e49-2f9c-4a2f-9b40-8e7e7cce3455@huaweicloud.com>
-Date: Thu, 26 Nov 2026 23:02:14 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C82606A33E
+	for <io-uring@vger.kernel.org>; Thu, 26 Nov 2026 16:18:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67C82606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.dk header.i=@kernel.dk header.a=rsa-sha256 header.s=google header.b=qxuxe3Q0
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8d1aec63541so283940b3a.3
+        for <io-uring@vger.kernel.org>; Thu, 26 Nov 2026 08:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel.dk; s=google; t=1795709935; x=1796314735; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rtZBeAu55s7ZloA+uxO3vPTR6c/NwsIGOFMs0FGmw6Q=;
+        b=qxuxe3Q0W5XXpl0fUvUZLskvRNe9SG5ofEfHdMDb3+R4KITuQjJ0XYanUY9xQ/nQul
+         whJS2fIcQz2/4QwDDjbOMiyf/Q3yGe5H1mwdJ97pnfaykqylS40+DYolz5Qy1dnW0sJi
+         +PEFJ1Pn3eHnkxQ53h7U9HJdXzh5OWXqOLTFYiPdQsRw7meUS8BS9NcsDNmvWE13L8X0
+         4teNlL6KnWoa33dBm73ssubc6KHK7V3ZH3yHz/z02CFt32uQeV1UBl5WLNer/lFfji8y
+         1KDJRNBVQ7IuZgsnHz454wS6PdudLpkTabwc9/A35NwoviY8aht5rBRYJ20Xj5sc0L0f
+         KBQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795709935; x=1796314735;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rtZBeAu55s7ZloA+uxO3vPTR6c/NwsIGOFMs0FGmw6Q=;
+        b=FETXjqpfj0ctJ2z3++v/S0a0MkMzvpB10ZGJBnS4E64mmPMi8qPqmhDeuPCvtSwraB
+         UeIJDA0ka8Jq2mP3j7KcX+TL+9JfobF5FIVyYeVra0wVCzZW0Yr5iqUGFJ/Tfqfn0Z8M
+         4mcptPAMt1xsgohuvel6+NVd7czBz2XD+5OlGBmo6XBsN3vywHFKCgM8VLLYBsw1pl+7
+         a5AXlIc29J8caU1rFE3OMY3o8eCu4uxjfntF58TbsAbEsKg1ExvABTl5I2xgYpxqoczZ
+         QazAk02OhU1JtvQZqlyr8jB0LbQ61VFXBFparLGyPLCNqMWd9IkORYqEiNG0FAhMgTrh
+         8qwg==
+X-Gm-Message-State: APuU4Z889Vz3OuUnWemB/LPfh/QhG4t/OMtGHylm24Q8vJBwNBOqFTZD
+	q6WqxCmXBcd9/VwdDJY8Wn2xNtYql40e5ZVPPJHzinnVyjnUArvlN8kshO254UA+tzk=
+X-Gm-Gg: AZFdTZcjfmh2/JaY/rNogp0Z7Ak4hsSFBaUgMaCJbsTf99jbvDDgh9rPJLU+Ijmak0d
+	ASOHtjKvU+IvygKblfpw8ra2f9429S1o7fpQAHmwh0BSNPkpdk4VSWMHkkjSMGX2JN/bk1W2f6Z
+	R0lcKhMYVSAjrZ+9dPyDYaZIADJXuElOi7KNUI6PlnoZoVlhoUnAwNL5szuC9gr17ww1R5T/k1B
+	MmP21RUs7do7hIAAvc9tUcLZhG2Sn0LABf0yZQiJlZ5BiB/g49m725dk3jU8H3vhAFJJMh9lQwI
+	8PeeOUwedoUHMbFjR9tvDGul9L96wS1ZN23vIjJBTLlr6lTwEsJLHiqZppDJBY0IzTUPE5K+Xuv
+	WUCXLTmfLfRV7TfwZIld8BzDFpPyPCqRzKgwvDrvbLfKYfcI3vdHBzdQ7YGJ04elM+5ASL9nDma
+	DWuYLYPMalTf6l6QZ12d4nHEaNPaPw9XxPsU1PfBNho2Ax+QPPPYP0d5dobqrCPkGX5YATWUmWv
+	dhdmoK8Ht6KlwGaT1dJV1y0KbCy4zM/WAf28phK96yl4PCOXPjy5OcqbO4S8QYG+F5K9srpC7Gd
+	wQEhB5x5DgweheEcrrdQe1d//sydQagj0HM425QUDUbPbz9iKUg3BBR3k5+7PEPlKovMWmpgxKu
+	tj8/2WAQgMb392PEw1xV20wK1fZoucKKkamyVn2CBgUUWrvps1+BHqFDRqG9A/24AHvU6sw==
+X-Received: by 2002:a05:6a00:1817:b0:8a0:5f63:5521 with SMTP id d2e1a72fcca58-8c8792bef60mr19479396b3a.8.1795709934821;
+        Thu, 26 Nov 2026 08:18:54 -0800 (PST)
+Received: from [192.168.1.142] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87344058bsm10863765b3a.41.2026.11.26.08.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 08:18:54 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: asml.silence@gmail.com, Sechang Lim <rhkrqnwk98@gmail.com>
+Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20261119115942.3613868-1-rhkrqnwk98@gmail.com>
+References: <20261119115942.3613868-1-rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH] io_uring/bpf-ops: validate loop_step before
+ registration
+Message-Id: <179570993387.7152.8807787806232376566.b4-ty@b4>
+Date: Thu, 26 Nov 2026 09:18:53 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -51,94 +98,29 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for seccomp
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jens Axboe <axboe@kernel.dk>
-References: <cover.1795139109.git.xukuohai@huaweicloud.com>
- <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgDXW_H2SQhr6+xRFw--.58962S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Wry3KFy8Gr18ZF18Jr13Jwb_yoW8KF15pF
-	W3Gw4Ykr4DJw4rAwn7Xw4UuFy2vFs5JwsxCrn8Kws7try5KrWDKw4IgrWFga15Cry0g340
-	vr4jq3s8Ja10v3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
-	xVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwI
-	DUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-Mailer: b4 0.15.2
 
-On 11/21/2026 3:37 AM, Alexei Starovoitov wrote:
-> On Thu, Nov 19, 2026 at 10:48 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->> The kernel repeatedly translates and JIT-compiles these same cBPF
->> programs, wasting CPU cycles and slowing down bulk startup of
->> identically sandboxed workloads. cBPF lacks dynamic instruction patching
+
+On Thu, 19 Nov 2026 11:59:29 +0000, Sechang Lim wrote:
+> A struct_ops map with only ring_fd set leaves loop_step NULL. The
+> struct_ops update path skips a zero program fd, and bpf_ring_ops does
+> not validate the completed value. Without BPF_F_LINK, the update then
+> calls bpf_io_reg(), where io_install_bpf() triggers a kernel warning
+> before returning -EINVAL. With BPF_F_LINK, the warning occurs when the
+> link is created.
 > 
-> There is no VM startup number in the series
-> which makes me question the whole thing.
->
+> [...]
 
-The problem comes from an agent sandbox deployment, where
-sandboxes are snapshotted to disk and resumed on demand for
-each new request.
+Applied, thanks!
 
-Below are the Firecracker microVM startup latencies I
-measured on a local server at different VM request rates.
-Parentheses show the improvement over the base kernel.
+[1/1] io_uring/bpf-ops: validate loop_step before registration
+      commit: ba0084f1402bdf2946282290a3fb0af8f3544759
 
-VM req/s   base p50   series p50 (gain)    base p95   series p95 (gain)    base p99   series p99 (gain)
-400        20.2 ms    19.7 ms  (+2%)       29.2 ms    27.9 ms  (+5%)       34.7 ms    33.3 ms  (+4%)
-500        28.2 ms    27.1 ms  (+4%)       96.8 ms    69.4 ms  (+28%)      164.0 ms   107.9 ms (+34%)
-600        56.6 ms    45.0 ms  (+21%)      602 ms     154.5 ms (+74%)      831.8 ms   223.6 ms (+73%)
-700        65.5 ms    41.1 ms  (+37%)      1.63 s     134.1 ms (+92%)      2.43 s     194.1 ms (+92%)
-800        65.4 ms    39.4 ms  (+40%)      2.97 s     113.8 ms (+96%)      4.60 s     167.3 ms (+96%)
-900        61.9 ms    35.7 ms  (+42%)      3.04 s     95.2 ms  (+97%)      5.13 s     147.3 ms (+97%)
-1000       53.2 ms    32.2 ms  (+39%)      3.38 s     80.0 ms  (+98%)      5.78 s     125.1 ms (+98%)
+Best regards,
+-- 
+Jens Axboe
 
-At 400 VM/s, the two kernels perform similarly. At higher
-rates, the base kernel suffers severe tail latency
-collapse, while this series keeps p99 below 225 ms,
-reducing it by up to 98% at 1000 VM/s.
 
-After further profiling, I found that this collapse is
-mainly caused by Firecracker instances queuing on the
-global pack_mutex in bpf_prog_pack_alloc(). So a better
-approach is to replace the global mutex to per-pack locks.
-I will work on that instead.
-
->> features like tail calls or tracing. Its JITed instructions remain
->> immutable at runtime. This makes it possible to share the same cBPF
->> filter between different processes.
-> 
-> Immutable is not enough. The image depends on the caps of the task
-> that loads the filter.
-> Also any task can time seccomp() and learn that somebody has this filter.
-> seccomp_get_filter() needs CAP_SYS_ADMIN for that today.
-> 
-> fork() shares the filter already, see copy_seccomp().
-> A launcher can install the common filter once and fork the VMs.
-> 
-> I don't think we need this.
-> 
-> pw-bot: cr
 
