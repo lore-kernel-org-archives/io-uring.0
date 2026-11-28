@@ -1,47 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.71.93.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=109.224.244.22
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795846465;
-	b=Dqnu9a5/7SlZ0M69yf2jzVs1tE18oT1LJl/HiGQdQyXlj3IqlvT9DaRjmxbmvutpuofi
-	 YAs+oeUtGlZU36INZhYnOvirsfW8qWPDKGnHU1bcWTrc8wINFLHPGnPWeUpRZ2Pr+J9nN
-	 pkmHR95lBgS7mX0wDBtIPbsDtLvmuBr+lFv2pgdrlw7058a9B8zDdOEWbiSLtTy/o/RKd
-	 nFdinbiXZkkoNF4z/EJgXw8Q0/ieqjrnO1pRdH0HMdDF6gmb6RG0BANoVQ+qbPKg3vF6T
-	 mo5yAnVJPL349Rn/ISOVvxVDiLiyJKBcwccjIoj6KfGABM8IengIvuLVeSXLpqxbTWA==
+	t=1795872865;
+	b=DltpHXYYjwrO5xBIVD33swfZj+rJulVzwOgT33TFLLBuA2gnnp9zjc4Tgmr2zDCNeLHa
+	 NqSioe73S3fAXg+95y/D6A1RpsvuttqDRRtPAos2K2eU6N1iOSwD7tRGhj4ErGIzIkaHx
+	 hpW638GluKdRwLYCilO1Gz6SrCh1s55tWgWRAqIAghwPAPjajh40ke/ZbbyhOu2I55lbo
+	 od5R5nqzEa8DyfPOfJ9P6pKrmtaNKxIlun6IL7WK/obpoBwi3VP40BpXFxcV+6qie1QBC
+	 oZikmoGFkdcYoqcFx9QQ0pPDuWR1crkX7cg+J049KFub6bBnmMCrpmJ1TjtYC4o45VQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795846465;
-	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=BpeYc5qapvr7db1WC0PM9BXoxCZrn7LTw/6t/OyLwrM=;
-	b=tu+jXMZmrae/+LOUb50iM+a+1mtTeX3BXLw9fx5numgTNCB6OFqnV9QsgQ9vC097thZp
-	 3r6srEguOXcc5z7f3J+jWlSxDPcNDPo59h/qjXT+efiNCPvRhTPTD1udI+rL61Vp7qhwH
-	 +Ke8+wsc3CrR71Yq9FZ/3qVt1WNJWsenmY1DOE/TcPmNLZViokuOlbd0J0NhEZcV+Gi9P
-	 UFPb0kbxarXEe0FI1RZkrh/8JADddgrWcpuUteTf5sFWOq7H8lqVK1mSf0jhS/IS0aR0o
-	 uYR6iNwaxcCfsVLJaju95sBTdjxw7RMDsTVjxcdwGL54UxyztRvI5dz1uFKILyp2TKQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795872865;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type;
+	bh=ibyN4UPqhfd0UnYPvRCvg3lzGL9+KsQkfNnJq6GWEN4=;
+	b=O6/ppgH9HMEd5cZZPLucG2JBo8zLCptqnj+woedlEVpYudaThmlfkIgkzn6zW5nz7RlO
+	 WGHk9ZMhho2EnN9bRFsN55KEamaes23jL84r690/K1Fj+Jetfr7Y1XW9y0ovpT7gjNymk
+	 abyCp9bILsEJY90M++IlJIMitZCm4LajEqQ0ug+UCe9qhllcCmiSHLsNX7FNmGX3TVbXE
+	 03pQH86q+Sr8BxeGcTptzfw7WC3+jXkBGn7fhQXxfHv1l+HQ9BnBDowJ6r/LiYtTpvLBH
+	 XFS6S26YI4S9bp0lCGDaSY/ESRT/JIAspzBTUwqftCWAcn9yv0ShYrUwHn48IsKJgtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=huaweicloud.com;
-	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=124.71.93.99
-Received: from dggmsgout11.his.huawei.com (dggmsgout11.his.huawei.com [124.71.93.99])
+	dmarc=pass header.from=mzfr.me;
+	spf=pass smtp.mailfrom=mzfr.me;
+	dkim=pass header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=R6gACOIr;
+	arc=none smtp.remote-ip=109.224.244.22
+Received: from mail-24422.protonmail.ch (mail-24422.protonmail.ch [109.224.244.22])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30D2606A31C;
-	Sat, 28 Nov 2026 06:14:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D30D2606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggmsgout11.his.huawei.com (SkyGuard) with ESMTP id 4jc0Nb11wvz1c1Tr;
-	Sat, 28 Nov 2026 14:14:07 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 25AFF4058F;
-	Sat, 28 Nov 2026 14:14:17 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDXKM43cQpr6dATGA--.2610S2;
-	Sat, 28 Nov 2026 14:14:16 +0800 (CST)
-Message-ID: <a27f5e70-8a42-468b-82e7-4a6d47969814@huaweicloud.com>
-Date: Sat, 28 Nov 2026 14:14:15 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB4B606A31F
+	for <io-uring@vger.kernel.org>; Sat, 28 Nov 2026 13:34:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BAB4B606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mzfr.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mzfr.me
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=R6gACOIr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mzfr.me;
+	s=protonmail2; t=1795872861; x=1796132061;
+	bh=ibyN4UPqhfd0UnYPvRCvg3lzGL9+KsQkfNnJq6GWEN4=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=R6gACOIrIr0yb9YygS7zSIfS5kS1yC9ilAe4m4suhpHfKmN9UbK1Iz6aDNp61vcSn
+	 gvRviWYes/CLinEd/hqy4ALdBBiTYkgmVUVV2az0tDaEnaO0kCQTpnPp4uUo/ZYepk
+	 yxHOP9i3lnBDmkGrWGG4Ee5Ked9Txuxpsg1k5DV4fqVOsI9jr8zawxdlbBvE3jhk/N
+	 gpQil3CjOO7Obhv5X772DO2RaITPC6ORS1mkE9tYsVbD4RHPeBMkj6X9XpiJM2IIbV
+	 qPvG1qdBC2pdQ5+b41IturS0KUvcqWLRW2eN45N2kJk2tE4xVBjKejV8hP/ACRlNde
+	 nDGAjLtf4Futw==
+Date: Sat, 28 Nov 2026 13:34:14 +0000
+To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+From: Mehtab Zafar <hello@mzfr.me>
+Cc: Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring/rw: complete partial writes from io-wq
+Message-ID: <20261128133400.62759-1-hello@mzfr.me>
+Feedback-ID: 37505322:user:proton
+X-Pm-Message-ID: b0f532564e3c66afd64b107f7752383ae92a0dc4
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -51,69 +60,192 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for seccomp
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jens Axboe <axboe@kernel.dk>
-References: <cover.1795139109.git.xukuohai@huaweicloud.com>
- <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com>
- <309b8e49-2f9c-4a2f-9b40-8e7e7cce3455@huaweicloud.com>
- <DN5F4EBDNESC.3UOJRTCXCL4HI@gmail.com>
- <5b1c03a4-f910-4f97-af3e-1b8c328dd1ba@huaweicloud.com>
- <DN6F6Y9I0QD7.1B49UETL2EKDJ@gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <DN6F6Y9I0QD7.1B49UETL2EKDJ@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgDXKM43cQpr6dATGA--.2610S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr4rKw1UWr4xWrW3uw1DAwb_yoWDJFb_Xw
-	srWFs8tw1ag3ZxJ3WUKw45Ar4kKryrXFy8JFy8Gr17AryDXr1rCF4kKrsa9FZ3AayxAFZx
-	Gwn0qay0qr9F9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------e0fdfd6fa2f252007acc851e603bae5c0d63fee035d950ea92fbb55e82a6ce98"; charset=utf-8
 
-On 11/28/2026 8:33 AM, Alexei Starovoitov wrote:
-> On Fri, Nov 27, 2026 at 07:15 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->> The free path is dominated by bpf_arch_text_invalidate(), which sends IPIs
->> to all CPUs and waits for completion. The wait happens after put_cpu(), so
->> the task is preemptible. If the task is preempted, other lock waiters remain
->> blocked until it is scheduled back and releases the lock. This can extend
->> the lock hold time to seconds.
-> 
->> After moving bpf_arch_text_invalidate() out of pack_mutex, the p99 VM
->> startup latency drops from 2.79 s to 170 ms under the same workload.
-> 
-> Awesome!
-> 
-> btw every free still sends these IPIs.
-> We can probably remove them.
-> 
-> aarch64_insn_set() can do caches_clean_inval_pou() only
-> like aarch64_insn_patch_text_nosync().
-> bpf_arch_text_invalidate() is its only caller and nothing runs in
-> the freed chunks.
-> 
-> It can be a separate patch, of course.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------e0fdfd6fa2f252007acc851e603bae5c0d63fee035d950ea92fbb55e82a6ce98
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+From: Mehtab Zafar <hello@mzfr.me>
+To: Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring/rw: complete partial writes from io-wq
+Date: Sat, 28 Nov 2026 21:34:00 +0800
+Message-ID: <20261128133400.62759-1-hello@mzfr.me>
+X-Mailer: git-send-email 2.54.0
+MIME-Version: 1.0
 
-Yeah, I'll look into it.
+IORING_OP_WRITE with an offset of -1 uses and advances the current file
+position. A partial write is currently returned as -EAGAIN so the remainder
+can be retried from io-wq.
+
+That is only appropriate for the initial nonblocking attempt. If the
+partial write already happened in an io-wq worker, returning -EAGAIN ends
+the worker attempt, drops req->file, and reaches io_rw_fail(). The CQE is
+fixed up to report the successful bytes, but kiocb_done() never updates
+f_pos.
+
+Only punt partial writes from the nonblocking submission path. A partial
+write from a blocking worker then completes normally through kiocb_done(),
+which updates f_pos and performs the usual write completion accounting.
+
+Keep the last known-good position for a partial nonblocking write. If its
+later retry fails through a normal completion path, commit that saved
+position rather than trusting ki_pos from the failed write.
+
+This bug was found with AI assistance, which also helped
+prepare the fix, tests, a
+nd description.
+
+Fixes: 1939316bf988 ("io_uring: kiocb_done() should *not* trust ->ki_pos if ->{read,write}_iter() failed")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mehtab Zafar <hello@mzfr.me>
+---
+Testing on x86_64 against axboe/for-next at e00ba7334fc2:
+- Three fresh KVM boots per kernel, using identical userspace binaries
+  and initramfs, with no guest disk or NIC.
+- Baseline: a 100-byte current-position write limited to 10 bytes returned
+  10 in the CQE but left f_pos at 0. Patched: CQE=10 and f_pos=10.
+- Wholly failed writes remained -EFBIG with f_pos=0; complete writes
+  remained successful with the expected position advance.
+- liburing fpos.t and read-write.t passed on the patched kernel.
+- A partial-read control returned 4096 bytes and advanced f_pos correctly
+  on both kernels; no analogous read-side regression was reproduced.
+- W=1 io_uring/rw.o and full bzImage builds passed. Strict checkpatch
+  reported no errors, warnings, or checks; git diff --check was 
+clean.
+
+ io_uring/rw.c | 43 +++++++++++++++++++++++++++++++++----------
+ io_uring/rw.h |  1 +
+ 2 files changed, 34 insertions(+), 10 deletions(-)
+
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 3ecb842147a4..e658a9b2e1b4 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -200,6 +200,7 @@ static int io_rw_alloc_async(struct io_kiocb *req)
+ 	if (rw->vec.iovec)
+ 		io_req_set_flags(req, REQ_F_NEED_CLEANUP);
+ 	rw->bytes_done = 0;
++	rw->partial_pos = -1;
+ 	return 0;
+ }
+ 
+@@ -551,6 +552,24 @@ static void __io_complete_rw_common(struct io_kiocb *req, long res)
+ 	}
+ }
+ 
++static inline void io_save_partial_pos(struct io_kiocb *req,
++				       struct kiocb *kiocb)
++{
++	struct io_async_rw *io = req->async_data;
++
++	if (req->flags & REQ_F_CUR_POS)
++		io->partial_pos = kiocb->ki_pos;
++}
++
++static inline void io_commit_partial_pos(struct io_kiocb *req, long res)
++{
++	struct io_async_rw *io = req->async_data;
++
++	if (res < 0 && req_has_async_data(req) && io->bytes_
+done > 0 &&
++	    (req->flags & REQ_F_CUR_POS) && io->partial_pos >= 0)
++		req->file->f_pos = io->partial_pos;
++}
++
+ static inline int io_fixup_rw_res(struct io_kiocb *req, long res)
+ {
+ 	struct io_async_rw *io = req->async_data;
+@@ -590,6 +609,8 @@ static void io_complete_rw(struct kiocb *kiocb, long res)
+ 		io_req_end_write(req);
+ 
+ 	__io_complete_rw_common(req, res);
++	if (!(req->flags & REQ_F_REISSUE))
++		io_commit_partial_pos(req, res);
+ 	io_req_set_res(req, io_fixup_rw_res(req, res), 0);
+ 	req->io_task_work.func = io_req_rw_complete;
+ 	__io_req_task_work_add(req, IOU_F_TWQ_LAZY_WAKE);
+@@ -604,11 +625,14 @@ static void io_complete_rw_iopoll(struct kiocb *kiocb, long res)
+ 	if (kiocb->ki_flags & IOCB_WRITE)
+ 		io_req_end_write(req);
+ 
+-	if (res == -EAGAIN && io_rw_should_reissue(req))
++	if (res == -EAGAIN && io_rw_should_reissue(req)) {
+ 		io_req_set_flags(req, REQ_F_REISSUE | REQ_F_BL_NO_RECYCLE);
+-	else if (unlikely(final_res != req->cqe.res)) {
+-		req_se
+t_fail(req);
+-		req->cqe.res = final_res;
++	} else {
++		io_commit_partial_pos(req, res);
++		if (unlikely(final_res != req->cqe.res)) {
++			req_set_fail(req);
++			req->cqe.res = final_res;
++		}
+ 	}
+ 
+ 	/* order with io_iopoll_complete() checking ->iopoll_completed */
+@@ -1178,15 +1202,14 @@ int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ 		if (ret2 == -EAGAIN && (req->flags & REQ_F_IOPOLL))
+ 			goto ret_eagain;
+ 
+-		if (ret2 != req->cqe.res && ret2 >= 0 && need_complete_io(req)) {
++		if (force_nonblock && ret2 != req->cqe.res && ret2 >= 0 &&
++		    need_complete_io(req)) {
+ 			trace_io_uring_short_write(req->ctx, kiocb->ki_pos - ret2,
+ 						req->cqe.res, ret2);
+ 
+-			/* This is a partial write. The file pos has already been
+-			 * updated, setup the async struct to complete the request
+-			 * in the worker. Also update bytes_done to account for
+-			 * the bytes already written.
+-			 */
++			/* Save the last known-good position before retrying. */
+
++			if (ret2 > 0)
++				io_save_partial_pos(req, kiocb);
+ 			iov_iter_save_state(&io->iter, &io->iter_state);
+ 			io->bytes_done += ret2;
+ 
+diff --git a/io_uring/rw.h b/io_uring/rw.h
+index 1179506f929f..63c53cd21286 100644
+--- a/io_uring/rw.h
++++ b/io_uring/rw.h
+@@ -12,6 +12,7 @@ struct io_meta_state {
+ struct io_async_rw {
+ 	struct iou_vec			vec;
+ 	size_t				bytes_done;
++	loff_t				partial_pos;
+ 
+ 	struct_group(clear,
+ 		struct iov_iter			iter;
+-- 
+2.34.1
+
+
+--------e0fdfd6fa2f252007acc851e603bae5c0d63fee035d950ea92fbb55e82a6ce98
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsCpBAEBCABdBYJrCthVCRBCkCzGpVLSJDUUAAAAAAAcABBzYWx0QG5vdGF0
+aW9ucy5vcGVucGdwanMub3JnpaIRLUsWCjUIE8wIkN6PshYhBJC8NTVod5IV
+Rdc7/kKQLMalUtIkAABdzggAhV0Vs4jx2eztN1HMrjJOQx5mbOvyn9YTYc0H
+ARUTSKm+oFWzG4h6f4xYf1yG+dPWAfWHV3IxFq04T4HLo2JcK0p9kxmvg28+
+UhA5cICObWSzVNjPfWtRynLlC0lzvqLgKgxVAxVDjNN0zpien+ZQcudIApGe
+GEwzdRqYL9d0nJJQVjIoreto4QeOeimACldP22WTpo4bO/oHj/R4wQDLhoiK
+SsTgSHLuto2CRFhtD6kGPT7bFQPw/EQROQpgUm4/ltdgy117DY7qvKJ+1Y38
+Czy3Pxno2eS1S3WhfLgQgEwaiPi46RHmI64NQeM73UPVSfxnOdVPxhV/iLlW
+BaH8aA==
+=Gsvd
+-----END PGP SIGNATURE-----
+
+
+--------e0fdfd6fa2f252007acc851e603bae5c0d63fee035d950ea92fbb55e82a6ce98--
 
