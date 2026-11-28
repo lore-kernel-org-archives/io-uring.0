@@ -1,98 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795814407;
-	b=GkViTHhSs+C/wNR0lejlgmPMec+bEhaBb1zYukXOdBWQ/7NfS1HEEeWJuJNeIJELK3mm
-	 57K8AD1yprNhQVB6GfJ51Ecg5uc/3PlweNbZxIrus1Zi7sJmjV02ZlCFE8ZGw1iaTAawt
-	 kbs7c9VCgWJCqXqVOU49o6d7UdPGHQJ9vmj8K8DlS6F4qQnSBvMonheqkulY4QE06v9Fn
-	 FiwaDitE8cZZANm0caL3+4s8MO5KU66JHi9UJ1nEDMxDmWqD5squv47vGkTJ8lN5K4NIE
-	 KtvzFvU8t0SuylqPfsYQk6AEkVCxlR8Ru0gHH7ycR6jPSuDxuIoEWVRnCvYbWl1+V5A==
+	t=1795826017;
+	b=hGIIiYwxIdajAQrZ4mu2IezwUBvO+SPm8oYTgX5/Lvt5lFOoZgzFVcm1ufaGsuPI4Dnm
+	 4EN/PpGfhVIyBOAQlTh8H8NiqcHBNmTswMn2HpGsTCseBsWZrkf/Yf9hIjoGbAiTaqcoS
+	 Vra6F0wR2GMOhTJwxlRZ/9UFYfpJo34a6dC6ny4JazhO1P2onsV1aK1CmUZasZ2KEVpn6
+	 0+A3Lokt8NTtWUWcez4Xy+/jbsnlSy4DwtlhQhfAgdibaQRa1sqPiu/dNHCD9Nh5GE1QP
+	 ZJ7M8dpVfBpqR9EX1pj1B47dP5O8Uu7a3UTIRDUPnYlD5+3zX7xaqCe+KaaEV3NHMQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795814407;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826017;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=KHHColduWGkmMFxFIDLQlFNb6NHf5yIkvDHac155u38=;
-	b=2ZA3tuWtf3cehOerrgblmmoPRcLph3zc2yQTCrpUP4tiYzDv6bK1SmnmC+jf//Moyusd
-	 SuS5a6nKzEISAXmotF0v8eHHXrXDGy5J0faeDwvAMrBthiIe50D3HJYBs/ewBVuPznv+n
-	 m1MLxEoEYd0iR4DusFfTcsVhx2143iSTvJ3jL80YQmUhGAO/Y+lu94A5eCJVo5dumuu7j
-	 FbCdx4ZM8jVPcE8PyAT8w85n1zxRj3iF/QAzQme+GTcz+6Z2/aQ46Pnd87GsiMvw0yJv0
-	 gyY6+VLeHby4bwY4lJg2rorwc2erbVpJDp6snfi+ViFvDvWIUdlbzY8d985LjcI3Bmw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+	b=0eOFe9Pr74xYjbvKftkA/hZF1fbu41WfiQ0UwTaDc9bMX+Jp9O75IIXp0Y+Pxpuwag3V
+	 f97Nl+jYiuxoI6bfIG2fucohXQpBSrS5cN+P1J4vyNF62zLeHOUDr84t/jySrf+X41kL+
+	 zG2J0+bcEqAuV706+lLrktF+6PUEQShJh5N2x28HAPT9ykl1BVLARiaUKKuyRr6roA+tV
+	 ZN9b3xyf/3WUUddWniKsFW7L8H9fvY3haOHnWjm7zgFzP7+i1qhwggsuMj+v1SJAaYU9e
+	 Hzq40Xb26kvu3YDJrT6z0ys9whsIXv81HkdSvsV+iYKarKPWxZhTITdixBEDLdO4I+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0SeRFOYg;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VtEfMRUf;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B14606A32C
-	for <io-uring@vger.kernel.org>; Fri, 27 Nov 2026 21:20:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66B14606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECEB606A321
+	for <io-uring@vger.kernel.org>; Sat, 28 Nov 2026 00:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1ECEB606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0SeRFOYg
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-385d8a00598so13229750eec.1
-        for <io-uring@vger.kernel.org>; Fri, 27 Nov 2026 13:20:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VtEfMRUf
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso3949612a91.1
+        for <io-uring@vger.kernel.org>; Fri, 27 Nov 2026 16:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795814406; x=1796419206; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KHHColduWGkmMFxFIDLQlFNb6NHf5yIkvDHac155u38=;
-        b=0SeRFOYgIHf0xKk845tY7Ew61fEgVRrey05t5afn/eNfocTuP4qrVuiOmmc2ZJGAzZ
-         mXTtk35clO94Jdl8LcjIjc8Set0IgMoOSOQ71g/Guu/ST33xtd9QZSjHaecR/ykryOB4
-         Sg0Sl0R6B0y2Uy/Jhq1zuTYDcluJXYizvqG6oLU3Bk7B+fmcQkDTioqhT40Y/TpzS01q
-         VF8JKhpd7F9kbolfYzRwFE7kawAgrWcIqoXiBYHhKYStnqwgh7d8zF93WVfPk2qk0OmS
-         VlYGYlxAWACfq4oGItMLrflh+mvmbsG7jcZiHL8OuDiAp7I/x3PrjnD5gtqWMdUUmawb
-         s23Q==
+        d=gmail.com; s=20260707; t=1795826016; x=1796430816; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+        b=VtEfMRUfZ3zyteX9vboA7JB9ZusTTGvzZOPMC/5Zmc5unjfrfu1V+L9VEVEdpbLwwm
+         +pH3uXa35kaCWPzE4JrKggHljzEp5AKNSP0EWh2laOQZ91sB1pFNt1rAH+CwrZpzhuqU
+         Kz4Yv+dgt/w/cahpmYsq9vgnZgcCuqTU/we5LM1IYaT2PqzE0NCasYG0QurDtaguHiiQ
+         HNsHiqpCOkedaEj4y3PfBloCVIuAhjA/qv/S7hHqOrH6KRZG7IC/OIWrKVXyIGeyzv53
+         ZWM8Du6OSmMvh3h18mCQ2AM5367yKk5sLJv4e8+DYrWAnMLRvrmH44wJXi8+qQT/8J92
+         neyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795814406; x=1796419206;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KHHColduWGkmMFxFIDLQlFNb6NHf5yIkvDHac155u38=;
-        b=h1x3UkL7/blwmPFD+4Ub4V87ayJ0CnyCk3XJ0bACSJja5M3dAyTCpLmfifvm+fq+ve
-         eO9gu5I5tiz+2ac/lXIP4pudHey0f4w6wMOWSOSQIH1fu3jpzs29qC34Atw23C1VTJ17
-         olCW7NxckRb6wEbwlLc78JSkGRdDx7iv0c7zaqxYF89HkbXc2QrXFjqVbqp0VRRwyUle
-         WuUFUR2TnN+weh3NmXjrrod3KO1nBv6a1wCRPayOYTv59csEU3lggD4EW8MpmoA1ONWx
-         CMgpsMhRVTqKlgpgvXWzsEuyt20JKRLoTD2/1nYLlq3SYruY31jrC/pFvDyWnB9rB4O/
-         WIFA==
-X-Gm-Message-State: APuU4Z/K6wLbK1jcZrgei2SilPWeaU1hDXnE7RxGtm32UwSaxHUTkm55
-	/2DbZyYk520k6E6S1PjKEadEOTiXHAzr05B/dnkaOBTA8h1LmWtYpL/u
-X-Gm-Gg: AZFdTZd0oOHSsSR8R80J0TUpg7FWpPFdJtlEyUl2AJ18ENOUgOBUp42skRBPVBoVB/B
-	H8gfcujvvPWpTvZQQ4KOP1Vm0M/1A7TlHpBjFyHcT1oAKWUHUhr76gyuJ9/AXTdv30OamKS+OnH
-	jKvdzSl4s/KGAQGhqXBtIJl5S9qyqFPXl9gIeHvQ2gRp94JrEJhIYsKdVJf9qOrshbullVO8JA1
-	pbBM7nyVaK1HzxJusq0gp/+dC9tfUgbgyzvX9E9i5vt0up/Lrn5OqhN7tKEny0H+M0E6s+bnZFq
-	Kc4W5C73xPz1Wn8B+gxIw5VIh5GX3yWkxvS+rTzBCUuSIfqO4Jyu980CIepDmtchWju7kEcKt8O
-	VexaQHzGFC4AfCGII5a+9fvdvEptjSg2kPBHoeatE0PKx6LWq+972F2UoADBozQ/nG3wiDcDjlp
-	YjH7yA8lJf9LPlnEVx9/o9Q/sflAAHjozRBRB7DbhrsWgc/mQroANoVz5GYstXzBiuF+cOJWxS7
-	d6qAdeIeKLASe8nZlwjdjEm0wBjT34YY92gTeddlYTHUz717a1vlhKP+go9XSf0FPV4nljMjPhl
-	kpDhvtWiDDS7XUo6Op/VndMtkn7fLiT7TZa2FvcQIqmWiAorh7soVLaLdWgNJMr1jivwpGsqZ/D
-	EdQZc17F7tOzv1aQl/ntlPQqHYe5V/BZ146dQnGmUzqEr7E3BuyESHckYvGmgtcIwqKTRIrGpGW
-	sfgMsHHCeXjrKdnKfILX9pt4EiSlhchMAIji1BPxhBvolrhyl4UB81VQr2oDicy7KiE88AQkdUU
-	vC+bHPbmqZDdCCp+NdXHnMFTci44NFxIjrkoq6vo5eP+1l0Mx7Gxzsep96B+n0OZkiwUouUQiW9
-	aOYS9NpBgUWLFsQu8A==
-X-Received: by 2002:a05:693c:88d4:20b0:386:a8de:2bfc with SMTP id 5a478bee46e88-386a8de2f67mr17929616eec.6.1795814406495;
-        Fri, 27 Nov 2026 13:20:06 -0800 (PST)
-Received: from localhost.localdomain ([2600:1700:5390:dae0:7063:f08:2b4a:6d9a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385672c6f31sm73804236eec.15.2026.11.27.13.20.05
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 27 Nov 2026 13:20:05 -0800 (PST)
-From: Artem Andreenko <miolini@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org,
-	Artem Andreenko <miolini@gmail.com>,
-	linux-api@vger.kernel.org
-Subject: [RFC PATCH 2/2] io_uring: add CLOCK_TAI support for waits and timeouts
-Date: Fri, 27 Nov 2026 13:20:04 -0800
-Message-ID: <20261127212001.18516-6-miolini@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261127212001.18516-4-miolini@gmail.com>
-References: <20261127212001.18516-4-miolini@gmail.com>
+        d=1e100.net; s=20260707; t=1795826016; x=1796430816;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+        b=WPVCMOxfVDl+PlydfyaicJrjZOJ+kcQDn5x1i83V0Ku3jBXrr2rzbQyOJvwW7aZCo1
+         TVlSv3oOlRmbm0lt3li+QWrQtvPCkHuAiY/mhRMR3WIjjidFnXTAHA7R0N0276r3ZgYS
+         cI+vysqqFX7Gca1kOUXfX2qq4zf3gcfqCRIu3/S7CMpJdhZpz4kx4C/B0VUHGYucrdoN
+         0+coVIvWM+ex7a66cgby52oXoE1X+QMZNyUHufdf+a+K1DbOuZqHpASNDyQvslsAvLO9
+         Tzh0iN/kYyvcdGwJ2RZz7o9blYj5oKMGxRDwyMVA/g+Y8DDEs1nQ0mzI+ISgDOc7Zzd1
+         y96g==
+X-Forwarded-Encrypted: i=1; AL+hErFMNGC9UN/50xbR5ndTM8Ozx4eJlEesS5tMdH1gKdUof41HfXqJ5QOVu8nxP9P63Kx0e1TGTwECuw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8qJEUt7fTEKhBkbMq5G8X22ugdqDzLaUrBnDUJj87Y0CR0o3Oc
+	jvPW0BC41g1gV4T2tJCcjm+VeZKI+jm8NrNV0V8ETDYFkf50QerBEhZB
+X-Gm-Gg: AZFdTZe/RI7tPvCEZrHgMuL1fymNbYxBejxS6TkJLFB+PWIQkSaC/PGXlry3ccRPtoM
+	ELf3KyPqqIhLKQFR9UMl7cNB/G7gKWzXHd4RG8m+xm5K/b2EgDNOvhwfKLrIG/+tCfoC0D2savy
+	Tnt1gk0SL0BtVq/4CFP4DA/vwiSD2Dy8alHUQQy+fKpjxWJLFLmDNLtEz8Lmk3iMusnXGAISRVW
+	uQatQo87+4PLwoPb7KtLeNvVO7iBvvdLN8b8HY79ypGyvgKNfqeScDJLP+Ck7ffdd2dvsRolpuo
+	JUayuRwvRkDN06xXZnDpnwXYm0vssvMPcRszi3DYhNWK8N63iJJ77rl6xnWVyFhO9Rya1l1PO/U
+	yXVwnb+V4om04XDPCW6fy3ilEXIs4V0ab+I7U97N5bb7lzV2UeaQO2lEwq12/b5EA/wD/nXS7Jd
+	q0dwZ2cEy42lZa3mj3qCWfxbD0IUToBzfqR6xu8vGCYeRnalnh87Nd/AxETtte7/d1XcHh6n/Oe
+	mEnO4vnVqP1ySge/XFsEFfoFHuopY4H7Ii6HfgwuY4IVb3w5rPWGTGWK3qdot8qvkFy8M0tt+0q
+	h3LSp7GdkWOwUrNhMLfYvyNDpzR4hASg/aqZgiPyOQy+zfyliTwQRQelyDZzHTosQPd6yM25HyO
+	xBNxdSUCVoL2hg8yJNHGdXMLUverTrYTpFA==
+X-Received: by 2002:a17:90b:4b85:b0:3b0:96b4:ceb7 with SMTP id 98e67ed59e1d1-3b41c7c2384mr26668854a91.8.1795826016052;
+        Fri, 27 Nov 2026 16:33:36 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b48b41928esm30793634a91.9.2026.11.27.16.33.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 16:33:35 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 28 Nov 2026 00:33:35 +0000
+Message-Id: <DN6F6Y9I0QD7.1B49UETL2EKDJ@gmail.com>
+Cc: "Kees Cook" <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>,
+ "Will Drewry" <wad@chromium.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "David S . Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Jens
+ Axboe" <axboe@kernel.dk>
+Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for
+ seccomp
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <io-uring@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+In-Reply-To: <5b1c03a4-f910-4f97-af3e-1b8c328dd1ba@huaweicloud.com>
+References: <cover.1795139109.git.xukuohai@huaweicloud.com> <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com> <309b8e49-2f9c-4a2f-9b40-8e7e7cce3455@huaweicloud.com> <DN5F4EBDNESC.3UOJRTCXCL4HI@gmail.com> <5b1c03a4-f910-4f97-af3e-1b8c328dd1ba@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -102,88 +107,25 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3022; i=miolini@gmail.com; h=from:subject; bh=yvTfJypiHdmknicGUP3Np55BO5/vKeWwpJXIdb7AeSg=; b=owJ4nJvAy8zAJebzwOiZnvnNTMbTakkM2ZxfmN56ORi3bbI+d5U/eGm7dcLJhpcZl6ZmpLDv3 bfw753NmQkdE1kYxLgYLMUUWRpb56/Vv//ZO6bEzRZmDisTyBBpkQYGIGBh4MtNzCs10jHSM9U2 1DM00jHQMWbg4hSAqd68gpHh34aXrUmP9mwXWTVhi/nNj66M/495rPNo6194U/WS7243K0aG3vP se07P85cMMrlx4Brfk888Spt+aRW+f227aI7b7O93WAAa4VOG
-X-Developer-Key: i=miolini@gmail.com; a=openpgp; fpr=81859FAD2FDFF34B5C74463D4CE032E62E37D969
-Content-Transfer-Encoding: 8bit
 
-Time-sensitive workloads such as 5G NR gNodeB DU/CU radio-slot loops,
-O-RAN 7.2x fronthaul, and TSN applications schedule periodic activations
-and packet launchtimes on PTP-synchronized CLOCK_TAI rather than
-CLOCK_MONOTONIC (which drifts relative to GNSS/PTP grandmasters).
+On Fri, Nov 27, 2026 at 07:15 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+> The free path is dominated by bpf_arch_text_invalidate(), which sends IPIs
+> to all CPUs and waits for completion. The wait happens after put_cpu(), so
+> the task is preemptible. If the task is preempted, other lock waiters remain
+> blocked until it is scheduled back and releases the lock. This can extend
+> the lock hold time to seconds.
 
-Allow CLOCK_TAI in IORING_REGISTER_CLOCK (via ktime_get_clocktai() and
-HRTIMER_BASE_TAI) and add IORING_TIMEOUT_TAI (bit 8) to
-IORING_TIMEOUT_CLOCK_MASK so IORING_OP_TIMEOUT and
-IORING_OP_LINK_TIMEOUT can arm CLOCK_TAI deadlines directly.
+> After moving bpf_arch_text_invalidate() out of pack_mutex, the p99 VM
+> startup latency drops from 2.79 s to 170 ms under the same workload.
 
-Tested on arm64 QEMU with PROVE_LOCKING and DEBUG_ATOMIC_SLEEP after
-setting a 37-second ADJ_TAI offset, verifying IORING_REGISTER_CLOCK,
-future and already-expired absolute io_uring_enter waits,
-IORING_OP_TIMEOUT with IORING_TIMEOUT_TAI, and conflicting clock-flag
-rejection.
+Awesome!
 
-Signed-off-by: Artem Andreenko <miolini@gmail.com>
----
- include/uapi/linux/io_uring.h | 5 ++++-
- io_uring/io_uring.h           | 2 ++
- io_uring/register.c           | 1 +
- io_uring/timeout.c            | 2 ++
- 4 files changed, 9 insertions(+), 1 deletion(-)
+btw every free still sends these IPIs.
+We can probably remove them.
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index cf1afd11b..af86553b3 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -357,7 +357,10 @@ enum io_uring_op {
- #define IORING_TIMEOUT_ETIME_SUCCESS	(1U << 5)
- #define IORING_TIMEOUT_MULTISHOT	(1U << 6)
- #define IORING_TIMEOUT_IMMEDIATE_ARG	(1U << 7)
--#define IORING_TIMEOUT_CLOCK_MASK	(IORING_TIMEOUT_BOOTTIME | IORING_TIMEOUT_REALTIME)
-+#define IORING_TIMEOUT_TAI		(1U << 8)
-+#define IORING_TIMEOUT_CLOCK_MASK	(IORING_TIMEOUT_BOOTTIME | \
-+					 IORING_TIMEOUT_REALTIME | \
-+					 IORING_TIMEOUT_TAI)
- #define IORING_TIMEOUT_UPDATE_MASK	(IORING_TIMEOUT_UPDATE | IORING_LINK_TIMEOUT_UPDATE)
- /*
-  * sqe->splice_flags
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index b2808222e..b8c2bee11 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -584,6 +584,8 @@ static inline ktime_t io_get_time(clockid_t clockid)
- 	switch (clockid) {
- 	case CLOCK_BOOTTIME:
- 		return ktime_get_boottime();
-+	case CLOCK_TAI:
-+		return ktime_get_clocktai();
- 	default:
- 		return ktime_get();
- 	}
-diff --git a/io_uring/register.c b/io_uring/register.c
-index 802cfd6a9..38495369f 100644
---- a/io_uring/register.c
-+++ b/io_uring/register.c
-@@ -453,6 +453,7 @@ static int io_register_clock(struct io_ring_ctx *ctx,
- 	switch (reg.clockid) {
- 	case CLOCK_MONOTONIC:
- 	case CLOCK_BOOTTIME:
-+	case CLOCK_TAI:
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index db78059cf..43a6afd6d 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -43,6 +43,8 @@ static clockid_t io_flags_to_clock(unsigned flags)
- 		return CLOCK_BOOTTIME;
- 	case IORING_TIMEOUT_REALTIME:
- 		return CLOCK_REALTIME;
-+	case IORING_TIMEOUT_TAI:
-+		return CLOCK_TAI;
- 	default:
- 		/* can't happen, vetted at prep time */
- 		WARN_ON_ONCE(1);
--- 
-2.54.0 (Apple Git-157)
+aarch64_insn_set() can do caches_clean_inval_pou() only
+like aarch64_insn_patch_text_nosync().
+bpf_arch_text_invalidate() is its only caller and nothing runs in
+the freed chunks.
 
+It can be a separate patch, of course.
